@@ -1,0 +1,50 @@
+[
+    {
+        "date_created_gmt": "2011-07-11T11:27:07.000Z",
+        "user_id": "0",
+        "comment_id": "163",
+        "parent": "0",
+        "status": "approve",
+        "content": "excellent JP.. you saved my time",
+        "link": "https://procbits.wordpress.com/2011/01/25/feedzirra-and-rails-3/#comment-163",
+        "post_id": "114",
+        "post_title": "Feedzirra and Rails&nbsp;3",
+        "author": "Sree",
+        "author_url": "",
+        "author_email": "sree@gmail.com",
+        "author_ip": "115.249.30.106",
+        "type": ""
+    },
+    {
+        "date_created_gmt": "2011-04-26T16:11:30.000Z",
+        "user_id": "0",
+        "comment_id": "143",
+        "parent": "0",
+        "status": "approve",
+        "content": "Thanx for help...:)",
+        "link": "https://procbits.wordpress.com/2011/01/25/feedzirra-and-rails-3/#comment-143",
+        "post_id": "114",
+        "post_title": "Feedzirra and Rails&nbsp;3",
+        "author": "Tapan",
+        "author_url": "",
+        "author_email": "tapan.rns@gmail.com",
+        "author_ip": "61.12.14.178",
+        "type": ""
+    },
+    {
+        "date_created_gmt": "2011-04-20T02:05:43.000Z",
+        "user_id": "0",
+        "comment_id": "138",
+        "parent": "0",
+        "status": "approve",
+        "content": "Works like a charm. Thanks!",
+        "link": "https://procbits.wordpress.com/2011/01/25/feedzirra-and-rails-3/#comment-138",
+        "post_id": "114",
+        "post_title": "Feedzirra and Rails&nbsp;3",
+        "author": "Americo Savinon",
+        "author_url": "",
+        "author_email": "americos@gmail.com",
+        "author_ip": "75.103.234.2",
+        "type": ""
+    }
+]

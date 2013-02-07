@@ -1,0 +1,50 @@
+[
+    {
+        "date_created_gmt": "2011-05-13T00:10:51.000Z",
+        "user_id": "3046554",
+        "comment_id": "155",
+        "parent": "153",
+        "status": "approve",
+        "content": "I just posted a StackOverflow question. Maybe it'll shed some light on the situation: http://stackoverflow.com/questions/5983059/why-is-a-linkedlist-generally-slower-than-a-list",
+        "link": "https://procbits.wordpress.com/2010/09/10/linkedlist-always-slower-than-a-list-in-c/#comment-155",
+        "post_id": "73",
+        "post_title": "LinkedList Always Slower than a List in&nbsp;C#?",
+        "author": "JP",
+        "author_url": "http://techneur.com",
+        "author_email": "jp@reflect7.com",
+        "author_ip": "76.84.50.67",
+        "type": ""
+    },
+    {
+        "date_created_gmt": "2011-05-12T23:38:33.000Z",
+        "user_id": "3046554",
+        "comment_id": "154",
+        "parent": "153",
+        "status": "approve",
+        "content": "No, unfortunately I haven't. It's really quite strange. Let me know if you find anything...",
+        "link": "https://procbits.wordpress.com/2010/09/10/linkedlist-always-slower-than-a-list-in-c/#comment-154",
+        "post_id": "73",
+        "post_title": "LinkedList Always Slower than a List in&nbsp;C#?",
+        "author": "JP",
+        "author_url": "http://techneur.com",
+        "author_email": "jp@reflect7.com",
+        "author_ip": "76.84.50.67",
+        "type": ""
+    },
+    {
+        "date_created_gmt": "2011-05-12T23:36:40.000Z",
+        "user_id": "0",
+        "comment_id": "153",
+        "parent": "0",
+        "status": "approve",
+        "content": "I've noticed the same thing with LinkedList. Also, InsertLast seems to be significantly slower than AddFirst. I had the same thought as you; that a LinkedList would be more efficient because unlike List it doesn't have to dynamically resize.  Did you ever find an explanation for this?",
+        "link": "https://procbits.wordpress.com/2010/09/10/linkedlist-always-slower-than-a-list-in-c/#comment-153",
+        "post_id": "73",
+        "post_title": "LinkedList Always Slower than a List in&nbsp;C#?",
+        "author": "rally25rs",
+        "author_url": "",
+        "author_email": "rally25rs@yahoo.com",
+        "author_ip": "76.188.63.237",
+        "type": ""
+    }
+]

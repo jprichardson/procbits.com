@@ -1,0 +1,34 @@
+[
+    {
+        "date_created_gmt": "2012-10-02T02:41:12.000Z",
+        "user_id": "0",
+        "comment_id": "674",
+        "parent": "0",
+        "status": "approve",
+        "content": "Thanks for that. I found a similar answer on StackOverflow but it didn't work. Your slightest different version worked perfectly.",
+        "link": "https://procbits.wordpress.com/2011/08/18/using-mongoid-with-rspec/#comment-674",
+        "post_id": "239",
+        "post_title": "Using Mongoid with&nbsp;Rspec",
+        "author": "Thiago Ganzarolli (@tganzarolli)",
+        "author_url": "http://twitter.com/tganzarolli",
+        "author_email": "tganzarolli@twitter.example.com",
+        "author_ip": "187.37.115.61",
+        "type": ""
+    },
+    {
+        "date_created_gmt": "2011-12-08T13:03:04.000Z",
+        "user_id": "0",
+        "comment_id": "411",
+        "parent": "0",
+        "status": "approve",
+        "content": "Thanks a lot. Exactly what i wanted with mongoid and rspec. Saved my day..",
+        "link": "https://procbits.wordpress.com/2011/08/18/using-mongoid-with-rspec/#comment-411",
+        "post_id": "239",
+        "post_title": "Using Mongoid with&nbsp;Rspec",
+        "author": "Arjun",
+        "author_url": "",
+        "author_email": "arjun@adepto.in",
+        "author_ip": "103.5.134.33",
+        "type": ""
+    }
+]

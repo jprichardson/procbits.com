@@ -1,0 +1,50 @@
+[
+    {
+        "date_created_gmt": "2011-11-02T01:29:35.000Z",
+        "user_id": "0",
+        "comment_id": "361",
+        "parent": "360",
+        "status": "approve",
+        "content": "JP - thanks for the reply and the clarification of my post.\r\n\r\nThanks, Anthony",
+        "link": "https://procbits.wordpress.com/2011/10/10/automating-generation-ios-push-notification-certificates/#comment-361",
+        "post_id": "245",
+        "post_title": "Automating the Generation of iOS Push Notification&nbsp;Certificates",
+        "author": "Anthony",
+        "author_url": "",
+        "author_email": "dotson.anthony@gmail.com",
+        "author_ip": "72.11.82.226",
+        "type": ""
+    },
+    {
+        "date_created_gmt": "2011-11-02T01:17:18.000Z",
+        "user_id": "3046554",
+        "comment_id": "360",
+        "parent": "359",
+        "status": "approve",
+        "content": "Anthony, in a sense, yes. Technically, it runs the browser and simulates user input. It then scripts the local Mac OS X Keychain application to generate the keys and certificates. Apple doesn't provide any API to do this.",
+        "link": "https://procbits.wordpress.com/2011/10/10/automating-generation-ios-push-notification-certificates/#comment-360",
+        "post_id": "245",
+        "post_title": "Automating the Generation of iOS Push Notification&nbsp;Certificates",
+        "author": "JP",
+        "author_url": "http://techneur.com",
+        "author_email": "jp@reflect7.com",
+        "author_ip": "208.82.105.200",
+        "type": ""
+    },
+    {
+        "date_created_gmt": "2011-11-02T00:54:27.000Z",
+        "user_id": "0",
+        "comment_id": "359",
+        "parent": "0",
+        "status": "approve",
+        "content": "This is interesting - so if I read this correctly this code is basically simulating a web browser to handle the certificate creation. I take it Apple hasn't done anything in terms of providing a callable API to achieve these same results?",
+        "link": "https://procbits.wordpress.com/2011/10/10/automating-generation-ios-push-notification-certificates/#comment-359",
+        "post_id": "245",
+        "post_title": "Automating the Generation of iOS Push Notification&nbsp;Certificates",
+        "author": "Anthony",
+        "author_url": "",
+        "author_email": "dotson.anthony@gmail.com",
+        "author_ip": "72.11.82.226",
+        "type": ""
+    }
+]

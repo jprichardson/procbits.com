@@ -1,0 +1,18 @@
+[
+    {
+        "date_created_gmt": "2011-02-08T03:46:11.000Z",
+        "user_id": "7871622",
+        "comment_id": "101",
+        "parent": "0",
+        "status": "approve",
+        "content": "This is a nice way of handling errors on the dispatcher thread but it wont work if you throw the error from a different thread.  You need to rethrow to the dispatcher thread if you want that to happen from different threads:\r\n\r\n<code>\r\ntry\r\n{\r\n    // Do some work\r\n    throw new Exception();\r\n}\r\ncatch(Exception ex)\r\n{\r\n    System.Action action = e =&gt; { throw e; };\r\n    Application.Current.Dispatcher.Invoke(action, ex);\r\n}\r\n</code>\r\n\r\nThis will then hit your code in app.xaml.cs",
+        "link": "https://procbits.wordpress.com/2011/02/07/wpf-application-exception-handling/#comment-101",
+        "post_id": "117",
+        "post_title": "WPF Application Wide Exception&nbsp;Handling",
+        "author": "Leom Burke",
+        "author_url": "http://",
+        "author_email": "leomburke@gmail.com",
+        "author_ip": "94.192.202.87",
+        "type": ""
+    }
+]

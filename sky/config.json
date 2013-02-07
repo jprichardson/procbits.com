@@ -1,0 +1,27 @@
+{
+  "blog": {
+    "name": "procbits",
+    "tagline": "source code snippets and other random musings about software",
+    "url": "http://procbits.com",
+    "template": "basic",
+    "author": "JP Richardson"
+  },
+  "articles": {
+    "urlformat": "articles/{{date-year}}/{{date-month}}/{{date-day}}/{{slug}}",
+    "indexUrl": "index.html"
+  },
+  "build": {
+    "outputDir": "public/"
+  }
+  "partials": {
+    "googleAnalytics": {
+      "id": ""
+    }
+  },
+  "user": {
+    "github": "",
+    "stackoverflow": "",
+    "twitter": "",
+    "aboutme": ""
+  }
+}

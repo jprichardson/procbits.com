@@ -1,0 +1,34 @@
+[
+    {
+        "date_created_gmt": "2012-06-14T12:35:53.000Z",
+        "user_id": "0",
+        "comment_id": "573",
+        "parent": "0",
+        "status": "approve",
+        "content": "Thanks! very nice article, you can put the command \"time\"  before run.\r\n\r\n$ time node hello.js \r\nHello World!\r\n\r\nreal\t0m0.940s\r\nuser\t0m0.058s\r\nsys\t0m0.020s\r\n\r\nRegards.",
+        "link": "https://procbits.wordpress.com/2011/10/29/a-node-js-experiment-thinking-asynchronously-recursion-calculate-file-size-directory/#comment-573",
+        "post_id": "261",
+        "post_title": "A Node.js Experiment: Thinking Asynchronously, Using Recursion to Calculate the Total File Size in a&nbsp;Directory",
+        "author": "xonico",
+        "author_url": "http://gravatar.com/xonico",
+        "author_email": "xonico@gmail.com",
+        "author_ip": "190.226.145.164",
+        "type": ""
+    },
+    {
+        "date_created_gmt": "2011-11-28T18:49:05.000Z",
+        "user_id": "0",
+        "comment_id": "395",
+        "parent": "0",
+        "status": "approve",
+        "content": "Great article! I had the similar problem and solved it using a simplified AviaFlu suggestion that you mentioned. In my case I had a recursive call to mongodb and needed to get the data after every db result was retrieved. So I just created a single variable with a value of 0, which I incremented at the beginning of the call and decremented at the end, simultaneously checking if it was 0. If yes, then I'd execute next step.",
+        "link": "https://procbits.wordpress.com/2011/10/29/a-node-js-experiment-thinking-asynchronously-recursion-calculate-file-size-directory/#comment-395",
+        "post_id": "261",
+        "post_title": "A Node.js Experiment: Thinking Asynchronously, Using Recursion to Calculate the Total File Size in a&nbsp;Directory",
+        "author": "AndriusVirbičianskas (@AVirbicianskas)",
+        "author_url": "http://twitter.com/AVirbicianskas",
+        "author_email": "AVirbicianskas@twitter.example.com",
+        "author_ip": "78.63.243.249",
+        "type": ""
+    }
+]

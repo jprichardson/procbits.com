@@ -1,0 +1,50 @@
+[
+    {
+        "date_created_gmt": "2012-07-07T04:25:43.000Z",
+        "user_id": "0",
+        "comment_id": "592",
+        "parent": "0",
+        "status": "approve",
+        "content": "GOTO 5",
+        "link": "https://procbits.wordpress.com/2012/06/28/nextflow-sane-coffeescript-flow-control/#comment-592",
+        "post_id": "326",
+        "post_title": "NextFlow: Sane CoffeeScript Flow&nbsp;Control",
+        "author": "anonymous",
+        "author_url": "",
+        "author_email": "no@mail.com",
+        "author_ip": "204.28.122.20",
+        "type": ""
+    },
+    {
+        "date_created_gmt": "2012-07-06T20:01:45.000Z",
+        "user_id": "3046554",
+        "comment_id": "591",
+        "parent": "589",
+        "status": "approve",
+        "content": "Hi Michael, thanks for writing. Part of the reason that I blog is so that people can point out things that I didn’t know. In this case, I wasn’t aware that async.series could execute functions in an object. Had I have known that, NextFlow probably wouldn’t have been written. However, it seems that NextFlow still has two advantages over async.series.\r\n\r\n1) You don’t have to pass in the callback as the first argument. The callback is implicitly defined as this.next().\r\n\r\n2) You can jump around to other functions denoted by their object keys, assuming that their valid variable names. 1() wouldn’t work, but this['1']() would. Hence the example with a1(), a2(), etc.\r\n\r\n-JP",
+        "link": "https://procbits.wordpress.com/2012/06/28/nextflow-sane-coffeescript-flow-control/#comment-591",
+        "post_id": "326",
+        "post_title": "NextFlow: Sane CoffeeScript Flow&nbsp;Control",
+        "author": "JP",
+        "author_url": "http://gitpilot.com",
+        "author_email": "jprichardson@gmail.com",
+        "author_ip": "208.82.105.200",
+        "type": ""
+    },
+    {
+        "date_created_gmt": "2012-07-06T14:33:03.000Z",
+        "user_id": "0",
+        "comment_id": "589",
+        "parent": "0",
+        "status": "approve",
+        "content": "Hmmm... I question the need for this...\r\n\r\n<code>\r\nasync = require 'async'\r\nvals = []\r\n\r\nflow =\r\n  1: (cb) -&gt;\r\n    vals.push 1\r\n    cb()\r\n  2: (cb) -&gt;\r\n    vals.push 2\r\n    cb()\r\n  3: -&gt;\r\n    console.log vals[0]\r\n    console.log vals[1]\r\n\r\nasync.series flow\r\n</code>",
+        "link": "https://procbits.wordpress.com/2012/06/28/nextflow-sane-coffeescript-flow-control/#comment-589",
+        "post_id": "326",
+        "post_title": "NextFlow: Sane CoffeeScript Flow&nbsp;Control",
+        "author": "Michael Hart (@hichaelmart)",
+        "author_url": "http://twitter.com/hichaelmart",
+        "author_email": "hichaelmart@twitter.example.com",
+        "author_ip": "110.175.232.34",
+        "type": ""
+    }
+]

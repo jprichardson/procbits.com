@@ -1,0 +1,18 @@
+[
+    {
+        "date_created_gmt": "2011-12-05T11:56:08.000Z",
+        "user_id": "0",
+        "comment_id": "404",
+        "parent": "0",
+        "status": "approve",
+        "content": "Great article. Works with Xcode 4.2.",
+        "link": "https://procbits.wordpress.com/2011/11/29/using-ocmock-with-mac-os-x-lion-xcode-4-to-mock-and-unit-test-cocoa-desktop-apps/#comment-404",
+        "post_id": "277",
+        "post_title": "Using OCMock with Mac OS X Lion, Xcode 4, to Mock and Unit Test Cocoa Desktop&nbsp;Apps",
+        "author": "Ralph",
+        "author_url": "http://gravatar.com/ralphmanns",
+        "author_email": "r.manns@gmail.com",
+        "author_ip": "87.152.52.128",
+        "type": ""
+    }
+]

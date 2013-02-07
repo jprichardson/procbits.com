@@ -1,0 +1,34 @@
+[
+    {
+        "date_created_gmt": "2012-05-03T22:37:04.000Z",
+        "user_id": "3046554",
+        "comment_id": "551",
+        "parent": "550",
+        "status": "approve",
+        "content": "Did you set YOUR_DOWNLOADS_DIR to the directory that contains the .cer file from Apple?",
+        "link": "https://procbits.wordpress.com/2011/10/07/automating-the-mac-os-x-keychain-app-with-ruby/#comment-551",
+        "post_id": "243",
+        "post_title": "Automating the Mac OS X Keychain App with&nbsp;Ruby",
+        "author": "JP",
+        "author_url": "http://gitpilot.com",
+        "author_email": "jprichardson@gmail.com",
+        "author_ip": "174.230.197.37",
+        "type": ""
+    },
+    {
+        "date_created_gmt": "2012-05-03T11:33:57.000Z",
+        "user_id": "0",
+        "comment_id": "550",
+        "parent": "0",
+        "status": "approve",
+        "content": "Hi i am getting below error while executing this script for creation of pem file.\r\nsecurity: SecKeychainItemExport: The specified item could not be found in the keychain.\r\nError opening input file /tmp/push_prod.p12\r\n/tmp/push_prod.p12: No such file or directory\r\n\r\nplease help me",
+        "link": "https://procbits.wordpress.com/2011/10/07/automating-the-mac-os-x-keychain-app-with-ruby/#comment-550",
+        "post_id": "243",
+        "post_title": "Automating the Mac OS X Keychain App with&nbsp;Ruby",
+        "author": "john",
+        "author_url": "",
+        "author_email": "anup_86singh@yahoo.co.in",
+        "author_ip": "122.177.213.222",
+        "type": ""
+    }
+]

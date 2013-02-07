@@ -1,0 +1,50 @@
+[
+    {
+        "date_created_gmt": "2011-08-31T22:06:44.000Z",
+        "user_id": "3046554",
+        "comment_id": "303",
+        "parent": "287",
+        "status": "approve",
+        "content": "Here is another source that I used: http://blog.hivedevelopment.co.uk/2009/10/introduction-to-mvp-unit-testing-part.html",
+        "link": "https://procbits.wordpress.com/2010/08/09/traversal-of-gwt-tree/#comment-303",
+        "post_id": "54",
+        "post_title": "Traversal of GWT&nbsp;Tree",
+        "author": "JP",
+        "author_url": "http://techneur.com",
+        "author_email": "jp@reflect7.com",
+        "author_ip": "208.82.105.200",
+        "type": ""
+    },
+    {
+        "date_created_gmt": "2011-08-31T22:05:21.000Z",
+        "user_id": "3046554",
+        "comment_id": "302",
+        "parent": "287",
+        "status": "approve",
+        "content": "It's been a long time since I've used GWT so I don't exactly remember how I did it... but the methods presented in the code above show how the mocked code. (You don't have to use GWT TestCase)... in fact you shouldn't if you can avoid to because your tests will run faster.\r\n\r\nI used Mockito.\r\n\r\nHere is a resource:\r\nhttp://code.google.com/p/gwt-test-utils/wiki/MockingClasses",
+        "link": "https://procbits.wordpress.com/2010/08/09/traversal-of-gwt-tree/#comment-302",
+        "post_id": "54",
+        "post_title": "Traversal of GWT&nbsp;Tree",
+        "author": "JP",
+        "author_url": "http://techneur.com",
+        "author_email": "jp@reflect7.com",
+        "author_ip": "208.82.105.200",
+        "type": ""
+    },
+    {
+        "date_created_gmt": "2011-08-24T16:00:34.000Z",
+        "user_id": "0",
+        "comment_id": "287",
+        "parent": "0",
+        "status": "approve",
+        "content": "Hi,\r\n\r\nI used your way of testing TreeItems, but I think it is unpossible to mock TreeItem class, because it can be instantiable only in GWT mode (or using GWT TestCase), not standard JRE JUnit test.\r\nAm I doing something wrong?\r\n\r\nThank you!",
+        "link": "https://procbits.wordpress.com/2010/08/09/traversal-of-gwt-tree/#comment-287",
+        "post_id": "54",
+        "post_title": "Traversal of GWT&nbsp;Tree",
+        "author": "Tomas",
+        "author_url": "",
+        "author_email": "tomas.k.sk@gmail.com",
+        "author_ip": "85.207.37.146",
+        "type": ""
+    }
+]

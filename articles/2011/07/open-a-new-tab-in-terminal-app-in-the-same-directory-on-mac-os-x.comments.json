@@ -1,0 +1,34 @@
+[
+    {
+        "date_created_gmt": "2012-09-12T21:09:48.000Z",
+        "user_id": "3046554",
+        "comment_id": "672",
+        "parent": "671",
+        "status": "approve",
+        "content": "You are right. I should have clarified in the article that it was applicable for Mac OS X 10.6 - Snow Leopard.",
+        "link": "https://procbits.wordpress.com/2011/07/18/open-a-new-tab-in-terminal-app-in-the-same-directory-on-mac-os-x/#comment-672",
+        "post_id": "171",
+        "post_title": "Open a New Tab in Terminal.app in the Same Directory on Mac OS&nbsp;X",
+        "author": "JP",
+        "author_url": "http://gitpilot.com",
+        "author_email": "jprichardson@gmail.com",
+        "author_ip": "208.82.105.200",
+        "type": ""
+    },
+    {
+        "date_created_gmt": "2012-09-12T20:57:39.000Z",
+        "user_id": "0",
+        "comment_id": "671",
+        "parent": "0",
+        "status": "approve",
+        "content": "A much easier way is in the Terminal.app settings. Terminal &gt; Preferences &gt; Startup &gt; New tabs open with: 1) Same Settings, 2) Same Working Directory",
+        "link": "https://procbits.wordpress.com/2011/07/18/open-a-new-tab-in-terminal-app-in-the-same-directory-on-mac-os-x/#comment-671",
+        "post_id": "171",
+        "post_title": "Open a New Tab in Terminal.app in the Same Directory on Mac OS&nbsp;X",
+        "author": "Matthew Boston (@bostonaholic)",
+        "author_url": "http://twitter.com/bostonaholic",
+        "author_email": "bostonaholic@twitter.example.com",
+        "author_ip": "96.11.137.56",
+        "type": ""
+    }
+]
