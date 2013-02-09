@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Convert a CSV to XML using C#</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="JP">
+    <mete name="description" content="">
+
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
+    <!--<link href="style.css" rel="stylesheet">-->
+
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+      <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', ]);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+  </head>
+  <body>
+    
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid nav-container">
+          <nav role="navigation">
+            <a class="brand" title="" href="http://procbits.com">procbits</a>
+            
+            <p class="navbar-text pull-left">
+              source code snippets and other random musings about software
+            </p>
+          </nav>
+
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container-fluid">
+      <div id="content" class="clearfix row-fluid">
+        <div id="main" class="span8 clearfix" role="main">
+
+
+<h1>Convert a CSV to XML using C#</h1>
+<p>I wrote a simple class that will help you convert a CSV file to XML. I
+can hear you asking &quot;that&#39;s nice JP, but why would I want to convert my
+simple CSV to that messy text format from the early 2000&#39;s?&quot; You would
+do this because you want to use LINQ with CSV files... that&#39;s why.</p>
+<p>Here is the crux of the algorithm:</p>
+<pre><code class="lang-csharp"><span class="keyword">public</span> void Convert() {
+    <span class="keyword">var</span> tempLines = File.ReadAllLines(<span class="keyword">this</span>.CsvFile);
+    string[] lines = <span class="keyword">null</span>;
+    _columnNames = <span class="keyword">null</span>;
+
+    <span class="keyword">if</span> (<span class="keyword">this</span>.HasColumnNames) {
+        _columnNames = Csv.RecordSplit(tempLines[<span class="number">0</span>], <span class="keyword">this</span>.RecordDelimiter, <span class="keyword">this</span>.TextQualifier);
+
+        lines = <span class="keyword">new</span> string[tempLines.Length - <span class="number">1</span>];
+        <span class="keyword">Array</span>.Copy(tempLines, <span class="number">1</span>, lines, <span class="number">0</span>, lines.Length);
+    } <span class="keyword">else</span> {
+        <span class="keyword">var</span> columnCount = Csv.RecordSplit(tempLines[<span class="number">0</span>], <span class="keyword">this</span>.RecordDelimiter, <span class="keyword">this</span>.TextQualifier).Length;
+        _columnNames = <span class="keyword">new</span> string[columnCount];
+        <span class="keyword">for</span> (int x = <span class="number">0</span>; x &lt; _columnNames.Length; ++x)
+            _columnNames[x] = <span class="string">"Column"</span> + (x+<span class="number">1</span>);
+
+        lines = tempLines;
+    }
+
+    <span class="keyword">this</span>.XmlData = <span class="keyword">new</span> XElement(<span class="string">"Records"</span>,
+        from line in lines
+        let fields = Csv.RecordSplit(line, <span class="keyword">this</span>.RecordDelimiter, <span class="keyword">this</span>.TextQualifier)
+        select <span class="keyword">new</span> XElement(<span class="string">"Record"</span>,
+            from fieldData in fields
+            let i = fields.ToList().FindIndex(f => f == fieldData)
+            select <span class="keyword">new</span> XElement(_columnNames[i], fieldData)
+        )
+    );
+}</code></pre>
+<p>You can look at the full code in my <a href="http://github.com/jprichardson/CommonLib/blob/master/CommonLib/Data/Csv/CsvToXml.cs">C# CommonLib
+library</a>.
+As you can see, the code is really straightforward.</p>
+<p>Let&#39;s assume that your CSV file looks like this:
+<code>&#39;Product&#39;,&#39;Price&#39;,&#39;DateStocked&#39; &#39;Pepsi&#39;,&#39;4.50&#39;,&#39;2010-05-04&#39; &#39;Coke&#39;,&#39;3.00&#39;,&#39;2010-09-22&#39; &#39;Cheetos&#39;,&#39;7.25&#39;,&#39;2009-01-13&#39;</code></p>
+<p>You can then run Csv2Xml like this:</p>
+<pre><code class="lang-csharp"><span class="keyword">var</span> csv = <span class="keyword">new</span> CsvToXml(csvFile);
+csv.RecordDelimiter = <span class="string">','</span>; 
+csv.TextQualifier = <span class="string">'\''</span>;
+csv.HasColumnNames = <span class="keyword">false</span>;
+csv.Convert();
+
+<span class="keyword">var</span> actualXml = csv.XmlString;</code></pre>
+<p>The output XML will look like this:</p>
+<pre><code class="lang-xml">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span><span class="preprocessor">?></span>
+&lt;Records>
+    &lt;Record>
+        &lt;Column1>Pepsi&lt;/Column1>
+        &lt;Column2><span class="number">4.50</span>&lt;/Column2>
+        &lt;Column3><span class="number">2010</span>-<span class="number">05</span>-<span class="number">04</span>&lt;/Column3>
+    &lt;/Record>
+    &lt;Record>
+        &lt;Column1>Coke&lt;/Column1>
+        &lt;Column2><span class="number">3.00</span>&lt;/Column2>
+        &lt;Column3><span class="number">2010</span>-<span class="number">09</span>-<span class="number">22</span>&lt;/Column3>
+    &lt;/Record>
+    &lt;Record>
+        &lt;Column1>Cheetos&lt;/Column1>
+        &lt;Column2><span class="number">7.25</span>&lt;/Column2>
+        &lt;Column3><span class="number">2009</span>-<span class="number">01</span>-<span class="number">13</span>&lt;/Column3>
+    &lt;/Record>
+&lt;/Records></code></pre>
+<p>If you set &quot;HasColumnNames&quot; to &quot;True&quot;, your XML output will look like
+this:</p>
+<pre><code class="lang-xml">&lt;?xml version=<span class="string">"1.0"</span> encoding=<span class="string">"utf-8"</span><span class="preprocessor">?></span>
+&lt;Records>
+    &lt;Record>
+        &lt;Product>Pepsi&lt;/Product>
+        &lt;Price><span class="number">4.50</span>&lt;/Price>
+        &lt;DateStocked><span class="number">2010</span>-<span class="number">05</span>-<span class="number">04</span>&lt;/DateStocked>
+    &lt;/Record>
+    &lt;Record>
+        &lt;Product>Coke&lt;/Product>
+        &lt;Price><span class="number">3.00</span>&lt;/Price>
+        &lt;DateStocked><span class="number">2010</span>-<span class="number">09</span>-<span class="number">22</span>&lt;/DateStocked>
+    &lt;/Record>
+    &lt;Record>
+        &lt;Product>Cheetos&lt;/Product>
+        &lt;Price><span class="number">7.25</span>&lt;/Price>
+        &lt;DateStocked><span class="number">2009</span>-<span class="number">01</span>-<span class="number">13</span>&lt;/DateStocked>
+    &lt;/Record>
+&lt;/Records></code></pre>
+<p>Are you a <a href="http://gitpilot.com">Git</a> user? Let me help you make project
+management with Git simple. Checkout <a href="http://gitpilot.com">Gitpilot</a>.</p>
+<p>Pretty nifty huh? In the next post, I&#39;ll explain how you can use this
+with LINQ. In the mean time follow me on Twitter
+(<a href="http://twitter.com/jprichardson">@jprichardson</a>) or read my blog on
+entrepreneurship: <a href="http://techneur.com">Techneur</a>.</p>
+<p>-JP</p>
+
+
+
+          <span id="footer">
+            <br/>
+            <span style="font-size: 10px">
+              Proudly built with <a href="{{sky.homepage}}">Sky</a>.
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    
+  </body>
+</html>

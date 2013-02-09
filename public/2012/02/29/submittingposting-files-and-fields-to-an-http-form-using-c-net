@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Submitting/Posting Files and Fields to an HTTP Form using C#/.NET </title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="JP">
+    <mete name="description" content="">
+
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
+    <!--<link href="style.css" rel="stylesheet">-->
+
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+      <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', ]);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+  </head>
+  <body>
+    
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid nav-container">
+          <nav role="navigation">
+            <a class="brand" title="" href="http://procbits.com">procbits</a>
+            
+            <p class="navbar-text pull-left">
+              source code snippets and other random musings about software
+            </p>
+          </nav>
+
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container-fluid">
+      <div id="content" class="clearfix row-fluid">
+        <div id="main" class="span8 clearfix" role="main">
+
+
+<h1>Submitting/Posting Files and Fields to an HTTP Form using C#/.NET </h1>
+<p>Awhile back, I had to integrate a C# program with a web system that
+allowed the user to upload a few files and include some misc. data. I
+Googled around and didn&#39;t find a comprehensive solution.</p>
+<p>I did use some code I found on the internet, unfortunately I don&#39;t
+remember where, so I can&#39;t give proper attribution. If you know, please
+let me know; it&#39;s the code relevant to the <code>MimePart</code> class. I added the
+form values code and packaged it up into the <code>HttpForm</code> sugar.</p>
+<p>Here is the code:</p>
+<pre><code class="lang-csharp"><span class="keyword">public</span> <span class="keyword">class</span> HttpForm {
+
+    <span class="keyword">private</span> Dictionary&lt;string, string> _files = <span class="keyword">new</span> Dictionary&lt;string, string>();
+    <span class="keyword">private</span> Dictionary&lt;string, string> _values = <span class="keyword">new</span> Dictionary&lt;string, string>();
+
+    <span class="keyword">public</span> HttpForm(string url) {
+        <span class="keyword">this</span>.Url = url;
+        <span class="keyword">this</span>.Method = <span class="string">"POST"</span>;
+    }
+
+    <span class="keyword">public</span> string Method { get; set; }
+    <span class="keyword">public</span> string Url { get; set; }
+
+    <span class="comment">//return self so that we can chain</span>
+    <span class="keyword">public</span> HttpForm AttachFile(string field, string fileName) {
+        _files[field] = fileName;
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+
+    <span class="keyword">public</span> HttpForm ResetForm(){
+        _files.Clear();
+        _values.Clear();
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+
+    <span class="comment">//return self so that we can chain</span>
+    <span class="keyword">public</span> HttpForm SetValue(string field, string value) {
+        _values[field] = value;
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+
+    <span class="keyword">public</span> HttpWebResponse Submit() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.UploadFiles(_files, _values);
+    }
+
+
+    <span class="keyword">private</span> HttpWebResponse UploadFiles(Dictionary&lt;string, string> files, Dictionary&lt;string, string> otherValues) {
+        <span class="keyword">var</span> req = (HttpWebRequest)WebRequest.Create(<span class="keyword">this</span>.Url);
+
+        req.Timeout = <span class="number">10000</span> * <span class="number">1000</span>;
+        req.Accept = <span class="string">"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"</span>;
+        req.AllowAutoRedirect = <span class="keyword">false</span>;
+
+        <span class="keyword">var</span> mimeParts = <span class="keyword">new</span> <span class="keyword">List</span>&lt;MimePart>();
+        <span class="keyword">try</span> {
+            <span class="keyword">if</span> (otherValues != <span class="keyword">null</span>) {
+                <span class="keyword">foreach</span> (<span class="keyword">var</span> fieldName in otherValues.Keys) {
+                    <span class="keyword">var</span> part = <span class="keyword">new</span> MimePart();
+
+                    part.Headers[<span class="string">"Content-Disposition"</span>] = <span class="string">"form-data; name=\""</span> + fieldName + <span class="string">"\""</span>;
+                    part.Data = <span class="keyword">new</span> MemoryStream(Encoding.UTF8.GetBytes(otherValues[fieldName]));
+
+                    mimeParts.Add(part);
+                }
+            }
+
+            <span class="keyword">if</span> (files != <span class="keyword">null</span>) {
+                <span class="keyword">foreach</span> (<span class="keyword">var</span> fieldName in files.Keys) {
+                    <span class="keyword">var</span> part = <span class="keyword">new</span> MimePart();
+
+                    part.Headers[<span class="string">"Content-Disposition"</span>] = <span class="string">"form-data; name=\""</span> + fieldName + <span class="string">"\"; filename=\""</span> + files[fieldName] + <span class="string">"\""</span>;
+                    part.Headers[<span class="string">"Content-Type"</span>] = <span class="string">"application/octet-stream"</span>;
+                    part.Data = File.OpenRead(files[fieldName]);
+
+                    mimeParts.Add(part);
+                }
+            }
+
+            string boundary = <span class="string">"----------"</span> + DateTime.Now.Ticks.ToString(<span class="string">"x"</span>);
+
+            req.ContentType = <span class="string">"multipart/form-data; boundary="</span> + boundary;
+            req.Method = <span class="keyword">this</span>.Method;
+
+            long contentLength = <span class="number">0</span>;
+
+            byte[] _footer = Encoding.UTF8.GetBytes(<span class="string">"--"</span> + boundary + <span class="string">"--\r\n"</span>);
+
+            <span class="keyword">foreach</span> (MimePart part in mimeParts) {
+                contentLength += part.GenerateHeaderFooterData(boundary);
+            }
+
+            req.ContentLength = contentLength + _footer.Length;
+
+            byte[] buffer = <span class="keyword">new</span> byte[<span class="number">8192</span>];
+            byte[] afterFile = Encoding.UTF8.GetBytes(<span class="string">"\r\n"</span>);
+            int read;
+
+            using (Stream s = req.GetRequestStream()) {
+                <span class="keyword">foreach</span> (MimePart part in mimeParts) {
+                    s.Write(part.Header, <span class="number">0</span>, part.Header.Length);
+
+                    <span class="keyword">while</span> ((read = part.Data.Read(buffer, <span class="number">0</span>, buffer.Length)) > <span class="number">0</span>)
+                        s.Write(buffer, <span class="number">0</span>, read);
+
+                    part.Data.Dispose();
+
+                    s.Write(afterFile, <span class="number">0</span>, afterFile.Length);
+                }
+
+                s.Write(_footer, <span class="number">0</span>, _footer.Length);
+            }
+
+            <span class="keyword">var</span> res = (HttpWebResponse)req.GetResponse();
+
+            <span class="keyword">return</span> res;
+        } <span class="keyword">catch</span> (<span class="keyword">Exception</span> ex) {
+            Console.WriteLine(ex.Message);
+            <span class="keyword">foreach</span> (MimePart part in mimeParts)
+                <span class="keyword">if</span> (part.Data != <span class="keyword">null</span>)
+                    part.Data.Dispose();
+
+            <span class="keyword">return</span> (HttpWebResponse)req.GetResponse();
+        }
+    }
+
+    <span class="keyword">private</span> <span class="keyword">class</span> MimePart {
+        <span class="keyword">private</span> NameValueCollection _headers = <span class="keyword">new</span> NameValueCollection();
+        <span class="keyword">public</span> NameValueCollection Headers { get { <span class="keyword">return</span> _headers; } }
+
+        <span class="keyword">public</span> byte[] Header { get; <span class="keyword">protected</span> set; }
+
+        <span class="keyword">public</span> long GenerateHeaderFooterData(string boundary) {
+            StringBuilder sb = <span class="keyword">new</span> StringBuilder();
+
+            sb.Append(<span class="string">"--"</span>);
+            sb.Append(boundary);
+            sb.AppendLine();
+            <span class="keyword">foreach</span> (string key in _headers.AllKeys) {
+                sb.Append(key);
+                sb.Append(<span class="string">": "</span>);
+                sb.AppendLine(_headers[key]);
+            }
+            sb.AppendLine();
+
+            Header = Encoding.UTF8.GetBytes(sb.ToString());
+
+            <span class="keyword">return</span> Header.Length + Data.Length + <span class="number">2</span>;
+        }
+
+        <span class="keyword">public</span> Stream Data { get; set; }
+    }
+}</code></pre>
+<p>You can easily use it like so:</p>
+<pre><code class="lang-csharp"><span class="keyword">var</span> file1 = @<span class="string">"C:\file"</span>;
+<span class="keyword">var</span> file2 = @<span class="string">"C:\file2"</span>;
+
+<span class="keyword">var</span> yourUrl = <span class="string">"http://yourdomain.com/process.php"</span>;
+<span class="keyword">var</span> httpForm = <span class="keyword">new</span> HttpForm(yourUrl);
+httpForm.AttachFile(<span class="string">"file1"</span>, file1).AttachFile(<span class="string">"file2"</span>, file2);
+httpForm.setValue(<span class="string">"foo"</span>, <span class="string">"some foo"</span>).setValue(<span class="string">"blah"</span>, <span class="string">"rarrr!"</span>);
+httpForm.Submit();</code></pre>
+<p>Do you use Git? If so, checkout <a href="http://gitpilot.com">Gitpilot</a> to make
+using Git thoughtless.</p>
+<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>.</p>
+<p>-JP Richardson</p>
+
+
+
+          <span id="footer">
+            <br/>
+            <span style="font-size: 10px">
+              Proudly built with <a href="{{sky.homepage}}">Sky</a>.
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    
+  </body>
+</html>

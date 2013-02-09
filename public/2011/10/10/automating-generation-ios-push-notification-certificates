@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Automating the Generation of iOS Push Notification Certificates</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="JP">
+    <mete name="description" content="">
+
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
+    <!--<link href="style.css" rel="stylesheet">-->
+
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+      <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', ]);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+  </head>
+  <body>
+    
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid nav-container">
+          <nav role="navigation">
+            <a class="brand" title="" href="http://procbits.com">procbits</a>
+            
+            <p class="navbar-text pull-left">
+              source code snippets and other random musings about software
+            </p>
+          </nav>
+
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container-fluid">
+      <div id="content" class="clearfix row-fluid">
+        <div id="main" class="span8 clearfix" role="main">
+
+
+<h1>Automating the Generation of iOS Push Notification Certificates</h1>
+<p>I have a large number (200+) of iOS applications. I needed to generate
+push notification certificates for each of them. If you&#39;ve ever gone
+through the process, it can be a huge pain to do just a few. I needed to
+write a script to automate this process.</p>
+<p>First, I created a <a href="http://procbits.com/2011/10/07/automating-the-mac-os-x-keychain-app-with-ruby/">ruby gem to access the Mac OS X Keychain
+App</a>.</p>
+<p>Next, I leveraged <a href="http://watir.com/">watir</a> to actually login to the
+iOS provisioning portal and upload/download the necessary files.</p>
+<p>First, make sure that you&#39;re using Mac OS X 10.7 (Lion) and that you
+have Chrome and Ruby 1.9.2 installed.</p>
+<ol>
+<li>Download chromedriver
+<a href="http://code.google.com/p/chromium/downloads/list">http://code.google.com/p/chromium/downloads/list</a></li>
+<li>Move the binary to /usr/local</li>
+</ol>
+<p>Next, run these commands:</p>
+<pre><code class="lang-bash">git <span class="keyword">clone</span> git:<span class="comment">//github.com/jprichardson/GeneratePushCerts.git</span>
+gem install <span class="string">'keychain_manager'</span>
+gem install <span class="string">'watir-webdriver'</span>
+cd ./GeneratePushCerts</code></pre>
+<p>Modify the &#39;config.example.yml&#39; file with your iOS
+developer/provisioning portal credentials. Rename the file to
+&#39;config.yml&#39;.</p>
+<p>You&#39;ll want to edit &#39;app.rb&#39; and modify the END_WITH variable and set
+it to &#39;&#39;. I should have created a regular expression around line 60.</p>
+<p>Run the app &#39;ruby app.rb&#39;.</p>
+<p>Let&#39;s take a look at some watir code from the file:</p>
+<pre><code class="lang-ruby">  browser.checkbox(id: <span class="string">'enablePush'</span>).click() <span class="comment">#enable configure buttons</span>
+  browser.button(id: <span class="string">'aps-assistant-btn-prod-en'</span>).click() <span class="comment">#configure button</span>
+
+  Watir::Wait.until { browser.body.text.<span class="keyword">include</span>?(<span class="string">'Generate a Certificate Signing Request'</span>) }
+
+  browser.button(id: <span class="string">'ext-gen59'</span>).click() <span class="comment">#on lightbox overlay, click continue</span>
+
+  Watir::Wait.until { browser.body.text.<span class="keyword">include</span>?(<span class="string">'Submit Certificate Signing Request'</span>) }
+
+  browser.file_field(name: <span class="string">'upload'</span>).set(CERT_REQUEST_FILE)
+  browser.execute_script(<span class="string">"callFileValidate();"</span>)
+  <span class="comment">#browser.file_field(name: 'upload').click() #calls some local javascript to validate the file and enable continue button, unfortunately File Browse dialog shows up</span>
+
+  browser.button(id: <span class="string">'ext-gen75'</span>).click()
+
+  Watir::Wait.until(WAIT_TO) { browser.body.text.<span class="keyword">include</span>?(<span class="string">'Your APNs SSL Certificate has been generated.'</span>) }
+
+  browser.button(id: <span class="string">'ext-gen59'</span>).click() <span class="comment">#continue</span>
+
+  Watir::Wait.until { browser.body.text.<span class="keyword">include</span>?(<span class="string">'Step 1: Download'</span>) }
+
+  File.delete(DOWNLOADED_CERT_FILE) <span class="keyword">if</span> File.exists?(DOWNLOADED_CERT_FILE)
+
+  browser.button(alt: <span class="string">'Download'</span>).click() <span class="comment">#download cert</span>
+
+  puts(<span class="string">'Checking for existence of downloaded certificate file...'</span>)
+  <span class="keyword">while</span> !File.exists?(DOWNLOADED_CERT_FILE)
+    sleep <span class="number">1</span>
+  end
+
+  Watir::Wait.until { browser.body.text.<span class="keyword">include</span>?(<span class="string">"Download &amp; Install Your Apple Push Notification service SSL Certificate"</span>) }
+
+  browser.button(id: <span class="string">'ext-gen91'</span>).click()
+  browser.goto(APP_IDS_URL)</code></pre>
+<p>You can browse the entire <a href="https://github.com/jprichardson/GeneratePushCerts">source code on
+Github</a>.</p>
+<p>I think watir is pretty intuitive and is a swiss army knife for
+automating the interaction with web pages. It&#39;s pretty slow as it&#39;s
+meant for testing, so I wouldn&#39;t use it for screen scraping, but it&#39;s
+served me well for this task.</p>
+<p>Do you use Git? If so, checkout <a href="http://gitpilot.com">Gitpilot</a> to make
+using Git thoughtless.</p>
+<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>
+and read my blog on entrepreneurship: <a href="http://techneur.com">Techneur</a>.</p>
+<p>-JP Richardson</p>
+
+
+
+          <span id="footer">
+            <br/>
+            <span style="font-size: 10px">
+              Proudly built with <a href="{{sky.homepage}}">Sky</a>.
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    
+  </body>
+</html>

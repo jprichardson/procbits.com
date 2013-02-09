@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Node.js Exec Like Ruby Exec and Writing a Node.js Native Add On Module</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="JP">
+    <mete name="description" content="">
+
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
+    <!--<link href="style.css" rel="stylesheet">-->
+
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+      <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', ]);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+  </head>
+  <body>
+    
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid nav-container">
+          <nav role="navigation">
+            <a class="brand" title="" href="http://procbits.com">procbits</a>
+            
+            <p class="navbar-text pull-left">
+              source code snippets and other random musings about software
+            </p>
+          </nav>
+
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container-fluid">
+      <div id="content" class="clearfix row-fluid">
+        <div id="main" class="span8 clearfix" role="main">
+
+
+<h1>Node.js Exec Like Ruby Exec and Writing a Node.js Native Add On Module</h1>
+<p>Recently, I was faced with a problem that required my Node.js programs
+process to execute another process and have the procoess that&#39;s passed
+to the exec function completely replace the Node.js process. In short, I
+wanted an &#39;exec&#39; function like Ruby&#39;s &#39;exec&#39; function. Unfortunately,
+out of the box, Node.js doesn&#39;t support this functionality. I asked on
+<a href="http://stackoverflow.com/questions/8362181/like-ruby-exec-but-for-node-js">Stackoverflow.com, and someone had a
+response</a>
+that I should use the <a href="http://linux.die.net/man/3/exec">POSIX exec
+functions</a> to solve my problem and to
+consider writing a native Node.js extension.</p>
+<p><code>npm install kexec</code></p>
+<p>You can then use it like:</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> kexec = <span class="keyword">require</span>(<span class="string">'kexec'</span>);
+kexec(<span class="string">'top'</span>); <span class="comment">//you can pass any process that you want here</span></code></pre>
+<p>Here is the C++ source for Node Kexec:</p>
+<pre><code class="lang-cpp">
+<span class="comment">#include &lt;v8.h></span>
+<span class="comment">#include &lt;node.h></span>
+<span class="comment">#include &lt;cstdio></span>
+
+<span class="comment">//#ifdef __POSIX__</span>
+<span class="comment">#include &lt;unistd.h></span>
+<span class="comment">/*#else
+#include &lt;process.h>
+#endif*/</span>
+
+using <span class="keyword">namespace</span> node;
+using <span class="keyword">namespace</span> v8;
+
+<span class="keyword">static</span> Handle&lt;Value> kexec(<span class="keyword">const</span> Arguments&amp; args) {
+    String::Utf8Value v8str(args[<span class="number">0</span>]);
+    char* argv2[] = {<span class="string">""</span>, <span class="string">"-c"</span>, *v8str, <span class="keyword">NULL</span>};
+
+    execvp(<span class="string">"/bin/sh"</span>, argv2);      
+    <span class="keyword">return</span> Undefined();
+}
+
+extern <span class="string">"C"</span> {
+    <span class="keyword">static</span> void init (Handle&lt;Object> target) {
+        NODE_SET_METHOD(target, <span class="string">"kexec"</span>, kexec);
+    }
+
+    NODE_MODULE(kexec, init);
+}</code></pre>
+<p>As you can see, writing a C++ add on in Node.js isn&#39;t too difficult. You
+can use it in your Node.js Javascript like so:</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> kexec;
+
+<span class="keyword">try</span> {
+  kexec = <span class="keyword">require</span>(<span class="string">"./build/default/kexec.node"</span>); <span class="comment">//Node.js v0.4</span>
+} <span class="keyword">catch</span>(e) {
+  kexec = <span class="keyword">require</span>(<span class="string">"./build/Release/kexec.node"</span>); <span class="comment">//Node.js v0.6</span>
+}
+
+module.exports = kexec.kexec; <span class="comment">//function of kexec module is named kexec</span></code></pre>
+<p>Don&#39;t forget your wscript file, which ironically is Python code:</p>
+<pre><code class="lang-python">def set_options(opt):
+  opt.tool_options(&quot;compiler_cxx&quot;)
+
+def configure(conf):
+  conf.check_tool(&quot;compiler_cxx&quot;)
+  conf.check_tool(&quot;node_addon&quot;)
+
+def build(bld):
+  obj = bld.new_task_gen(&quot;cxx&quot;, &quot;shlib&quot;, &quot;node_addon&quot;) 
+  obj.cxxflags = [&quot;-g&quot;, &quot;-D_FILE_OFFSET_BITS=64&quot;, &quot;-D_LARGEFILE_SOURCE&quot;,&quot;-Wall&quot;]
+  obj.target = &quot;kexec&quot;
+  obj.source = &quot;src/node_kexec.cpp&quot;</code></pre>
+<p>In your package.json, include this bit:</p>
+<pre><code class="lang-javascript">&quot;scripts&quot;: { &quot;install&quot;: &quot;node-waf configure build&quot; }</code></pre>
+<p>Github Sourcecode: <a href="https://github.com/jprichardson/node-kexec">Node.js kernel
+exec</a></p>
+<p>I&#39;ve also included other resources for writing a Node.js Native Add On
+Module:</p>
+<ol>
+<li><a href="http://code.google.com/apis/v8/get_started.html">Google V8 Engine Getting
+Started</a></li>
+<li><a href="http://code.google.com/apis/v8/embed.html">Google V8 Embedder&#39;s
+Guide</a></li>
+<li><a href="http://syskall.com/how-to-roll-out-your-own-javascript-api-with">How to Roll Your Own Javascript API with
+V8</a></li>
+<li><a href="http://syskall.com/how-to-write-your-own-native-nodejs-extension">How to Write Your Own Native Node.js
+Extension</a></li>
+<li><a href="https://www.cloudkick.com/blog/2010/aug/23/writing-nodejs-native-extensions/">Writing Node.js Native
+Extensions</a></li>
+<li><a href="http://odoe.net/blog/?p=168">Node.js Native Extension with Hammer and a
+Prayer</a></li>
+<li><a href="http://www.ipreferjim.com/2011/04/node-js-mastering-node-excerpt-addons/">Mastering Node; Add
+Ons</a></li>
+<li><a href="http://nodejs.org/docs/v0.6.4/api/addons.html">Node.js Documentation: Add
+Ons</a></li>
+<li><a href="https://github.com/ry/node_postgres">Postgres Node.js Module</a></li>
+<li><a href="http://v8.googlecode.com/svn/trunk/samples/shell.cc">V8 Sample:
+shell.cc</a></li>
+<li><a href="http://create.tpsitulsa.com/blog/2009/01/29/v8-objects/">V8
+Objects</a></li>
+<li><a href="http://nikhilm.bitbucket.org/articles/c_in_my_javascript/c_in_javascript_part_2.html">There&#39;s C in My
+JavaScript</a></li>
+<li><a href="http://stackoverflow.com/questions/7476145/converting-from-v8arguments-to-c-types">Converting V8 Arguments to C++
+Types</a></li>
+</ol>
+<p>Do you use Git? If so, checkout <a href="http://gitpilot.com">Gitpilot</a> to make
+using Git easy.</p>
+<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>
+and read my blog on entrepreneurship: <a href="http://techneur.com">Techneur</a>.</p>
+<p>-JP Richardson</p>
+
+
+
+          <span id="footer">
+            <br/>
+            <span style="font-size: 10px">
+              Proudly built with <a href="{{sky.homepage}}">Sky</a>.
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    
+  </body>
+</html>

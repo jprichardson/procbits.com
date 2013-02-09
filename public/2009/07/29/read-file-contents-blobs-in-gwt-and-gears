@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Read File Contents (Blobs) in GWT and Gears</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="JP">
+    <mete name="description" content="">
+
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
+    <!--<link href="style.css" rel="stylesheet">-->
+
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+      <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', ]);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+  </head>
+  <body>
+    
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid nav-container">
+          <nav role="navigation">
+            <a class="brand" title="" href="http://procbits.com">procbits</a>
+            
+            <p class="navbar-text pull-left">
+              source code snippets and other random musings about software
+            </p>
+          </nav>
+
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container-fluid">
+      <div id="content" class="clearfix row-fluid">
+        <div id="main" class="span8 clearfix" role="main">
+
+
+<h1>Read File Contents (Blobs) in GWT and Gears</h1>
+<p>What do you do if you want to read the contents of a file in your GWT
+application? One possible solution is to use Google Gears.</p>
+<p>Gears offers a method to allow a user to select file(s). You can then
+use the returned &quot;getFiles&quot; method of the &quot;OpenFilesEvent&quot; object to
+find out what file(s) the user selected. Each &quot;File&quot; class has a method
+called &quot;getBlob&quot; that returns a &quot;Blob&quot; object. However, each blob object
+doesn&#39;t provide any direct way to access the blobs contents. Many
+<a href="http://www.arcaner.com/2008/09/14/google-gears-blob-hate/">people</a>
+<a href="http://groups.google.com/group/gears-users/browse_thread/thread/0b4d3933a1ef0e91?fwc=1">haven&#39;t</a>
+found a way to read the blob contents.</p>
+<p>I wrote a class to access the contents of the blob. The class is called
+&quot;BlobReader&quot; and is very simple to use. The trick lies in the fact that
+in Javascript we can access the &quot;getBytes&quot; method of the blob.</p>
+<p>Here is an example reading line by line of a text file:</p>
+<pre><code><span class="keyword">try</span> {
+    Desktop dt = Factory.getInstance().createDesktop();
+    dt.openFiles(<span class="keyword">new</span> OpenFilesHandler(){
+        <span class="keyword">public</span> void onOpenFiles(OpenFilesEvent event) {
+            File[] files = event.getFiles();
+            File file = files[<span class="number">0</span>];
+            Blob data = file.getBlob();
+
+            BlobReader br = <span class="keyword">new</span> BlobReader(data);
+            <span class="keyword">while</span> (!br.endOfBlob())
+                Window.alert(br.readLine());
+            }
+        }, <span class="keyword">true</span>);
+} <span class="keyword">catch</span> (<span class="keyword">Exception</span> ex){
+    Window.alert(ex.toString());
+}</code></pre>
+<p>Here is BlobReader.java:</p>
+<pre><code>package com.yourpackage.client;
+import com.google.gwt.core.client.JsArrayInteger;
+import com.google.gwt.gears.client.blob.Blob;
+
+<span class="keyword">public</span> <span class="keyword">class</span> BlobReader {
+
+    <span class="keyword">private</span> <span class="keyword">final</span> int CHUNK_SIZE = <span class="number">1024</span>;
+
+    <span class="keyword">public</span> BlobReader(Blob blob){
+        <span class="keyword">this</span>.blob = blob;
+    }
+
+    <span class="keyword">private</span> Blob blob;
+    <span class="keyword">public</span> Blob getBlob(){ <span class="keyword">return</span> <span class="keyword">this</span>.blob; }
+
+    <span class="keyword">private</span> int blobPointer = <span class="number">0</span>;
+    <span class="keyword">public</span> int getBlobPointer(){ <span class="keyword">return</span> <span class="keyword">this</span>.blobPointer; }
+
+    <span class="keyword">public</span> boolean endOfBlob(){
+        <span class="keyword">return</span> (blobPointer >= blob.getLength());
+    }
+
+    <span class="keyword">public</span> byte[] readAllBytes(){
+        <span class="keyword">return</span> getBlobBytes(<span class="keyword">this</span>.blob);
+    }
+
+    <span class="keyword">public</span> String readAllText(){
+        int size = <span class="keyword">this</span>.blob.getLength();
+        StringBuilder sb = <span class="keyword">new</span> StringBuilder(size);
+
+        JsArrayInteger bytes = getBlobBytes(<span class="keyword">this</span>.blob, <span class="number">0</span>, size);
+        <span class="keyword">for</span> (int x = <span class="number">0</span>; x &lt; size; x++)
+            sb.append((char)bytes.get(x));
+
+        <span class="keyword">return</span> sb.toString();
+    }
+
+    <span class="keyword">public</span> String readLine(){
+        int size = CHUNK_SIZE;
+        boolean foundEndOfLine = <span class="keyword">false</span>;
+
+        JsArrayInteger bytes;
+        StringBuilder sb = <span class="keyword">new</span> StringBuilder(CHUNK_SIZE);
+
+        <span class="keyword">while</span> (!foundEndOfLine &amp;&amp; size > <span class="number">0</span>){
+            int dif = <span class="keyword">this</span>.blob.getLength() - <span class="keyword">this</span>.blobPointer; <span class="comment">//remainder of the data</span>
+            <span class="keyword">if</span> (dif &lt; CHUNK_SIZE)
+                size = dif;
+            bytes = getBlobBytes(<span class="keyword">this</span>.blob, <span class="keyword">this</span>.blobPointer, size);
+
+            <span class="keyword">for</span> (int x = <span class="number">0</span>; x &lt; size; x++){
+                blobPointer++;
+                int b = bytes.get(x);
+                <span class="keyword">if</span> (b == <span class="number">10</span>){ <span class="comment">//newline</span>
+                    foundEndOfLine = <span class="keyword">true</span>;
+                    <span class="keyword">break</span>;
+                }
+                sb.append((char)b);
+
+                <span class="keyword">if</span> (<span class="keyword">this</span>.getBlobPointer() % <span class="number">1000000</span> == <span class="number">0</span>)
+                    Window.alert(<span class="string">""</span> + <span class="keyword">this</span>.getBlobPointer());
+            }
+        }
+
+        <span class="keyword">if</span> (sb.substring(sb.length() - <span class="number">1</span>) == <span class="string">"\r"</span>)
+            sb.deleteCharAt(sb.length() - <span class="number">1</span>);
+
+        <span class="keyword">return</span> sb.toString();
+    }
+
+       <span class="keyword">public</span> void reset(){
+        <span class="keyword">this</span>.blobPointer = <span class="number">0</span>;
+    }
+
+    <span class="keyword">private</span> byte[] getBlobBytes(Blob b){
+        JsArrayInteger <span class="keyword">array</span> = getBlobBytes(b, <span class="number">0</span>, b.getLength());
+        byte[] bytes = <span class="keyword">new</span> byte[<span class="keyword">array</span>.length()];
+        <span class="keyword">for</span> (int x = <span class="number">0</span>; x &lt; bytes.length; x++)
+            bytes[x] = (byte) <span class="keyword">array</span>.get(x); <span class="comment">//in google docs we are told these are from 0-255</span>
+
+        <span class="keyword">return</span> bytes;
+    }
+
+    <span class="keyword">private</span> native JsArrayInteger getBlobBytes(Blob b, int offset, int length) <span class="comment">/*-{
+        return b.getBytes(offset, length);
+    }-*/</span>;
+}</code></pre>
+<p>Notes: 1) This hasn&#39;t been thoroughly tested/debugged. 2) At the time of
+this writing, I&#39;m using Gears 0.5 with the GWT-Gears 1.2.1. In the
+current GWT-Gears svn trunk you can see upcoming support for the GWT
+methods &quot;getNativeBytes&quot; and &quot;getBytes&quot;</p>
+<p>Are you a <a href="http://gitpilot.com">Git</a> user? Let me help you make project
+management with Git simple. Checkout <a href="http://gitpilot.com">Gitpilot</a>.</p>
+<p>Enjoy!</p>
+
+
+
+          <span id="footer">
+            <br/>
+            <span style="font-size: 10px">
+              Proudly built with <a href="{{sky.homepage}}">Sky</a>.
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    
+  </body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Using LINQ with CSV Files</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="JP">
+    <mete name="description" content="">
+
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
+    <!--<link href="style.css" rel="stylesheet">-->
+
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+      <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', ]);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+  </head>
+  <body>
+    
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid nav-container">
+          <nav role="navigation">
+            <a class="brand" title="" href="http://procbits.com">procbits</a>
+            
+            <p class="navbar-text pull-left">
+              source code snippets and other random musings about software
+            </p>
+          </nav>
+
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container-fluid">
+      <div id="content" class="clearfix row-fluid">
+        <div id="main" class="span8 clearfix" role="main">
+
+
+<h1>Using LINQ with CSV Files</h1>
+<p>In my <a href="http://procbits.com/2010/10/07/convert-a-csv-to-xml-using-c/">last
+post</a>, I
+wrote how you can convert a CSV to XML. I stated that the reason that
+you would do this is so that you can use LINQ on CSV files.</p>
+<p>Using my CsvToXml class you can easily use LINQ on CSV. You can see the
+<a href="http://github.com/jprichardson/CommonLib/blob/master/CommonLib/Data/Csv/CsvToXml.cs">source for
+CsvToXml</a>
+in my C# CommonLib library.</p>
+<p>Let&#39;s assume your CSV file looks like the following:
+<code>&#39;Product&#39;,&#39;Price&#39;,&#39;DateStocked&#39; &#39;Pepsi&#39;,&#39;4.50&#39;,&#39;2010-05-04&#39; &#39;Coke&#39;,&#39;3.00&#39;,&#39;2010-09-22&#39; &#39;Cheetos&#39;,&#39;7.25&#39;,&#39;2009-01-13&#39;</code></p>
+<p>You can then convert like so:</p>
+<pre><code class="lang-csharp"><span class="keyword">var</span> csv2xml = <span class="keyword">new</span> CsvToXml(<span class="string">"mycsvfile.csv"</span>, <span class="keyword">true</span>);
+csv2xml.TextQualifier = <span class="string">'\''</span>;
+csv2xml.Convert();</code></pre>
+<p>You can then do cool LINQ queries using the &quot;Records&quot; property of the
+CsvToXml class:</p>
+<pre><code class="lang-csharp"><span class="keyword">var</span> records = from rec in csv2xml.Records
+            where (decimal)rec.Element(<span class="string">"Price"</span>) > <span class="number">3.5</span>m
+            orderby (string)rec.Element(<span class="string">"Product"</span>)
+            select rec;</code></pre>
+<p>or use LINQ like...</p>
+<pre><code class="lang-csharp"><span class="keyword">var</span> records = from rec in csv2xml.Records
+            where Convert.ToDateTime((string)rec.Element(<span class="string">"DateStocked"</span>)) > <span class="keyword">new</span> DateTime(<span class="number">2010</span>, <span class="number">9</span>, <span class="number">1</span>)
+            orderby (string)rec.Element(<span class="string">"Product"</span>)
+            select rec;</code></pre>
+<p>Then to access the data of the returned &quot;records&quot; object you can do
+this:</p>
+<pre><code class="lang-csharp"><span class="keyword">var</span> myrec = records.ElementAt(<span class="number">0</span>);
+<span class="keyword">var</span> firstProduct = (string)myrec.Element(<span class="string">"Product"</span>);</code></pre>
+<p>Cool, huh? But we can do better. It&#39;s annoying to cast your objects all
+of the time and to call Element(&quot;CSV_COLUMN_NAME&quot;). Why not take
+advantage of .NET 4.0 and use its &#39;dynamic&#39; data type? Admittedly, I got
+this idea from this article: <a href="http://blogs.msdn.com/b/csharpfaq/archive/2009/10/19/dynamic-in-c-4-0-creating-wrappers-with-dynamicobject.aspx">Creating Wrappers with
+DynamicObject</a>.</p>
+<p>Now we can use LINQ like this:</p>
+<pre><code class="lang-csharp"><span class="keyword">var</span> records = from rec in csv2xml.DynamicRecords
+            where (decimal)rec.Price > <span class="number">3.5</span>m
+            orderby (string)rec.Product
+            select rec;
+
+<span class="comment">//OR</span>
+
+records = from rec in csv2xml.DynamicRecords
+        where Convert.ToDateTime((string)rec.DateStocked) > <span class="keyword">new</span> DateTime(<span class="number">2010</span>, <span class="number">9</span>, <span class="number">1</span>)
+        orderby (string)rec.Product
+        select rec;</code></pre>
+<p>A bit better. Now you don&#39;t have to call &quot;Element&quot; method everytime, you
+still have to annoyingly cast. But, in each CSV column, we already know
+that the types should be consistent. Let&#39;s define our types up front:</p>
+<pre><code class="lang-csharp"><span class="keyword">var</span> csv2xml = <span class="keyword">new</span> CsvToXml(<span class="string">"mycsvfile.csv"</span>, <span class="keyword">true</span>);
+csv2xml.TextQualifier = <span class="string">'\''</span>;
+
+csv2xml.ColumnTypes.Add(<span class="string">"Product"</span>, typeof(string));
+csv2xml.ColumnTypes.Add(<span class="string">"Price"</span>, typeof(decimal));
+csv2xml.ColumnTypes.Add(<span class="string">"DateStocked"</span>, typeof(DateTime));
+
+csv2xml.Convert();</code></pre>
+<p>Now we can use LINQ like this:</p>
+<pre><code class="lang-csharp">records = from rec in csv2xml.DynamicRecords
+            where rec.Price > <span class="number">3.5</span>m
+            orderby rec.Product
+            select rec;
+
+<span class="comment">//OR</span>
+records = from rec in csv2xml.DynamicRecords
+            where rec.DateStocked > <span class="keyword">new</span> DateTime(<span class="number">2010</span>, <span class="number">9</span>, <span class="number">1</span>)
+            orderby rec.Product
+            select rec;</code></pre>
+<p>This is truly clean code. All you need to do is define your types for
+each column and you&#39;re set. At this time, the major disadvantage is that
+you can&#39;t lazily evaluate your CSV. You must read it entirely into
+memory. This class could be modified for lazy evaluation and then you
+would be able to use LINQ on large CSV files.</p>
+<p>Are you a <a href="http://gitpilot.com">Git</a> user? Let me help you make project
+management with Git simple. Checkout <a href="http://gitpilot.com">Gitpilot</a>.</p>
+<p>I hope you&#39;ve enjoyed this. You should read my blog on entrepreneurship:
+<a href="http://techneur.com">Techneur</a> or follow me on Twitter:
+<a href="http://twitter.com/jprichardson">@jprichardson</a>.</p>
+<p>-JP</p>
+
+
+
+          <span id="footer">
+            <br/>
+            <span style="font-size: 10px">
+              Proudly built with <a href="{{sky.homepage}}">Sky</a>.
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    
+  </body>
+</html>

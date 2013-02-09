@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>RVM Is a Must for the Rubyist</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="JP">
+    <mete name="description" content="">
+
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
+    <!--<link href="style.css" rel="stylesheet">-->
+
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+      <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', ]);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+  </head>
+  <body>
+    
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid nav-container">
+          <nav role="navigation">
+            <a class="brand" title="" href="http://procbits.com">procbits</a>
+            
+            <p class="navbar-text pull-left">
+              source code snippets and other random musings about software
+            </p>
+          </nav>
+
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container-fluid">
+      <div id="content" class="clearfix row-fluid">
+        <div id="main" class="span8 clearfix" role="main">
+
+
+<h1>RVM Is a Must for the Rubyist</h1>
+<p>If you are a Ruby or Rails developer and you haven&#39;t heard of
+<a href="http://rvm.beginrescueend.com/">RVM</a> yet, I&#39;ll let you in on the
+secret. It rocks! Basically, RVM allows you to easily simultaneously run
+multiple ruby version on the same machine. You see, Rails 3.0 just came
+out and I thought it would run on Ruby 1.9.1 but it won&#39;t. It require&#39;s
+Ruby 1.9.2. So I upgraded my OS X dev box and manually created the new
+symlinks. All was well, but I wasn&#39;t sure how my apps that required
+1.9.1 would behave. So I researched RVM.</p>
+<p>To install on your OS X box, it&#39;s quite simple. Just make sure that you
+have XCode installed, as you&#39;ll need the GCC.</p>
+<pre><code class="lang-bash">bash &lt; &lt;( curl http:<span class="comment">//rvm.beginrescueend.com/releases/rvm-install-head )</span></code></pre>
+<p>That&#39;s all you need to do to install it!</p>
+<p>Edit ~./.bash_profile with the following:</p>
+<pre><code class="lang-bash">[[ -s "$HOME/.rvm/scripts/rvm" ]] &amp;&amp; source "$HOME/.rvm/scripts/rvm"</code></pre>
+<p>Open a new shell and you&#39;re ready to rock.</p>
+<p>To install a Ruby version 1.9.2, just type:</p>
+<pre><code class="lang-bash">rvm install 1.9.2</code></pre>
+<p>Or for version 1.8.7</p>
+<pre><code class="lang-bash">rvm install 1.8.7</code></pre>
+<p>Switch versions like:</p>
+<pre><code class="lang-bash">rvm 1.9.2</code></pre>
+<p>To see where &quot;ruby&quot; is actually installed you type:</p>
+<pre><code class="lang-bash">which ruby</code></pre>
+<p>You&#39;ll see:</p>
+<pre><code class="lang-bash">/Users/jp/.rvm/rubies/ruby-1.9.2-p0/bin/ruby</code></pre>
+<p>To see the gem path:</p>
+<pre><code class="lang-bash">gem env path</code></pre>
+<p>Its output:</p>
+<pre><code class="lang-bash">/Users/jp/.rvm/gems/ruby-<span class="number">1.9</span>.<span class="number">2</span>-p0:/Users/jp/.rvm/gems/ruby-<span class="number">1.9</span>.<span class="number">2</span>-p0@<span class="keyword">global</span></code></pre>
+<p>It&#39;s like magic! Take note: <a href="http://rvm.beginrescueend.com/rvm/install/">according to the
+guide</a>, you should NOT run
+&quot;sudo&quot; to install rvm.</p>
+<p>Are you a <a href="http://gitpilot.com">Git</a> user? Let me help you make project
+management with Git simple. Checkout <a href="http://gitpilot.com">Gitpilot</a>.</p>
+<p>Read me blog on entrepreneurship: <a href="http://techneur.com">Techneur</a> Follow
+me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
+<p>-JP</p>
+
+
+
+          <span id="footer">
+            <br/>
+            <span style="font-size: 10px">
+              Proudly built with <a href="{{sky.homepage}}">Sky</a>.
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    
+  </body>
+</html>

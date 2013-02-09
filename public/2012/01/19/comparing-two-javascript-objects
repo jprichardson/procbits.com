@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Comparing Two Javascript Objects</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="JP">
+    <mete name="description" content="">
+
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
+    <!--<link href="style.css" rel="stylesheet">-->
+
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+      <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', ]);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+  </head>
+  <body>
+    
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid nav-container">
+          <nav role="navigation">
+            <a class="brand" title="" href="http://procbits.com">procbits</a>
+            
+            <p class="navbar-text pull-left">
+              source code snippets and other random musings about software
+            </p>
+          </nav>
+
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container-fluid">
+      <div id="content" class="clearfix row-fluid">
+        <div id="main" class="span8 clearfix" role="main">
+
+
+<h1>Comparing Two Javascript Objects</h1>
+<p>Recently, I was faced with a problem where I needed to compare two
+Javascript objects. My initial strategy was to convert them to JSON and
+compare the JSON strings.</p>
+<p>Sort of like this:</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> a = JSON.stringify(person1);<span class="comment">//'{"firstName":"JP","lastName":"Richardson"}'</span>
+<span class="keyword">var</span> b = JSON.stringify(person2);<span class="comment">//'{"firstName":"JP","lastName":"Richardson"}'</span>
+
+assert(a === b);</code></pre>
+<p>Simple enough, right?</p>
+<p>Not so fast. I encountered a case like this:</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> a = JSON.stringify(person1);<span class="comment">//'{"firstName":"JP","lastName":"Richardson"}'</span>
+<span class="keyword">var</span> b = JSON.stringify(person2);<span class="comment">//'{"lastName":"Richardson","firstName":"JP"}'</span>
+
+assert(a === b);</code></pre>
+<p>The data is the same, but the string is different. Fortunately,
+Stackoverflow had a nice <a href="http://stackoverflow.com/questions/1068834/object-comparison-in-javascript">Javascript object comparison
+algorithm</a>
+to dump into my app.</p>
+<pre><code class="lang-javascript">Object.prototype.equals = <span class="keyword">function</span>(x)
+{
+  <span class="keyword">var</span> p;
+  <span class="keyword">for</span>(p in <span class="keyword">this</span>) {
+      <span class="keyword">if</span>(typeof(x[p])==<span class="string">'undefined'</span>) {<span class="keyword">return</span> <span class="keyword">false</span>;}
+  }
+
+  <span class="keyword">for</span>(p in <span class="keyword">this</span>) {
+      <span class="keyword">if</span> (<span class="keyword">this</span>[p]) {
+          <span class="keyword">switch</span>(typeof(<span class="keyword">this</span>[p])) {
+              <span class="keyword">case</span> <span class="string">'object'</span>:
+                  <span class="keyword">if</span> (!<span class="keyword">this</span>[p].equals(x[p])) { <span class="keyword">return</span> <span class="keyword">false</span>; } <span class="keyword">break</span>;
+              <span class="keyword">case</span> <span class="string">'function'</span>:
+                  <span class="keyword">if</span> (typeof(x[p])==<span class="string">'undefined'</span> ||
+                      (p != <span class="string">'equals'</span> &amp;&amp; <span class="keyword">this</span>[p].toString() != x[p].toString()))
+                      <span class="keyword">return</span> <span class="keyword">false</span>;
+                  <span class="keyword">break</span>;
+              <span class="keyword">default</span>:
+                  <span class="keyword">if</span> (<span class="keyword">this</span>[p] != x[p]) { <span class="keyword">return</span> <span class="keyword">false</span>; }
+          }
+      } <span class="keyword">else</span> {
+          <span class="keyword">if</span> (x[p])
+              <span class="keyword">return</span> <span class="keyword">false</span>;
+      }
+  }
+
+  <span class="keyword">for</span>(p in x) {
+      <span class="keyword">if</span>(typeof(<span class="keyword">this</span>[p])==<span class="string">'undefined'</span>) {<span class="keyword">return</span> <span class="keyword">false</span>;}
+  }
+
+  <span class="keyword">return</span> <span class="keyword">true</span>;
+}</code></pre>
+<p>Test passed. I eventually hit a situation where I had some code with an
+Object that had a Person prototype and some data that came from JSON.
+Kinda like this:</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> person1 = <span class="keyword">new</span> Person(<span class="string">'JP'</span>, <span class="string">'Richardson'</span>);
+<span class="keyword">var</span> person2 = JSON.parse(<span class="string">'{"firstName":"JP","lastName":"Richardson"}'</span>);
+
+<span class="comment">//deepEquals is code snippet above ^</span>
+person1.deepEquals(person2); <span class="comment">// &lt;--- THIS FAILS</span></code></pre>
+<p>I only cared about comparing the data. The methods associated with the
+object (Prototype) didn&#39;t matter. Let&#39;s modify the above algorithm. I
+use CoffeeScript. Here&#39;s the modification:</p>
+<pre><code class="lang-ruby">Object::jsonEquals = (x) ->
+  <span class="comment">#we do this because two objects may have the same data fields and data but different prototypes</span>
+  x1 = JSON.parse(JSON.stringify(<span class="keyword">this</span>))
+  x2 = JSON.parse(JSON.stringify(x))
+
+  p = <span class="keyword">null</span>
+  <span class="keyword">for</span> p of x1
+    <span class="keyword">return</span> <span class="keyword">false</span> <span class="keyword">if</span> typeof (x2[p]) is <span class="string">'undefined'</span>
+  <span class="keyword">for</span> p of x1
+    <span class="keyword">if</span> x1[p]
+      <span class="keyword">switch</span> typeof (x1[p])
+        when <span class="string">'object'</span>
+          <span class="keyword">return</span> <span class="keyword">false</span> unless x1[p].jsonEquals(x2[p])
+        when <span class="string">'function'</span>
+          <span class="keyword">return</span> <span class="keyword">false</span> <span class="keyword">if</span> typeof (x2[p]) is <span class="string">'undefined'</span> <span class="keyword">or</span> (p isnt <span class="string">'equals'</span> <span class="keyword">and</span> x1[p].toString() isnt x2[p].toString())
+        <span class="keyword">else</span>
+          <span class="keyword">return</span> <span class="keyword">false</span>  unless x1[p] is x2[p]
+    <span class="keyword">else</span>
+      <span class="keyword">return</span> <span class="keyword">false</span> <span class="keyword">if</span> x2[p]
+  <span class="keyword">for</span> p of x2
+    <span class="keyword">return</span> <span class="keyword">false</span> <span class="keyword">if</span> typeof (x1[p]) is <span class="string">'undefined'</span>
+  <span class="keyword">true</span></code></pre>
+<p>This causes the situation like I described above to pass. Essentially
+convert to JSON to remove the prototype. I suppose you could make this
+more efficient my just manually setting the prototype to Object before
+doing the comparison, but oh well this works for the time being.</p>
+<p>Do you use Git? If so, checkout <a href="http://gitpilot.com">Gitpilot</a> to make
+project management and collaborating on projects seamless.</p>
+<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>
+and read my blog on entrepreneurship: <a href="http://techneur.com">Techneur</a>.</p>
+<p>-JP Richardson</p>
+
+
+
+          <span id="footer">
+            <br/>
+            <span style="font-size: 10px">
+              Proudly built with <a href="{{sky.homepage}}">Sky</a>.
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    
+  </body>
+</html>

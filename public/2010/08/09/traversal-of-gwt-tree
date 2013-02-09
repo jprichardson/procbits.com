@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Traversal of GWT Tree</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="JP">
+    <mete name="description" content="">
+
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
+    <!--<link href="style.css" rel="stylesheet">-->
+
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+      <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', ]);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+  </head>
+  <body>
+    
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid nav-container">
+          <nav role="navigation">
+            <a class="brand" title="" href="http://procbits.com">procbits</a>
+            
+            <p class="navbar-text pull-left">
+              source code snippets and other random musings about software
+            </p>
+          </nav>
+
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container-fluid">
+      <div id="content" class="clearfix row-fluid">
+        <div id="main" class="span8 clearfix" role="main">
+
+
+<h1>Traversal of GWT Tree</h1>
+<p>Recently, an app I&#39;m working on needed two trees. I just so happened
+that I needed to deep copy part of one of the trees to the other tree.
+The copied tree will then have checkboxes as nodes instead of just
+Strings.</p>
+<p>So how would you do this? The first solution that came to mine is
+depth-first traversal of the tree. This method could be adapted to any
+tree structure in just about any language.</p>
+<p>We need a callback function for everytime we &#39;hit&#39; a tree node. Let&#39;s
+create an interface called &#39;Action&#39;: Action.java:</p>
+<pre><code class="lang-java"><span class="keyword">public</span> <span class="keyword">interface</span> Action&lt;T> {
+    <span class="keyword">public</span> void execute(T object);
+}</code></pre>
+<p>Now, we need to create a file called TreeItemUtil.java. This will
+include the algorithm. The algorithm is really straightforward, it just
+uses a stack for each node and iterates the stack. If a node has
+children, they are pushed onto the stack. TreeItemUtil.java:</p>
+<pre><code class="lang-java"><span class="keyword">public</span> <span class="keyword">class</span> TreeItemUtil {
+
+    <span class="keyword">public</span> <span class="keyword">static</span> Collection&lt;TreeItem> fetchChildren(TreeItem ti){
+        <span class="keyword">List</span>&lt;TreeItem> children = <span class="keyword">new</span> ArrayList&lt;TreeItem>();
+
+        <span class="keyword">for</span> (int i = <span class="number">0</span>; i &lt; ti.getChildCount(); ++i)
+            children.add(ti.getChild(i));
+        <span class="keyword">return</span> children;
+    }
+
+    <span class="keyword">public</span> <span class="keyword">static</span> void traverseDfs(TreeItem root, Action&lt;TreeItem> onNode){
+        <span class="keyword">if</span> (onNode == <span class="keyword">null</span>)
+            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Must pass an action."</span>);
+
+        Stack&lt;TreeItem> children = <span class="keyword">new</span> Stack&lt;TreeItem>();
+        children.add(root);
+
+        <span class="keyword">while</span> (!children.isEmpty()){
+            TreeItem current = children.pop();
+            onNode.execute(current);
+            <span class="keyword">List</span>&lt;TreeItem> currentChildren = fetchChildren(current);
+            children.addAll(currentChildren);
+        }
+    }
+}</code></pre>
+<p>Here is our TreeItemUtilTest.java that uses Mockito:</p>
+<pre><code class="lang-java"><span class="keyword">public</span> void testTraverseDfs(){
+        <span class="keyword">final</span> StringBuffer sb = <span class="keyword">new</span> StringBuffer();
+
+        TreeItem a = createMockedTI(<span class="string">"a"</span>);
+        TreeItem b = createMockedTI(<span class="string">"b"</span>);
+        TreeItem c = createMockedTI(<span class="string">"c"</span>);
+        TreeItem d = createMockedTI(<span class="string">"d"</span>);
+        TreeItem e = createMockedTI(<span class="string">"e"</span>);
+        TreeItem f = createMockedTI(<span class="string">"f"</span>);
+        TreeItem g = createMockedTI(<span class="string">"g"</span>);
+        TreeItem h = createMockedTI(<span class="string">"h"</span>);
+        TreeItem i = createMockedTI(<span class="string">"i"</span>);
+        TreeItem j = createMockedTI(<span class="string">"j"</span>);
+        TreeItem k = createMockedTI(<span class="string">"k"</span>);
+        TreeItem l = createMockedTI(<span class="string">"l"</span>);
+        TreeItem m = createMockedTI(<span class="string">"m"</span>);
+        TreeItem n = createMockedTI(<span class="string">"n"</span>);
+        TreeItem o = createMockedTI(<span class="string">"o"</span>);
+        TreeItem p = createMockedTI(<span class="string">"p"</span>);
+
+        addMockedChildren(a, b, o);
+        addMockedChildren(b, c, i);
+        addMockedChildren(o, n, p);
+        addMockedChildren(c, d);
+        addMockedChildren(i, j, m);
+        addMockedChildren(d, e);
+        addMockedChildren(j, k, l);
+        addMockedChildren(e, f, g);
+        addMockedChildren(g, h);
+
+        TreeItemUtil.traverseDfs(a, <span class="keyword">new</span> Action&lt;TreeItem>(){
+            <span class="keyword">public</span> void execute(TreeItem current){
+                sb.append(current.getText());
+            }
+        });
+
+        <span class="comment">//I was assuming it would be leftmost child first, if so, it would be in alphabetical order</span>
+        <span class="comment">//but it starts with rightmost node first.</span>
+        assertEquals(<span class="string">"aopnbimjlkcdeghf"</span>, sb.toString());
+    }
+
+    <span class="keyword">private</span> TreeItem createMockedTI(String text){
+        TreeItem ti = mock(TreeItem.<span class="keyword">class</span>);
+        when(ti.getText()).thenReturn(text);
+        <span class="keyword">return</span> ti;
+    }
+
+    <span class="keyword">private</span> void addMockedChildren(TreeItem <span class="keyword">parent</span>, TreeItem... children){
+        <span class="keyword">for</span> (int x = <span class="number">0</span>; x &lt; children.length; ++x){
+            when(<span class="keyword">parent</span>.getChild(x)).thenReturn(children[x]);
+            when(children[x].getParentItem()).thenReturn(<span class="keyword">parent</span>);
+        }
+
+        when(<span class="keyword">parent</span>.getChildCount()).thenReturn(children.length);
+    }</code></pre>
+<p>Now for the actual algorithm that clones the TreeItem into a TreeItem
+with checkboxes:</p>
+<pre><code class="lang-java"><span class="keyword">private</span> TreeItem cloneTreeItemsWithCheckboxes(TreeItem root){
+        <span class="keyword">final</span> HashMap&lt;TreeItem, TreeItem> oldNew = <span class="keyword">new</span> HashMap&lt;TreeItem, TreeItem>();
+
+        TreeItemUtil.traverseDfs(root, <span class="keyword">new</span> Action&lt;TreeItem>(){
+            <span class="keyword">public</span> void execute(TreeItem current){
+                TreeItem newTi = <span class="keyword">new</span> TreeItem(<span class="keyword">new</span> CheckBox(current.getText()));
+                newTi.setUserObject(current.getUserObject());
+                oldNew.put(current, newTi);
+
+                <span class="keyword">if</span> (current.getParentItem() != <span class="keyword">null</span> &amp;&amp; oldNew.containsKey(current.getParentItem())){
+                    TreeItem newParent = oldNew.get(current.getParentItem());
+                    newParent.addItem(newTi);
+                }
+            }
+        });
+
+        <span class="keyword">return</span> oldNew.get(root);
+    }</code></pre>
+<p>Are you a <a href="http://gitpilot.com">Git</a> user? Let me help you make project
+management with Git simple. Checkout <a href="http://gitpilot.com">Gitpilot</a>.</p>
+<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
+<p>-JP</p>
+
+
+
+          <span id="footer">
+            <br/>
+            <span style="font-size: 10px">
+              Proudly built with <a href="{{sky.homepage}}">Sky</a>.
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    
+  </body>
+</html>

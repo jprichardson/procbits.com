@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Buzz: A Node.js Command Line Program to Keep Your App Running Indefinitely; Like the Program Forever</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="JP">
+    <mete name="description" content="">
+
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
+    <!--<link href="style.css" rel="stylesheet">-->
+
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+      <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', ]);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+  </head>
+  <body>
+    
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid nav-container">
+          <nav role="navigation">
+            <a class="brand" title="" href="http://procbits.com">procbits</a>
+            
+            <p class="navbar-text pull-left">
+              source code snippets and other random musings about software
+            </p>
+          </nav>
+
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container-fluid">
+      <div id="content" class="clearfix row-fluid">
+        <div id="main" class="span8 clearfix" role="main">
+
+
+<h1>Buzz: A Node.js Command Line Program to Keep Your App Running Indefinitely; Like the Program Forever</h1>
+<p>Buzz is a command line program that can kill your app routinely and
+restart it. It&#39;ll will also restart your app if it dies. It&#39;s a lot like
+the other Node.js program
+<a href="https://github.com/indexzero/forever">Forever</a>.</p>
+<p>It&#39;s much simpler than Forever. Approximately 50 lines of CoffeeScript
+code. It displays your apps output to STDOUT and also displays any of
+your apps STDERR output in red.</p>
+<p><strong>Usage</strong></p>
+<p>Install it via npm: <code>npm install buzz</code></p>
+<p>Then run: <code>buzz 240 your_cool_app param1 param2</code></p>
+<p>The first parameter to buzz is the time in seconds that it&#39;ll be killed
+and restarted. So, `your_cool_app` would be killed and restarted
+after four minutes.</p>
+<p>If you don&#39;t want buzz to kill your app, but you want it to bring it
+back to life if it dies, run: <code>buzz your_cool_app param1 param2</code></p>
+<p>You can test buzz by running his the app `buzz_test`: <code>buzz_test</code></p>
+<p>`buzz_test` runs the app `smarty_pants` that spews out random
+facts to you and taunts you. Occasionally `smarty_pants` will commit
+suicide, but buzz will bring him back to life.</p>
+<p>`buzz_test` ends up actualy just running the following command:
+<code>buzz 10 smarty_pants 2000 0.15</code></p>
+<p>Which will kill smarty pants every 10 seconds and bring him back to
+life. Also, every two seconds, smarty pants will spit out a random fact.
+Approximately, every 13 seconds smarty pants will take his own life, but
+Buzz will bring him back.</p>
+<p><strong>Motivation</strong></p>
+<p>I have a command line app that is nasty to debug. It&#39;s working fine for
+the first five minutes or so. Thus, Buzz was born. Instead of fixing the
+bug, I wanted to make this. =)</p>
+<p>But really, it&#39;s utility is that it&#39;s a much simpler Forever.</p>
+<p>The name comes from Buzz Lightyear in the movie Toy Story. His popular
+phrase was: To infinity and beyond!</p>
+<p>Do you use Git? If so, checkout <a href="http://gitpilot.com">Gitpilot</a> to make
+using Git thoughtless.</p>
+<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>
+and read my blog on entrepreneurship: <a href="http://techneur.com">Techneur</a>.</p>
+<p>-JP Richardson</p>
+
+
+
+          <span id="footer">
+            <br/>
+            <span style="font-size: 10px">
+              Proudly built with <a href="{{sky.homepage}}">Sky</a>.
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    
+  </body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>DataGrid Not Found in Silverlight 4</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="JP">
+    <mete name="description" content="">
+
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
+    <!--<link href="style.css" rel="stylesheet">-->
+
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+      <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', ]);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+  </head>
+  <body>
+    
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid nav-container">
+          <nav role="navigation">
+            <a class="brand" title="" href="http://procbits.com">procbits</a>
+            
+            <p class="navbar-text pull-left">
+              source code snippets and other random musings about software
+            </p>
+          </nav>
+
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container-fluid">
+      <div id="content" class="clearfix row-fluid">
+        <div id="main" class="span8 clearfix" role="main">
+
+
+<h1>DataGrid Not Found in Silverlight 4</h1>
+<p>I created a fresh new Silverlight 4 project. I opened up MainPage.xaml
+and started typing &quot;DataGrid&quot;... but intellisense didn&#39;t show it.</p>
+<p>I found out that I needed to add the following to the top of my Xaml
+file:
+<code>xmlns:sdk=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation/sdk&quot;</code></p>
+<p>In then started showing up in intellisense. I tried to compile the
+simple app and I got an error out of the MainPage.g.i.cs file. The error
+is:</p>
+<blockquote>
+<p>&quot;The type or namespace name &#39;DataGrid&#39; could not be found (are you
+missing a using directive or an assembly reference?)&quot;</p>
+</blockquote>
+<p>I opened up the <a href="http://msdn.microsoft.com/en-us/library/system.windows.controls.datagrid(v=vs.95">Silverlight MSDN for the DataGrid
+control</a>.aspx)
+and found out that my DataGrid is in the System.Windows.Controls
+namespace and the System.Windows.Controls.Data assembly. I didn&#39;t see it
+in my references tree, so I tried to add a .NET reference.
+Unfortunately, &quot;System.Windows.Controls&quot; or
+&quot;System.Windows.Controls.Data&quot; weren&#39;t in the list.</p>
+<p>It turns out that you need to navigate to the &quot;Browse&quot; tab in the &quot;Add
+Reference Dialog&quot; and then add the file &quot;System.Windows.Controls.Data&quot;
+which is typically found in &quot;C:\Program Files\Microsoft
+SDKs\Silverlight\v4.0\Libraries\Client&quot;</p>
+<p>Hope this helps someone.</p>
+<p>Are you a <a href="http://gitpilot.com">Git</a> user? Let me help you make project
+management with Git simple. Checkout <a href="http://gitpilot.com">Gitpilot</a>.</p>
+<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>
+or read my blog on entrepreneurship: <a href="http://techneur.com">Techneur</a>.</p>
+<p>-JP</p>
+
+
+
+          <span id="footer">
+            <br/>
+            <span style="font-size: 10px">
+              Proudly built with <a href="{{sky.homepage}}">Sky</a>.
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    
+  </body>
+</html>

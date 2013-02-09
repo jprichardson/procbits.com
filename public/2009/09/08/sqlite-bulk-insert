@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>SQLite Bulk Insert In C#/.NET</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="JP">
+    <mete name="description" content="">
+
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
+    <!--<link href="style.css" rel="stylesheet">-->
+
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+      <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', ]);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+  </head>
+  <body>
+    
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid nav-container">
+          <nav role="navigation">
+            <a class="brand" title="" href="http://procbits.com">procbits</a>
+            
+            <p class="navbar-text pull-left">
+              source code snippets and other random musings about software
+            </p>
+          </nav>
+
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container-fluid">
+      <div id="content" class="clearfix row-fluid">
+        <div id="main" class="span8 clearfix" role="main">
+
+
+<h1>SQLite Bulk Insert In C#/.NET</h1>
+<p>Recently, I had a project where I needed to load 1 million+ records into
+a SQLite database. I downloaded the <a href="http://sqlite.phxsoftware.com/">SQLite ADO.NET
+adapter</a> and setup the Entity framework
+to map to my SQLite database. All was simple and all was well!</p>
+<p>I started inserting the data into my database; lo and behold, it was
+taking forever! In fact, it took most of a full working day to insert my
+data. I knew something wasn&#39;t right. A simple Google search pointed me
+to the <a href="http://www.sqlite.org/faq.html#q19">SQLite FAQ</a>. It turns out
+that SQLite wraps every INSERT into a transaction. Simple solution:
+start a transaction and perform multiple INSERTs. I needed my inserts to
+be fast, so I just had to write a class to encapsulate this.</p>
+<p>It&#39;s very simple to use. Make sure that your SQLite database file has
+been created and your table has been created as well.</p>
+<p>Let&#39;s assume your database schema looks like the following: Id INTEGER
+PRIMARY KEY AUTOINCREMENT NOT NULL, LastName VARCHAR(16) NOT NULL,
+Height REAL NOT NULL</p>
+<p>You would then use SQLiteBulkInsert as follows:</p>
+<pre><code class="lang-csharp">SQLiteBulkInsert sbi = <span class="keyword">new</span> SQLiteBulkInsert(yourDatabaseConnectionObject, <span class="string">"yourTableName"</span>);
+sbi.AddParameter(<span class="string">"LastName"</span>, DbType.String);
+sbi.AddParameter(<span class="string">"Height"</span>, DbType.Single);</code></pre>
+<p>You can then insert records:</p>
+<pre><code class="lang-csharp"><span class="keyword">for</span> (int x = <span class="number">0</span>; x &amp;lt; <span class="number">10000</span>; x++)
+    sbi.Insert(<span class="keyword">new</span> object[]{someString, someFloat});
+sbi.Flush();</code></pre>
+<p>That&#39;s it! You should look at the file SQLiteBulkInsertTest.cs for more
+details. SQLiteBulkInsert.cs:</p>
+<pre><code class="lang-csharp">using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Data.SQLite;
+using System.Data;
+
+<span class="keyword">namespace</span> YourProject.Data.SQLite
+{
+    <span class="keyword">public</span> <span class="keyword">class</span> SQLiteBulkInsert
+    {
+        <span class="keyword">private</span> SQLiteConnection m_dbCon;
+        <span class="keyword">private</span> SQLiteCommand m_cmd;
+        <span class="keyword">private</span> SQLiteTransaction m_trans;
+
+        <span class="keyword">private</span> Dictionary m_parameters = <span class="keyword">new</span> Dictionary();
+
+        <span class="keyword">private</span> uint m_counter = <span class="number">0</span>;
+
+        <span class="keyword">private</span> string m_beginInsertText;
+
+        <span class="keyword">public</span> SQLiteBulkInsert(SQLiteConnection dbConnection, string tableName) {
+            m_dbCon = dbConnection;
+            m_tableName = tableName;
+
+            StringBuilder query = <span class="keyword">new</span> StringBuilder(<span class="number">255</span>);
+            query.Append(<span class="string">"INSERT INTO ["</span>); query.Append(tableName); query.Append(<span class="string">"] ("</span>);
+            m_beginInsertText = query.ToString();
+        }
+
+        <span class="keyword">private</span> bool m_allowBulkInsert = <span class="keyword">true</span>;
+        <span class="keyword">public</span> bool AllowBulkInsert { get { <span class="keyword">return</span> m_allowBulkInsert; } set { m_allowBulkInsert = value; } }
+
+        <span class="keyword">public</span> string CommandText {
+            get {
+                <span class="keyword">if</span> (m_parameters.Count &amp;lt; <span class="number">1</span>)
+                    <span class="keyword">throw</span> <span class="keyword">new</span> SQLiteException(<span class="string">"You must add at least one parameter."</span>);
+
+                StringBuilder sb = <span class="keyword">new</span> StringBuilder(<span class="number">255</span>);
+                sb.Append(m_beginInsertText);
+
+                <span class="keyword">foreach</span> (string param in m_parameters.Keys) {
+                    sb.Append(<span class="string">'['</span>);
+                    sb.Append(param);
+                    sb.Append(<span class="string">']'</span>);
+                    sb.Append(<span class="string">", "</span>);
+                }
+                sb.Remove(sb.Length - <span class="number">2</span>, <span class="number">2</span>);
+
+                sb.Append(<span class="string">") VALUES ("</span>);
+
+                <span class="keyword">foreach</span> (string param in m_parameters.Keys) {
+                    sb.Append(m_paramDelim);
+                    sb.Append(param);
+                    sb.Append(<span class="string">", "</span>);
+                }
+                sb.Remove(sb.Length - <span class="number">2</span>, <span class="number">2</span>);
+
+                sb.Append(<span class="string">")"</span>);
+
+                <span class="keyword">return</span> sb.ToString();
+            }
+        }
+
+        <span class="keyword">private</span> uint m_commitMax = <span class="number">10000</span>;
+        <span class="keyword">public</span> uint CommitMax { get { <span class="keyword">return</span> m_commitMax; } set { m_commitMax = value; } }
+
+        <span class="keyword">private</span> string m_tableName;
+        <span class="keyword">public</span> string TableName { get { <span class="keyword">return</span> m_tableName; } }
+
+        <span class="keyword">private</span> string m_paramDelim = <span class="string">":"</span>;
+        <span class="keyword">public</span> string ParamDelimiter { get { <span class="keyword">return</span> m_paramDelim; } }
+
+        <span class="keyword">public</span> void AddParameter(string name, DbType dbType) {
+            SQLiteParameter param = <span class="keyword">new</span> SQLiteParameter(m_paramDelim + name, dbType);
+            m_parameters.Add(name, param);
+        }
+
+        <span class="keyword">public</span> void Flush() {
+            <span class="keyword">try</span> {
+                <span class="keyword">if</span> (m_trans != <span class="keyword">null</span>)
+                    m_trans.Commit();
+            }
+            <span class="keyword">catch</span> (<span class="keyword">Exception</span> ex) { <span class="keyword">throw</span> <span class="keyword">new</span> <span class="keyword">Exception</span>(<span class="string">"Could not commit transaction. See InnerException for more details"</span>, ex); }
+            finally {
+                <span class="keyword">if</span> (m_trans != <span class="keyword">null</span>)
+                    m_trans.Dispose();
+
+                m_trans = <span class="keyword">null</span>;
+                m_counter = <span class="number">0</span>;
+            }
+        }
+
+        <span class="keyword">public</span> void Insert(object[] paramValues) {
+            <span class="keyword">if</span> (paramValues.Length != m_parameters.Count)
+                <span class="keyword">throw</span> <span class="keyword">new</span> <span class="keyword">Exception</span>(<span class="string">"The values array count must be equal to the count of the number of parameters."</span>);
+
+            m_counter++;
+
+            <span class="keyword">if</span> (m_counter == <span class="number">1</span>) {
+                <span class="keyword">if</span> (m_allowBulkInsert)
+                    m_trans = m_dbCon.BeginTransaction();
+
+                m_cmd = m_dbCon.CreateCommand();
+                <span class="keyword">foreach</span> (SQLiteParameter par in m_parameters.Values)
+                    m_cmd.Parameters.Add(par);
+
+                m_cmd.CommandText = <span class="keyword">this</span>.CommandText;
+            }
+
+            int i = <span class="number">0</span>;
+            <span class="keyword">foreach</span> (SQLiteParameter par in m_parameters.Values) {
+                par.Value = paramValues[i];
+                i++;
+            }
+
+            m_cmd.ExecuteNonQuery();
+
+            <span class="keyword">if</span> (m_counter == m_commitMax) {
+                <span class="keyword">try</span> {
+                    <span class="keyword">if</span> (m_trans != <span class="keyword">null</span>)
+                        m_trans.Commit();
+                }
+                <span class="keyword">catch</span> (<span class="keyword">Exception</span> ex) { }
+                finally {
+                    <span class="keyword">if</span> (m_trans != <span class="keyword">null</span>) {
+                        m_trans.Dispose();
+                        m_trans = <span class="keyword">null</span>;
+                    }
+
+                    m_counter = <span class="number">0</span>;
+                }
+            }
+        }
+    }
+}</code></pre>
+<p>SQLiteBulkInsertTest.cs:</p>
+<pre><code class="lang-csharp">using YourProject.Data.SQLite;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Data.SQLite;
+using System.Data;
+using System.IO;
+using System;
+
+namespace TestYourProject
+{
+    /// 
+    ///This is a test class for SQLiteBulkInsertTest and is intended
+    ///to contain all SQLiteBulkInsertTest Unit Tests
+    ///
+    [TestClass()]
+    public class SQLiteBulkInsertTest
+    {
+        private static string m_testDir;
+        private static string m_testFile;
+        private static string m_testTableName = "test_table";
+        private static string m_connectionString;
+
+        private static string m_deleteAllQuery = "DELETE FROM [{0}]";
+        private static string m_countAllQuery = "SELECT COUNT(id) FROM [{0}]";
+        private static string m_selectAllQuery = "SELECT * FROM [{0}]";
+
+        private static SQLiteConnection m_dbCon;
+        private static SQLiteCommand m_deleteAllCmd;
+        private static SQLiteCommand m_countAllCmd;
+        private static SQLiteCommand m_selectAllCmd;
+
+        private TestContext testContextInstance;
+
+        /// 
+        ///Gets or sets the test context which provides
+        ///information about and functionality for the current test run.
+        ///
+        public TestContext TestContext {
+            get {
+                return testContextInstance;
+            }
+            set {
+                testContextInstance = value;
+            }
+        }
+
+        #region Additional test attributes
+        //
+        //You can use the following additional attributes as you write your tests:
+        //
+        //Use ClassInitialize to run code before running the first test in the class
+        [ClassInitialize()]
+        public static void MyClassInitialize(TestContext testContext){
+            Random rand = new Random(Environment.TickCount);
+            int rn = rand.Next(0, int.MaxValue);
+            m_testDir = @"C:\SqliteBulkInsertTest-" + rn + @"\";
+            m_testFile = m_testDir + "db.sqlite";
+
+            if (!Directory.Exists(m_testDir))
+                Directory.CreateDirectory(m_testDir);
+
+            if (!File.Exists(m_testFile)) {
+                FileStream fs = File.Create(m_testFile);
+                fs.Close();
+            }
+
+            m_connectionString = string.Format(@"data source={0};datetimeformat=Ticks", m_testFile);
+            m_dbCon = new SQLiteConnection(m_connectionString);
+            m_dbCon.Open();
+
+            SQLiteCommand cmd = m_dbCon.CreateCommand();
+            string query = "CREATE TABLE IF NOT EXISTS [{0}] (id INTEGER PRIMARY KEY AUTOINCREMENT, somestring VARCHAR(16), somereal REAL, someint INTEGER(4), somedt DATETIME)";
+            query = string.Format(query, m_testTableName);
+            cmd.CommandText = query;
+            cmd.ExecuteNonQuery();
+        }
+        //
+        //Use ClassCleanup to run code after all tests in a class have run
+        [ClassCleanup()]
+        public static void MyClassCleanup(){
+            m_dbCon.Close();
+
+            File.Delete(m_testFile);
+            Directory.Delete(m_testDir);
+        }
+        #endregion
+
+        private void AddParameters(SQLiteBulkInsert target) {
+            target.AddParameter("somestring", DbType.String);
+            target.AddParameter("somereal", DbType.String);
+            target.AddParameter("someint", DbType.Int32);
+            target.AddParameter("somedt", DbType.DateTime);
+        }
+
+        private long CountRecords() {
+            m_countAllCmd = m_dbCon.CreateCommand();
+            m_countAllCmd.CommandText = string.Format(m_countAllQuery, m_testTableName);
+
+            long ret = (long)m_countAllCmd.ExecuteScalar();
+            m_countAllCmd.Dispose();
+
+            return ret;
+        }
+
+        private void DeleteRecords() {
+            m_deleteAllCmd = m_dbCon.CreateCommand();
+            m_deleteAllCmd.CommandText = string.Format(m_deleteAllQuery, m_testTableName);
+
+            m_deleteAllCmd.ExecuteNonQuery();
+            m_deleteAllCmd.Dispose();
+        }
+
+        private SQLiteDataReader SelectAllRecords() {
+            m_selectAllCmd = m_dbCon.CreateCommand();
+            m_selectAllCmd.CommandText = string.Format(m_selectAllQuery, m_testTableName);
+            return m_selectAllCmd.ExecuteReader();
+        }
+
+        [TestMethod()]
+        public void AddParameterTest() {
+            SQLiteBulkInsert target = new SQLiteBulkInsert(m_dbCon, m_testTableName);
+            AddParameters(target);
+
+            string pd = target.ParamDelimiter;
+            string expectedStmnt = "INSERT INTO [{0}] ([somestring], [somereal], [someint], [somedt]) VALUES ({1}somestring, {2}somereal, {3}someint, {4}somedt)";
+            expectedStmnt = string.Format(expectedStmnt, m_testTableName, pd, pd, pd, pd);
+            Assert.AreEqual(expectedStmnt, target.CommandText);
+        }
+
+        [TestMethod()]
+        public void SQLiteBulkInsertConstructorTest() {
+            SQLiteBulkInsert target = new SQLiteBulkInsert(m_dbCon, m_testTableName);
+            Assert.AreEqual(m_testTableName, target.TableName);
+
+            bool wasException = false;
+            try {
+                string a = target.CommandText;
+            }
+            catch (SQLiteException ex) { wasException = true; }
+
+            Assert.IsTrue(wasException);
+        }
+
+        [TestMethod()]
+        public void CommandTextTest() {
+            SQLiteBulkInsert target = new SQLiteBulkInsert(m_dbCon, m_testTableName);
+            AddParameters(target);
+
+            string pd = target.ParamDelimiter;
+            string expectedStmnt = "INSERT INTO [{0}] ([somestring], [somereal], [someint], [somedt]) VALUES ({1}somestring, {2}somereal, {3}someint, {4}somedt)";
+            expectedStmnt = string.Format(expectedStmnt, m_testTableName, pd, pd, pd, pd);
+            Assert.AreEqual(expectedStmnt, target.CommandText);
+        }
+
+        [TestMethod()]
+        public void TableNameTest() {
+            SQLiteBulkInsert target = new SQLiteBulkInsert(m_dbCon, m_testTableName);
+            Assert.AreEqual(m_testTableName, target.TableName);
+        }
+
+        [TestMethod()]
+        public void InsertTest() {
+            SQLiteBulkInsert target = new SQLiteBulkInsert(m_dbCon, m_testTableName);
+
+            bool didThrow = false;
+            try {
+                target.Insert(new object[] { "hello" }); //object.length must equal the number of parameters added
+            }
+            catch (Exception ex) { didThrow = true; }
+            Assert.IsTrue(didThrow);
+
+            AddParameters(target);
+
+            target.CommitMax = 4;
+            DateTime dt1 = DateTime.Now; DateTime dt2 = DateTime.Now; DateTime dt3 = DateTime.Now; DateTime dt4 = DateTime.Now;
+            target.Insert(new object[] { "john", 3.45f, 10, dt1 });
+            target.Insert(new object[] { "paul", -0.34f, 100, dt2 });
+            target.Insert(new object[] { "ringo", 1000.98f, 1000, dt3 });
+            target.Insert(new object[] { "george", 5.0f, 10000, dt4 });
+
+            long count = CountRecords();
+            Assert.AreEqual(4, count);
+
+            SQLiteDataReader reader = SelectAllRecords();
+
+            Assert.IsTrue(reader.Read());
+            Assert.AreEqual("john", reader.GetString(1)); Assert.AreEqual(3.45f, reader.GetFloat(2));
+            Assert.AreEqual(10, reader.GetInt32(3)); Assert.AreEqual(dt1, reader.GetDateTime(4));
+
+            Assert.IsTrue(reader.Read());
+            Assert.AreEqual("paul", reader.GetString(1)); Assert.AreEqual(-0.34f, reader.GetFloat(2));
+            Assert.AreEqual(100, reader.GetInt32(3)); Assert.AreEqual(dt2, reader.GetDateTime(4));
+
+            Assert.IsTrue(reader.Read());
+            Assert.AreEqual("ringo", reader.GetString(1)); Assert.AreEqual(1000.98f, reader.GetFloat(2));
+            Assert.AreEqual(1000, reader.GetInt32(3)); Assert.AreEqual(dt3, reader.GetDateTime(4));
+
+            Assert.IsTrue(reader.Read());
+            Assert.AreEqual("george", reader.GetString(1)); Assert.AreEqual(5.0f, reader.GetFloat(2));
+            Assert.AreEqual(10000, reader.GetInt32(3)); Assert.AreEqual(dt4, reader.GetDateTime(4));
+
+            Assert.IsFalse(reader.Read());
+
+            DeleteRecords();
+
+            count = CountRecords();
+            Assert.AreEqual(0, count);
+        }
+
+        [TestMethod()]
+        public void FlushTest() {
+            string[] names = new string[] { "metalica", "beatles", "coldplay", "tiesto", "t-pain", "blink 182", "plain white ts", "staind", "pink floyd" };
+            Random rand = new Random(Environment.TickCount);
+
+            SQLiteBulkInsert target = new SQLiteBulkInsert(m_dbCon, m_testTableName);
+            AddParameters(target);
+
+            target.CommitMax = 1000;
+
+            //Insert less records than commitmax
+            for (int x = 0; x &amp;lt; 50; x++)
+                target.Insert(new object[] { names[rand.Next(names.Length)], (float)rand.NextDouble(), rand.Next(50), DateTime.Now });
+
+            //Close connect to verify records were not inserted
+            m_dbCon.Close();
+
+            m_dbCon = new SQLiteConnection(m_connectionString);
+            m_dbCon.Open();
+
+            long count = CountRecords();
+            Assert.AreEqual(0, count);
+
+            //Now actually verify flush worked
+            target = new SQLiteBulkInsert(m_dbCon, m_testTableName);
+            AddParameters(target);
+
+            target.CommitMax = 1000;
+
+            //Insert less records than commitmax
+            for (int x = 0; x &amp;lt; 50; x++)
+                target.Insert(new object[] { names[rand.Next(names.Length)], (float)rand.NextDouble(), rand.Next(50), DateTime.Now });
+
+            target.Flush();
+
+            count = CountRecords();
+            Assert.AreEqual(50, count);
+
+            //Close connect to verify flush worked
+            m_dbCon.Close();
+
+            m_dbCon = new SQLiteConnection(m_connectionString);
+            m_dbCon.Open();
+
+            count = CountRecords();
+            Assert.AreEqual(50, count);
+
+            DeleteRecords();
+            count = CountRecords();
+            Assert.AreEqual(0, count);
+        }
+
+        [TestMethod()]
+        public void CommitMaxTest() {
+            SQLiteBulkInsert target = new SQLiteBulkInsert(m_dbCon, m_testTableName);
+
+            target.CommitMax = 4;
+            Assert.AreEqual(4, target.CommitMax);
+
+            target.CommitMax = 1000;
+            Assert.AreEqual(1000, target.CommitMax);
+        }
+
+        //SPEED TEST
+        [TestMethod()]
+        public void AllowBulkInsertTest() {
+            string[] names = new string[] { "metalica", "beatles", "coldplay", "tiesto", "t-pain", "blink 182", "plain white ts", "staind", "pink floyd"};
+            Random rand = new Random(Environment.TickCount);
+
+            SQLiteBulkInsert target = new SQLiteBulkInsert(m_dbCon, m_testTableName);
+            AddParameters(target);
+
+            const int COUNT = 100;
+
+            target.CommitMax = COUNT;
+
+            DateTime start1 = DateTime.Now;
+            for (int x = 0; x &amp;lt; COUNT; x++)
+                target.Insert(new object[] { names[rand.Next(names.Length)], (float)rand.NextDouble(), rand.Next(COUNT), DateTime.Now });
+
+            DateTime end1 = DateTime.Now;
+            TimeSpan delta1 = end1 - start1;
+
+            DeleteRecords();
+
+            target.AllowBulkInsert = false;
+            DateTime start2 = DateTime.Now;
+            for (int x = 0; x &amp;lt; COUNT; x++)
+                target.Insert(new object[] { names[rand.Next(names.Length)], (float)rand.NextDouble(), rand.Next(COUNT), DateTime.Now });
+
+            DateTime end2 = DateTime.Now;
+            TimeSpan delta2 = end2 - start2;
+
+            //THIS MAY FAIL DEPENDING UPON THE MACHINE THE TEST IS RUNNING ON.
+            Assert.IsTrue(delta1.TotalSeconds &amp;lt; 0.1); //approx true for 100 recs             Assert.IsTrue(delta2.TotalSeconds &amp;gt; 1.0); //approx true for 100 recs;
+
+            //UNCOMMENT THIS TO MAKE IT FAIL AND SEE ACTUAL NUMBERS IN FAILED REPORT
+            //Assert.AreEqual(delta1.TotalSeconds, delta2.TotalSeconds);
+
+            DeleteRecords();
+        }
+    }
+}</code></pre>
+<p>Enjoy. Drop me a line if you have any problems.</p>
+<p>Are you a <a href="http://gitpilot.com">Git</a> user? Let me help you make project
+management with Git simple. Checkout <a href="http://gitpilot.com">Gitpilot</a>.</p>
+<p>Read my blog on entrepreneurship: <a href="http://techneur.com">Techneur</a> Follow
+me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
+<p>-JP</p>
+
+
+
+          <span id="footer">
+            <br/>
+            <span style="font-size: 10px">
+              Proudly built with <a href="{{sky.homepage}}">Sky</a>.
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    
+  </body>
+</html>

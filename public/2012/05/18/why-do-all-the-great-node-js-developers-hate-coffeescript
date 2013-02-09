@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Why Do All the Great Node.js Developers Hate CoffeeScript?</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="JP">
+    <mete name="description" content="">
+
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
+    <!--<link href="style.css" rel="stylesheet">-->
+
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+      <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', ]);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+  </head>
+  <body>
+    
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid nav-container">
+          <nav role="navigation">
+            <a class="brand" title="" href="http://procbits.com">procbits</a>
+            
+            <p class="navbar-text pull-left">
+              source code snippets and other random musings about software
+            </p>
+          </nav>
+
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container-fluid">
+      <div id="content" class="clearfix row-fluid">
+        <div id="main" class="span8 clearfix" role="main">
+
+
+<h1>Why Do All the Great Node.js Developers Hate CoffeeScript?</h1>
+<p>Why do all the great Node.js developers hate CoffeeScript?</p>
+<p>Take a look at the following Github repositories of the well-known
+Node.js developers:</p>
+<ul>
+<li><a href="https://github.com/isaacs">Isaac Schleuter</a> (maintainer of Node.js
+/ NPM)</li>
+<li><a href="https://github.com/visionmedia">TJ Holowaychuk</a> (express, Jade,
+Mocha)</li>
+<li><a href="https://github.com/mikeal">Mikeal Rogers</a> (Request)</li>
+<li><a href="https://github.com/substack">James Haliday &quot;substack&quot;</a> (Browserify,
+dnode, Optimist)</li>
+<li><a href="https://github.com/guille">Guillermo Rauch</a> (Socket.IO)</li>
+<li><a href="https://github.com/aheckmann">Aaron Heckmann</a> (Mongoose)</li>
+<li><a href="https://github.com/TooTallNate">Nathan Rajich &quot;Too Tall Nate&quot;</a>
+(node-gyp)</li>
+<li><a href="https://github.com/marak">Marak Squires</a> (Hook.io, pdf.js,
+color.js)</li>
+<li><a href="https://github.com/felixge">Felix Geisendörfer </a></li>
+<li><a href="https://github.com/creationix">Tim Caswell</a> (NVM)</li>
+</ul>
+<p>Did you look at them? Not one of them has a project (that isn&#39;t forked)
+that is written in CoffeeScript. So does the absence of CoffeeScript on
+Github imply these developers hate it? Absolutely not. Listen to episode
+<a href="http://nodeup.com/eighteen">18</a> or <a href="http://nodeup.com/nineteen">19</a> of
+Nodeup (don&#39;t remember which one) but there are a couple of instances
+where they (expert Node.js devs) joke and laugh about writing in
+CoffeeScript. If this offensive? Of course not. But the attitude is
+curious to me.</p>
+<p>One of the aforementioned developers said the following about a
+technology:</p>
+<blockquote>
+<p>What if we could omit braces? How about semi-colons?</p>
+</blockquote>
+<p>Sounds like the developer is talking about CoffeeScript, doesn&#39;t it? No,
+it was TJ Holowaychuk
+describing <a href="http://learnboost.github.com/stylus/">Stylus</a>, his CSS
+replacement language. Look at Stylus, look how CoffeeScript-esque it is.
+This is the the same <a href="https://github.com/visionmedia/jade/issues/430">TJ that doesn&#39;t like
+CoffeeScript</a>. This is
+meant to be partially tongue &amp; cheek, but it does lend credance to my
+point.</p>
+<p>Can you guess what the second most <a href="http://search.npmjs.org/">depended-upon package is on
+NPM</a>? If you guessed CoffeeScript, you&#39;d be
+right!</p>
+<p><a href="http://procbits.files.wordpress.com/2012/05/coffeescript-dep2.png"><img src="http://procbits.files.wordpress.com/2012/05/coffeescript-dep2.png?w=300" alt="" title="NPM / CoffeeScript"></a></p>
+<p>So if it&#39;s the second most depended-upon package, it must be in use by
+us mere-mortal developers. Having defected from Rails, I love
+CoffeeScript. But, I ask again, why do the greats have a haughty
+attitude towards CoffeeScript? This isn&#39;t meant to be a crusade trying
+to get people to convert to the holier-than-though CoffeeScript, but a
+genuine lack of understanding of why the disdain exists. Especially
+given the acceptance towards Haml, SASS, SCSS, Jade, etc. I mean, when
+it comes down to it, write in whatever makes you happy, but I feel like
+I&#39;m missing something. If you&#39;re part of the Node.js community, you&#39;ll
+know what I&#39;m talking about.</p>
+<p>Looking over the <a href="http://coffeescript.org/">CoffeeScrip</a>t page, I think
+that you can safely conclude that in general, you&#39;ll write less lines of
+code using CoffeeScript. <a href="http://www.codinghorror.com/blog/2007/12/size-is-the-enemy.html">Code is our
+enemy</a>
+so that&#39;s a good thing.</p>
+<p>What do you think about CoffeeScript? Why do you think these developers
+don&#39;t like CoffeeScript?</p>
+<p>More fun CoffeeScript hatred:</p>
+<ul>
+<li><a href="http://ryanflorence.com/2011/case-against-coffeescript/">A Case Against Using
+CoffeeScript</a></li>
+<li><a href="http://net.tutsplus.com/articles/interviews/should-you-learn-coffeescript/">Should You Learn
+CoffeeScript?</a></li>
+</ul>
+<p>If you use Git with others, you should checkout
+<a href="http://gitpilot.com">Gitpilot</a> to make collaboration with Git simple.
+We would love your advice.</p>
+<p>If you made it this far, follow me on Twitter:
+<a href="http://twitter.com/jprichardson">@jprichardson</a></p>
+<p>-JP</p>
+
+
+
+          <span id="footer">
+            <br/>
+            <span style="font-size: 10px">
+              Proudly built with <a href="{{sky.homepage}}">Sky</a>.
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    
+  </body>
+</html>

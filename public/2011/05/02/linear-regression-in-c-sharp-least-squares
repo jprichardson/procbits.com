@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Linear Regression in C#/.NET Using Least Squares</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="JP">
+    <mete name="description" content="">
+
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
+    <!--<link href="style.css" rel="stylesheet">-->
+
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+      <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', ]);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+  </head>
+  <body>
+    
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid nav-container">
+          <nav role="navigation">
+            <a class="brand" title="" href="http://procbits.com">procbits</a>
+            
+            <p class="navbar-text pull-left">
+              source code snippets and other random musings about software
+            </p>
+          </nav>
+
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container-fluid">
+      <div id="content" class="clearfix row-fluid">
+        <div id="main" class="span8 clearfix" role="main">
+
+
+<h1>Linear Regression in C#/.NET Using Least Squares</h1>
+<p>I had a class that handled the regression of my data sets, but it had
+too many business rules. It was necessary for me to refactor the code.</p>
+<p>Here&#39;s how you can use it:</p>
+<pre><code class="lang-csharp">double[] X = { <span class="number">75.0</span>, <span class="number">83</span>, <span class="number">85</span>, <span class="number">85</span>, <span class="number">92</span>, <span class="number">97</span>, <span class="number">99</span> };
+double[] Y = { <span class="number">16.0</span>, <span class="number">20</span>, <span class="number">25</span>, <span class="number">27</span>, <span class="number">32</span>, <span class="number">48</span>, <span class="number">48</span> };
+<span class="keyword">var</span> ds = <span class="keyword">new</span> XYDataSet(X, Y);
+
+Console.WriteLine(Math.Round(ds.Slope,<span class="number">2</span>)); <span class="comment">//1.45</span>
+Console.WriteLine(Math.Round(ds.YIntercept,<span class="number">2</span>)); <span class="comment">//-96.85</span>
+ConsoleWriteLine(Math.Round(ds.ComputeRSquared(), <span class="number">3</span>)); <span class="comment">//0.927</span></code></pre>
+<p>The source is in my .NET CommonLib library. XYDataSet.cs:
+<a href="https://github.com/jprichardson/CommonLib/blob/master/CommonLib/Numerical/XYDataSet.cs"><a href="https://github.com/jprichardson/CommonLib/blob/master/CommonLib/Numerical/XYDataSet.cs">https://github.com/jprichardson/CommonLib/blob/master/CommonLib/Numerical/XYDataSet.cs</a></a>
+XYDataSetTest.cs:
+<a href="https://github.com/jprichardson/CommonLib/blob/master/TestCommonLib/Numerical/XYDataSetTest.cs"><a href="https://github.com/jprichardson/CommonLib/blob/master/TestCommonLib/Numerical/XYDataSetTest.cs">https://github.com/jprichardson/CommonLib/blob/master/TestCommonLib/Numerical/XYDataSetTest.cs</a></a></p>
+<p>Here is the source for XYDataSet.cs:</p>
+<pre><code class="lang-csharp">using System;
+using System.Collections.Generic;
+using System.Collections;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using CommonLib.Geometry;
+
+<span class="keyword">namespace</span> CommonLib.Numerical
+{
+    <span class="keyword">public</span> <span class="keyword">class</span> XYDataSet : IList&lt;PointD>
+    {
+
+        <span class="keyword">private</span> <span class="keyword">List</span>&lt;PointD> _internalList = <span class="keyword">new</span> <span class="keyword">List</span>&lt;PointD>();
+
+        <span class="keyword">public</span> XYDataSet() : <span class="keyword">this</span>(<span class="keyword">null</span>, <span class="keyword">null</span>) { }
+
+        <span class="keyword">public</span> XYDataSet(IEnumerable&lt;PointD> points) {
+            ResetValues();
+
+            <span class="keyword">foreach</span> (<span class="keyword">var</span> point in points)
+                Add(point);
+        }
+
+        <span class="keyword">public</span> XYDataSet(IEnumerable&lt;double> Xs, IEnumerable&lt;double> Ys) {
+            ResetValues();
+
+            <span class="keyword">if</span> (Xs != <span class="keyword">null</span> || Ys != <span class="keyword">null</span>) {
+                <span class="keyword">if</span> (Xs.Count() != Ys.Count())
+                    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="keyword">Exception</span>(<span class="string">"X count must be the same as the Y count."</span>);
+
+                <span class="keyword">for</span> (int i = <span class="number">0</span>; i &lt; Xs.Count(); ++i)
+                    Add(Xs.ElementAt(i), Ys.ElementAt(i));
+            }
+        }
+
+        <span class="keyword">public</span> int Count { get { <span class="keyword">return</span> _internalList.Count; } }
+
+        <span class="keyword">public</span> bool IsReadOnly { get { <span class="keyword">return</span> <span class="keyword">false</span>; } }
+
+        <span class="keyword">private</span> double _maxX = Double.NegativeInfinity;
+        <span class="keyword">public</span> double XMax { get { <span class="keyword">return</span> _internalList[XMaxIndex].X; } }
+        <span class="keyword">private</span> double _minX = Double.PositiveInfinity;
+        <span class="keyword">public</span> double XMin { get { <span class="keyword">return</span> _internalList[XMinIndex].X; } }
+        <span class="keyword">public</span> int XMaxIndex { get; <span class="keyword">protected</span> set; }
+        <span class="keyword">public</span> int XMinIndex { get; <span class="keyword">protected</span> set; }
+
+        <span class="keyword">private</span> double _maxY = Double.NegativeInfinity;
+        <span class="keyword">public</span> double YMax { get { <span class="keyword">return</span> _internalList[YMaxIndex].Y; } }
+        <span class="keyword">private</span> double _minY = Double.PositiveInfinity;
+        <span class="keyword">public</span> double YMin { get { <span class="keyword">return</span> _internalList[YMinIndex].Y; } }
+        <span class="keyword">public</span> int YMaxIndex { get; <span class="keyword">protected</span> set; }
+        <span class="keyword">public</span> int YMinIndex { get; <span class="keyword">protected</span> set; }
+
+        <span class="keyword">public</span> double XMean { get { <span class="keyword">return</span> XSum / Count; } }
+        <span class="keyword">public</span> double YMean { get { <span class="keyword">return</span> YSum / Count; } }
+
+        <span class="keyword">public</span> double RSquare { get; <span class="keyword">protected</span> set; }
+
+        <span class="keyword">public</span> PointD RegressionPoint0 { get; <span class="keyword">protected</span> set; }
+        <span class="keyword">public</span> PointD RegressionPointN { get; <span class="keyword">protected</span> set; }
+
+        <span class="keyword">public</span> double Slope { get; <span class="keyword">protected</span> set; }
+
+        <span class="keyword">public</span> double XSum { get; set; }
+        <span class="keyword">public</span> double YSum { get; set; }
+        <span class="keyword">public</span> double XSquaredSum { get; set; }
+        <span class="keyword">public</span> double XYProductSum { get; set; }
+
+        <span class="keyword">public</span> double XIntercept { get { <span class="keyword">return</span> -YIntercept / Slope; } }
+        <span class="keyword">public</span> double YIntercept { get; <span class="keyword">protected</span> set; }
+
+
+        <span class="keyword">public</span> PointD <span class="keyword">this</span>[int index] {
+            get { <span class="keyword">return</span> _internalList[index]; }
+            set {
+                <span class="keyword">var</span> p = value;
+                <span class="keyword">var</span> old = _internalList[index];
+                _internalList[index] = p;
+
+                ComputeSums(old, SumMode.Subtract);
+                ComputeSums(p, SumMode.Add);
+                ComputeMinAndMax();
+                ComputeSlopeAndYIntercept();
+            }
+        }
+
+        <span class="keyword">public</span> void Add(double x, double y) {
+            Add(<span class="keyword">new</span> PointD(x, y));
+        }
+
+        <span class="keyword">public</span> void Add(PointD p) {
+            _internalList.Add(p);
+            RSquare = double.NaN;
+
+            ComputeSums(p, SumMode.Add);
+            ComputeMinAndMax(Count - <span class="number">1</span>, p);
+            ComputeSlopeAndYIntercept();
+        }
+
+        <span class="keyword">public</span> void Clear() {
+            _internalList.Clear();
+            ResetValues();
+        }
+
+        <span class="keyword">public</span> void ComputeSlopeAndYIntercept() {
+            double delta = Count * XSquaredSum - Math.Pow(XSum, <span class="number">2.0</span>);
+            YIntercept = (<span class="number">1.0</span> / delta) * (XSquaredSum * YSum - XSum * XYProductSum);
+            Slope = (<span class="number">1.0</span> / delta) * (Count * XYProductSum - XSum * YSum);
+
+            RegressionPoint0.X = XMin;
+            RegressionPoint0.Y = Slope * XMin + YIntercept;
+            RegressionPointN.X = XMax;
+            RegressionPointN.Y = Slope * XMax + YIntercept;
+        }
+
+        <span class="keyword">public</span> double ComputeRSquared() {
+            <span class="keyword">var</span> SStot = _internalList.Sum(p => Math.Pow(p.Y - YMean, <span class="number">2.0</span>));
+            <span class="keyword">var</span> SSerr = _internalList.Sum(p => Math.Pow(p.Y - (Slope * p.X + YIntercept), <span class="number">2.0</span>));
+            RSquare = <span class="number">1.0</span> - SSerr / SStot;
+            <span class="keyword">return</span> RSquare;
+        }
+
+        <span class="keyword">public</span> bool Contains(PointD p) {
+            <span class="keyword">return</span> _internalList.Contains(p);
+        }
+
+        <span class="keyword">public</span> void CopyTo(PointD[] points, int index) {
+            _internalList.CopyTo(points, index);
+        }
+
+        <span class="keyword">public</span> IEnumerator&lt;PointD> GetEnumerator() {
+            <span class="keyword">return</span> _internalList.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() {
+            <span class="keyword">return</span> _internalList.GetEnumerator();
+        }
+
+        <span class="keyword">public</span> int IndexOf(PointD p) {
+            <span class="keyword">return</span> _internalList.IndexOf(p);
+        }
+
+        <span class="keyword">public</span> void Insert(int index, PointD p) {
+            _internalList.Insert(index, p);
+            RSquare = double.NaN;
+
+            ComputeSums(p, SumMode.Add);
+            ComputeMinAndMax();
+            ComputeSlopeAndYIntercept();
+        }
+
+        <span class="keyword">public</span> bool Remove(PointD p) {
+            <span class="keyword">var</span> success = _internalList.Remove(p);
+            <span class="keyword">if</span> (success) {
+                RSquare = double.NaN;
+                ComputeSums(p, SumMode.Subtract);
+                ComputeMinAndMax();
+                ComputeSlopeAndYIntercept();
+            }
+            <span class="keyword">return</span> success;
+        }
+
+        <span class="keyword">public</span> void RemoveAt(int index) {
+            <span class="keyword">var</span> old = _internalList[index];
+            _internalList.RemoveAt(index);
+            RSquare = double.NaN;
+
+            ComputeSums(old, SumMode.Subtract);
+            ComputeMinAndMax();
+            ComputeSlopeAndYIntercept();
+        }
+
+        <span class="keyword">protected</span> void ComputeMinAndMax() { <span class="comment">//methods that call this, Insert, </span>
+            ResetMinAndMax();
+
+            <span class="keyword">for</span> (int i = <span class="number">0</span>; i &lt; _internalList.Count; ++i)
+                ComputeMinAndMax(i, _internalList[i]);
+        }
+
+        <span class="keyword">protected</span> void ComputeMinAndMax(int index, PointD newPoint) {
+            <span class="keyword">if</span> (newPoint.X &lt;= _minX) {
+                _minX = newPoint.X;
+                XMinIndex = index;
+            }
+
+            <span class="keyword">if</span> (newPoint.X >= _maxX) {
+                _maxX = newPoint.X;
+                XMaxIndex = index;
+            }
+
+            <span class="keyword">if</span> (newPoint.Y &lt;= _minY) {
+                _minY = newPoint.Y;
+                YMinIndex = index;
+            }
+
+            <span class="keyword">if</span> (newPoint.Y >= _maxY) {
+                _maxY = newPoint.Y;
+                YMaxIndex = index;
+            }
+        }
+
+        <span class="keyword">protected</span> enum SumMode { Add, Subtract };
+        <span class="keyword">protected</span> void ComputeSums(PointD p, SumMode mode) {
+            <span class="keyword">if</span> (mode == SumMode.Add) {
+                XSum += p.X;
+                YSum += p.Y;
+                XSquaredSum += Math.Pow(p.X, <span class="number">2.0</span>);
+                XYProductSum += (p.X * p.Y);
+            }
+            <span class="keyword">else</span> <span class="keyword">if</span> (mode == SumMode.Subtract) {
+                XSum -= p.X;
+                YSum -= p.Y;
+                XSquaredSum -= Math.Pow(p.X, <span class="number">2.0</span>);
+                XYProductSum -= (p.X * p.Y);
+            }
+        }
+
+        <span class="keyword">protected</span> void ResetMinAndMax() {
+            _maxX = double.NegativeInfinity;
+            _maxY = double.NegativeInfinity;
+            _minX = double.PositiveInfinity;
+            _minY = double.PositiveInfinity;
+        }
+
+        <span class="keyword">protected</span> void ResetValues() {
+            ResetMinAndMax();
+
+            RegressionPoint0 = <span class="keyword">new</span> PointD();
+            RegressionPointN = <span class="keyword">new</span> PointD();
+
+            RSquare = double.NaN;
+
+            Slope = double.NaN;
+            YIntercept = double.NaN;
+
+            XSum = <span class="number">0.0</span>;
+            YSum = <span class="number">0.0</span>;
+            XSquaredSum = <span class="number">0.0</span>;
+            XYProductSum = <span class="number">0.0</span>;
+
+            XMaxIndex = -<span class="number">1</span>;
+            YMaxIndex = -<span class="number">1</span>;
+            XMinIndex = -<span class="number">1</span>;
+            YMinIndex = -<span class="number">1</span>;
+        }
+
+    }
+}</code></pre>
+<p>Are you a <a href="http://gitpilot.com">Git</a> user? Let me help you make project
+management with Git simple. Checkout <a href="http://gitpilot.com">Gitpilot</a>.</p>
+<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>
+and read my blog on software entrepreneurship:
+<a href="http://techneur.com">Techneur</a></p>
+<p>-JP</p>
+
+
+
+          <span id="footer">
+            <br/>
+            <span style="font-size: 10px">
+              Proudly built with <a href="{{sky.homepage}}">Sky</a>.
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    
+  </body>
+</html>

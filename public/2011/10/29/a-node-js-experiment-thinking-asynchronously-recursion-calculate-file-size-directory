@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>A Node.js Experiment: Thinking Asynchronously, Using Recursion to Calculate the Total File Size in a Directory</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="JP">
+    <mete name="description" content="">
+
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
+    <!--<link href="style.css" rel="stylesheet">-->
+
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+      <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', ]);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+  </head>
+  <body>
+    
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid nav-container">
+          <nav role="navigation">
+            <a class="brand" title="" href="http://procbits.com">procbits</a>
+            
+            <p class="navbar-text pull-left">
+              source code snippets and other random musings about software
+            </p>
+          </nav>
+
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container-fluid">
+      <div id="content" class="clearfix row-fluid">
+        <div id="main" class="span8 clearfix" role="main">
+
+
+<h1>A Node.js Experiment: Thinking Asynchronously, Using Recursion to Calculate the Total File Size in a Directory</h1>
+<p>I recently picked up Node.js/CoffeeScript; I figured that since
+JavaScript can run on about every modern computing device, it&#39;s about
+time that I accept JavaScript instead of side-stepping it by using dying
+technologies such as GWT and Silverlight.</p>
+<p>I&#39;ve always felt that the best way to learn a new language/platform is
+to start by writing a simple program that solves a simple problem.</p>
+<p>My problem involved traversing the filesystem and performing some tasks.
+For the sake of this blog post and for the sake of your attention span,
+the problem can be reduced to a simple algorithm that computes the total
+space that a directory and its contents use.</p>
+<p>Let&#39;s start by creating a simple synchronous version:</p>
+<pre><code class="lang-ruby">fs = <span class="keyword">require</span>(<span class="string">'fs'</span>)
+path = <span class="keyword">require</span>(<span class="string">'path'</span>)
+
+du = (dir) ->
+  total = <span class="number">0</span>
+  <span class="keyword">try</span> 
+    stat = fs.lstatSync(dir)
+    <span class="keyword">if</span> stat.isFile()
+      total += stat.size
+    <span class="keyword">else</span> <span class="keyword">if</span> stat.isDirectory()
+      files = fs.readdirSync(dir)
+      <span class="keyword">for</span> file in files
+        total += du(path.join(dir, file))
+  <span class="keyword">catch</span> e
+
+  total
+
+DIR = <span class="string">'/'</span>
+total_bytes = du(DIR)
+total_kb = total_bytes / <span class="number">1024.0</span>
+total_mb = total_kb / <span class="number">1024.0</span>
+
+console.log(<span class="string">"#{DIR}: #{total_mb.toFixed(3)} MB"</span>)</code></pre>
+<p>This code works fine and as expected. It displays the total size of your
+entire directory in MiB. Ya, I know, I wrote &quot;MB&quot;.</p>
+<p>But... we are using Node.js here. The asynchronous nature should be
+embraced. Let&#39;s rewrite this algorithm in an asynchronous form.</p>
+<pre><code class="lang-ruby">fs = <span class="keyword">require</span>(<span class="string">'fs'</span>)
+path = <span class="keyword">require</span>(<span class="string">'path'</span>)
+
+duAsync = (dir, cb) ->
+  total = <span class="number">0</span>
+  fs.lstat dir, (err, stat) ->
+    <span class="keyword">if</span> err then <span class="keyword">return</span>
+    <span class="keyword">if</span> stat.isFile()
+      total += stat.size
+    <span class="keyword">else</span> <span class="keyword">if</span> stat.isDirectory()
+      fs.readdir dir, (err, files) ->
+        <span class="keyword">if</span> err then <span class="keyword">return</span>
+        <span class="keyword">for</span> file in files
+          duAsync path.join(dir,file), cb
+    cb(<span class="keyword">null</span>,total)
+
+DIR = <span class="string">'/'</span>
+duAsync DIR, (err, total_bytes) ->
+  total_kb = total_bytes / <span class="number">1000.0</span>
+  total_mb = total_kb / <span class="number">1000.0</span>
+
+  console.log(<span class="string">"#{DIR}: #{total_mb.toFixed(3)} MB"</span>)</code></pre>
+<p>Hmm, this doesn&#39;t output the correct values. I&#39;m not passing the totals
+up the callback chain.</p>
+<p>Also, from here on out, I&#39;m only going to show the algorithm.</p>
+<p>Let&#39;s take advantage of closures and modify this a bit. If we could
+remove the recursion, that may simplify things a bit.</p>
+<pre><code class="lang-ruby">duAsync2 = (dir,cb) ->
+  total = <span class="number">0</span>
+  files = []
+  all_files.push(dir)
+
+  <span class="keyword">while</span> all_files.length > <span class="number">0</span>
+    current_dir = files.pop
+    fs.lstat current_dir, (err,stat) ->
+      <span class="keyword">if</span> err then <span class="keyword">return</span>
+      <span class="keyword">if</span> stat.isFile()
+        total += stat.size
+      <span class="keyword">else</span> <span class="keyword">if</span> stat.isDirectory()
+        fs.readdir current_dir, (err,files) ->
+          <span class="keyword">if</span> err then <span class="keyword">return</span>
+          <span class="keyword">for</span> file in files
+            all_files.push(path.join(current_dir, file))
+      cb(<span class="keyword">null</span>,total)</code></pre>
+<p>On the surface, this looks fairly simple. We have removed the recursive
+aspect to simplify it a bit. The code in the while block will always see
+&#39;total&#39; so we don&#39;t run into the same problem as the last
+implementation.</p>
+<p>One major problem though, this doesn&#39;t work. This exits almost right
+away. Ah yes... we are doing an asynchronous implementation. The
+all_files array is empty by the time the while loop goes to the second
+iteration.</p>
+<p>Maybe recursion is unavoidable? Let&#39;s still leverage closures though.</p>
+<p>This version is very similar to the last, I&#39;ve just managed to use
+recursion within a function. The &#39;again&#39; function is called recursively.</p>
+<pre><code class="lang-ruby">duAsync3 = (dir,cb) ->
+  total = <span class="number">0</span>
+
+  again = (current_dir) ->
+    fs.lstat current_dir, (err, stat) ->
+      <span class="keyword">if</span> err then <span class="keyword">return</span>
+      <span class="keyword">if</span> stat.isFile()
+        total += stat.size
+      <span class="keyword">else</span> <span class="keyword">if</span> stat.isDirectory()
+        fs.readdir current_dir, (err,files) ->
+          <span class="keyword">if</span> err then <span class="keyword">return</span>
+          <span class="keyword">for</span> file in files
+            again(path.join(current_dir, file))
+      cb(<span class="keyword">null</span>, total)
+
+  again(dir)</code></pre>
+<p>It works! Consider this: what if you only want the results at the very
+end? That is, you only want the callback to occur once, and at the
+end... then what do you do?</p>
+<p>This was a dilemma that I faced for a bit. For this particular problem,
+it might not really matter much. Especially considering that this is a
+console utility. However, I considered figuring this out, a right of
+passage as a Node.js/JavaScript noob. So I didn&#39;t want to use any
+utilities such as <a href="https://github.com/caolan/async">Async.js</a>,
+<a href="https://github.com/substack/node-seq">Seq</a>, etc.</p>
+<p>I started doing research, fortunately I stumbled upon two great
+articles:</p>
+<ol>
+<li><a href="http://bjouhier.wordpress.com/2011/01/09/asynchronous-javascript-the-tale-of-harry/">&quot;Asynchronous JavaScript: The Tale of
+Harry&quot;</a></li>
+<li><a href="http://bjouhier.wordpress.com/2011/04/04/currying-the-callback-or-the-essence-of-futures/">Currying the Callback the Essence of
+Futures</a></li>
+</ol>
+<p>The first article seemed to have almost an identical problem. Except,
+that the author didn&#39;t impose the additional constraint of only
+executing the callback upon the finished. The solution in that article
+works as expected, but seems a bit more complex than necessary.</p>
+<p>I kept researching. Found an article <a href="http://igstan.ro/posts/2010-12-01-deriving-the-y-combinator-in-7-easy-steps.html">Deriving the Y-Combinator in 7
+Easy Steps
+(JavaScript)</a>.
+My mind was exploding learning some of these functional programming
+concepts!</p>
+<p>But, I still wasn&#39;t closer to a solution. I finally made my way into
+#node.js on freenode (IRC). Fortunately,
+<a href="https://github.com/avianflu">AvianFlu</a> was able to lend me a tip. He
+suggested the following:</p>
+<ul>
+<li>Create three variables: started, finished, running</li>
+<li>At the beginning of the callback, increment started and running.</li>
+<li>At the end, decrement running and increment finished.</li>
+<li>When (started === finished) &amp;&amp; (running === 0) You should be done.</li>
+</ul>
+<p>I experimented with this for awhile. Sometimes, it felt that I was
+close. But it never quite worked. Then I thought about it a bit more and
+kept the concept of a &#39;running&#39; variable and added a variable to denote
+the number of files left to process.</p>
+<pre><code class="lang-ruby">duAsync4 = (dir,cb) ->
+  total = <span class="number">0</span>
+  file_counter = <span class="number">1</span> <span class="comment">#starts at one because of the initial directory</span>
+  async_running = <span class="number">0</span>
+
+  again = (current_dir) ->
+    fs.lstat current_dir, (err, stat) ->
+      <span class="keyword">if</span> err then file_counter--; <span class="keyword">return</span>
+      <span class="keyword">if</span> stat.isFile()
+        file_counter--
+        total += stat.size
+      <span class="keyword">else</span> <span class="keyword">if</span> stat.isDirectory()
+        file_counter--
+        async_running++
+        fs.readdir current_dir, (err,files) ->
+          async_running--
+          <span class="keyword">if</span> err then <span class="keyword">return</span> <span class="comment">#console.log err.message</span>
+          file_counter += files.length
+          <span class="keyword">for</span> file in files
+            again path.join(current_dir, file)
+      <span class="keyword">else</span>
+        file_counter--
+      <span class="keyword">if</span> file_counter is <span class="number">0</span> <span class="keyword">and</span> async_running is <span class="number">0</span>
+        cb(<span class="keyword">null</span>, total)
+
+  again dir</code></pre>
+<p>This works. What&#39;s important to note is that there are many ways to
+solve problems using Node.js. On my Quad-Core MBP 8 GB Ram, this is
+almost <strong>twice as fast</strong> as the synchronous version!</p>
+<p>Try it out and let me know your results. Also, can you think of any
+other ways to solve this problem?</p>
+<p>Do you use Git? If so, checkout <a href="http://gitpilot.com">Gitpilot</a> to make
+using Git thoughtless.</p>
+<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>
+and read my blog on entrepreneurship: <a href="http://techneur.com">Techneur</a>.</p>
+<p>-JP Richardson</p>
+
+
+
+          <span id="footer">
+            <br/>
+            <span style="font-size: 10px">
+              Proudly built with <a href="{{sky.homepage}}">Sky</a>.
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    
+  </body>
+</html>

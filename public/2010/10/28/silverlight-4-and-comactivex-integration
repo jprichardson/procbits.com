@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Silverlight 4 and COM/ActiveX Integration</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="JP">
+    <mete name="description" content="">
+
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
+    <!--<link href="style.css" rel="stylesheet">-->
+
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+      <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', ]);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+  </head>
+  <body>
+    
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid nav-container">
+          <nav role="navigation">
+            <a class="brand" title="" href="http://procbits.com">procbits</a>
+            
+            <p class="navbar-text pull-left">
+              source code snippets and other random musings about software
+            </p>
+          </nav>
+
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container-fluid">
+      <div id="content" class="clearfix row-fluid">
+        <div id="main" class="span8 clearfix" role="main">
+
+
+<h1>Silverlight 4 and COM/ActiveX Integration</h1>
+<p>Silverlight 4 supports COM/ActiveX controls with Trusted permissions.
+However you must configure your app to be an
+<a href="http://msdn.microsoft.com/en-us/library/dd550721(VS.95">Out-of-Browser</a>.aspx)
+app with <a href="http://msdn.microsoft.com/en-us/library/ee721083(v=VS.95">Trusted
+permissions</a>.aspx).</p>
+<p>Here is the snippet of code that will open Excel and place a value in
+the first cell:</p>
+<pre><code class="lang-csharp">dynamic ex = AutomationFactory.CreateObject(<span class="string">"Excel.Application"</span>);
+ex.Visible = <span class="keyword">true</span>;
+ex.workbooks.Add();
+
+dynamic sheet = ex.ActiveSheet;
+sheet.Cells[<span class="number">1</span>, <span class="number">1</span>].Value = <span class="string">"hello!"</span>;</code></pre>
+<p>However this won&#39;t compile out of the box. First make sure that your app
+is enabled to run as an Out-of-Browser app. Open up your project
+properties and on the &quot;Silverlight&quot; tab make sure that &quot;Enable running
+application out of the browser&quot; and then click the button
+&quot;Out-of-Browser Settings...&quot; and at the bottom check &quot;Require elevated
+trust when running outside the browser.&quot;</p>
+<p>If you&#39;ve read other tutorials, you&#39;ll see that a lot of them are using
+ComAutomationFactory. This is because these tutorials were written with
+a beta release of Silverlight 4. That&#39;s why you&#39;re getting this error:
+<code>The name &#39;ComAutomationFactory&#39; does not exist in the current context</code></p>
+<p>Change &quot;ComAutomationFactory&quot; to &quot;AutomationFactory&quot; and you&#39;ll still
+notice that it won&#39;t compile. Now you&#39;re probably getting this error:
+<code>The name &#39;AutomationFactory&#39; does not exist in the current context</code></p>
+<p>ComAutomationFactory was previously in the namespace
+System.Windows.Interop. AutomationFactory has been moved to
+System.Runtime.InteropServices.Automation.</p>
+<p>Now you might be getting the following error:
+<code>One or more types required to compile a dynamic expression cannot be found. Are you missing references to Microsoft.CSharp.dll and System.Core.dll</code></p>
+<p>All you need to do is add a reference to &quot;Microsoft.CSharp.dll.&quot; You can
+do this by right-clicking &quot;References&quot; in the &quot;Solution Explorer&quot; and
+then navigating to the &quot;.NET&quot; tab and selecting it.</p>
+<p>Are you a <a href="http://gitpilot.com">Git</a> user? Let me help you make project
+management with Git simple. Checkout <a href="http://gitpilot.com">Gitpilot</a>.</p>
+<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>
+or read my blog on entrepreneurship: <a href="http://techneur.com">Techneur</a>.</p>
+<p>-JP</p>
+
+
+
+          <span id="footer">
+            <br/>
+            <span style="font-size: 10px">
+              Proudly built with <a href="{{sky.homepage}}">Sky</a>.
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    
+  </body>
+</html>

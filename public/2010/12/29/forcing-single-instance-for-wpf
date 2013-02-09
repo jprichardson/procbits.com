@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Forcing Single Instance for WPF Apps</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="JP">
+    <mete name="description" content="">
+
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
+    <!--<link href="style.css" rel="stylesheet">-->
+
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+      <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', ]);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+  </head>
+  <body>
+    
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid nav-container">
+          <nav role="navigation">
+            <a class="brand" title="" href="http://procbits.com">procbits</a>
+            
+            <p class="navbar-text pull-left">
+              source code snippets and other random musings about software
+            </p>
+          </nav>
+
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container-fluid">
+      <div id="content" class="clearfix row-fluid">
+        <div id="main" class="span8 clearfix" role="main">
+
+
+<h1>Forcing Single Instance for WPF Apps</h1>
+<p>Sometimes you may not want to allow multiple instances for your WPF
+apps. You can use a Mutex to accomplish this. Credit goes to this
+<a href="http://stackoverflow.com/questions/19147/what-is-the-correct-way-to-create-a-single-instance-application">StackOverflow question: &quot;What is the correct way to create a single
+instance
+application?&quot;</a>
+for mashing these ideas together.</p>
+<pre><code class="lang-csharp"><span class="keyword">public</span> partial <span class="keyword">class</span> App : Application
+{
+    [DllImport(<span class="string">"user32.dll"</span>)]
+    <span class="keyword">private</span> <span class="keyword">static</span> extern bool ShowWindow(IntPtr hWnd, int cmdShow);
+    <span class="keyword">private</span> <span class="keyword">const</span> int SW_MAXIMIZE = <span class="number">3</span>;
+    <span class="keyword">private</span> <span class="keyword">const</span> int SW_SHOWNORMAL = <span class="number">1</span>;
+
+    <span class="keyword">private</span> <span class="keyword">static</span> Mutex singleInstanceMutex = <span class="keyword">new</span> Mutex(<span class="keyword">true</span>, <span class="string">"AnyUniqueStringToYourApp"</span>);
+
+    <span class="keyword">protected</span> override void OnStartup(StartupEventArgs e) {
+        base.OnStartup(e);
+        <span class="keyword">if</span> (singleInstanceMutex.WaitOne(TimeSpan.Zero, <span class="keyword">true</span>))
+            Program.OnStartup();
+        <span class="keyword">else</span> {
+            <span class="keyword">var</span> procs = Process.GetProcessesByName(Process.GetCurrentProcess().ProcessName);
+            <span class="keyword">foreach</span> (<span class="keyword">var</span> p in procs.Where(p => p.MainWindowHandle != IntPtr.Zero)) {
+                ShowWindow(p.MainWindowHandle, SW_MAXIMIZE);
+                    Application.Current.Shutdown();
+                    <span class="keyword">return</span>;
+                }
+            }   
+        }
+    }
+}</code></pre>
+<p>The basic idea is that the startup code checks the mutex and maximizes
+the application if the app isn&#39;t already open. You can view the <a href="http://msdn.microsoft.com/en-us/library/ms633548(VS.85">MSDN
+docs for
+ShowWindow</a>.aspx)
+and pass any of the associated constants to alter the behavior of the
+window if it is already running.</p>
+<p>Are you a <a href="http://gitpilot.com">Git</a> user? Let me help you make project
+management with Git simple. Checkout <a href="http://gitpilot.com">Gitpilot</a>.</p>
+<p>Read my <a href="http://techneur.com">blog on entrepreneurship</a> and follow me on
+<a href="http://twitter.com/jprichardson">Twitter</a>.</p>
+<p>-JP</p>
+
+
+
+          <span id="footer">
+            <br/>
+            <span style="font-size: 10px">
+              Proudly built with <a href="{{sky.homepage}}">Sky</a>.
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    
+  </body>
+</html>

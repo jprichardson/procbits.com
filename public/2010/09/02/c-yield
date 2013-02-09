@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>C# yield</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="JP">
+    <mete name="description" content="">
+
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
+    <!--<link href="style.css" rel="stylesheet">-->
+
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+      <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', ]);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+  </head>
+  <body>
+    
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid nav-container">
+          <nav role="navigation">
+            <a class="brand" title="" href="http://procbits.com">procbits</a>
+            
+            <p class="navbar-text pull-left">
+              source code snippets and other random musings about software
+            </p>
+          </nav>
+
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container-fluid">
+      <div id="content" class="clearfix row-fluid">
+        <div id="main" class="span8 clearfix" role="main">
+
+
+<h1>C# yield</h1>
+<p>I&#39;ve seen the &quot;yield&quot; keyword here and there... but I&#39;ve never really
+cared to learn what it does. Until now. Actually, it&#39;s my understanding
+that it&#39;s more or less a convenience keyword like &quot;var.&quot;</p>
+<p>In short, &quot;yield&quot; allows you to return an IEnumerable without creating a
+List.</p>
+<p>Example: (old way)</p>
+<pre><code class="lang-csharp">IEnumerable&lt;Car> FindBlueCars(){
+    <span class="keyword">var</span> blueCars = <span class="keyword">new</span> <span class="keyword">List</span>&lt;Car>();
+    <span class="keyword">foreach</span> (<span class="keyword">var</span> c in _allCars)
+        <span class="keyword">if</span> (c.IsBlue())
+            blueCars.Add(c);
+    <span class="keyword">return</span> blueCars;
+}</code></pre>
+<p>Example: (new way)</p>
+<pre><code class="lang-csharp">IEnumerable&lt;Car> FindBlueCars(){
+    <span class="keyword">foreach</span> (<span class="keyword">var</span> c in _allCars)
+        <span class="keyword">if</span> (c.IsBlue())
+            yield <span class="keyword">return</span> c;
+}</code></pre>
+<p>Saves some typing. <a href="http://msdn.microsoft.com/en-us/library/9k7k7cf0(v=VS.100">MSDN reference for
+yield.</a>.aspx)</p>
+<p>Are you a <a href="http://gitpilot.com">Git</a> user? Let me help you make project
+management with Git simple. Checkout <a href="http://gitpilot.com">Gitpilot</a>.</p>
+<p>Read me blog on entrepreneurship: <a href="http://techneur.com">Techneur</a> Follow
+me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
+<p>-JP</p>
+
+
+
+          <span id="footer">
+            <br/>
+            <span style="font-size: 10px">
+              Proudly built with <a href="{{sky.homepage}}">Sky</a>.
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    
+  </body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Automating the Mac OS X Keychain App with Ruby</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="JP">
+    <mete name="description" content="">
+
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
+    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
+    <!--<link href="style.css" rel="stylesheet">-->
+
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+      <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', ]);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+  </head>
+  <body>
+    
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid nav-container">
+          <nav role="navigation">
+            <a class="brand" title="" href="http://procbits.com">procbits</a>
+            
+            <p class="navbar-text pull-left">
+              source code snippets and other random musings about software
+            </p>
+          </nav>
+
+            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+              <span class="icon-bar"></span>
+            </a>
+
+
+
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container-fluid">
+      <div id="content" class="clearfix row-fluid">
+        <div id="main" class="span8 clearfix" role="main">
+
+
+<h1>Automating the Mac OS X Keychain App with Ruby</h1>
+<p>Recently, I needed a way to automate the generation of 100+ Apple Push
+notification certificates for my iOS development. So, I created a <a href="https://rubygems.org/gems/keychain_manager">Ruby
+Gem [keychain_manager]</a> to
+automate the Mac OS X Keychain application.</p>
+<p>Here is how you can use it: <code>gem install keychain_manager</code></p>
+<pre><code class="lang-ruby"><span class="keyword">require</span> <span class="string">'keychain_manager'</span>
+
+USER = <span class="string">'jprichardson@gmail.com'</span>
+KEYCHAIN = <span class="string">'apple_push_keychain'</span> <span class="comment">#this can be anything, we just don't want to pollute the 'login' keychain</span>
+YOUR_DOWNLOADS_DIR = <span class="string">''</span> <span class="comment"># you must set this, this is where the file aps_production_identity.cer exists</span>
+
+RSA_FILE = <span class="string">'/tmp/myrsa.key'</span>
+KeychainManager.generate_rsa_key(RSA_FILE)
+
+CERT_FILE = <span class="string">'/tmp/CertificateSigningRequest.certSigningRequest'</span>
+KeychainManager.generate_cert_request(USER, <span class="string">'US'</span>, CERT_FILE) <span class="comment">#'US' is the country abbreviation.</span>
+
+kcm = KeychainManager.<span class="keyword">new</span>(KEYCHAIN)
+kcm.delete <span class="keyword">if</span> kcm.exists?
+kcm.create
+
+kcm.import_rsa_key(RSA_FILE)
+
+<span class="comment">#now from your browser, you'll have downloaded a file from Apple typically named: aps_production_identity.cer</span>
+kcm.import_apple_cert(File.join(YOUR_DOWNLOADS_DIR, <span class="string">'/aps_production_identity.cer'</span>))
+
+P12_FILE = <span class="string">'/tmp/push_prod.p12'</span>
+kcm.export_identites(P12_FILE)
+
+PEM_FILE = <span class="string">'/tmp/push_prod.pem'</span>
+KeychainManager.convert_p12_to_pem(P12_FILE, PEM_FILE)
+
+kcm.delete
+
+<span class="comment">#Now upload the PEM_FILE to your server.</span></code></pre>
+<p>This gem could easily be modified to support other Keychain functions.
+Browse the sourcecode here: <a href="https://github.com/jprichardson/keychain_manager">Keychain Manager source
+code</a>.</p>
+<p>I&#39;ll post soon on how I automated the web portion of communicating with
+the iOS Provisioning Portal.</p>
+<p>Do you use Git? If so, checkout <a href="http://gitpilot.com">Gitpilot</a> to make
+using Git thoughtless.</p>
+<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>
+and read my blog on entrepreneurship: <a href="http://techneur.com">Techneur</a>.</p>
+<p>-JP Richardson</p>
+
+
+
+          <span id="footer">
+            <br/>
+            <span style="font-size: 10px">
+              Proudly built with <a href="{{sky.homepage}}">Sky</a>.
+            </span>
+          </span>
+        </div>
+      </div>
+    </div>
+    
+  </body>
+</html>
