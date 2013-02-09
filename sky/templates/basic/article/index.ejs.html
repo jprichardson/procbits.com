@@ -1,0 +1,16 @@
+<%
+  var articles = _(self).groupBy(function(a){ return a.publishedAt.getFullYear() }) //group by year
+  var years = Object.keys(articles).map(function(year) { return ~~year }).sort().reverse()
+%>
+
+<% years.forEach(function(year) { %>
+  <% var sortedArticles = _(articles[year]).sortBy(function(a) { return -a.createdAt })%>
+  <h3><%= year %></h3>
+  <ul>
+    <% sortedArticles.forEach(function(article) { %>
+      <li>
+        <a href="<%= article.relativePath %>"><%= article.title %></a>
+      </li>
+    <% }) %>
+  </ul>
+<% }) %>

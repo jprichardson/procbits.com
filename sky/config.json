@@ -7,12 +7,12 @@
     "author": "JP Richardson"
   },
   "articles": {
-    "urlformat": "articles/{{date-year}}/{{date-month}}/{{date-day}}/{{slug}}",
+    "urlformat": "{{slug}}",
     "indexUrl": "index.html"
   },
   "build": {
     "outputDir": "public/"
-  }
+  },
   "partials": {
     "googleAnalytics": {
       "id": ""
