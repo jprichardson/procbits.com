@@ -8,7 +8,7 @@
   },
   "articles": {
     "urlformat": "{{slug}}",
-    "indexUrl": "index.html"
+    "index": "index.html"
   },
   "build": {
     "outputDir": "public/"
