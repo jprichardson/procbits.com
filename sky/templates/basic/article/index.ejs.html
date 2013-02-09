@@ -4,7 +4,7 @@
 %>
 
 <% years.forEach(function(year) { %>
-  <% var sortedArticles = _(articles[year]).sortBy(function(a) { return -a.createdAt })%>
+  <% var sortedArticles = _(articles[year]).sortBy(function(a) { return -a.publishedAt })%>
   <h3><%= year %></h3>
   <ul>
     <% sortedArticles.forEach(function(article) { %>
