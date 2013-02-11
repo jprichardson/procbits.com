@@ -90,6 +90,14 @@ and read my <a href="http://techneur.com">blog on entrepreneurship</a>.</p>
   /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
   var disqus_shortname = 'procbits'; // required: replace example with your forum shortname
 
+  //optional url
+  
+    var disqus_url = 'http://procbits.com/2010/12/08/including-more-than-one-resourcedictionary-in-your-xaml/';
+  
+
+  //optional id
+  
+
   /* * * DON'T EDIT BELOW THIS LINE * * */
         (function() {
             var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -104,7 +112,7 @@ and read my <a href="http://techneur.com">blog on entrepreneurship</a>.</p>
           <span id="footer">
             <br/>
             <span style="font-size: 10px">
-              Proudly built with <a href="{{sky.homepage}}">Sky</a>.
+              Proudly built with <a href="https://github.com/skywrite">Sky</a>.
             </span>
           </span>
         </div>

@@ -103,6 +103,14 @@ collaborating on software development easy.</p>
   /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
   var disqus_shortname = 'procbits'; // required: replace example with your forum shortname
 
+  //optional url
+  
+    var disqus_url = 'http://procbits.com/2012/04/11/quick-and-dirty-screen-scraping-with-node-js-using-request-and-cheerio/';
+  
+
+  //optional id
+  
+
   /* * * DON'T EDIT BELOW THIS LINE * * */
         (function() {
             var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
@@ -117,7 +125,7 @@ collaborating on software development easy.</p>
           <span id="footer">
             <br/>
             <span style="font-size: 10px">
-              Proudly built with <a href="{{sky.homepage}}">Sky</a>.
+              Proudly built with <a href="https://github.com/skywrite">Sky</a>.
             </span>
           </span>
         </div>

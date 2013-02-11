@@ -1,5 +1,5 @@
 <%
-  var articles = _(self).groupBy(function(a){ return a.publishedAt.getFullYear() }) //group by year
+  var articles = _(self.outputArticles).groupBy(function(a){ return a.publishedAt.getFullYear() }) //group by year
   var years = Object.keys(articles).map(function(year) { return ~~year }).sort().reverse()
 %>
 

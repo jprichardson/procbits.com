@@ -16,7 +16,7 @@
   "partials": {
     "disqus": {
       "shortname": "procbits",
-      "url": "{{slug}}"
+      "url": "http://procbits.com/{{slug}}/"
     },
     "googleAnalytics": {
       "id": ""
