@@ -1,5 +1,5 @@
 <!--
-author: JP
+author: JP Richardson
 publish: Thu Mar 03 2011 16:56:20 GMT-0600 (CST)
 status: publish
 type: post

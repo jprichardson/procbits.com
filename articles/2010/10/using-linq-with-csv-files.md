@@ -1,5 +1,5 @@
 <!--
-author: JP
+author: JP Richardson
 publish: Mon Oct 11 2010 18:09:24 GMT-0500 (CDT)
 status: publish
 type: post
