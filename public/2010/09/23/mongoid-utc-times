@@ -66,16 +66,23 @@
 
 
 <h1>Mongoid UTC Times</h1>
-<p>By default Mongoid will store your Time objects in your local timezone.
-It&#39;s not made clear on the <a href="http://mongoid.org/docs/installation/">installation
-page</a>, but all you have to do is
-add &quot;use_utc: true&quot; to the defaults in your mongoid.yml configuration
-file. Yes Virginia, it&#39;s that simple.</p>
-<p>Are you a <a href="http://gitpilot.com">Git</a> user? Let me help you make project
-management with Git simple. Checkout <a href="http://gitpilot.com">Gitpilot</a>.</p>
-<p>-JP</p>
 
 
+ <div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'procbits'; // required: replace example with your forum shortname
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    
 
           <span id="footer">
             <br/>
