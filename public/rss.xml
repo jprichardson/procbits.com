@@ -1,0 +1,953 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[procbits]]></title><description><![CDATA[source code snippets and other random musings about software]]></description><link>http://procbits.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Wed, 13 Feb 2013 16:45:11 GMT</lastBuildDate><atom:link href="http://procbits.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[BatchFlow: Easily batch process collections sequentially or in parallel in JavaScript/Node.js]]></title><description><![CDATA[<h1>BatchFlow: Easily batch process collections sequentially or in parallel in JavaScript/Node.js</h1>
+<h2>Why?</h2>
+<p>I really got tired of writing the following patterns over and over
+again:</p>
+<p><strong>Sequential:</strong></p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> files = [... <span class="keyword">list</span> of files ...];
+<span class="keyword">function</span> again(x) {
+    <span class="keyword">if</span> (x &lt; files.length) {
+        fs.readFile(files[x], <span class="keyword">function</span>(err, data) {
+            <span class="comment">//... do something with data ...</span>
+            again(x + <span class="number">1</span>);
+        });
+    } <span class="keyword">else</span> {
+        console.log(<span class="string">'Done.'</span>);
+    }
+}
+
+again(<span class="number">0</span>);</code></pre>
+<p>or..</p>
+<p><strong>Parallel:</strong></p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> files = [... <span class="keyword">list</span> of files ...];
+<span class="keyword">var</span> pending = <span class="number">0</span>;
+files.<span class="keyword">forEach</span>(<span class="keyword">function</span>(file, i) {
+    pending += <span class="number">1</span>;
+    fs.readFile(file, <span class="keyword">function</span>(err, data) {
+        <span class="comment">//... do something with data ....</span>
+
+        pending -= <span class="number">1</span>;
+        <span class="keyword">if</span> (pending === <span class="number">0</span> &amp;&amp; i === files.length -<span class="number">1</span>) {
+            console.log(<span class="string">'Done.'</span>);
+        }
+    });
+});</code></pre>
+<p>That&#39;s ugly. For more complicated examples it requires a bit more
+thinking.</p>
+<p>Why don&#39;t I use the wonderful library
+<a href="https://github.com/caolan/async/">async</a>? Well, `async` tries to do
+way too much. I also suffer from a server case of NIH syndrome. Kidding,
+or else I&#39;d rewrite Express.js. Or, am I? Muahahhaa. `async` syntax is
+also very ugly and not CoffeeScript friendly.</p>
+<h2>Installation</h2>
+<p><code>npm install batchflow</code></p>
+<h2>Examples</h2>
+<h3>Arrays</h3>
+<p>Let&#39;s rewrite the previous sequential example:</p>
+<p><strong>Sequential:</strong></p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> batch = <span class="keyword">require</span>(<span class="string">'batchflow'</span>);
+
+<span class="keyword">var</span> files = [... <span class="keyword">list</span> of files ...];
+batch(files).sequential()
+.each(<span class="keyword">function</span>(i, item, done) {
+    fs.readFile(item, <span class="keyword">function</span>(err, data) {
+        <span class="comment">//do something with data</span>
+        done(someResult);
+    });
+}).end(<span class="keyword">function</span>(results) {
+    <span class="comment">//analyze results</span>
+});</code></pre>
+<p>How about the parallel example?</p>
+<p><strong>Parallel:</strong></p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> batch = <span class="keyword">require</span>(<span class="string">'batchflow'</span>);
+
+<span class="keyword">var</span> files = [... <span class="keyword">list</span> of files ...];
+batch(files).parallel()
+.each(<span class="keyword">function</span>(i, item, done) {
+    fs.readFile(item, <span class="keyword">function</span>(err, data) {
+        <span class="comment">//do something with data</span>
+        done(someResult); <span class="comment">//&lt;---- yes, you must still call done in parallel, this way we can know when to trigger `end()`.</span>
+    });
+}).end(<span class="keyword">function</span>(results) {
+    <span class="comment">//analyze results</span>
+});</code></pre>
+<pre><code>
+What&#39;s that, your data is not stored in an array? Oh, you say it&#39;s
+stored in an object? That&#39;s OK too...
+
+Objects
+-------
+
+**Sequential:**
+
+```javascript
+var batch = require(&#39;batchflow&#39;);
+
+var files = {&#39;file1&#39;: &#39;path&#39;.... &#39;filen&#39;: &#39;pathn&#39;}
+batch(files).sequential()
+.each(function(key, val, done) {
+    fs.readFile(val, function(err, data) {
+        //do something with data
+        done(someResult);
+    });
+}).end(function(results) {
+    //analyze results
+});</code></pre>
+<p>How about the parallel example? <strong>Parallel:</strong></p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> batch = <span class="keyword">require</span>(<span class="string">'batchflow'</span>);
+
+<span class="keyword">var</span> files = {<span class="string">'file1'</span>: <span class="string">'path'</span>.... <span class="string">'filen'</span>: <span class="string">'pathn'</span>}
+batch(files).parallel()
+.each(<span class="keyword">function</span>(key, val, done) {
+    fs.readFile(val, <span class="keyword">function</span>(err, data) {
+        <span class="comment">//do something with data</span>
+        done(someResult);
+    });
+}).end(<span class="keyword">function</span>(results) {
+    <span class="comment">//analyze results</span>
+});</code></pre>
+<h2>Misc</h2>
+<p>​1. Is `sequential()` or `parallel()` too long? Fine. `series()`
+and `seq()` are aliases for `sequential()` and `par()` is an alias
+for `parallel()`. 2. You don&#39;t like the fluent API? That&#39;s OK too:</p>
+<p>Non-fluent API BatchFlow</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> batch = <span class="keyword">require</span>(<span class="string">'batchflow'</span>);
+<span class="keyword">var</span> bf = batch(files);
+bf.isSequential = <span class="keyword">true</span>;
+
+bf.each(<span class="keyword">function</span>(i, file, done) {
+    done(someResult);
+});
+
+bf.end(<span class="keyword">function</span>(results) {
+    <span class="comment">//blah blah</span>
+});</code></pre>
+<h2>CoffeeScript</h2>
+<pre><code class="lang-ruby">batch = <span class="keyword">require</span>(<span class="string">'batchflow'</span>)
+files = [... <span class="keyword">list</span> of files ...]
+bf = batch(files).seq().each (i, file, done) ->
+  fs.readFile file, done
+bf.error (err) ->
+  console.log(err);
+bf.end (results) ->
+  console.log fr.toString() <span class="keyword">for</span> fr in results</code></pre>
+<h2>Error Handling</h2>
+<p>What&#39;s that, you want error handling? Well, you might as well call me
+Burger King... have it your way.</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> a = {<span class="string">'f'</span>: <span class="string">'/tmp/file_DOES_NOT_exist_hopefully'</span> + Math.random()};
+batch(a).parallel().each(<span class="keyword">function</span>(i, item, done) {
+    fs.readFile(item, done);
+}).error(<span class="keyword">function</span>(err) {
+    assert(err);
+    done();
+}).end(<span class="keyword">function</span>() {
+    assert(<span class="keyword">false</span>); <span class="comment">//&lt;--- shouldn't get here</span>
+});
+
+
+<span class="keyword">var</span> a = [<span class="string">'/tmp/file_DOES_NOT_exist_hopefully'</span> + Math.random()];
+batch(a).series().each(<span class="keyword">function</span>(i, item, done) {
+    <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">'err'</span>);
+}).error(<span class="keyword">function</span>(err) {
+    assert(err);
+    done();
+}).end(<span class="keyword">function</span>() {
+    assert(<span class="keyword">false</span>); <span class="comment">//&lt;--- shouldn't get here</span>
+});</code></pre>
+<p>You can grab the source on
+<a href="https://github.com/jprichardson/node-batchflow">Github</a>.</p>
+<p>If you use Git with others, you should checkout
+<a href="http://gitpilot.com">Gitpilot</a> to make collaboration with Git simple
+using a different GUI. We would love your feedback.</p>
+<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
+<p>-JP</p>
+]]></description><link>http://procbits.com/2012/08/14/batchflow-easily-batch-process-collections-sequentially-or-in-parallel-in-javascriptnode-js</link><guid isPermaLink="true">http://procbits.com/2012/08/14/batchflow-easily-batch-process-collections-sequentially-or-in-parallel-in-javascriptnode-js</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Tue, 14 Aug 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[Like Unix Expect: Automate Command Line Programs in Node.js with Suppose]]></title><description><![CDATA[<h1>Like Unix Expect: Automate Command Line Programs in Node.js with Suppose</h1>
+<p>Have you ever heard of the command line program
+<a href="http://en.wikipedia.org/wiki/Expect">expect</a>? Basically, expect allows
+you to automate command line programs.
+<a href="https://github.com/jprichardson/node-suppose">suppose</a> is a
+programmable Node.js module that allows the same behavior.</p>
+<p>Why would you do this? Maybe you want to automate a ssh session? Or,
+maybe you want to test the external interface of on of your Node.js
+command line scripts.</p>
+<p>Install: <code>npm install suppose</code></p>
+<p>Example:</p>
+<pre><code class="lang-javascript">process.chdir(<span class="string">'/tmp/awesome'</span>);
+suppose(<span class="string">'npm'</span>, [<span class="string">'init'</span>])
+  .on(<span class="string">'name: (awesome) '</span>).respond(<span class="string">'awesome_package\n'</span>)
+  .on(<span class="string">'version: (0.0.0) '</span>).respond(<span class="string">'0.0.1\n'</span>)
+  .on(<span class="string">'description: '</span>).respond(<span class="string">"It's an awesome package man!\n"</span>)
+  .on(<span class="string">'entry point: (index.js) '</span>).respond(<span class="string">"\n"</span>)
+  .on(<span class="string">'test command: '</span>).respond(<span class="string">'npm test\n'</span>)
+  .on(<span class="string">'git repository: '</span>).respond(<span class="string">"\n"</span>)
+  .on(<span class="string">'keywords: '</span>).respond(<span class="string">'awesome, cool\n'</span>)
+  .on(<span class="string">'author: '</span>).respond(<span class="string">'JP Richardson\n'</span>)
+  .on(<span class="string">'license: (BSD) '</span>).respond(<span class="string">'MIT\n'</span>)
+  .on(<span class="string">'ok? (yes) '</span> ).respond(<span class="string">'yes\n'</span>)
+.end(<span class="keyword">function</span>(code){
+    assert(code === <span class="number">0</span>);
+    <span class="keyword">var</span> packageFile = <span class="string">'/tmp/awesome/package.json'</span>;
+    fs.readFile(packageFile, <span class="keyword">function</span>(err, data){
+        <span class="keyword">var</span> packageObj = JSON.parse(data.toString());
+        assert(packageObj.name === <span class="string">'awesome_package'</span>);
+        assert(packageObj.version === <span class="string">'0.0.1'</span>);
+        assert(packageObj.description === <span class="string">"It's an awesome package man!"</span>);
+        assert(packageObj.main === <span class="string">'index.js'</span>);
+        assert(packageObj.scripts.test === <span class="string">'npm test'</span>);
+        assert(packageObj.keywords[<span class="number">0</span>] === <span class="string">'awesome'</span>);
+        assert(packageObj.keywords[<span class="number">1</span>] === <span class="string">'cool'</span>);
+        assert(packageObj.author === <span class="string">'JP Richardson'</span>);
+        assert(packageObj.license === <span class="string">'MIT'</span>);
+        done();
+    });
+});</code></pre>
+<p>Pretty easy, huh? You can grab the source on
+<a href="https://github.com/jprichardson/node-suppose">Github</a>.</p>
+<p>If you use Git with others, you should checkout
+<a href="http://gitpilot.com">Gitpilot</a> to make collaboration with Git simple
+using a different GUI. We would love your feedback.</p>
+<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
+<p>-JP</p>
+]]></description><link>http://procbits.com/2012/08/03/like-unix-expect-automate-command-line-programs-in-node-js-with-suppose</link><guid isPermaLink="true">http://procbits.com/2012/08/03/like-unix-expect-automate-command-line-programs-in-node-js-with-suppose</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Fri, 03 Aug 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[NextFlow: Sane CoffeeScript Flow Control]]></title><description><![CDATA[<h1>NextFlow: Sane CoffeeScript Flow Control</h1>
+<p>Take a look at the most prominent JavaScript control flow libraries:
+<a href="https://github.com/caolan/async">Async.js</a>,
+<a href="https://github.com/creationix/step">Step</a>,
+<a href="https://github.com/substack/node-seq">Seq</a>. If you were to use these
+libraries in CoffeeScript, your code would be an ugly mess.</p>
+<p><strong>Async.js / CoffeeScript</strong></p>
+<pre><code class="lang-ruby">async = <span class="keyword">require</span>(<span class="string">'async'</span>)
+
+async.series(
+  (->
+    <span class="comment">#first function</span>
+  ),
+  (->
+    <span class="comment">#second function</span>
+  )
+)</code></pre>
+<p><strong>Step / CoffeeScript</strong></p>
+<pre><code class="lang-ruby">Step = <span class="keyword">require</span>(<span class="string">'step'</span>)
+
+Step(
+  (->
+    <span class="comment">#first function</span>
+  ),
+  (->
+    <span class="comment">#second function</span>
+  )
+)</code></pre>
+<p><strong>Seq / CoffeeScript</strong></p>
+<pre><code class="lang-ruby">Seq = <span class="keyword">require</span>(<span class="string">'seq'</span>)
+
+Seq().seq(->
+  <span class="comment">#first function</span>
+).seq(->
+  <span class="comment">#second function</span>
+)</code></pre>
+<p>Yuck. If you&#39;re programming in JavaScript, all of them are very usable
+solutions. Also, to be fair, they do a lot more than NextFlow. But
+NextFlow looks much nicer with CoffeeScript programs.</p>
+<p><strong>How to Install:</strong></p>
+<p><code>npm install --production nextflow</code></p>
+<p>Can be used in the browser too.</p>
+<p>Execute sequentially, calling the `next()` function:</p>
+<pre><code class="lang-ruby">next = <span class="keyword">require</span>(<span class="string">'nextflow'</span>)
+
+vals = []
+x = <span class="number">0</span>
+
+flow =
+  <span class="number">1</span>: ->
+    vals.push(<span class="number">1</span>)
+    @next()
+  <span class="number">2</span>: ->
+    vals.push(<span class="number">2</span>)
+    x = Math.random()
+    @next(x)
+  <span class="number">3</span>: (num) ->
+    vals.push(num)
+    @next()
+  <span class="number">4</span>: ->
+    vals.push(<span class="number">4</span>)
+    @next()
+  <span class="number">5</span>: ->
+    console.log vals[<span class="number">0</span>] <span class="comment">#is 1</span>
+    console.log vals[<span class="number">1</span>] <span class="comment">#is 2</span>
+    console.log vals[<span class="number">2</span>] <span class="comment">#is x</span>
+    console.log vals[<span class="number">3</span>] <span class="comment">#is 4</span>
+
+next(flow)</code></pre>
+<p>Call functions by the label:</p>
+<pre><code class="lang-ruby">vals = []
+x = <span class="number">0</span>
+
+flow =
+  a1: ->
+    vals.push(<span class="number">1</span>)
+    @a2()
+  a2: ->
+    vals.push(<span class="number">2</span>)
+    x = Math.random()
+    @a3(x)
+  a3: (num) ->
+    vals.push(num)
+    @a4()
+  a4: ->
+    vals.push(<span class="number">4</span>)
+    @a5()
+  a5: ->
+    console.log vals[<span class="number">0</span>] <span class="comment">#is 1</span>
+    console.log vals[<span class="number">1</span>] <span class="comment">#is 2</span>
+    console.log vals[<span class="number">2</span>] <span class="comment">#is x</span>
+    console.log vals[<span class="number">3</span>] <span class="comment">#is 4</span>
+
+next(flow)</code></pre>
+<p>Call either `next()` or call the label:</p>
+<pre><code class="lang-ruby">vals = []
+x = <span class="number">0</span>
+y = <span class="number">0</span>
+
+flow =
+  a1: ->
+    vals.push(<span class="number">1</span>)
+    @a2()
+  a2: ->
+    vals.push(<span class="number">2</span>)
+    x = Math.random()
+    @a3(x)
+  a3: (num) ->
+    vals.push(num)
+    y = Math.random()
+    @next(y)
+  a4: (num) ->
+    vals.push(num)
+    @a5()
+  a5: ->
+    console.log vals[<span class="number">0</span>] <span class="comment">#is 1</span>
+    console.log vals[<span class="number">1</span>] <span class="comment">#is 2</span>
+    console.log vals[<span class="number">2</span>] <span class="comment">#is x</span>
+    console.log vals[<span class="number">3</span>] <span class="comment">#is y</span>
+
+next(flow)</code></pre>
+<p><a href="https://github.com/jprichardson/node-nextflow">NextFlow on Github</a></p>
+<p>Checkout <a href="http://gitpilot.com">Gitpilot</a>, to become more productive with
+Git.</p>
+<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
+<p>-JP</p>
+]]></description><link>http://procbits.com/2012/06/28/nextflow-sane-coffeescript-flow-control</link><guid isPermaLink="true">http://procbits.com/2012/06/28/nextflow-sane-coffeescript-flow-control</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 28 Jun 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[Thinking Asynchronously in CoffeeScript/JavaScript: Loops and Callbacks]]></title><description><![CDATA[<h1>Thinking Asynchronously in CoffeeScript/JavaScript: Loops and Callbacks</h1>
+<p>Awhile back, I wrote about my new experience in learning Node.js: <a href="http://procbits.com/2011/10/29/a-node-js-experiment-thinking-asynchronously-recursion-calculate-file-size-directory/">A
+Node.js Experiment: Thinking Asynchronously, Using Recursion to
+Calculate the Total File Size in a
+Directory</a>.</p>
+<p>Consider this snippet of code:</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> names = [<span class="string">'JP'</span>, <span class="string">'Chris'</span>, <span class="string">'Leslie'</span>];
+<span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; names.length; ++i){
+  <span class="keyword">var</span> name = names[i];
+  setTimeout(<span class="keyword">function</span>(){
+    alert(name);              
+  },<span class="number">10</span>);
+}​</code></pre>
+<p>Equivalent CoffeeScript:</p>
+<pre><code class="lang-ruby">names = [<span class="string">'JP'</span>, <span class="string">'Chris'</span>, <span class="string">'Leslie'</span>]
+<span class="keyword">for</span> name in names
+  setTimeout(->
+    alert(name)
+  ,<span class="number">10</span>)</code></pre>
+<p>Click
+<a href="http://coffeescript.org/#try:names%20%3D%20%5B&#39;JP&#39;%2C%20&#39;Chris&#39;%2C%20&#39;Leslie&#39;%5D%0Afor%20name%20in%20names%0A%20%20setTimeout(-%3E%0A%20%20%20%20alert(name">here</a>%0A%20%20%2C10))
+to run it. If you guessed that the loop would alert &quot;Leslie&quot; three
+times, then you&#39;d be correct.</p>
+<p>The problem is, that before the callback executes, the loop has
+completed. Thus callback always has the last value.</p>
+<p>How do you solve this problem? You wrap the callback in a closure that
+executes immediately.</p>
+<p>JavaScript:</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> names = [<span class="string">'JP'</span>, <span class="string">'Chris'</span>, <span class="string">'Leslie'</span>];
+<span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; names.length; ++i){
+  <span class="keyword">var</span> name = names[i];
+  (<span class="keyword">function</span>(name){
+    setTimeout(<span class="keyword">function</span>(){
+      alert(name);              
+    },<span class="number">10</span>);
+  })(name);
+}​</code></pre>
+<p>CoffeeScript:</p>
+<pre><code class="lang-ruby">names = [<span class="string">'JP'</span>, <span class="string">'Chris'</span>, <span class="string">'Leslie'</span>]
+<span class="keyword">for</span> name in names
+  <span class="keyword">do</span> (name) ->
+    setTimeout(->
+      alert(name)
+    ,<span class="number">10</span>)</code></pre>
+<p>Click
+<a href="http://coffeescript.org/#try:names%20%3D%20%5B&#39;JP&#39;%2C%20&#39;Chris&#39;%2C%20&#39;Leslie&#39;%5D%0Afor%20name%20in%20names%0A%20%20do%20(name">here</a>%20-%3E%0A%20%20%20%20setTimeout(-%3E%0A%20%20%20%20%20%20alert(name)%0A%20%20%20%20%2C10))
+to run it.</p>
+<p>These solutions execute the block of code in a parallel manner. Using
+the alert&#39;s are not a good indication in showing this behavior. However,
+if you were opening files, all of them would be opened approximately
+(not exactly) at the same time.</p>
+<p>What if you wanted to perform the action in the callback in a serial
+manner?</p>
+<p>Using the previous simple example, it&#39;d look like this:</p>
+<p>JavaScript:</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> names = [<span class="string">'JP'</span>, <span class="string">'Chris'</span>, <span class="string">'Leslie'</span>];
+loop = <span class="keyword">function</span>(i){
+    setTimeout(<span class="keyword">function</span>(){
+      alert(names[i]);
+      <span class="keyword">if</span> (i &lt; names.length - <span class="number">1</span>)
+        loop(i + <span class="number">1</span>);       
+    },<span class="number">10</span>);
+}
+loop(<span class="number">0</span>);</code></pre>
+<p>CoffeeScript:</p>
+<pre><code class="lang-ruby">names = [<span class="string">'JP'</span>, <span class="string">'Chris'</span>, <span class="string">'Leslie'</span>];
+doloop = (i) ->
+  setTimeout(->
+    alert(names[i])
+    <span class="keyword">if</span> i &lt; names.length - <span class="number">1</span>
+      doloop(i + <span class="number">1</span>)       
+  ,<span class="number">10</span>);
+doloop(<span class="number">0</span>)</code></pre>
+<p><a href="http://coffeescript.org/#try:names%20%3D%20%5B&#39;JP&#39;%2C%20&#39;Chris&#39;%2C%20&#39;Leslie&#39;%5D%3B%0Adoloop%20%3D%20(i">Run
+it.</a>%20-%3E%0A%20%20setTimeout(-%3E%0A%20%20%20%20alert(names%5Bi%5D)%0A%20%20%20%20if%20i%20%3C%20names.length%20-%201%0A%20%20%20%20%20%20doloop(i%20%2B%201)%20%20%20%20%20%20%20%0A%20%20%2C10)%3B%0Adoloop(0))</p>
+<p>If you were doing file processing in the loop, it would be executed
+sequentially.</p>
+<p>Hopefully this helps you to better understand asynchronous design of
+algorithms in JavaScript.</p>
+<p><strong>Update:</strong> I forgot about the forEach function that exists in Node.js
+and most modern browsers. This function pretty much solves the problem.</p>
+<p>Here&#39;s the JavaScript code:</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> names = [<span class="string">'JP'</span>, <span class="string">'Chris'</span>, <span class="string">'Leslie'</span>];
+names.<span class="keyword">forEach</span>(<span class="keyword">function</span>(name){
+  setTimeout(<span class="keyword">function</span>(){
+    alert(name);              
+  },<span class="number">10</span>);
+}​);</code></pre>
+<p>Much cleaner. Thanks to <a href="http://www.reddit.com/r/programming/comments/u34ed/thinking_asynchronously_in_coffeescriptjavascript/c4ryifw">smog_alado
+[Reddit]</a>
+for the reminder.</p>
+<p>Checkout <a href="http://gitpilot.com">Gitpilot</a>, a different kind of Git GUI.</p>
+<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
+<p>-JP</p>
+]]></description><link>http://procbits.com/2012/05/24/thinking-asynchronously-in-coffeescriptjavascript-loops-and-callbacks</link><guid isPermaLink="true">http://procbits.com/2012/05/24/thinking-asynchronously-in-coffeescriptjavascript-loops-and-callbacks</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 24 May 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[Why Do All the Great Node.js Developers Hate CoffeeScript?]]></title><description><![CDATA[<h1>Why Do All the Great Node.js Developers Hate CoffeeScript?</h1>
+<p>Why do all the great Node.js developers hate CoffeeScript?</p>
+<p>Take a look at the following Github repositories of the well-known
+Node.js developers:</p>
+<ul>
+<li><a href="https://github.com/isaacs">Isaac Schleuter</a> (maintainer of Node.js
+/ NPM)</li>
+<li><a href="https://github.com/visionmedia">TJ Holowaychuk</a> (express, Jade,
+Mocha)</li>
+<li><a href="https://github.com/mikeal">Mikeal Rogers</a> (Request)</li>
+<li><a href="https://github.com/substack">James Haliday &quot;substack&quot;</a> (Browserify,
+dnode, Optimist)</li>
+<li><a href="https://github.com/guille">Guillermo Rauch</a> (Socket.IO)</li>
+<li><a href="https://github.com/aheckmann">Aaron Heckmann</a> (Mongoose)</li>
+<li><a href="https://github.com/TooTallNate">Nathan Rajich &quot;Too Tall Nate&quot;</a>
+(node-gyp)</li>
+<li><a href="https://github.com/marak">Marak Squires</a> (Hook.io, pdf.js,
+color.js)</li>
+<li><a href="https://github.com/felixge">Felix Geisendörfer </a></li>
+<li><a href="https://github.com/creationix">Tim Caswell</a> (NVM)</li>
+</ul>
+<p>Did you look at them? Not one of them has a project (that isn&#39;t forked)
+that is written in CoffeeScript. So does the absence of CoffeeScript on
+Github imply these developers hate it? Absolutely not. Listen to episode
+<a href="http://nodeup.com/eighteen">18</a> or <a href="http://nodeup.com/nineteen">19</a> of
+Nodeup (don&#39;t remember which one) but there are a couple of instances
+where they (expert Node.js devs) joke and laugh about writing in
+CoffeeScript. If this offensive? Of course not. But the attitude is
+curious to me.</p>
+<p>One of the aforementioned developers said the following about a
+technology:</p>
+<blockquote>
+<p>What if we could omit braces? How about semi-colons?</p>
+</blockquote>
+<p>Sounds like the developer is talking about CoffeeScript, doesn&#39;t it? No,
+it was TJ Holowaychuk
+describing <a href="http://learnboost.github.com/stylus/">Stylus</a>, his CSS
+replacement language. Look at Stylus, look how CoffeeScript-esque it is.
+This is the the same <a href="https://github.com/visionmedia/jade/issues/430">TJ that doesn&#39;t like
+CoffeeScript</a>. This is
+meant to be partially tongue &amp; cheek, but it does lend credance to my
+point.</p>
+<p>Can you guess what the second most <a href="http://search.npmjs.org/">depended-upon package is on
+NPM</a>? If you guessed CoffeeScript, you&#39;d be
+right!</p>
+<p><a href="http://procbits.files.wordpress.com/2012/05/coffeescript-dep2.png"><img src="http://procbits.files.wordpress.com/2012/05/coffeescript-dep2.png?w=300" alt="" title="NPM / CoffeeScript"></a></p>
+<p>So if it&#39;s the second most depended-upon package, it must be in use by
+us mere-mortal developers. Having defected from Rails, I love
+CoffeeScript. But, I ask again, why do the greats have a haughty
+attitude towards CoffeeScript? This isn&#39;t meant to be a crusade trying
+to get people to convert to the holier-than-though CoffeeScript, but a
+genuine lack of understanding of why the disdain exists. Especially
+given the acceptance towards Haml, SASS, SCSS, Jade, etc. I mean, when
+it comes down to it, write in whatever makes you happy, but I feel like
+I&#39;m missing something. If you&#39;re part of the Node.js community, you&#39;ll
+know what I&#39;m talking about.</p>
+<p>Looking over the <a href="http://coffeescript.org/">CoffeeScrip</a>t page, I think
+that you can safely conclude that in general, you&#39;ll write less lines of
+code using CoffeeScript. <a href="http://www.codinghorror.com/blog/2007/12/size-is-the-enemy.html">Code is our
+enemy</a>
+so that&#39;s a good thing.</p>
+<p>What do you think about CoffeeScript? Why do you think these developers
+don&#39;t like CoffeeScript?</p>
+<p>More fun CoffeeScript hatred:</p>
+<ul>
+<li><a href="http://ryanflorence.com/2011/case-against-coffeescript/">A Case Against Using
+CoffeeScript</a></li>
+<li><a href="http://net.tutsplus.com/articles/interviews/should-you-learn-coffeescript/">Should You Learn
+CoffeeScript?</a></li>
+</ul>
+<p>If you use Git with others, you should checkout
+<a href="http://gitpilot.com">Gitpilot</a> to make collaboration with Git simple.
+We would love your advice.</p>
+<p>If you made it this far, follow me on Twitter:
+<a href="http://twitter.com/jprichardson">@jprichardson</a></p>
+<p>-JP</p>
+]]></description><link>http://procbits.com/2012/05/18/why-do-all-the-great-node-js-developers-hate-coffeescript</link><guid isPermaLink="true">http://procbits.com/2012/05/18/why-do-all-the-great-node-js-developers-hate-coffeescript</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Fri, 18 May 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[Quick and Dirty Screen Scraping with Node.js using Request and Cheerio]]></title><description><![CDATA[<h1>Quick and Dirty Screen Scraping with Node.js using Request and Cheerio</h1>
+<p>I wrote my own screen scraping module built on
+<a href="http://www.phantomjs.org/">PhantomJS</a>, but unfortunately it&#39;s too slow
+for most screen scraping tasks that don&#39;t require browser-side
+JavaScript. One easy way to scrape pages with Node.js is to use
+<a href="https://github.com/mikeal/request">Request</a> and
+<a href="https://github.com/MatthewMueller/cheerio">Cheerio</a>.</p>
+<p>Here is an example of scraping Bing to get all of the search results:</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> request = <span class="keyword">require</span>(<span class="string">'request'</span>);
+<span class="keyword">var</span> cheerio = <span class="keyword">require</span>(<span class="string">'cheerio'</span>);
+
+<span class="keyword">var</span> searchTerm = <span class="string">'screen+scraping'</span>;
+<span class="keyword">var</span> url = <span class="string">'http://www.bing.com/search?q='</span> + searchTerm;
+
+request(url, <span class="keyword">function</span>(err, resp, body){
+  $ = cheerio.load(body);
+  links = $(<span class="string">'.sb_tlst h3 a'</span>); <span class="comment">//use your CSS selector here</span>
+  $(links).each(<span class="keyword">function</span>(i, link){
+    console.log($(link).text() + <span class="string">':\n  '</span> + $(link).attr(<span class="string">'href'</span>));
+  });
+});</code></pre>
+<p>Cheerio acts a jQuery replacement for a lot of jQuery tasks. It doesn&#39;t
+replicate jQuery in every way, and most importantly it&#39;s not meant for
+the browser but for the server. But it beats the pants off of the
+<a href="https://github.com/tmpvar/jsdom">jsdom</a>/jQuery combo for screen
+scraping.</p>
+<p>Do you use Git? If so, checkout <a href="http://gitpilot.com">Gitpilot</a> to make
+collaborating on software development easy.</p>
+<p>You should follow me on Twitter:
+<a href="http://twitter.com/jprichardson">@jprichardson</a>.</p>
+<p>-JP</p>
+]]></description><link>http://procbits.com/2012/04/11/quick-and-dirty-screen-scraping-with-node-js-using-request-and-cheerio</link><guid isPermaLink="true">http://procbits.com/2012/04/11/quick-and-dirty-screen-scraping-with-node-js-using-request-and-cheerio</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Wed, 11 Apr 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[Submitting/Posting Files and Fields to an HTTP Form using C#/.NET ]]></title><description><![CDATA[<h1>Submitting/Posting Files and Fields to an HTTP Form using C#/.NET </h1>
+<p>Awhile back, I had to integrate a C# program with a web system that
+allowed the user to upload a few files and include some misc. data. I
+Googled around and didn&#39;t find a comprehensive solution.</p>
+<p>I did use some code I found on the internet, unfortunately I don&#39;t
+remember where, so I can&#39;t give proper attribution. If you know, please
+let me know; it&#39;s the code relevant to the <code>MimePart</code> class. I added the
+form values code and packaged it up into the <code>HttpForm</code> sugar.</p>
+<p>Here is the code:</p>
+<pre><code class="lang-csharp"><span class="keyword">public</span> <span class="keyword">class</span> HttpForm {
+
+    <span class="keyword">private</span> Dictionary&lt;string, string> _files = <span class="keyword">new</span> Dictionary&lt;string, string>();
+    <span class="keyword">private</span> Dictionary&lt;string, string> _values = <span class="keyword">new</span> Dictionary&lt;string, string>();
+
+    <span class="keyword">public</span> HttpForm(string url) {
+        <span class="keyword">this</span>.Url = url;
+        <span class="keyword">this</span>.Method = <span class="string">"POST"</span>;
+    }
+
+    <span class="keyword">public</span> string Method { get; set; }
+    <span class="keyword">public</span> string Url { get; set; }
+
+    <span class="comment">//return self so that we can chain</span>
+    <span class="keyword">public</span> HttpForm AttachFile(string field, string fileName) {
+        _files[field] = fileName;
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+
+    <span class="keyword">public</span> HttpForm ResetForm(){
+        _files.Clear();
+        _values.Clear();
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+
+    <span class="comment">//return self so that we can chain</span>
+    <span class="keyword">public</span> HttpForm SetValue(string field, string value) {
+        _values[field] = value;
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+
+    <span class="keyword">public</span> HttpWebResponse Submit() {
+        <span class="keyword">return</span> <span class="keyword">this</span>.UploadFiles(_files, _values);
+    }
+
+
+    <span class="keyword">private</span> HttpWebResponse UploadFiles(Dictionary&lt;string, string> files, Dictionary&lt;string, string> otherValues) {
+        <span class="keyword">var</span> req = (HttpWebRequest)WebRequest.Create(<span class="keyword">this</span>.Url);
+
+        req.Timeout = <span class="number">10000</span> * <span class="number">1000</span>;
+        req.Accept = <span class="string">"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"</span>;
+        req.AllowAutoRedirect = <span class="keyword">false</span>;
+
+        <span class="keyword">var</span> mimeParts = <span class="keyword">new</span> <span class="keyword">List</span>&lt;MimePart>();
+        <span class="keyword">try</span> {
+            <span class="keyword">if</span> (otherValues != <span class="keyword">null</span>) {
+                <span class="keyword">foreach</span> (<span class="keyword">var</span> fieldName in otherValues.Keys) {
+                    <span class="keyword">var</span> part = <span class="keyword">new</span> MimePart();
+
+                    part.Headers[<span class="string">"Content-Disposition"</span>] = <span class="string">"form-data; name=\""</span> + fieldName + <span class="string">"\""</span>;
+                    part.Data = <span class="keyword">new</span> MemoryStream(Encoding.UTF8.GetBytes(otherValues[fieldName]));
+
+                    mimeParts.Add(part);
+                }
+            }
+
+            <span class="keyword">if</span> (files != <span class="keyword">null</span>) {
+                <span class="keyword">foreach</span> (<span class="keyword">var</span> fieldName in files.Keys) {
+                    <span class="keyword">var</span> part = <span class="keyword">new</span> MimePart();
+
+                    part.Headers[<span class="string">"Content-Disposition"</span>] = <span class="string">"form-data; name=\""</span> + fieldName + <span class="string">"\"; filename=\""</span> + files[fieldName] + <span class="string">"\""</span>;
+                    part.Headers[<span class="string">"Content-Type"</span>] = <span class="string">"application/octet-stream"</span>;
+                    part.Data = File.OpenRead(files[fieldName]);
+
+                    mimeParts.Add(part);
+                }
+            }
+
+            string boundary = <span class="string">"----------"</span> + DateTime.Now.Ticks.ToString(<span class="string">"x"</span>);
+
+            req.ContentType = <span class="string">"multipart/form-data; boundary="</span> + boundary;
+            req.Method = <span class="keyword">this</span>.Method;
+
+            long contentLength = <span class="number">0</span>;
+
+            byte[] _footer = Encoding.UTF8.GetBytes(<span class="string">"--"</span> + boundary + <span class="string">"--\r\n"</span>);
+
+            <span class="keyword">foreach</span> (MimePart part in mimeParts) {
+                contentLength += part.GenerateHeaderFooterData(boundary);
+            }
+
+            req.ContentLength = contentLength + _footer.Length;
+
+            byte[] buffer = <span class="keyword">new</span> byte[<span class="number">8192</span>];
+            byte[] afterFile = Encoding.UTF8.GetBytes(<span class="string">"\r\n"</span>);
+            int read;
+
+            using (Stream s = req.GetRequestStream()) {
+                <span class="keyword">foreach</span> (MimePart part in mimeParts) {
+                    s.Write(part.Header, <span class="number">0</span>, part.Header.Length);
+
+                    <span class="keyword">while</span> ((read = part.Data.Read(buffer, <span class="number">0</span>, buffer.Length)) > <span class="number">0</span>)
+                        s.Write(buffer, <span class="number">0</span>, read);
+
+                    part.Data.Dispose();
+
+                    s.Write(afterFile, <span class="number">0</span>, afterFile.Length);
+                }
+
+                s.Write(_footer, <span class="number">0</span>, _footer.Length);
+            }
+
+            <span class="keyword">var</span> res = (HttpWebResponse)req.GetResponse();
+
+            <span class="keyword">return</span> res;
+        } <span class="keyword">catch</span> (<span class="keyword">Exception</span> ex) {
+            Console.WriteLine(ex.Message);
+            <span class="keyword">foreach</span> (MimePart part in mimeParts)
+                <span class="keyword">if</span> (part.Data != <span class="keyword">null</span>)
+                    part.Data.Dispose();
+
+            <span class="keyword">return</span> (HttpWebResponse)req.GetResponse();
+        }
+    }
+
+    <span class="keyword">private</span> <span class="keyword">class</span> MimePart {
+        <span class="keyword">private</span> NameValueCollection _headers = <span class="keyword">new</span> NameValueCollection();
+        <span class="keyword">public</span> NameValueCollection Headers { get { <span class="keyword">return</span> _headers; } }
+
+        <span class="keyword">public</span> byte[] Header { get; <span class="keyword">protected</span> set; }
+
+        <span class="keyword">public</span> long GenerateHeaderFooterData(string boundary) {
+            StringBuilder sb = <span class="keyword">new</span> StringBuilder();
+
+            sb.Append(<span class="string">"--"</span>);
+            sb.Append(boundary);
+            sb.AppendLine();
+            <span class="keyword">foreach</span> (string key in _headers.AllKeys) {
+                sb.Append(key);
+                sb.Append(<span class="string">": "</span>);
+                sb.AppendLine(_headers[key]);
+            }
+            sb.AppendLine();
+
+            Header = Encoding.UTF8.GetBytes(sb.ToString());
+
+            <span class="keyword">return</span> Header.Length + Data.Length + <span class="number">2</span>;
+        }
+
+        <span class="keyword">public</span> Stream Data { get; set; }
+    }
+}</code></pre>
+<p>You can easily use it like so:</p>
+<pre><code class="lang-csharp"><span class="keyword">var</span> file1 = @<span class="string">"C:\file"</span>;
+<span class="keyword">var</span> file2 = @<span class="string">"C:\file2"</span>;
+
+<span class="keyword">var</span> yourUrl = <span class="string">"http://yourdomain.com/process.php"</span>;
+<span class="keyword">var</span> httpForm = <span class="keyword">new</span> HttpForm(yourUrl);
+httpForm.AttachFile(<span class="string">"file1"</span>, file1).AttachFile(<span class="string">"file2"</span>, file2);
+httpForm.setValue(<span class="string">"foo"</span>, <span class="string">"some foo"</span>).setValue(<span class="string">"blah"</span>, <span class="string">"rarrr!"</span>);
+httpForm.Submit();</code></pre>
+<p>Do you use Git? If so, checkout <a href="http://gitpilot.com">Gitpilot</a> to make
+using Git thoughtless.</p>
+<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>.</p>
+<p>-JP Richardson</p>
+]]></description><link>http://procbits.com/2012/02/29/submittingposting-files-and-fields-to-an-http-form-using-c-net</link><guid isPermaLink="true">http://procbits.com/2012/02/29/submittingposting-files-and-fields-to-an-http-form-using-c-net</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 01 Mar 2012 06:00:00 GMT</pubDate></item><item><title><![CDATA[Installing Node.js on Ubuntu 10.04 LTS ]]></title><description><![CDATA[<h1>Installing Node.js on Ubuntu 10.04 LTS </h1>
+<p>Installing Node.js on Ubuntu 10.04 LTS is pretty straight forward.</p>
+<p>You will want a Node.js versioning manager. Node.js has a quick release
+cycle, point releases happen quite frequently. A Node.js versioning
+manager will help you keep all of your versions isolated from each
+other.</p>
+<p>As it stands today, there are four Node.js version managers. They are:</p>
+<ol>
+<li><a href="https://github.com/creationix/nvm">NVM</a> - NVM works like RVM. It
+must be sourced in your ~./bashrc or ~./profile file. Some people
+don&#39;t like this. It&#39;s my understanding that some find this to be a
+bit of hackery.</li>
+<li><a href="https://github.com/isaacs/nave">Nave</a> - Nave doesn&#39;t need to be
+sourced or loaded up into your bash profile. But, when you use Nave
+it executes commands into a
+<a href="http://docstore.mik.ua/orelly/unix/upt/ch38_04.htm">subshell</a>. It&#39;s
+my understanding that if any process in a subshell modifies the
+environment then these changes won&#39;t persist to the parent process.
+It&#39;s not entirely clear these changes persist or not. But the
+rhetoric from some regarding using subshells for version management
+was enough to drive me away.</li>
+<li><a href="https://github.com/visionmedia/n">n</a> - I love the simplicity of
+&#39;n&#39;. It doesn&#39;t use subshells and it doesn&#39;t require that you modify
+your bash profile. I would use &#39;n&#39; if it installed NPM (Node.js
+package manager) with each release, and <a href="https://github.com/visionmedia/n/issues/47">it
+doesn&#39;t</a>.</li>
+<li><a href="https://github.com/ekalinin/nodeenv">nodeenv</a>- I never seriously
+considered this one as it requires Python to be installed. I haven&#39;t
+read about anyone using this. But I wanted to list it so that you&#39;d
+be informed about its existence.</li>
+</ol>
+<p>Use NVM. Seriously, it just works.</p>
+<p>On your clean Ubuntu machine, make sure that Git is installed:</p>
+<pre><code class="lang-bash">sudo apt-get install git-core</code></pre>
+<p>Then install NVM:</p>
+<pre><code class="lang-bash">git <span class="keyword">clone</span> git:<span class="comment">//github.com/creationix/nvm.git ~/.nvm</span>
+. ~/.nvm/nvm.sh <span class="comment"># &lt;------ be sure to add this line to the end of your ~./profile or ~./bashrc file</span></code></pre>
+<p>Now install all of the packages need to build Node.js:</p>
+<pre><code class="lang-bash">sudo apt-get install build-essential openssl libssl-dev pkg-config</code></pre>
+<p>Now install the latest version of Node.js, at the time of this writing
+it&#39;s v0.6.9</p>
+<pre><code class="lang-bash">nvm install v0.6.9</code></pre>
+<p>You now have a Node.js environment on your machine! Just run <code>node</code> on
+the command line to experiment with the Node.js REPL. You can also run
+<code>npm</code> to install Node.js packages. Read more about <a href="http://npmjs.org/">NPM
+here</a>.</p>
+<p>Do you use Git? If so, checkout <a href="http://gitpilot.com">Gitpilot</a> to make
+using Git mindless.</p>
+<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>
+and read my blog on entrepreneurship: <a href="http://techneur.com">Techneur</a>.</p>
+<p>-JP Richardson</p>
+]]></description><link>http://procbits.com/2012/01/29/installing-node-js-on-ubuntu-10-4-lts</link><guid isPermaLink="true">http://procbits.com/2012/01/29/installing-node-js-on-ubuntu-10-4-lts</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Mon, 30 Jan 2012 06:00:00 GMT</pubDate></item><item><title><![CDATA[Comparing Two Javascript Objects]]></title><description><![CDATA[<h1>Comparing Two Javascript Objects</h1>
+<p>Recently, I was faced with a problem where I needed to compare two
+Javascript objects. My initial strategy was to convert them to JSON and
+compare the JSON strings.</p>
+<p>Sort of like this:</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> a = JSON.stringify(person1);<span class="comment">//'{"firstName":"JP","lastName":"Richardson"}'</span>
+<span class="keyword">var</span> b = JSON.stringify(person2);<span class="comment">//'{"firstName":"JP","lastName":"Richardson"}'</span>
+
+assert(a === b);</code></pre>
+<p>Simple enough, right?</p>
+<p>Not so fast. I encountered a case like this:</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> a = JSON.stringify(person1);<span class="comment">//'{"firstName":"JP","lastName":"Richardson"}'</span>
+<span class="keyword">var</span> b = JSON.stringify(person2);<span class="comment">//'{"lastName":"Richardson","firstName":"JP"}'</span>
+
+assert(a === b);</code></pre>
+<p>The data is the same, but the string is different. Fortunately,
+Stackoverflow had a nice <a href="http://stackoverflow.com/questions/1068834/object-comparison-in-javascript">Javascript object comparison
+algorithm</a>
+to dump into my app.</p>
+<pre><code class="lang-javascript">Object.prototype.equals = <span class="keyword">function</span>(x)
+{
+  <span class="keyword">var</span> p;
+  <span class="keyword">for</span>(p in <span class="keyword">this</span>) {
+      <span class="keyword">if</span>(typeof(x[p])==<span class="string">'undefined'</span>) {<span class="keyword">return</span> <span class="keyword">false</span>;}
+  }
+
+  <span class="keyword">for</span>(p in <span class="keyword">this</span>) {
+      <span class="keyword">if</span> (<span class="keyword">this</span>[p]) {
+          <span class="keyword">switch</span>(typeof(<span class="keyword">this</span>[p])) {
+              <span class="keyword">case</span> <span class="string">'object'</span>:
+                  <span class="keyword">if</span> (!<span class="keyword">this</span>[p].equals(x[p])) { <span class="keyword">return</span> <span class="keyword">false</span>; } <span class="keyword">break</span>;
+              <span class="keyword">case</span> <span class="string">'function'</span>:
+                  <span class="keyword">if</span> (typeof(x[p])==<span class="string">'undefined'</span> ||
+                      (p != <span class="string">'equals'</span> &amp;&amp; <span class="keyword">this</span>[p].toString() != x[p].toString()))
+                      <span class="keyword">return</span> <span class="keyword">false</span>;
+                  <span class="keyword">break</span>;
+              <span class="keyword">default</span>:
+                  <span class="keyword">if</span> (<span class="keyword">this</span>[p] != x[p]) { <span class="keyword">return</span> <span class="keyword">false</span>; }
+          }
+      } <span class="keyword">else</span> {
+          <span class="keyword">if</span> (x[p])
+              <span class="keyword">return</span> <span class="keyword">false</span>;
+      }
+  }
+
+  <span class="keyword">for</span>(p in x) {
+      <span class="keyword">if</span>(typeof(<span class="keyword">this</span>[p])==<span class="string">'undefined'</span>) {<span class="keyword">return</span> <span class="keyword">false</span>;}
+  }
+
+  <span class="keyword">return</span> <span class="keyword">true</span>;
+}</code></pre>
+<p>Test passed. I eventually hit a situation where I had some code with an
+Object that had a Person prototype and some data that came from JSON.
+Kinda like this:</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> person1 = <span class="keyword">new</span> Person(<span class="string">'JP'</span>, <span class="string">'Richardson'</span>);
+<span class="keyword">var</span> person2 = JSON.parse(<span class="string">'{"firstName":"JP","lastName":"Richardson"}'</span>);
+
+<span class="comment">//deepEquals is code snippet above ^</span>
+person1.deepEquals(person2); <span class="comment">// &lt;--- THIS FAILS</span></code></pre>
+<p>I only cared about comparing the data. The methods associated with the
+object (Prototype) didn&#39;t matter. Let&#39;s modify the above algorithm. I
+use CoffeeScript. Here&#39;s the modification:</p>
+<pre><code class="lang-ruby">Object::jsonEquals = (x) ->
+  <span class="comment">#we do this because two objects may have the same data fields and data but different prototypes</span>
+  x1 = JSON.parse(JSON.stringify(<span class="keyword">this</span>))
+  x2 = JSON.parse(JSON.stringify(x))
+
+  p = <span class="keyword">null</span>
+  <span class="keyword">for</span> p of x1
+    <span class="keyword">return</span> <span class="keyword">false</span> <span class="keyword">if</span> typeof (x2[p]) is <span class="string">'undefined'</span>
+  <span class="keyword">for</span> p of x1
+    <span class="keyword">if</span> x1[p]
+      <span class="keyword">switch</span> typeof (x1[p])
+        when <span class="string">'object'</span>
+          <span class="keyword">return</span> <span class="keyword">false</span> unless x1[p].jsonEquals(x2[p])
+        when <span class="string">'function'</span>
+          <span class="keyword">return</span> <span class="keyword">false</span> <span class="keyword">if</span> typeof (x2[p]) is <span class="string">'undefined'</span> <span class="keyword">or</span> (p isnt <span class="string">'equals'</span> <span class="keyword">and</span> x1[p].toString() isnt x2[p].toString())
+        <span class="keyword">else</span>
+          <span class="keyword">return</span> <span class="keyword">false</span>  unless x1[p] is x2[p]
+    <span class="keyword">else</span>
+      <span class="keyword">return</span> <span class="keyword">false</span> <span class="keyword">if</span> x2[p]
+  <span class="keyword">for</span> p of x2
+    <span class="keyword">return</span> <span class="keyword">false</span> <span class="keyword">if</span> typeof (x1[p]) is <span class="string">'undefined'</span>
+  <span class="keyword">true</span></code></pre>
+<p>This causes the situation like I described above to pass. Essentially
+convert to JSON to remove the prototype. I suppose you could make this
+more efficient my just manually setting the prototype to Object before
+doing the comparison, but oh well this works for the time being.</p>
+<p>Do you use Git? If so, checkout <a href="http://gitpilot.com">Gitpilot</a> to make
+project management and collaborating on projects seamless.</p>
+<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>
+and read my blog on entrepreneurship: <a href="http://techneur.com">Techneur</a>.</p>
+<p>-JP Richardson</p>
+]]></description><link>http://procbits.com/2012/01/19/comparing-two-javascript-objects</link><guid isPermaLink="true">http://procbits.com/2012/01/19/comparing-two-javascript-objects</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 19 Jan 2012 06:00:00 GMT</pubDate></item><item><title><![CDATA[Node.js Exec Like Ruby Exec and Writing a Node.js Native Add On Module]]></title><description><![CDATA[<h1>Node.js Exec Like Ruby Exec and Writing a Node.js Native Add On Module</h1>
+<p>Recently, I was faced with a problem that required my Node.js programs
+process to execute another process and have the procoess that&#39;s passed
+to the exec function completely replace the Node.js process. In short, I
+wanted an &#39;exec&#39; function like Ruby&#39;s &#39;exec&#39; function. Unfortunately,
+out of the box, Node.js doesn&#39;t support this functionality. I asked on
+<a href="http://stackoverflow.com/questions/8362181/like-ruby-exec-but-for-node-js">Stackoverflow.com, and someone had a
+response</a>
+that I should use the <a href="http://linux.die.net/man/3/exec">POSIX exec
+functions</a> to solve my problem and to
+consider writing a native Node.js extension.</p>
+<p><code>npm install kexec</code></p>
+<p>You can then use it like:</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> kexec = <span class="keyword">require</span>(<span class="string">'kexec'</span>);
+kexec(<span class="string">'top'</span>); <span class="comment">//you can pass any process that you want here</span></code></pre>
+<p>Here is the C++ source for Node Kexec:</p>
+<pre><code class="lang-cpp">
+<span class="comment">#include &lt;v8.h></span>
+<span class="comment">#include &lt;node.h></span>
+<span class="comment">#include &lt;cstdio></span>
+
+<span class="comment">//#ifdef __POSIX__</span>
+<span class="comment">#include &lt;unistd.h></span>
+<span class="comment">/*#else
+#include &lt;process.h>
+#endif*/</span>
+
+using <span class="keyword">namespace</span> node;
+using <span class="keyword">namespace</span> v8;
+
+<span class="keyword">static</span> Handle&lt;Value> kexec(<span class="keyword">const</span> Arguments&amp; args) {
+    String::Utf8Value v8str(args[<span class="number">0</span>]);
+    char* argv2[] = {<span class="string">""</span>, <span class="string">"-c"</span>, *v8str, <span class="keyword">NULL</span>};
+
+    execvp(<span class="string">"/bin/sh"</span>, argv2);      
+    <span class="keyword">return</span> Undefined();
+}
+
+extern <span class="string">"C"</span> {
+    <span class="keyword">static</span> void init (Handle&lt;Object> target) {
+        NODE_SET_METHOD(target, <span class="string">"kexec"</span>, kexec);
+    }
+
+    NODE_MODULE(kexec, init);
+}</code></pre>
+<p>As you can see, writing a C++ add on in Node.js isn&#39;t too difficult. You
+can use it in your Node.js Javascript like so:</p>
+<pre><code class="lang-javascript"><span class="keyword">var</span> kexec;
+
+<span class="keyword">try</span> {
+  kexec = <span class="keyword">require</span>(<span class="string">"./build/default/kexec.node"</span>); <span class="comment">//Node.js v0.4</span>
+} <span class="keyword">catch</span>(e) {
+  kexec = <span class="keyword">require</span>(<span class="string">"./build/Release/kexec.node"</span>); <span class="comment">//Node.js v0.6</span>
+}
+
+module.exports = kexec.kexec; <span class="comment">//function of kexec module is named kexec</span></code></pre>
+<p>Don&#39;t forget your wscript file, which ironically is Python code:</p>
+<pre><code class="lang-python">def set_options(opt):
+  opt.tool_options(&quot;compiler_cxx&quot;)
+
+def configure(conf):
+  conf.check_tool(&quot;compiler_cxx&quot;)
+  conf.check_tool(&quot;node_addon&quot;)
+
+def build(bld):
+  obj = bld.new_task_gen(&quot;cxx&quot;, &quot;shlib&quot;, &quot;node_addon&quot;) 
+  obj.cxxflags = [&quot;-g&quot;, &quot;-D_FILE_OFFSET_BITS=64&quot;, &quot;-D_LARGEFILE_SOURCE&quot;,&quot;-Wall&quot;]
+  obj.target = &quot;kexec&quot;
+  obj.source = &quot;src/node_kexec.cpp&quot;</code></pre>
+<p>In your package.json, include this bit:</p>
+<pre><code class="lang-javascript">&quot;scripts&quot;: { &quot;install&quot;: &quot;node-waf configure build&quot; }</code></pre>
+<p>Github Sourcecode: <a href="https://github.com/jprichardson/node-kexec">Node.js kernel
+exec</a></p>
+<p>I&#39;ve also included other resources for writing a Node.js Native Add On
+Module:</p>
+<ol>
+<li><a href="http://code.google.com/apis/v8/get_started.html">Google V8 Engine Getting
+Started</a></li>
+<li><a href="http://code.google.com/apis/v8/embed.html">Google V8 Embedder&#39;s
+Guide</a></li>
+<li><a href="http://syskall.com/how-to-roll-out-your-own-javascript-api-with">How to Roll Your Own Javascript API with
+V8</a></li>
+<li><a href="http://syskall.com/how-to-write-your-own-native-nodejs-extension">How to Write Your Own Native Node.js
+Extension</a></li>
+<li><a href="https://www.cloudkick.com/blog/2010/aug/23/writing-nodejs-native-extensions/">Writing Node.js Native
+Extensions</a></li>
+<li><a href="http://odoe.net/blog/?p=168">Node.js Native Extension with Hammer and a
+Prayer</a></li>
+<li><a href="http://www.ipreferjim.com/2011/04/node-js-mastering-node-excerpt-addons/">Mastering Node; Add
+Ons</a></li>
+<li><a href="http://nodejs.org/docs/v0.6.4/api/addons.html">Node.js Documentation: Add
+Ons</a></li>
+<li><a href="https://github.com/ry/node_postgres">Postgres Node.js Module</a></li>
+<li><a href="http://v8.googlecode.com/svn/trunk/samples/shell.cc">V8 Sample:
+shell.cc</a></li>
+<li><a href="http://create.tpsitulsa.com/blog/2009/01/29/v8-objects/">V8
+Objects</a></li>
+<li><a href="http://nikhilm.bitbucket.org/articles/c_in_my_javascript/c_in_javascript_part_2.html">There&#39;s C in My
+JavaScript</a></li>
+<li><a href="http://stackoverflow.com/questions/7476145/converting-from-v8arguments-to-c-types">Converting V8 Arguments to C++
+Types</a></li>
+</ol>
+<p>Do you use Git? If so, checkout <a href="http://gitpilot.com">Gitpilot</a> to make
+using Git easy.</p>
+<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>
+and read my blog on entrepreneurship: <a href="http://techneur.com">Techneur</a>.</p>
+<p>-JP Richardson</p>
+]]></description><link>http://procbits.com/2011/12/04/node-js-exec-like-ruby-exec-and-writing-a-node-js-native-add-on-module</link><guid isPermaLink="true">http://procbits.com/2011/12/04/node-js-exec-like-ruby-exec-and-writing-a-node-js-native-add-on-module</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Mon, 05 Dec 2011 06:00:00 GMT</pubDate></item></channel></rss>
