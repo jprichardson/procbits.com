@@ -11,7 +11,8 @@
     "index": "index.html"
   },
   "build": {
-    "outputDir": "public/"
+    "outputDir": "public/",
+    "lastBuild": "2013-02-23T20:03:20.541Z"
   },
   "partials": {
     "disqus": {
