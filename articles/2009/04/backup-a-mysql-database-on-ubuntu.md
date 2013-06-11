@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2009/04/07/backup-a-mysql-database-on-ubuntu/
 tags: Linux, MySql
 slug: 2009/04/07/backup-a-mysql-database-on-ubuntu
+title: Backup a MySQL Database on Ubuntu
 -->
 
-Backup a MySQL Database on Ubuntu
-=================================
+
 
 Backing up a MySQL database is extremely simple. Just simply create a
 directory as to where you want to store your backups. I typically just

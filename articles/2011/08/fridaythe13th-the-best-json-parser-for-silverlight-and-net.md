@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2011/08/11/fridaythe13th-the-best-json-parser-for-silverlight-and-net/
 tags: C#, Silverlight, WPF
 slug: 2011/08/11/fridaythe13th-the-best-json-parser-for-silverlight-and-net
+title: FridayThe13th the Best JSON Parser for Silverlight and C#/.NET
 -->
 
-FridayThe13th the Best JSON Parser for Silverlight and C#/.NET
-==============================================================
+
 
 Up until a couple of months ago I was writing most of my code using WPF.
 Recently, a project came up where Silverlight made more sense to use.

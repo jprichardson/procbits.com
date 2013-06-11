@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2011/11/29/using-ocmock-with-mac-os-x-lion-xcode-4-to-mock-and-unit-test-cocoa-desktop-apps/
 tags: Cocoa, Objective C
 slug: 2011/11/29/using-ocmock-with-mac-os-x-lion-xcode-4-to-mock-and-unit-test-cocoa-desktop-apps
+title: Using OCMock with Mac OS X Lion, Xcode 4, to Mock and Unit Test Cocoa Desktop Apps
 -->
 
-Using OCMock with Mac OS X Lion, Xcode 4, to Mock and Unit Test Cocoa Desktop Apps
-==================================================================================
+
 
 If you're trying to learn how to use [OCMock](http://ocmock.org/),
 you'll encounter a number of articles dedicated to using it with iOS.

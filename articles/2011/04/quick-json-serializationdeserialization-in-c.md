@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2011/04/21/quick-json-serializationdeserialization-in-c/
 tags: C#
 slug: 2011/04/21/quick-json-serializationdeserialization-in-c
+title: Quick JSON Serialization/Deserialization in C#
 -->
 
-Quick JSON Serialization/Deserialization in C#
-==============================================
+
 
 **\*This outdated\*.** You should use [FridayThe13th the best JSON
 parser for Silverlight and .NET

@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2012/01/19/comparing-two-javascript-objects/
 tags: CoffeeScript, JavaScript
 slug: 2012/01/19/comparing-two-javascript-objects
+title: Comparing Two Javascript Objects
 -->
 
-Comparing Two Javascript Objects
-================================
+
 
 Recently, I was faced with a problem where I needed to compare two
 Javascript objects. My initial strategy was to convert them to JSON and

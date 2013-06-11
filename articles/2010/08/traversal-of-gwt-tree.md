@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2010/08/09/traversal-of-gwt-tree/
 tags: GWT
 slug: 2010/08/09/traversal-of-gwt-tree
+title: Traversal of GWT Tree
 -->
 
-Traversal of GWT Tree
-=====================
+
 
 Recently, an app I'm working on needed two trees. I just so happened
 that I needed to deep copy part of one of the trees to the other tree.

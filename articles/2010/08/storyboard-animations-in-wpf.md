@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2010/08/10/storyboard-animations-in-wpf/
 tags: WPF
 slug: 2010/08/10/storyboard-animations-in-wpf
+title: StoryBoard: Animations in WPF
 -->
 
-StoryBoard: Animations in WPF
-=============================
+
 
 I recently discovered how to do animations in WPF. It's super simple! So
 what if you want to create a mouse over animation on a StackPanel? You

@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2010/01/15/handy-c-xml-serialization-methods/
 tags: C#
 slug: 2010/01/15/handy-c-xml-serialization-methods
+title: Handy C# XML Serialization Methods
 -->
 
-Handy C# XML Serialization Methods
-==================================
+
 
 I have been hacking away on WPF/MVVM, GWT/MVP, and Rails for the last
 six months and haven't found much time to update. But I wrote some handy

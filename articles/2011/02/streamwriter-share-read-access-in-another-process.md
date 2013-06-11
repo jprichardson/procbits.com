@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2011/02/18/streamwriter-share-read-access-in-another-process/
 tags: C#
 slug: 2011/02/18/streamwriter-share-read-access-in-another-process
+title: StreamWriter Share Read Access in Another Process
 -->
 
-StreamWriter Share Read Access in Another Process
-=================================================
+
 
 I have two applications, one is the main application that generates a
 log file, the other is an application that reads the log file to compute

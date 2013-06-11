@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2011/04/15/locate-and-updatedb-on-os-x-snow-leopard/
 tags: OSX
 slug: 2011/04/15/locate-and-updatedb-on-os-x-snow-leopard
+title: locate and updatedb on OS X Snow Leopard
 -->
 
-locate and updatedb on OS X Snow Leopard
-========================================
+
 
 On Linux, I love using the "locate" utility. In essence, the locate
 utility works similar to the "find" utility but it's much faster. This

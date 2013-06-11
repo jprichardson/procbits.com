@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2011/07/26/disable-sprockets-for-rails-in-development-mode/
 tags: Rails, Ruby
 slug: 2011/07/26/disable-sprockets-for-rails-in-development-mode
+title: Disable Sprockets for Rails in Development Mode
 -->
 
-Disable Sprockets for Rails in Development Mode
-===============================================
+
 
 Sprockets (is/are)? the technology in Rails 3.1 and up that combines
 your CSS and Javascript files into one CSS and Javascript file. It

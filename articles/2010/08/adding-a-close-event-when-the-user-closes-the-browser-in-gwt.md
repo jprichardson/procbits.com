@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2010/08/06/adding-a-close-event-when-the-user-closes-the-browser-in-gwt/
 tags: GWT
 slug: 2010/08/06/adding-a-close-event-when-the-user-closes-the-browser-in-gwt
+title: Adding a Close Event When the User Closes the Browser in GWT
 -->
 
-Adding a Close Event When the User Closes the Browser in GWT
-============================================================
+
 
 Often times your GWT app will queue up client side RPC events. What if
 the user clicks close on the browser window or tries to navigate to a

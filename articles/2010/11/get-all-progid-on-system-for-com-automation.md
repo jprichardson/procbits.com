@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2010/11/08/get-all-progid-on-system-for-com-automation/
 tags: C#, Silverlight
 slug: 2010/11/08/get-all-progid-on-system-for-com-automation
+title: Get All ProgID on System for COM Automation
 -->
 
-Get All ProgID on System for COM Automation
-===========================================
+
 
 If you want to use [Silverlight COM
 Automation](http://procbits.com/2010/10/28/silverlight-4-and-comactivex-integration/),

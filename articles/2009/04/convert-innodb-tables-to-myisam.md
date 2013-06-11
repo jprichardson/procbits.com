@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2009/04/07/convert-innodb-tables-to-myisam/
 tags: MySql
 slug: 2009/04/07/convert-innodb-tables-to-myisam
+title: Convert InnoDB Tables to MyISAM
 -->
 
-Convert InnoDB Tables to MyISAM
-===============================
+
 
 I have been trying to optimize my 256 MB slice from
 [slicehost](http://slicehost.com). One of the strategies is to **not**

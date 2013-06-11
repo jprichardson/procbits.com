@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2010/08/06/hosted-wordpress-syntax-highlighting/
 tags: Misc
 slug: 2010/08/06/hosted-wordpress-syntax-highlighting
+title: Hosted Wordpress Syntax Highlighting 
 -->
 
-Hosted Wordpress Syntax Highlighting 
-=====================================
+
 
 Dear 2 RSS subscribers:
 

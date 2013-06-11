@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2010/09/08/rvm-is-a-must-for-the-rubyist/
 tags: Rails, Ruby
 slug: 2010/09/08/rvm-is-a-must-for-the-rubyist
+title: RVM Is a Must for the Rubyist
 -->
 
-RVM Is a Must for the Rubyist
-=============================
+
 
 If you are a Ruby or Rails developer and you haven't heard of
 [RVM](http://rvm.beginrescueend.com/) yet, I'll let you in on the

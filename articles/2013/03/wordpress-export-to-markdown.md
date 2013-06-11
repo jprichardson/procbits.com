@@ -3,12 +3,10 @@ author: JP Richardson
 publish: 2013-03-23
 tags: meta
 slug: 2013/03/02/wordpress-export-to-markdown-hosted-on-amazon-s3
+title: Wordpress Export to Markdown Hosted on Amazon S3
 -->
 
 
-
-Wordpress Export to Markdown Hosted on Amazon S3
-================================================
 
 You may have been able to tell, but this blog looks different. Yes, I finally left Wordpress. I converted my Wordpress blog to a static generated Markdown blog. It's fairly straight forward.
 

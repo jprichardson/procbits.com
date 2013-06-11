@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2011/11/08/buzz-a-node-js-command-line-program-to-keep-your-app-running-indefinitely-like-the-program-forever/
 tags: Linux, Node.js
 slug: 2011/11/08/buzz-a-node-js-command-line-program-to-keep-your-app-running-indefinitely-like-the-program-forever
+title: Buzz: A Node.js Command Line Program to Keep Your App Running Indefinitely; Like the Program Forever
 -->
 
-Buzz: A Node.js Command Line Program to Keep Your App Running Indefinitely; Like the Program Forever
-====================================================================================================
+
 
 Buzz is a command line program that can kill your app routinely and
 restart it. It'll will also restart your app if it dies. It's a lot like

@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2011/10/21/a-for-loop-conversion-from-javascript-to-coffeescript/
 tags: JavaScript
 slug: 2011/10/21/a-for-loop-conversion-from-javascript-to-coffeescript
+title: A for-loop conversion from JavaScript to CoffeeScript
 -->
 
-A for-loop conversion from JavaScript to CoffeeScript
-=====================================================
+
 
 I was stumbling along StackOverflow when I ran into this question:
 

@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2011/01/21/memcached-alternative-for-c-net/
 tags: C#
 slug: 2011/01/21/memcached-alternative-for-c-net
+title: Memcached Alternative for C#/.NET
 -->
 
-Memcached Alternative for C#/.NET
-=================================
+
 
 I'm currently developing a software package that has to retrieve large
 amounts of data from a server. This data is needed frequently throughout

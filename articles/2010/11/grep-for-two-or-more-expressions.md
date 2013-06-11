@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2010/11/09/grep-for-two-or-more-expressions/
 tags: Linux
 slug: 2010/11/09/grep-for-two-or-more-expressions
+title: Grep for Two or More Expressions
 -->
 
-Grep for Two or More Expressions
-================================
+
 
 Unfortunately a database of mine crashed. Fortunately, I have log files
 with the data. I need the timestamp and the data.

@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2011/10/20/modifying-node_path-for-node-jsnpmnvm/
 tags: Node.js
 slug: 2011/10/20/modifying-node_path-for-node-jsnpmnvm
+title: Modifying $NODE_PATH for Node.js/NPM/NVM
 -->
 
-Modifying $NODE_PATH for Node.js/NPM/NVM
-========================================
+
 
 I've been hacking around with Node.js lately. If you develop with
 Node.js then you should be using both [NPM](http://npmjs.org/) (package

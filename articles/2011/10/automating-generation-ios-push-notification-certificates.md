@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2011/10/10/automating-generation-ios-push-notification-certificates/
 tags: Ruby
 slug: 2011/10/10/automating-generation-ios-push-notification-certificates
+title: Automating the Generation of iOS Push Notification Certificates
 -->
 
-Automating the Generation of iOS Push Notification Certificates
-===============================================================
+
 
 I have a large number (200+) of iOS applications. I needed to generate
 push notification certificates for each of them. If you've ever gone

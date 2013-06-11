@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2011/07/18/open-a-new-tab-in-terminal-app-in-the-same-directory-on-mac-os-x/
 tags: OSX
 slug: 2011/07/18/open-a-new-tab-in-terminal-app-in-the-same-directory-on-mac-os-x
+title: Open a New Tab in Terminal.app in the Same Directory on Mac OS X
 -->
 
-Open a New Tab in Terminal.app in the Same Directory on Mac OS X
-================================================================
+
 
 When working with Rails on my Mac OS X machine, I often find myself
 opening a lot of terminal tabs. Unfortunately I then need to navigate to

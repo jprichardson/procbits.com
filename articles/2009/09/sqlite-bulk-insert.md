@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2009/09/08/sqlite-bulk-insert/
 tags: C#
 slug: 2009/09/08/sqlite-bulk-insert
+title: SQLite Bulk Insert In C#/.NET
 -->
 
-SQLite Bulk Insert In C#/.NET
-=============================
+
 
 Recently, I had a project where I needed to load 1 million+ records into
 a SQLite database. I downloaded the [SQLite ADO.NET

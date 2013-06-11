@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2010/11/10/iterate-over-files-in-bash/
 tags: Linux
 slug: 2010/11/10/iterate-over-files-in-bash
+title: Iterate Over Files in Bash
 -->
 
-Iterate Over Files in Bash
-==========================
+
 
 Sometimes you need to whip up a dirty bash script to process through
 some text. I needed to iterate over my database log files that I wrote

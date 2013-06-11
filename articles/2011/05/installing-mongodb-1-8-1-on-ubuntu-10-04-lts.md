@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2011/05/04/installing-mongodb-1-8-1-on-ubuntu-10-04-lts/
 tags: Linux, MongoDB
 slug: 2011/05/04/installing-mongodb-1-8-1-on-ubuntu-10-04-lts
+title: Installing MongoDB 1.8.1 on Ubuntu 10.04 LTS
 -->
 
-Installing MongoDB 1.8.1 on Ubuntu 10.04 LTS
-============================================
+
 
 A lot of this information will seem obvious to a lot of you. But it did
 require me to perform a few Google searches, so hopefully I can save you

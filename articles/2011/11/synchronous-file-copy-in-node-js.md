@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2011/11/15/synchronous-file-copy-in-node-js/
 tags: CoffeeScript, Node.js, JavaScript
 slug: 2011/11/15/synchronous-file-copy-in-node-js
+title: Synchronous File Copy in Node.js
 -->
 
-Synchronous File Copy in Node.js
-================================
+
 
 Sometimes, asynchronous operations can be a burden. Especially when
 you're writing small console utilities like to batch process files.

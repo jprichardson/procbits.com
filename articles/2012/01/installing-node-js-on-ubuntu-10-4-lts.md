@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2012/01/29/installing-node-js-on-ubuntu-10-4-lts/
 tags: Node.js
 slug: 2012/01/29/installing-node-js-on-ubuntu-10-4-lts
+title: Installing Node.js on Ubuntu 10.04 LTS 
 -->
 
-Installing Node.js on Ubuntu 10.04 LTS 
-=======================================
+
 
 Installing Node.js on Ubuntu 10.04 LTS is pretty straight forward.
 

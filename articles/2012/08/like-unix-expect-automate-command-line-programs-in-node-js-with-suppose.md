@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2012/08/03/like-unix-expect-automate-command-line-programs-in-node-js-with-suppose/
 tags: JavaScript, Node.js
 slug: 2012/08/03/like-unix-expect-automate-command-line-programs-in-node-js-with-suppose
+title: Like Unix Expect: Automate Command Line Programs in Node.js with Suppose
 -->
 
-Like Unix Expect: Automate Command Line Programs in Node.js with Suppose
-========================================================================
+
 
 Have you ever heard of the command line program
 [expect](http://en.wikipedia.org/wiki/Expect)? Basically, expect allows

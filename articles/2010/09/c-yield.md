@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2010/09/02/c-yield/
 tags: C#
 slug: 2010/09/02/c-yield
+title: C# yield
 -->
 
-C# yield
-========
+
 
 I've seen the "yield" keyword here and there... but I've never really
 cared to learn what it does. Until now. Actually, it's my understanding

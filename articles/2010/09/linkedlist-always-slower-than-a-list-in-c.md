@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2010/09/10/linkedlist-always-slower-than-a-list-in-c/
 tags: C#
 slug: 2010/09/10/linkedlist-always-slower-than-a-list-in-c
+title: LinkedList Always Slower than a List in C#?
 -->
 
-LinkedList Always Slower than a List in C#?
-===========================================
+
 
 I started using some LinkedList's instead of Lists in some of my C\#
 algorithms hoping to speed them up. However, I noticed that they just

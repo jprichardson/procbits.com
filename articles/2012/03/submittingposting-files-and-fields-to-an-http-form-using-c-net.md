@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2012/02/29/submittingposting-files-and-fields-to-an-http-form-using-c-net/
 tags: C#
 slug: 2012/02/29/submittingposting-files-and-fields-to-an-http-form-using-c-net
+title: Submitting/Posting Files and Fields to an HTTP Form using C#/.NET 
 -->
 
-Submitting/Posting Files and Fields to an HTTP Form using C#/.NET 
-==================================================================
+
 
 Awhile back, I had to integrate a C\# program with a web system that
 allowed the user to upload a few files and include some misc. data. I

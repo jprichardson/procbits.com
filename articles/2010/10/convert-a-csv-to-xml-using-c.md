@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2010/10/07/convert-a-csv-to-xml-using-c/
 tags: C#
 slug: 2010/10/07/convert-a-csv-to-xml-using-c
+title: Convert a CSV to XML using C#
 -->
 
-Convert a CSV to XML using C#
-=============================
+
 
 I wrote a simple class that will help you convert a CSV file to XML. I
 can hear you asking "that's nice JP, but why would I want to convert my

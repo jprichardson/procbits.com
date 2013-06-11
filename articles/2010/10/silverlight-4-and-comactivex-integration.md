@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2010/10/28/silverlight-4-and-comactivex-integration/
 tags: C#, Silverlight
 slug: 2010/10/28/silverlight-4-and-comactivex-integration
+title: Silverlight 4 and COM/ActiveX Integration
 -->
 
-Silverlight 4 and COM/ActiveX Integration
-=========================================
+
 
 Silverlight 4 supports COM/ActiveX controls with Trusted permissions.
 However you must configure your app to be an

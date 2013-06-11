@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2010/08/25/benchmarking-c-apps-algorithms/
 tags: C#
 slug: 2010/08/25/benchmarking-c-apps-algorithms
+title: Benchmarking C# Apps & Algorithms
 -->
 
-Benchmarking C# Apps & Algorithms
-=================================
+
 
 I created a class to help me benchmark my C\# algorithms.
 

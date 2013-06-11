@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2011/07/19/missing-dockpanel-add-dockpanel-for-silverlight-4-or-silverlight-5/
 tags: C#, Silverlight
 slug: 2011/07/19/missing-dockpanel-add-dockpanel-for-silverlight-4-or-silverlight-5
+title: Missing DockPanel? Add DockPanel for Silverlight 4 or Silverlight 5
 -->
 
-Missing DockPanel? Add DockPanel for Silverlight 4 or Silverlight 5
-===================================================================
+
 
 When I first created a demo project for Silverlight 5, I opened the XAML
 code to start editing. I started typing "DockPanel" but then I noticed

@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2012/06/28/nextflow-sane-coffeescript-flow-control/
 tags: CoffeeScript, Node.js
 slug: 2012/06/28/nextflow-sane-coffeescript-flow-control
+title: NextFlow: Sane CoffeeScript Flow Control
 -->
 
-NextFlow: Sane CoffeeScript Flow Control
-========================================
+
 
 Take a look at the most prominent JavaScript control flow libraries:
 [Async.js](https://github.com/caolan/async),

@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2012/04/11/quick-and-dirty-screen-scraping-with-node-js-using-request-and-cheerio/
 tags: JavaScript, Node.js
 slug: 2012/04/11/quick-and-dirty-screen-scraping-with-node-js-using-request-and-cheerio
+title: Quick and Dirty Screen Scraping with Node.js using Request and Cheerio
 -->
 
-Quick and Dirty Screen Scraping with Node.js using Request and Cheerio
-======================================================================
+
 
 I wrote my own screen scraping module built on
 [PhantomJS](http://www.phantomjs.org/), but unfortunately it's too slow

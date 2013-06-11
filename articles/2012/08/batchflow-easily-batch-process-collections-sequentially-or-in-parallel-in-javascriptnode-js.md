@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2012/08/14/batchflow-easily-batch-process-collections-sequentially-or-in-parallel-in-javascriptnode-js/
 tags: JavaScript, Node.js
 slug: 2012/08/14/batchflow-easily-batch-process-collections-sequentially-or-in-parallel-in-javascriptnode-js
+title: BatchFlow: Easily batch process collections sequentially or in parallel in JavaScript/Node.js
 -->
 
-BatchFlow: Easily batch process collections sequentially or in parallel in JavaScript/Node.js
-=============================================================================================
+
 
 Why?
 ----

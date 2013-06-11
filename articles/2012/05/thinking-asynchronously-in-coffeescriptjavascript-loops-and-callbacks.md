@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2012/05/24/thinking-asynchronously-in-coffeescriptjavascript-loops-and-callbacks/
 tags: CoffeeScript, JavaScript
 slug: 2012/05/24/thinking-asynchronously-in-coffeescriptjavascript-loops-and-callbacks
+title: Thinking Asynchronously in CoffeeScript/JavaScript: Loops and Callbacks
 -->
 
-Thinking Asynchronously in CoffeeScript/JavaScript: Loops and Callbacks
-=======================================================================
+
 
 Awhile back, I wrote about my new experience in learning Node.js: [A
 Node.js Experiment: Thinking Asynchronously, Using Recursion to

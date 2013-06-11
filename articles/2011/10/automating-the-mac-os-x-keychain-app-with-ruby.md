@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2011/10/07/automating-the-mac-os-x-keychain-app-with-ruby/
 tags: Ruby
 slug: 2011/10/07/automating-the-mac-os-x-keychain-app-with-ruby
+title: Automating the Mac OS X Keychain App with Ruby
 -->
 
-Automating the Mac OS X Keychain App with Ruby
-==============================================
+
 
 Recently, I needed a way to automate the generation of 100+ Apple Push
 notification certificates for my iOS development. So, I created a [Ruby

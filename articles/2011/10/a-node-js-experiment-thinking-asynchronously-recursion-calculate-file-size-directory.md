@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2011/10/29/a-node-js-experiment-thinking-asynchronously-recursion-calculate-file-size-directory/
 tags: CoffeeScript, Node.js
 slug: 2011/10/29/a-node-js-experiment-thinking-asynchronously-recursion-calculate-file-size-directory
+title: A Node.js Experiment: Thinking Asynchronously, Using Recursion to Calculate the Total File Size in a Directory
 -->
 
-A Node.js Experiment: Thinking Asynchronously, Using Recursion to Calculate the Total File Size in a Directory
-==============================================================================================================
+
 
 I recently picked up Node.js/CoffeeScript; I figured that since
 JavaScript can run on about every modern computing device, it's about

@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2011/02/07/wpf-application-exception-handling/
 tags: C#, WPF
 slug: 2011/02/07/wpf-application-exception-handling
+title: WPF Application Wide Exception Handling
 -->
 
-WPF Application Wide Exception Handling
-=======================================
+
 
 What do you do if you want to catch all unhandled exceptions in an
 application?

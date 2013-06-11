@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2011/08/18/using-mongoid-with-rspec/
 tags: MongoDB, Rails, Ruby
 slug: 2011/08/18/using-mongoid-with-rspec
+title: Using Mongoid with Rspec
 -->
 
-Using Mongoid with Rspec
-========================
+
 
 I'm a fan of testing. I'm still trying to discipline myself to test
 before I write code, that's been a tough habit to develop, however

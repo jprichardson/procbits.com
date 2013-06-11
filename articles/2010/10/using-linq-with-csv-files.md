@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2010/10/11/using-linq-with-csv-files/
 tags: C#
 slug: 2010/10/11/using-linq-with-csv-files
+title: Using LINQ with CSV Files
 -->
 
-Using LINQ with CSV Files
-=========================
+
 
 In my [last
 post](http://procbits.com/2010/10/07/convert-a-csv-to-xml-using-c/), I

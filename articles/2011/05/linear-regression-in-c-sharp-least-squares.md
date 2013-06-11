@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2011/05/02/linear-regression-in-c-sharp-least-squares/
 tags: C#
 slug: 2011/05/02/linear-regression-in-c-sharp-least-squares
+title: Linear Regression in C#/.NET Using Least Squares
 -->
 
-Linear Regression in C#/.NET Using Least Squares
-================================================
+
 
 I had a class that handled the regression of my data sets, but it had
 too many business rules. It was necessary for me to refactor the code.

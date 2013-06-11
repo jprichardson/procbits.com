@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2011/07/27/printing-to-a-postscript-file-from-delphic-builder/
 tags: Uncategorized
 slug: 2011/07/27/printing-to-a-postscript-file-from-delphic-builder
+title: Printing to a Postscript File from Delphi/C++ Builder
 -->
 
-Printing to a Postscript File from Delphi/C++ Builder
-=====================================================
+
 
 Unfortunately for me, I had to patch some legacy C++ Builder code to
 output the reports that were sent to a printer to a PDF file.

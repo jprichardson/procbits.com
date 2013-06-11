@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2011/03/03/datagrid-not-found-in-silverlight-4/
 tags: Silverlight
 slug: 2011/03/03/datagrid-not-found-in-silverlight-4
+title: DataGrid Not Found in Silverlight 4
 -->
 
-DataGrid Not Found in Silverlight 4
-===================================
+
 
 I created a fresh new Silverlight 4 project. I opened up MainPage.xaml
 and started typing "DataGrid"... but intellisense didn't show it.

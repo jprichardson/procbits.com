@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2010/09/09/three-ways-to-sort-a-list-of-objects-with-datetime-in-c/
 tags: C#
 slug: 2010/09/09/three-ways-to-sort-a-list-of-objects-with-datetime-in-c
+title: Three Ways to Sort a List of Objects with DateTime in C#
 -->
 
-Three Ways to Sort a List of Objects with DateTime in C#
-========================================================
+
 
 Here are three quick ways to sort a List of objects that have DateTime
 properties in C\#.

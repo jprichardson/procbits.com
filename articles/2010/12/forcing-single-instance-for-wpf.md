@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2010/12/29/forcing-single-instance-for-wpf/
 tags: C#, WPF
 slug: 2010/12/29/forcing-single-instance-for-wpf
+title: Forcing Single Instance for WPF Apps
 -->
 
-Forcing Single Instance for WPF Apps
-====================================
+
 
 Sometimes you may not want to allow multiple instances for your WPF
 apps. You can use a Mutex to accomplish this. Credit goes to this

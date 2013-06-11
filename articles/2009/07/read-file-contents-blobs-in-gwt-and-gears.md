@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2009/07/29/read-file-contents-blobs-in-gwt-and-gears/
 tags: GWT
 slug: 2009/07/29/read-file-contents-blobs-in-gwt-and-gears
+title: Read File Contents (Blobs) in GWT and Gears
 -->
 
-Read File Contents (Blobs) in GWT and Gears
-===========================================
+
 
 What do you do if you want to read the contents of a file in your GWT
 application? One possible solution is to use Google Gears.

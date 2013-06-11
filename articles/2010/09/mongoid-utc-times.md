@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2010/09/23/mongoid-utc-times/
 tags: MongoDB, Rails, Ruby
 slug: 2010/09/23/mongoid-utc-times
+title: Mongoid UTC Times
 -->
 
-Mongoid UTC Times
-=================
+
 
 By default Mongoid will store your Time objects in your local timezone.
 It's not made clear on the [installation

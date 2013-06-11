@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2011/12/04/node-js-exec-like-ruby-exec-and-writing-a-node-js-native-add-on-module/
 tags: JavaScript, Node.js
 slug: 2011/12/04/node-js-exec-like-ruby-exec-and-writing-a-node-js-native-add-on-module
+title: Node.js Exec Like Ruby Exec and Writing a Node.js Native Add On Module
 -->
 
-Node.js Exec Like Ruby Exec and Writing a Node.js Native Add On Module
-======================================================================
+
 
 Recently, I was faced with a problem that required my Node.js programs
 process to execute another process and have the procoess that's passed

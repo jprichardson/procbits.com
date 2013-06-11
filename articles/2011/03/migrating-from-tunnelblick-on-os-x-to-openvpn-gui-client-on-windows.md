@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2011/03/13/migrating-from-tunnelblick-on-os-x-to-openvpn-gui-client-on-windows/
 tags: Uncategorized
 slug: 2011/03/13/migrating-from-tunnelblick-on-os-x-to-openvpn-gui-client-on-windows
+title: Migrating from Tunnelblick on OS X to OpenVPN GUI Client on Windows
 -->
 
-Migrating from Tunnelblick on OS X to OpenVPN GUI Client on Windows
-===================================================================
+
 
 This was done on Windows 7. These same instructions should work for
 Windows Vista.

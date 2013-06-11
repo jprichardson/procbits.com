@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2011/01/25/feedzirra-and-rails-3/
 tags: Rails, Ruby
 slug: 2011/01/25/feedzirra-and-rails-3
+title: Feedzirra and Rails 3
 -->
 
-Feedzirra and Rails 3
-=====================
+
 
 [Feedzirra](https://github.com/pauldix/feedzirra) is probably one of the
 best Ruby RSS parsers. But if you're using it with Rails 3, you may get

@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2010/08/07/levenshtein-in-ruby-1-9/
 tags: Ruby
 slug: 2010/08/07/levenshtein-in-ruby-1-9
+title: Levenshtein in Ruby 1.9
 -->
 
-Levenshtein in Ruby 1.9
-=======================
+
 
 In Ruby 1.8, I would use the gem 'levenshtein'... well that doesn't work
 in 1.9. So you need to install the gem 'text'.

@@ -6,10 +6,10 @@ type: post
 link: https://procbits.wordpress.com/2012/05/18/why-do-all-the-great-node-js-developers-hate-coffeescript/
 tags: CoffeeScript, JavaScript, Node.js
 slug: 2012/05/18/why-do-all-the-great-node-js-developers-hate-coffeescript
+title: Why Do All the Great Node.js Developers Hate CoffeeScript?
 -->
 
-Why Do All the Great Node.js Developers Hate CoffeeScript?
-==========================================================
+
 
 Why do all the great Node.js developers hate CoffeeScript?
 
