@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>procbits: source code snippets and other random musings about software</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="JP Richardson">
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/highlight.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid nav-container">
+          <nav role="navigation"><a title="" href="http://procbits.com" class="brand">procbits</a>
+            <p class="navbar-text pull-left">source code snippets and other random musings about software</p>
+            <ul class="nav pull-right">             
+              <li><a href="/tags">Tags</a></li>
+              <li><a href="/rss.xml">RSS</a></li>
+            </ul>
+          </nav><a data-toggle="collapse" data-target=".nav-collapse" href="http://procbits.com" class="btn btn-navbar">procbits<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <div id="content" class="clearfix row-fluid">
+        <div id="main" role="main" class="span8 clearfix">
+
+
+  
+  <h3>2012</h3>
+  <ul>
+    
+      
+      <li>
+        <a href="/2012/08/14/batchflow-easily-batch-process-collections-sequentially-or-in-parallel-in-javascriptnode-js">BatchFlow</a>
+      </li>
+    
+      
+      <li>
+        <a href="/2012/08/03/like-unix-expect-automate-command-line-programs-in-node-js-with-suppose">Like Unix Expect</a>
+      </li>
+    
+      
+      <li>
+        <a href="/2012/06/28/nextflow-sane-coffeescript-flow-control">NextFlow</a>
+      </li>
+    
+      
+      <li>
+        <a href="/2012/05/18/why-do-all-the-great-node-js-developers-hate-coffeescript">Why Do All the Great Node.js Developers Hate CoffeeScript?</a>
+      </li>
+    
+      
+      <li>
+        <a href="/2012/04/11/quick-and-dirty-screen-scraping-with-node-js-using-request-and-cheerio">Quick and Dirty Screen Scraping with Node.js using Request and Cheerio</a>
+      </li>
+    
+      
+      <li>
+        <a href="/2012/01/29/installing-node-js-on-ubuntu-10-4-lts">Installing Node.js on Ubuntu 10.04 LTS</a>
+      </li>
+    
+  </ul>
+
+  
+  <h3>2011</h3>
+  <ul>
+    
+      
+      <li>
+        <a href="/2011/12/04/node-js-exec-like-ruby-exec-and-writing-a-node-js-native-add-on-module">Node.js Exec Like Ruby Exec and Writing a Node.js Native Add On Module</a>
+      </li>
+    
+      
+      <li>
+        <a href="/2011/11/15/synchronous-file-copy-in-node-js">Synchronous File Copy in Node.js</a>
+      </li>
+    
+      
+      <li>
+        <a href="/2011/11/08/buzz-a-node-js-command-line-program-to-keep-your-app-running-indefinitely-like-the-program-forever">Buzz</a>
+      </li>
+    
+      
+      <li>
+        <a href="/2011/10/29/a-node-js-experiment-thinking-asynchronously-recursion-calculate-file-size-directory">A Node.js Experiment</a>
+      </li>
+    
+      
+      <li>
+        <a href="/2011/10/20/modifying-node_path-for-node-jsnpmnvm">Modifying $NODE_PATH for Node.js/NPM/NVM</a>
+      </li>
+    
+  </ul>
+
+<span id="footer"><br><span style="font-size: 10px;">Proudly built with<a href="https://github.com/skywrite"> Sky</a></span></span></div>
+      </div>
+    </div>
+    <div class="scripts">  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35069840-2']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+    </div>
+  </body>
+</html>

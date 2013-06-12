@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>procbits: source code snippets and other random musings about software</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="JP Richardson">
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/highlight.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid nav-container">
+          <nav role="navigation"><a title="" href="http://procbits.com" class="brand">procbits</a>
+            <p class="navbar-text pull-left">source code snippets and other random musings about software</p>
+            <ul class="nav pull-right">             
+              <li><a href="/tags">Tags</a></li>
+              <li><a href="/rss.xml">RSS</a></li>
+            </ul>
+          </nav><a data-toggle="collapse" data-target=".nav-collapse" href="http://procbits.com" class="btn btn-navbar">procbits<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <div id="content" class="clearfix row-fluid">
+        <div id="main" role="main" class="span8 clearfix">
+
+
+  
+  <h3>2012</h3>
+  <ul>
+    
+      
+      <li>
+        <a href="/2012/02/29/submittingposting-files-and-fields-to-an-http-form-using-c-net">Submitting/Posting Files and Fields to an HTTP Form using C#/.NET</a>
+      </li>
+    
+  </ul>
+
+  
+  <h3>2011</h3>
+  <ul>
+    
+      
+      <li>
+        <a href="/2011/08/11/fridaythe13th-the-best-json-parser-for-silverlight-and-net">FridayThe13th the Best JSON Parser for Silverlight and C#/.NET</a>
+      </li>
+    
+      
+      <li>
+        <a href="/2011/07/19/missing-dockpanel-add-dockpanel-for-silverlight-4-or-silverlight-5">Missing DockPanel? Add DockPanel for Silverlight 4 or Silverlight 5</a>
+      </li>
+    
+      
+      <li>
+        <a href="/2011/05/02/linear-regression-in-c-sharp-least-squares">Linear Regression in C#/.NET Using Least Squares</a>
+      </li>
+    
+      
+      <li>
+        <a href="/2011/04/21/quick-json-serializationdeserialization-in-c">Quick JSON Serialization/Deserialization in C#</a>
+      </li>
+    
+      
+      <li>
+        <a href="/2011/02/18/streamwriter-share-read-access-in-another-process">StreamWriter Share Read Access in Another Process</a>
+      </li>
+    
+      
+      <li>
+        <a href="/2011/02/07/wpf-application-exception-handling">WPF Application Wide Exception Handling</a>
+      </li>
+    
+      
+      <li>
+        <a href="/2011/01/21/memcached-alternative-for-c-net">Memcached Alternative for C#/.NET</a>
+      </li>
+    
+  </ul>
+
+  
+  <h3>2010</h3>
+  <ul>
+    
+      
+      <li>
+        <a href="/2010/12/29/forcing-single-instance-for-wpf">Forcing Single Instance for WPF Apps</a>
+      </li>
+    
+      
+      <li>
+        <a href="/2010/12/08/including-more-than-one-resourcedictionary-in-your-xaml">Including More than One ResourceDictionary in Your Xaml</a>
+      </li>
+    
+      
+      <li>
+        <a href="/2010/11/08/get-all-progid-on-system-for-com-automation">Get All ProgID on System for COM Automation</a>
+      </li>
+    
+      
+      <li>
+        <a href="/2010/10/28/silverlight-4-and-comactivex-integration">Silverlight 4 and COM/ActiveX Integration</a>
+      </li>
+    
+      
+      <li>
+        <a href="/2010/10/11/using-linq-with-csv-files">Using LINQ with CSV Files</a>
+      </li>
+    
+      
+      <li>
+        <a href="/2010/10/07/convert-a-csv-to-xml-using-c">Convert a CSV to XML using C#</a>
+      </li>
+    
+      
+      <li>
+        <a href="/2010/09/10/linkedlist-always-slower-than-a-list-in-c">LinkedList Always Slower than a List in C#?</a>
+      </li>
+    
+      
+      <li>
+        <a href="/2010/09/09/three-ways-to-sort-a-list-of-objects-with-datetime-in-c">Three Ways to Sort a List of Objects with DateTime in C#</a>
+      </li>
+    
+      
+      <li>
+        <a href="/2010/09/02/c-yield">C# yield</a>
+      </li>
+    
+      
+      <li>
+        <a href="/2010/08/25/benchmarking-c-apps-algorithms">Benchmarking C# Apps &amp; Algorithms</a>
+      </li>
+    
+      
+      <li>
+        <a href="/2010/01/15/handy-c-xml-serialization-methods">Handy C# XML Serialization Methods</a>
+      </li>
+    
+  </ul>
+
+  
+  <h3>2009</h3>
+  <ul>
+    
+      
+      <li>
+        <a href="/2009/09/08/sqlite-bulk-insert">SQLite Bulk Insert In C#/.NET</a>
+      </li>
+    
+  </ul>
+
+<span id="footer"><br><span style="font-size: 10px;">Proudly built with<a href="https://github.com/skywrite"> Sky</a></span></span></div>
+      </div>
+    </div>
+    <div class="scripts">  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35069840-2']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+    </div>
+  </body>
+</html>
