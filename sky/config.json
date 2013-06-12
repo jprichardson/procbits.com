@@ -1,5 +1,5 @@
 {
-  "blog": {
+  "site": {
     "name": "procbits",
     "tagline": "source code snippets and other random musings about software",
     "url": "http://procbits.com",
@@ -12,7 +12,7 @@
   },
   "build": {
     "outputDir": "public/",
-    "lastBuild": "2013-02-23T20:03:20.541Z"
+    "lastBuild": "2013-06-12T09:16:43.392Z"
   },
   "partials": {
     "disqus": {
