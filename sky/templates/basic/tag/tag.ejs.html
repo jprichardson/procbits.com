@@ -3,14 +3,15 @@
   var years = Object.keys(articles).map(function(year) { return ~~year }).sort().reverse()
 %>
 
+<h2>Articles Tagged with "<%= ctx.tag %>"</h2>
+
 <% years.forEach(function(year) { %>
   <% var sortedArticles = _(articles[year]).sortBy(function(a) { return -a.publishedAt })%>
   <h3><%= year %></h3>
   <ul>
     <% sortedArticles.forEach(function(article) { %>
-      <% var rp = '/' + article.relativePath; %>
       <li>
-        <a href="<%= rp %>"><%= article.title %></a>
+        <a href="<%= article.relativePath %>"><%= article.title %></a>
       </li>
     <% }) %>
   </ul>
