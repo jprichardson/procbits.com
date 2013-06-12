@@ -6,82 +6,48 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="JP Richardson">
-    <mete name="description" content="">
-
     <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
-    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
-    <!--<link href="style.css" rel="stylesheet">-->
-
-    <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
-
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-      <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-35069840-2']);
-    _gaq.push(['_trackPageview']);
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/highlight.css" rel="stylesheet">
   </head>
   <body>
-    
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid nav-container">
-          <nav role="navigation">
-            <a class="brand" title="" href="http://procbits.com">procbits</a>
-            
-            <p class="navbar-text pull-left">
-              source code snippets and other random musings about software
-            </p>
-          </nav>
-
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </a>
-
-
-
+          <nav role="navigation"><a title="" href="http://procbits.com" class="brand">procbits</a>
+            <p class="navbar-text pull-left">source code snippets and other random musings about software</p>
+            <ul class="nav pull-right">             
+              <li><a href="/tags">Tags</a></li>
+              <li><a href="/rss.xml">RSS</a></li>
+            </ul>
+          </nav><a data-toggle="collapse" data-target=".nav-collapse" href="http://procbits.com" class="btn btn-navbar">procbits<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a>
         </div>
       </div>
     </div>
-
-
     <div class="container-fluid">
       <div id="content" class="clearfix row-fluid">
-        <div id="main" class="span8 clearfix" role="main">
+        <div id="main" role="main" class="span8 clearfix"><h1>WPF Application Wide Exception Handling</h1>
 
-
-<h1>WPF Application Wide Exception Handling</h1>
 <p>What do you do if you want to catch all unhandled exceptions in an
 application?</p>
 <p>In App.xaml:</p>
-<pre><code class="lang-xml">&lt;Application x:<span class="keyword">Class</span>=<span class="string">"MyApp.App"</span>
-    xmlns=<span class="string">"http://schemas.microsoft.com/winfx/2006/xaml/presentation"</span>
-    xmlns:x=<span class="string">"http://schemas.microsoft.com/winfx/2006/xaml"</span>
-    DispatcherUnhandledException=<span class="string">"UnhandledException"</span>
-></code></pre>
+<div class="highlight"><pre><span class="nt">&lt;Application</span> <span class="na">x:Class=</span><span class="s">&quot;MyApp.App&quot;</span>
+    <span class="na">xmlns=</span><span class="s">&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;</span>
+    <span class="na">xmlns:x=</span><span class="s">&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;</span>
+    <span class="na">DispatcherUnhandledException=</span><span class="s">&quot;UnhandledException&quot;</span>
+<span class="nt">&gt;</span>
+</pre></div>
+
 <p>Add &quot;DispatcherUnhandledException&quot; to App.xaml. Then in your App.xaml.cs
 file:</p>
-<pre><code class="lang-csharp"><span class="keyword">private</span> void UnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e) {
-    <span class="keyword">var</span> time = DateTime.Now;
-    File.AppendAllText(@<span class="string">"C:\exps.csv"</span>, string.Format(<span class="string">"{0},{1}"</span>, time, e.<span class="keyword">Exception</span>.Message));
-    File.AppendAllText(@<span class="string">"C:\sts.txt"</span>, time + <span class="string">":\n"</span> + e.<span class="keyword">Exception</span>.StackTrace + <span class="string">"\n"</span>);
-    e.Handled = <span class="keyword">false</span>; <span class="comment">//we want the user to experience the crash</span>
-}</code></pre>
+<div class="highlight"><pre><span class="k">private</span> <span class="k">void</span> <span class="nf">UnhandledException</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">DispatcherUnhandledExceptionEventArgs</span> <span class="n">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">var</span> <span class="n">time</span> <span class="p">=</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">;</span>
+    <span class="n">File</span><span class="p">.</span><span class="n">AppendAllText</span><span class="p">(</span><span class="s">@&quot;C:\exps.csv&quot;</span><span class="p">,</span> <span class="kt">string</span><span class="p">.</span><span class="n">Format</span><span class="p">(</span><span class="s">&quot;{0},{1}&quot;</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">e</span><span class="p">.</span><span class="n">Exception</span><span class="p">.</span><span class="n">Message</span><span class="p">));</span>
+    <span class="n">File</span><span class="p">.</span><span class="n">AppendAllText</span><span class="p">(</span><span class="s">@&quot;C:\sts.txt&quot;</span><span class="p">,</span> <span class="n">time</span> <span class="p">+</span> <span class="s">&quot;:\n&quot;</span> <span class="p">+</span> <span class="n">e</span><span class="p">.</span><span class="n">Exception</span><span class="p">.</span><span class="n">StackTrace</span> <span class="p">+</span> <span class="s">&quot;\n&quot;</span><span class="p">);</span>
+    <span class="n">e</span><span class="p">.</span><span class="n">Handled</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span> <span class="c1">//we want the user to experience the crash</span>
+<span class="p">}</span>
+</pre></div>
+
 <p>That&#39;s it. So now if the app crashes on your users, you don&#39;t have to
 ask your users what steps they did to cause the crash. You can just look
 at the logs!</p>
@@ -114,17 +80,19 @@ read my <a href="http://techneur.com">blog on software entrepreneurship</a>.</p>
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-    
-
-          <span id="footer">
-            <br/>
-            <span style="font-size: 10px">
-              Proudly built with <a href="https://github.com/skywrite">Sky</a>.
-            </span>
-          </span>
-        </div>
+    <span id="footer"><br><span style="font-size: 10px;">Proudly built with<a href="https://github.com/skywrite"> Sky</a></span></span></div>
       </div>
     </div>
-    
+    <div class="scripts">  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35069840-2']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+    </div>
   </body>
 </html>

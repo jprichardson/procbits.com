@@ -6,330 +6,296 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="JP Richardson">
-    <mete name="description" content="">
-
     <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
-    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
-    <!--<link href="style.css" rel="stylesheet">-->
-
-    <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
-
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-      <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-35069840-2']);
-    _gaq.push(['_trackPageview']);
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/highlight.css" rel="stylesheet">
   </head>
   <body>
-    
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid nav-container">
-          <nav role="navigation">
-            <a class="brand" title="" href="http://procbits.com">procbits</a>
-            
-            <p class="navbar-text pull-left">
-              source code snippets and other random musings about software
-            </p>
-          </nav>
-
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </a>
-
-
-
+          <nav role="navigation"><a title="" href="http://procbits.com" class="brand">procbits</a>
+            <p class="navbar-text pull-left">source code snippets and other random musings about software</p>
+            <ul class="nav pull-right">             
+              <li><a href="/tags">Tags</a></li>
+              <li><a href="/rss.xml">RSS</a></li>
+            </ul>
+          </nav><a data-toggle="collapse" data-target=".nav-collapse" href="http://procbits.com" class="btn btn-navbar">procbits<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a>
         </div>
       </div>
     </div>
-
-
     <div class="container-fluid">
       <div id="content" class="clearfix row-fluid">
-        <div id="main" class="span8 clearfix" role="main">
+        <div id="main" role="main" class="span8 clearfix"><h1>Linear Regression in C#/.NET Using Least Squares</h1>
 
-
-<h1>Linear Regression in C#/.NET Using Least Squares</h1>
 <p>I had a class that handled the regression of my data sets, but it had
 too many business rules. It was necessary for me to refactor the code.</p>
 <p>Here&#39;s how you can use it:</p>
-<pre><code class="lang-csharp">double[] X = { <span class="number">75.0</span>, <span class="number">83</span>, <span class="number">85</span>, <span class="number">85</span>, <span class="number">92</span>, <span class="number">97</span>, <span class="number">99</span> };
-double[] Y = { <span class="number">16.0</span>, <span class="number">20</span>, <span class="number">25</span>, <span class="number">27</span>, <span class="number">32</span>, <span class="number">48</span>, <span class="number">48</span> };
-<span class="keyword">var</span> ds = <span class="keyword">new</span> XYDataSet(X, Y);
+<div class="highlight"><pre><span class="kt">double</span><span class="p">[]</span> <span class="n">X</span> <span class="p">=</span> <span class="p">{</span> <span class="m">75.0</span><span class="p">,</span> <span class="m">83</span><span class="p">,</span> <span class="m">85</span><span class="p">,</span> <span class="m">85</span><span class="p">,</span> <span class="m">92</span><span class="p">,</span> <span class="m">97</span><span class="p">,</span> <span class="m">99</span> <span class="p">};</span>
+<span class="kt">double</span><span class="p">[]</span> <span class="n">Y</span> <span class="p">=</span> <span class="p">{</span> <span class="m">16.0</span><span class="p">,</span> <span class="m">20</span><span class="p">,</span> <span class="m">25</span><span class="p">,</span> <span class="m">27</span><span class="p">,</span> <span class="m">32</span><span class="p">,</span> <span class="m">48</span><span class="p">,</span> <span class="m">48</span> <span class="p">};</span>
+<span class="kt">var</span> <span class="n">ds</span> <span class="p">=</span> <span class="k">new</span> <span class="n">XYDataSet</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">Y</span><span class="p">);</span>
 
-Console.WriteLine(Math.Round(ds.Slope,<span class="number">2</span>)); <span class="comment">//1.45</span>
-Console.WriteLine(Math.Round(ds.YIntercept,<span class="number">2</span>)); <span class="comment">//-96.85</span>
-ConsoleWriteLine(Math.Round(ds.ComputeRSquared(), <span class="number">3</span>)); <span class="comment">//0.927</span></code></pre>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">Math</span><span class="p">.</span><span class="n">Round</span><span class="p">(</span><span class="n">ds</span><span class="p">.</span><span class="n">Slope</span><span class="p">,</span><span class="m">2</span><span class="p">));</span> <span class="c1">//1.45</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">Math</span><span class="p">.</span><span class="n">Round</span><span class="p">(</span><span class="n">ds</span><span class="p">.</span><span class="n">YIntercept</span><span class="p">,</span><span class="m">2</span><span class="p">));</span> <span class="c1">//-96.85</span>
+<span class="n">ConsoleWriteLine</span><span class="p">(</span><span class="n">Math</span><span class="p">.</span><span class="n">Round</span><span class="p">(</span><span class="n">ds</span><span class="p">.</span><span class="n">ComputeRSquared</span><span class="p">(),</span> <span class="m">3</span><span class="p">));</span> <span class="c1">//0.927</span>
+</pre></div>
+
 <p>The source is in my .NET CommonLib library. XYDataSet.cs:
 <a href="https://github.com/jprichardson/CommonLib/blob/master/CommonLib/Numerical/XYDataSet.cs"><a href="https://github.com/jprichardson/CommonLib/blob/master/CommonLib/Numerical/XYDataSet.cs">https://github.com/jprichardson/CommonLib/blob/master/CommonLib/Numerical/XYDataSet.cs</a></a>
 XYDataSetTest.cs:
 <a href="https://github.com/jprichardson/CommonLib/blob/master/TestCommonLib/Numerical/XYDataSetTest.cs"><a href="https://github.com/jprichardson/CommonLib/blob/master/TestCommonLib/Numerical/XYDataSetTest.cs">https://github.com/jprichardson/CommonLib/blob/master/TestCommonLib/Numerical/XYDataSetTest.cs</a></a></p>
 <p>Here is the source for XYDataSet.cs:</p>
-<pre><code class="lang-csharp">using System;
-using System.Collections.Generic;
-using System.Collections;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using CommonLib.Geometry;
+<div class="highlight"><pre><span class="k">using</span> <span class="nn">System</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.Generic</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Collections.ObjectModel</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Linq</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">System.Text</span><span class="p">;</span>
+<span class="k">using</span> <span class="nn">CommonLib.Geometry</span><span class="p">;</span>
 
-<span class="keyword">namespace</span> CommonLib.Numerical
-{
-    <span class="keyword">public</span> <span class="keyword">class</span> XYDataSet : IList&lt;PointD>
-    {
+<span class="k">namespace</span> <span class="nn">CommonLib.Numerical</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">class</span> <span class="nc">XYDataSet</span> <span class="p">:</span> <span class="n">IList</span><span class="p">&lt;</span><span class="n">PointD</span><span class="p">&gt;</span>
+    <span class="p">{</span>
 
-        <span class="keyword">private</span> <span class="keyword">List</span>&lt;PointD> _internalList = <span class="keyword">new</span> <span class="keyword">List</span>&lt;PointD>();
+        <span class="k">private</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">PointD</span><span class="p">&gt;</span> <span class="n">_internalList</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">PointD</span><span class="p">&gt;();</span>
 
-        <span class="keyword">public</span> XYDataSet() : <span class="keyword">this</span>(<span class="keyword">null</span>, <span class="keyword">null</span>) { }
+        <span class="k">public</span> <span class="nf">XYDataSet</span><span class="p">()</span> <span class="p">:</span> <span class="k">this</span><span class="p">(</span><span class="k">null</span><span class="p">,</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span> <span class="p">}</span>
 
-        <span class="keyword">public</span> XYDataSet(IEnumerable&lt;PointD> points) {
-            ResetValues();
+        <span class="k">public</span> <span class="nf">XYDataSet</span><span class="p">(</span><span class="n">IEnumerable</span><span class="p">&lt;</span><span class="n">PointD</span><span class="p">&gt;</span> <span class="n">points</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">ResetValues</span><span class="p">();</span>
 
-            <span class="keyword">foreach</span> (<span class="keyword">var</span> point in points)
-                Add(point);
-        }
+            <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">point</span> <span class="k">in</span> <span class="n">points</span><span class="p">)</span>
+                <span class="n">Add</span><span class="p">(</span><span class="n">point</span><span class="p">);</span>
+        <span class="p">}</span>
 
-        <span class="keyword">public</span> XYDataSet(IEnumerable&lt;double> Xs, IEnumerable&lt;double> Ys) {
-            ResetValues();
+        <span class="k">public</span> <span class="nf">XYDataSet</span><span class="p">(</span><span class="n">IEnumerable</span><span class="p">&lt;</span><span class="kt">double</span><span class="p">&gt;</span> <span class="n">Xs</span><span class="p">,</span> <span class="n">IEnumerable</span><span class="p">&lt;</span><span class="kt">double</span><span class="p">&gt;</span> <span class="n">Ys</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">ResetValues</span><span class="p">();</span>
 
-            <span class="keyword">if</span> (Xs != <span class="keyword">null</span> || Ys != <span class="keyword">null</span>) {
-                <span class="keyword">if</span> (Xs.Count() != Ys.Count())
-                    <span class="keyword">throw</span> <span class="keyword">new</span> <span class="keyword">Exception</span>(<span class="string">"X count must be the same as the Y count."</span>);
+            <span class="k">if</span> <span class="p">(</span><span class="n">Xs</span> <span class="p">!=</span> <span class="k">null</span> <span class="p">||</span> <span class="n">Ys</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">Xs</span><span class="p">.</span><span class="n">Count</span><span class="p">()</span> <span class="p">!=</span> <span class="n">Ys</span><span class="p">.</span><span class="n">Count</span><span class="p">())</span>
+                    <span class="k">throw</span> <span class="k">new</span> <span class="nf">Exception</span><span class="p">(</span><span class="s">&quot;X count must be the same as the Y count.&quot;</span><span class="p">);</span>
 
-                <span class="keyword">for</span> (int i = <span class="number">0</span>; i &lt; Xs.Count(); ++i)
-                    Add(Xs.ElementAt(i), Ys.ElementAt(i));
-            }
-        }
+                <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">Xs</span><span class="p">.</span><span class="n">Count</span><span class="p">();</span> <span class="p">++</span><span class="n">i</span><span class="p">)</span>
+                    <span class="n">Add</span><span class="p">(</span><span class="n">Xs</span><span class="p">.</span><span class="n">ElementAt</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="n">Ys</span><span class="p">.</span><span class="n">ElementAt</span><span class="p">(</span><span class="n">i</span><span class="p">));</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
 
-        <span class="keyword">public</span> int Count { get { <span class="keyword">return</span> _internalList.Count; } }
+        <span class="k">public</span> <span class="kt">int</span> <span class="n">Count</span> <span class="p">{</span> <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_internalList</span><span class="p">.</span><span class="n">Count</span><span class="p">;</span> <span class="p">}</span> <span class="p">}</span>
 
-        <span class="keyword">public</span> bool IsReadOnly { get { <span class="keyword">return</span> <span class="keyword">false</span>; } }
+        <span class="k">public</span> <span class="kt">bool</span> <span class="n">IsReadOnly</span> <span class="p">{</span> <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="k">false</span><span class="p">;</span> <span class="p">}</span> <span class="p">}</span>
 
-        <span class="keyword">private</span> double _maxX = Double.NegativeInfinity;
-        <span class="keyword">public</span> double XMax { get { <span class="keyword">return</span> _internalList[XMaxIndex].X; } }
-        <span class="keyword">private</span> double _minX = Double.PositiveInfinity;
-        <span class="keyword">public</span> double XMin { get { <span class="keyword">return</span> _internalList[XMinIndex].X; } }
-        <span class="keyword">public</span> int XMaxIndex { get; <span class="keyword">protected</span> set; }
-        <span class="keyword">public</span> int XMinIndex { get; <span class="keyword">protected</span> set; }
+        <span class="k">private</span> <span class="kt">double</span> <span class="n">_maxX</span> <span class="p">=</span> <span class="n">Double</span><span class="p">.</span><span class="n">NegativeInfinity</span><span class="p">;</span>
+        <span class="k">public</span> <span class="kt">double</span> <span class="n">XMax</span> <span class="p">{</span> <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_internalList</span><span class="p">[</span><span class="n">XMaxIndex</span><span class="p">].</span><span class="n">X</span><span class="p">;</span> <span class="p">}</span> <span class="p">}</span>
+        <span class="k">private</span> <span class="kt">double</span> <span class="n">_minX</span> <span class="p">=</span> <span class="n">Double</span><span class="p">.</span><span class="n">PositiveInfinity</span><span class="p">;</span>
+        <span class="k">public</span> <span class="kt">double</span> <span class="n">XMin</span> <span class="p">{</span> <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_internalList</span><span class="p">[</span><span class="n">XMinIndex</span><span class="p">].</span><span class="n">X</span><span class="p">;</span> <span class="p">}</span> <span class="p">}</span>
+        <span class="k">public</span> <span class="kt">int</span> <span class="n">XMaxIndex</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">protected</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">public</span> <span class="kt">int</span> <span class="n">XMinIndex</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">protected</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 
-        <span class="keyword">private</span> double _maxY = Double.NegativeInfinity;
-        <span class="keyword">public</span> double YMax { get { <span class="keyword">return</span> _internalList[YMaxIndex].Y; } }
-        <span class="keyword">private</span> double _minY = Double.PositiveInfinity;
-        <span class="keyword">public</span> double YMin { get { <span class="keyword">return</span> _internalList[YMinIndex].Y; } }
-        <span class="keyword">public</span> int YMaxIndex { get; <span class="keyword">protected</span> set; }
-        <span class="keyword">public</span> int YMinIndex { get; <span class="keyword">protected</span> set; }
+        <span class="k">private</span> <span class="kt">double</span> <span class="n">_maxY</span> <span class="p">=</span> <span class="n">Double</span><span class="p">.</span><span class="n">NegativeInfinity</span><span class="p">;</span>
+        <span class="k">public</span> <span class="kt">double</span> <span class="n">YMax</span> <span class="p">{</span> <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_internalList</span><span class="p">[</span><span class="n">YMaxIndex</span><span class="p">].</span><span class="n">Y</span><span class="p">;</span> <span class="p">}</span> <span class="p">}</span>
+        <span class="k">private</span> <span class="kt">double</span> <span class="n">_minY</span> <span class="p">=</span> <span class="n">Double</span><span class="p">.</span><span class="n">PositiveInfinity</span><span class="p">;</span>
+        <span class="k">public</span> <span class="kt">double</span> <span class="n">YMin</span> <span class="p">{</span> <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_internalList</span><span class="p">[</span><span class="n">YMinIndex</span><span class="p">].</span><span class="n">Y</span><span class="p">;</span> <span class="p">}</span> <span class="p">}</span>
+        <span class="k">public</span> <span class="kt">int</span> <span class="n">YMaxIndex</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">protected</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">public</span> <span class="kt">int</span> <span class="n">YMinIndex</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">protected</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 
-        <span class="keyword">public</span> double XMean { get { <span class="keyword">return</span> XSum / Count; } }
-        <span class="keyword">public</span> double YMean { get { <span class="keyword">return</span> YSum / Count; } }
+        <span class="k">public</span> <span class="kt">double</span> <span class="n">XMean</span> <span class="p">{</span> <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">XSum</span> <span class="p">/</span> <span class="n">Count</span><span class="p">;</span> <span class="p">}</span> <span class="p">}</span>
+        <span class="k">public</span> <span class="kt">double</span> <span class="n">YMean</span> <span class="p">{</span> <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">YSum</span> <span class="p">/</span> <span class="n">Count</span><span class="p">;</span> <span class="p">}</span> <span class="p">}</span>
 
-        <span class="keyword">public</span> double RSquare { get; <span class="keyword">protected</span> set; }
+        <span class="k">public</span> <span class="kt">double</span> <span class="n">RSquare</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">protected</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 
-        <span class="keyword">public</span> PointD RegressionPoint0 { get; <span class="keyword">protected</span> set; }
-        <span class="keyword">public</span> PointD RegressionPointN { get; <span class="keyword">protected</span> set; }
+        <span class="k">public</span> <span class="n">PointD</span> <span class="n">RegressionPoint0</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">protected</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">public</span> <span class="n">PointD</span> <span class="n">RegressionPointN</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">protected</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 
-        <span class="keyword">public</span> double Slope { get; <span class="keyword">protected</span> set; }
+        <span class="k">public</span> <span class="kt">double</span> <span class="n">Slope</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">protected</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 
-        <span class="keyword">public</span> double XSum { get; set; }
-        <span class="keyword">public</span> double YSum { get; set; }
-        <span class="keyword">public</span> double XSquaredSum { get; set; }
-        <span class="keyword">public</span> double XYProductSum { get; set; }
+        <span class="k">public</span> <span class="kt">double</span> <span class="n">XSum</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">public</span> <span class="kt">double</span> <span class="n">YSum</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">public</span> <span class="kt">double</span> <span class="n">XSquaredSum</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+        <span class="k">public</span> <span class="kt">double</span> <span class="n">XYProductSum</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 
-        <span class="keyword">public</span> double XIntercept { get { <span class="keyword">return</span> -YIntercept / Slope; } }
-        <span class="keyword">public</span> double YIntercept { get; <span class="keyword">protected</span> set; }
+        <span class="k">public</span> <span class="kt">double</span> <span class="n">XIntercept</span> <span class="p">{</span> <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="p">-</span><span class="n">YIntercept</span> <span class="p">/</span> <span class="n">Slope</span><span class="p">;</span> <span class="p">}</span> <span class="p">}</span>
+        <span class="k">public</span> <span class="kt">double</span> <span class="n">YIntercept</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">protected</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 
 
-        <span class="keyword">public</span> PointD <span class="keyword">this</span>[int index] {
-            get { <span class="keyword">return</span> _internalList[index]; }
-            set {
-                <span class="keyword">var</span> p = value;
-                <span class="keyword">var</span> old = _internalList[index];
-                _internalList[index] = p;
+        <span class="k">public</span> <span class="n">PointD</span> <span class="k">this</span><span class="p">[</span><span class="kt">int</span> <span class="n">index</span><span class="p">]</span> <span class="p">{</span>
+            <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_internalList</span><span class="p">[</span><span class="n">index</span><span class="p">];</span> <span class="p">}</span>
+            <span class="k">set</span> <span class="p">{</span>
+                <span class="kt">var</span> <span class="n">p</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span>
+                <span class="kt">var</span> <span class="n">old</span> <span class="p">=</span> <span class="n">_internalList</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+                <span class="n">_internalList</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="p">=</span> <span class="n">p</span><span class="p">;</span>
 
-                ComputeSums(old, SumMode.Subtract);
-                ComputeSums(p, SumMode.Add);
-                ComputeMinAndMax();
-                ComputeSlopeAndYIntercept();
-            }
-        }
+                <span class="n">ComputeSums</span><span class="p">(</span><span class="n">old</span><span class="p">,</span> <span class="n">SumMode</span><span class="p">.</span><span class="n">Subtract</span><span class="p">);</span>
+                <span class="n">ComputeSums</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">SumMode</span><span class="p">.</span><span class="n">Add</span><span class="p">);</span>
+                <span class="n">ComputeMinAndMax</span><span class="p">();</span>
+                <span class="n">ComputeSlopeAndYIntercept</span><span class="p">();</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
 
-        <span class="keyword">public</span> void Add(double x, double y) {
-            Add(<span class="keyword">new</span> PointD(x, y));
-        }
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">Add</span><span class="p">(</span><span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="kt">double</span> <span class="n">y</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">Add</span><span class="p">(</span><span class="k">new</span> <span class="n">PointD</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">));</span>
+        <span class="p">}</span>
 
-        <span class="keyword">public</span> void Add(PointD p) {
-            _internalList.Add(p);
-            RSquare = double.NaN;
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">Add</span><span class="p">(</span><span class="n">PointD</span> <span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">_internalList</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
+            <span class="n">RSquare</span> <span class="p">=</span> <span class="kt">double</span><span class="p">.</span><span class="n">NaN</span><span class="p">;</span>
 
-            ComputeSums(p, SumMode.Add);
-            ComputeMinAndMax(Count - <span class="number">1</span>, p);
-            ComputeSlopeAndYIntercept();
-        }
+            <span class="n">ComputeSums</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">SumMode</span><span class="p">.</span><span class="n">Add</span><span class="p">);</span>
+            <span class="n">ComputeMinAndMax</span><span class="p">(</span><span class="n">Count</span> <span class="p">-</span> <span class="m">1</span><span class="p">,</span> <span class="n">p</span><span class="p">);</span>
+            <span class="n">ComputeSlopeAndYIntercept</span><span class="p">();</span>
+        <span class="p">}</span>
 
-        <span class="keyword">public</span> void Clear() {
-            _internalList.Clear();
-            ResetValues();
-        }
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">Clear</span><span class="p">()</span> <span class="p">{</span>
+            <span class="n">_internalList</span><span class="p">.</span><span class="n">Clear</span><span class="p">();</span>
+            <span class="n">ResetValues</span><span class="p">();</span>
+        <span class="p">}</span>
 
-        <span class="keyword">public</span> void ComputeSlopeAndYIntercept() {
-            double delta = Count * XSquaredSum - Math.Pow(XSum, <span class="number">2.0</span>);
-            YIntercept = (<span class="number">1.0</span> / delta) * (XSquaredSum * YSum - XSum * XYProductSum);
-            Slope = (<span class="number">1.0</span> / delta) * (Count * XYProductSum - XSum * YSum);
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">ComputeSlopeAndYIntercept</span><span class="p">()</span> <span class="p">{</span>
+            <span class="kt">double</span> <span class="n">delta</span> <span class="p">=</span> <span class="n">Count</span> <span class="p">*</span> <span class="n">XSquaredSum</span> <span class="p">-</span> <span class="n">Math</span><span class="p">.</span><span class="n">Pow</span><span class="p">(</span><span class="n">XSum</span><span class="p">,</span> <span class="m">2.0</span><span class="p">);</span>
+            <span class="n">YIntercept</span> <span class="p">=</span> <span class="p">(</span><span class="m">1.0</span> <span class="p">/</span> <span class="n">delta</span><span class="p">)</span> <span class="p">*</span> <span class="p">(</span><span class="n">XSquaredSum</span> <span class="p">*</span> <span class="n">YSum</span> <span class="p">-</span> <span class="n">XSum</span> <span class="p">*</span> <span class="n">XYProductSum</span><span class="p">);</span>
+            <span class="n">Slope</span> <span class="p">=</span> <span class="p">(</span><span class="m">1.0</span> <span class="p">/</span> <span class="n">delta</span><span class="p">)</span> <span class="p">*</span> <span class="p">(</span><span class="n">Count</span> <span class="p">*</span> <span class="n">XYProductSum</span> <span class="p">-</span> <span class="n">XSum</span> <span class="p">*</span> <span class="n">YSum</span><span class="p">);</span>
 
-            RegressionPoint0.X = XMin;
-            RegressionPoint0.Y = Slope * XMin + YIntercept;
-            RegressionPointN.X = XMax;
-            RegressionPointN.Y = Slope * XMax + YIntercept;
-        }
+            <span class="n">RegressionPoint0</span><span class="p">.</span><span class="n">X</span> <span class="p">=</span> <span class="n">XMin</span><span class="p">;</span>
+            <span class="n">RegressionPoint0</span><span class="p">.</span><span class="n">Y</span> <span class="p">=</span> <span class="n">Slope</span> <span class="p">*</span> <span class="n">XMin</span> <span class="p">+</span> <span class="n">YIntercept</span><span class="p">;</span>
+            <span class="n">RegressionPointN</span><span class="p">.</span><span class="n">X</span> <span class="p">=</span> <span class="n">XMax</span><span class="p">;</span>
+            <span class="n">RegressionPointN</span><span class="p">.</span><span class="n">Y</span> <span class="p">=</span> <span class="n">Slope</span> <span class="p">*</span> <span class="n">XMax</span> <span class="p">+</span> <span class="n">YIntercept</span><span class="p">;</span>
+        <span class="p">}</span>
 
-        <span class="keyword">public</span> double ComputeRSquared() {
-            <span class="keyword">var</span> SStot = _internalList.Sum(p => Math.Pow(p.Y - YMean, <span class="number">2.0</span>));
-            <span class="keyword">var</span> SSerr = _internalList.Sum(p => Math.Pow(p.Y - (Slope * p.X + YIntercept), <span class="number">2.0</span>));
-            RSquare = <span class="number">1.0</span> - SSerr / SStot;
-            <span class="keyword">return</span> RSquare;
-        }
+        <span class="k">public</span> <span class="kt">double</span> <span class="nf">ComputeRSquared</span><span class="p">()</span> <span class="p">{</span>
+            <span class="kt">var</span> <span class="n">SStot</span> <span class="p">=</span> <span class="n">_internalList</span><span class="p">.</span><span class="n">Sum</span><span class="p">(</span><span class="n">p</span> <span class="p">=&gt;</span> <span class="n">Math</span><span class="p">.</span><span class="n">Pow</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">Y</span> <span class="p">-</span> <span class="n">YMean</span><span class="p">,</span> <span class="m">2.0</span><span class="p">));</span>
+            <span class="kt">var</span> <span class="n">SSerr</span> <span class="p">=</span> <span class="n">_internalList</span><span class="p">.</span><span class="n">Sum</span><span class="p">(</span><span class="n">p</span> <span class="p">=&gt;</span> <span class="n">Math</span><span class="p">.</span><span class="n">Pow</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">Y</span> <span class="p">-</span> <span class="p">(</span><span class="n">Slope</span> <span class="p">*</span> <span class="n">p</span><span class="p">.</span><span class="n">X</span> <span class="p">+</span> <span class="n">YIntercept</span><span class="p">),</span> <span class="m">2.0</span><span class="p">));</span>
+            <span class="n">RSquare</span> <span class="p">=</span> <span class="m">1.0</span> <span class="p">-</span> <span class="n">SSerr</span> <span class="p">/</span> <span class="n">SStot</span><span class="p">;</span>
+            <span class="k">return</span> <span class="n">RSquare</span><span class="p">;</span>
+        <span class="p">}</span>
 
-        <span class="keyword">public</span> bool Contains(PointD p) {
-            <span class="keyword">return</span> _internalList.Contains(p);
-        }
+        <span class="k">public</span> <span class="kt">bool</span> <span class="nf">Contains</span><span class="p">(</span><span class="n">PointD</span> <span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">_internalList</span><span class="p">.</span><span class="n">Contains</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
+        <span class="p">}</span>
 
-        <span class="keyword">public</span> void CopyTo(PointD[] points, int index) {
-            _internalList.CopyTo(points, index);
-        }
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">CopyTo</span><span class="p">(</span><span class="n">PointD</span><span class="p">[]</span> <span class="n">points</span><span class="p">,</span> <span class="kt">int</span> <span class="n">index</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">_internalList</span><span class="p">.</span><span class="n">CopyTo</span><span class="p">(</span><span class="n">points</span><span class="p">,</span> <span class="n">index</span><span class="p">);</span>
+        <span class="p">}</span>
 
-        <span class="keyword">public</span> IEnumerator&lt;PointD> GetEnumerator() {
-            <span class="keyword">return</span> _internalList.GetEnumerator();
-        }
+        <span class="k">public</span> <span class="n">IEnumerator</span><span class="p">&lt;</span><span class="n">PointD</span><span class="p">&gt;</span> <span class="n">GetEnumerator</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">_internalList</span><span class="p">.</span><span class="n">GetEnumerator</span><span class="p">();</span>
+        <span class="p">}</span>
 
-        IEnumerator IEnumerable.GetEnumerator() {
-            <span class="keyword">return</span> _internalList.GetEnumerator();
-        }
+        <span class="n">IEnumerator</span> <span class="n">IEnumerable</span><span class="p">.</span><span class="n">GetEnumerator</span><span class="p">()</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">_internalList</span><span class="p">.</span><span class="n">GetEnumerator</span><span class="p">();</span>
+        <span class="p">}</span>
 
-        <span class="keyword">public</span> int IndexOf(PointD p) {
-            <span class="keyword">return</span> _internalList.IndexOf(p);
-        }
+        <span class="k">public</span> <span class="kt">int</span> <span class="nf">IndexOf</span><span class="p">(</span><span class="n">PointD</span> <span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="n">_internalList</span><span class="p">.</span><span class="n">IndexOf</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
+        <span class="p">}</span>
 
-        <span class="keyword">public</span> void Insert(int index, PointD p) {
-            _internalList.Insert(index, p);
-            RSquare = double.NaN;
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">Insert</span><span class="p">(</span><span class="kt">int</span> <span class="n">index</span><span class="p">,</span> <span class="n">PointD</span> <span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">_internalList</span><span class="p">.</span><span class="n">Insert</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">p</span><span class="p">);</span>
+            <span class="n">RSquare</span> <span class="p">=</span> <span class="kt">double</span><span class="p">.</span><span class="n">NaN</span><span class="p">;</span>
 
-            ComputeSums(p, SumMode.Add);
-            ComputeMinAndMax();
-            ComputeSlopeAndYIntercept();
-        }
+            <span class="n">ComputeSums</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">SumMode</span><span class="p">.</span><span class="n">Add</span><span class="p">);</span>
+            <span class="n">ComputeMinAndMax</span><span class="p">();</span>
+            <span class="n">ComputeSlopeAndYIntercept</span><span class="p">();</span>
+        <span class="p">}</span>
 
-        <span class="keyword">public</span> bool Remove(PointD p) {
-            <span class="keyword">var</span> success = _internalList.Remove(p);
-            <span class="keyword">if</span> (success) {
-                RSquare = double.NaN;
-                ComputeSums(p, SumMode.Subtract);
-                ComputeMinAndMax();
-                ComputeSlopeAndYIntercept();
-            }
-            <span class="keyword">return</span> success;
-        }
+        <span class="k">public</span> <span class="kt">bool</span> <span class="nf">Remove</span><span class="p">(</span><span class="n">PointD</span> <span class="n">p</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">var</span> <span class="n">success</span> <span class="p">=</span> <span class="n">_internalList</span><span class="p">.</span><span class="n">Remove</span><span class="p">(</span><span class="n">p</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">success</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">RSquare</span> <span class="p">=</span> <span class="kt">double</span><span class="p">.</span><span class="n">NaN</span><span class="p">;</span>
+                <span class="n">ComputeSums</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">SumMode</span><span class="p">.</span><span class="n">Subtract</span><span class="p">);</span>
+                <span class="n">ComputeMinAndMax</span><span class="p">();</span>
+                <span class="n">ComputeSlopeAndYIntercept</span><span class="p">();</span>
+            <span class="p">}</span>
+            <span class="k">return</span> <span class="n">success</span><span class="p">;</span>
+        <span class="p">}</span>
 
-        <span class="keyword">public</span> void RemoveAt(int index) {
-            <span class="keyword">var</span> old = _internalList[index];
-            _internalList.RemoveAt(index);
-            RSquare = double.NaN;
+        <span class="k">public</span> <span class="k">void</span> <span class="nf">RemoveAt</span><span class="p">(</span><span class="kt">int</span> <span class="n">index</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">var</span> <span class="n">old</span> <span class="p">=</span> <span class="n">_internalList</span><span class="p">[</span><span class="n">index</span><span class="p">];</span>
+            <span class="n">_internalList</span><span class="p">.</span><span class="n">RemoveAt</span><span class="p">(</span><span class="n">index</span><span class="p">);</span>
+            <span class="n">RSquare</span> <span class="p">=</span> <span class="kt">double</span><span class="p">.</span><span class="n">NaN</span><span class="p">;</span>
 
-            ComputeSums(old, SumMode.Subtract);
-            ComputeMinAndMax();
-            ComputeSlopeAndYIntercept();
-        }
+            <span class="n">ComputeSums</span><span class="p">(</span><span class="n">old</span><span class="p">,</span> <span class="n">SumMode</span><span class="p">.</span><span class="n">Subtract</span><span class="p">);</span>
+            <span class="n">ComputeMinAndMax</span><span class="p">();</span>
+            <span class="n">ComputeSlopeAndYIntercept</span><span class="p">();</span>
+        <span class="p">}</span>
 
-        <span class="keyword">protected</span> void ComputeMinAndMax() { <span class="comment">//methods that call this, Insert, </span>
-            ResetMinAndMax();
+        <span class="k">protected</span> <span class="k">void</span> <span class="nf">ComputeMinAndMax</span><span class="p">()</span> <span class="p">{</span> <span class="c1">//methods that call this, Insert, </span>
+            <span class="n">ResetMinAndMax</span><span class="p">();</span>
 
-            <span class="keyword">for</span> (int i = <span class="number">0</span>; i &lt; _internalList.Count; ++i)
-                ComputeMinAndMax(i, _internalList[i]);
-        }
+            <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span> <span class="n">i</span> <span class="p">&lt;</span> <span class="n">_internalList</span><span class="p">.</span><span class="n">Count</span><span class="p">;</span> <span class="p">++</span><span class="n">i</span><span class="p">)</span>
+                <span class="n">ComputeMinAndMax</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">_internalList</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+        <span class="p">}</span>
 
-        <span class="keyword">protected</span> void ComputeMinAndMax(int index, PointD newPoint) {
-            <span class="keyword">if</span> (newPoint.X &lt;= _minX) {
-                _minX = newPoint.X;
-                XMinIndex = index;
-            }
+        <span class="k">protected</span> <span class="k">void</span> <span class="nf">ComputeMinAndMax</span><span class="p">(</span><span class="kt">int</span> <span class="n">index</span><span class="p">,</span> <span class="n">PointD</span> <span class="n">newPoint</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">newPoint</span><span class="p">.</span><span class="n">X</span> <span class="p">&lt;=</span> <span class="n">_minX</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">_minX</span> <span class="p">=</span> <span class="n">newPoint</span><span class="p">.</span><span class="n">X</span><span class="p">;</span>
+                <span class="n">XMinIndex</span> <span class="p">=</span> <span class="n">index</span><span class="p">;</span>
+            <span class="p">}</span>
 
-            <span class="keyword">if</span> (newPoint.X >= _maxX) {
-                _maxX = newPoint.X;
-                XMaxIndex = index;
-            }
+            <span class="k">if</span> <span class="p">(</span><span class="n">newPoint</span><span class="p">.</span><span class="n">X</span> <span class="p">&gt;=</span> <span class="n">_maxX</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">_maxX</span> <span class="p">=</span> <span class="n">newPoint</span><span class="p">.</span><span class="n">X</span><span class="p">;</span>
+                <span class="n">XMaxIndex</span> <span class="p">=</span> <span class="n">index</span><span class="p">;</span>
+            <span class="p">}</span>
 
-            <span class="keyword">if</span> (newPoint.Y &lt;= _minY) {
-                _minY = newPoint.Y;
-                YMinIndex = index;
-            }
+            <span class="k">if</span> <span class="p">(</span><span class="n">newPoint</span><span class="p">.</span><span class="n">Y</span> <span class="p">&lt;=</span> <span class="n">_minY</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">_minY</span> <span class="p">=</span> <span class="n">newPoint</span><span class="p">.</span><span class="n">Y</span><span class="p">;</span>
+                <span class="n">YMinIndex</span> <span class="p">=</span> <span class="n">index</span><span class="p">;</span>
+            <span class="p">}</span>
 
-            <span class="keyword">if</span> (newPoint.Y >= _maxY) {
-                _maxY = newPoint.Y;
-                YMaxIndex = index;
-            }
-        }
+            <span class="k">if</span> <span class="p">(</span><span class="n">newPoint</span><span class="p">.</span><span class="n">Y</span> <span class="p">&gt;=</span> <span class="n">_maxY</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">_maxY</span> <span class="p">=</span> <span class="n">newPoint</span><span class="p">.</span><span class="n">Y</span><span class="p">;</span>
+                <span class="n">YMaxIndex</span> <span class="p">=</span> <span class="n">index</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
 
-        <span class="keyword">protected</span> enum SumMode { Add, Subtract };
-        <span class="keyword">protected</span> void ComputeSums(PointD p, SumMode mode) {
-            <span class="keyword">if</span> (mode == SumMode.Add) {
-                XSum += p.X;
-                YSum += p.Y;
-                XSquaredSum += Math.Pow(p.X, <span class="number">2.0</span>);
-                XYProductSum += (p.X * p.Y);
-            }
-            <span class="keyword">else</span> <span class="keyword">if</span> (mode == SumMode.Subtract) {
-                XSum -= p.X;
-                YSum -= p.Y;
-                XSquaredSum -= Math.Pow(p.X, <span class="number">2.0</span>);
-                XYProductSum -= (p.X * p.Y);
-            }
-        }
+        <span class="k">protected</span> <span class="k">enum</span> <span class="n">SumMode</span> <span class="p">{</span> <span class="n">Add</span><span class="p">,</span> <span class="n">Subtract</span> <span class="p">};</span>
+        <span class="k">protected</span> <span class="k">void</span> <span class="nf">ComputeSums</span><span class="p">(</span><span class="n">PointD</span> <span class="n">p</span><span class="p">,</span> <span class="n">SumMode</span> <span class="n">mode</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">mode</span> <span class="p">==</span> <span class="n">SumMode</span><span class="p">.</span><span class="n">Add</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">XSum</span> <span class="p">+=</span> <span class="n">p</span><span class="p">.</span><span class="n">X</span><span class="p">;</span>
+                <span class="n">YSum</span> <span class="p">+=</span> <span class="n">p</span><span class="p">.</span><span class="n">Y</span><span class="p">;</span>
+                <span class="n">XSquaredSum</span> <span class="p">+=</span> <span class="n">Math</span><span class="p">.</span><span class="n">Pow</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">X</span><span class="p">,</span> <span class="m">2.0</span><span class="p">);</span>
+                <span class="n">XYProductSum</span> <span class="p">+=</span> <span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">X</span> <span class="p">*</span> <span class="n">p</span><span class="p">.</span><span class="n">Y</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span> <span class="nf">if</span> <span class="p">(</span><span class="n">mode</span> <span class="p">==</span> <span class="n">SumMode</span><span class="p">.</span><span class="n">Subtract</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">XSum</span> <span class="p">-=</span> <span class="n">p</span><span class="p">.</span><span class="n">X</span><span class="p">;</span>
+                <span class="n">YSum</span> <span class="p">-=</span> <span class="n">p</span><span class="p">.</span><span class="n">Y</span><span class="p">;</span>
+                <span class="n">XSquaredSum</span> <span class="p">-=</span> <span class="n">Math</span><span class="p">.</span><span class="n">Pow</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">X</span><span class="p">,</span> <span class="m">2.0</span><span class="p">);</span>
+                <span class="n">XYProductSum</span> <span class="p">-=</span> <span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">X</span> <span class="p">*</span> <span class="n">p</span><span class="p">.</span><span class="n">Y</span><span class="p">);</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
 
-        <span class="keyword">protected</span> void ResetMinAndMax() {
-            _maxX = double.NegativeInfinity;
-            _maxY = double.NegativeInfinity;
-            _minX = double.PositiveInfinity;
-            _minY = double.PositiveInfinity;
-        }
+        <span class="k">protected</span> <span class="k">void</span> <span class="nf">ResetMinAndMax</span><span class="p">()</span> <span class="p">{</span>
+            <span class="n">_maxX</span> <span class="p">=</span> <span class="kt">double</span><span class="p">.</span><span class="n">NegativeInfinity</span><span class="p">;</span>
+            <span class="n">_maxY</span> <span class="p">=</span> <span class="kt">double</span><span class="p">.</span><span class="n">NegativeInfinity</span><span class="p">;</span>
+            <span class="n">_minX</span> <span class="p">=</span> <span class="kt">double</span><span class="p">.</span><span class="n">PositiveInfinity</span><span class="p">;</span>
+            <span class="n">_minY</span> <span class="p">=</span> <span class="kt">double</span><span class="p">.</span><span class="n">PositiveInfinity</span><span class="p">;</span>
+        <span class="p">}</span>
 
-        <span class="keyword">protected</span> void ResetValues() {
-            ResetMinAndMax();
+        <span class="k">protected</span> <span class="k">void</span> <span class="nf">ResetValues</span><span class="p">()</span> <span class="p">{</span>
+            <span class="n">ResetMinAndMax</span><span class="p">();</span>
 
-            RegressionPoint0 = <span class="keyword">new</span> PointD();
-            RegressionPointN = <span class="keyword">new</span> PointD();
+            <span class="n">RegressionPoint0</span> <span class="p">=</span> <span class="k">new</span> <span class="n">PointD</span><span class="p">();</span>
+            <span class="n">RegressionPointN</span> <span class="p">=</span> <span class="k">new</span> <span class="n">PointD</span><span class="p">();</span>
 
-            RSquare = double.NaN;
+            <span class="n">RSquare</span> <span class="p">=</span> <span class="kt">double</span><span class="p">.</span><span class="n">NaN</span><span class="p">;</span>
 
-            Slope = double.NaN;
-            YIntercept = double.NaN;
+            <span class="n">Slope</span> <span class="p">=</span> <span class="kt">double</span><span class="p">.</span><span class="n">NaN</span><span class="p">;</span>
+            <span class="n">YIntercept</span> <span class="p">=</span> <span class="kt">double</span><span class="p">.</span><span class="n">NaN</span><span class="p">;</span>
 
-            XSum = <span class="number">0.0</span>;
-            YSum = <span class="number">0.0</span>;
-            XSquaredSum = <span class="number">0.0</span>;
-            XYProductSum = <span class="number">0.0</span>;
+            <span class="n">XSum</span> <span class="p">=</span> <span class="m">0.0</span><span class="p">;</span>
+            <span class="n">YSum</span> <span class="p">=</span> <span class="m">0.0</span><span class="p">;</span>
+            <span class="n">XSquaredSum</span> <span class="p">=</span> <span class="m">0.0</span><span class="p">;</span>
+            <span class="n">XYProductSum</span> <span class="p">=</span> <span class="m">0.0</span><span class="p">;</span>
 
-            XMaxIndex = -<span class="number">1</span>;
-            YMaxIndex = -<span class="number">1</span>;
-            XMinIndex = -<span class="number">1</span>;
-            YMinIndex = -<span class="number">1</span>;
-        }
+            <span class="n">XMaxIndex</span> <span class="p">=</span> <span class="p">-</span><span class="m">1</span><span class="p">;</span>
+            <span class="n">YMaxIndex</span> <span class="p">=</span> <span class="p">-</span><span class="m">1</span><span class="p">;</span>
+            <span class="n">XMinIndex</span> <span class="p">=</span> <span class="p">-</span><span class="m">1</span><span class="p">;</span>
+            <span class="n">YMinIndex</span> <span class="p">=</span> <span class="p">-</span><span class="m">1</span><span class="p">;</span>
+        <span class="p">}</span>
 
-    }
-}</code></pre>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
 <p>Are you a <a href="http://gitpilot.com">Git</a> user? Let me help you make project
 management with Git simple. Checkout <a href="http://gitpilot.com">Gitpilot</a>.</p>
 <p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>
@@ -360,17 +326,19 @@ and read my blog on software entrepreneurship:
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-    
-
-          <span id="footer">
-            <br/>
-            <span style="font-size: 10px">
-              Proudly built with <a href="https://github.com/skywrite">Sky</a>.
-            </span>
-          </span>
-        </div>
+    <span id="footer"><br><span style="font-size: 10px;">Proudly built with<a href="https://github.com/skywrite"> Sky</a></span></span></div>
       </div>
     </div>
-    
+    <div class="scripts">  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35069840-2']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+    </div>
   </body>
 </html>

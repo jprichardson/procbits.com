@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[procbits]]></title><description><![CDATA[source code snippets and other random musings about software]]></description><link>http://procbits.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Sat, 23 Mar 2013 20:24:56 GMT</lastBuildDate><atom:link href="http://procbits.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Wordpress Export to Markdown Hosted on Amazon S3]]></title><description><![CDATA[<h1>Wordpress Export to Markdown Hosted on Amazon S3</h1>
-<p>You may have been able to tell, but this blog looks different. Yes, I finally left Wordpress. I converted my Wordpress blog to a static generated Markdown blog. It&#39;s fairly straight forward.</p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[procbits]]></title><description><![CDATA[source code snippets and other random musings about software]]></description><link>http://procbits.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Wed, 12 Jun 2013 09:16:43 GMT</lastBuildDate><atom:link href="http://procbits.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Wordpress Export to Markdown Hosted on Amazon S3]]></title><description><![CDATA[<p>You may have been able to tell, but this blog looks different. Yes, I finally left Wordpress. I converted my Wordpress blog to a static generated Markdown blog. It&#39;s fairly straight forward.</p>
 <h2>Why?</h2>
 <ul>
 <li>I hated writing my blog posts in Wordpress. I wanted to write in pure Markdown since I&#39;m such a big <a href="https://github.com/jprichardson">open source advocate</a> and have been using Markdown a lot with Github.</li>
@@ -25,39 +24,42 @@
 </ol>
 <p>There are still a lot of things to do. But for now, I&#39;m satisfied.</p>
 <p>-JP</p>
-]]></description><link>http://procbits.com/2013/03/02/wordpress-export-to-markdown-hosted-on-amazon-s3</link><guid isPermaLink="true">http://procbits.com/2013/03/02/wordpress-export-to-markdown-hosted-on-amazon-s3</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Sat, 23 Mar 2013 00:00:00 GMT</pubDate></item><item><title><![CDATA[BatchFlow: Easily batch process collections sequentially or in parallel in JavaScript/Node.js]]></title><description><![CDATA[<h1>BatchFlow: Easily batch process collections sequentially or in parallel in JavaScript/Node.js</h1>
-<h2>Why?</h2>
+]]></description><link>http://procbits.com/2013/03/02/wordpress-export-to-markdown-hosted-on-amazon-s3</link><guid isPermaLink="true">http://procbits.com/2013/03/02/wordpress-export-to-markdown-hosted-on-amazon-s3</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Sat, 23 Mar 2013 00:00:00 GMT</pubDate></item><item><title><![CDATA[BatchFlow]]></title><description><![CDATA[<h2>Why?</h2>
 <p>I really got tired of writing the following patterns over and over
 again:</p>
 <p><strong>Sequential:</strong></p>
-<pre><code class="lang-javascript"><span class="keyword">var</span> files = [... <span class="keyword">list</span> of files ...];
-<span class="keyword">function</span> again(x) {
-    <span class="keyword">if</span> (x &lt; files.length) {
-        fs.readFile(files[x], <span class="keyword">function</span>(err, data) {
-            <span class="comment">//... do something with data ...</span>
-            again(x + <span class="number">1</span>);
-        });
-    } <span class="keyword">else</span> {
-        console.log(<span class="string">'Done.'</span>);
-    }
-}
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">files</span> <span class="o">=</span> <span class="p">[...</span> <span class="nx">list</span> <span class="nx">of</span> <span class="nx">files</span> <span class="p">...];</span>
+<span class="kd">function</span> <span class="nx">again</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">files</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">files</span><span class="p">[</span><span class="nx">x</span><span class="p">],</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">//... do something with data ...</span>
+            <span class="nx">again</span><span class="p">(</span><span class="nx">x</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>
+        <span class="p">});</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Done.&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
 
-again(<span class="number">0</span>);</code></pre>
+<span class="nx">again</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</pre></div>
+
 <p>or..</p>
 <p><strong>Parallel:</strong></p>
-<pre><code class="lang-javascript"><span class="keyword">var</span> files = [... <span class="keyword">list</span> of files ...];
-<span class="keyword">var</span> pending = <span class="number">0</span>;
-files.<span class="keyword">forEach</span>(<span class="keyword">function</span>(file, i) {
-    pending += <span class="number">1</span>;
-    fs.readFile(file, <span class="keyword">function</span>(err, data) {
-        <span class="comment">//... do something with data ....</span>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">files</span> <span class="o">=</span> <span class="p">[...</span> <span class="nx">list</span> <span class="nx">of</span> <span class="nx">files</span> <span class="p">...];</span>
+<span class="kd">var</span> <span class="nx">pending</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="nx">files</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">pending</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">file</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">//... do something with data ....</span>
 
-        pending -= <span class="number">1</span>;
-        <span class="keyword">if</span> (pending === <span class="number">0</span> &amp;&amp; i === files.length -<span class="number">1</span>) {
-            console.log(<span class="string">'Done.'</span>);
-        }
-    });
-});</code></pre>
+        <span class="nx">pending</span> <span class="o">-=</span> <span class="mi">1</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">pending</span> <span class="o">===</span> <span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nx">i</span> <span class="o">===</span> <span class="nx">files</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Done.&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+
 <p>That&#39;s ugly. For more complicated examples it requires a bit more
 thinking.</p>
 <p>Why don&#39;t I use the wonderful library
@@ -71,32 +73,36 @@ also very ugly and not CoffeeScript friendly.</p>
 <h3>Arrays</h3>
 <p>Let&#39;s rewrite the previous sequential example:</p>
 <p><strong>Sequential:</strong></p>
-<pre><code class="lang-javascript"><span class="keyword">var</span> batch = <span class="keyword">require</span>(<span class="string">'batchflow'</span>);
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">batch</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;batchflow&#39;</span><span class="p">);</span>
 
-<span class="keyword">var</span> files = [... <span class="keyword">list</span> of files ...];
-batch(files).sequential()
-.each(<span class="keyword">function</span>(i, item, done) {
-    fs.readFile(item, <span class="keyword">function</span>(err, data) {
-        <span class="comment">//do something with data</span>
-        done(someResult);
-    });
-}).end(<span class="keyword">function</span>(results) {
-    <span class="comment">//analyze results</span>
-});</code></pre>
+<span class="kd">var</span> <span class="nx">files</span> <span class="o">=</span> <span class="p">[...</span> <span class="nx">list</span> <span class="nx">of</span> <span class="nx">files</span> <span class="p">...];</span>
+<span class="nx">batch</span><span class="p">(</span><span class="nx">files</span><span class="p">).</span><span class="nx">sequential</span><span class="p">()</span>
+<span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">item</span><span class="p">,</span> <span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">item</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">//do something with data</span>
+        <span class="nx">done</span><span class="p">(</span><span class="nx">someResult</span><span class="p">);</span>
+    <span class="p">});</span>
+<span class="p">}).</span><span class="nx">end</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//analyze results</span>
+<span class="p">});</span>
+</pre></div>
+
 <p>How about the parallel example?</p>
 <p><strong>Parallel:</strong></p>
-<pre><code class="lang-javascript"><span class="keyword">var</span> batch = <span class="keyword">require</span>(<span class="string">'batchflow'</span>);
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">batch</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;batchflow&#39;</span><span class="p">);</span>
 
-<span class="keyword">var</span> files = [... <span class="keyword">list</span> of files ...];
-batch(files).parallel()
-.each(<span class="keyword">function</span>(i, item, done) {
-    fs.readFile(item, <span class="keyword">function</span>(err, data) {
-        <span class="comment">//do something with data</span>
-        done(someResult); <span class="comment">//&lt;---- yes, you must still call done in parallel, this way we can know when to trigger `end()`.</span>
-    });
-}).end(<span class="keyword">function</span>(results) {
-    <span class="comment">//analyze results</span>
-});</code></pre>
+<span class="kd">var</span> <span class="nx">files</span> <span class="o">=</span> <span class="p">[...</span> <span class="nx">list</span> <span class="nx">of</span> <span class="nx">files</span> <span class="p">...];</span>
+<span class="nx">batch</span><span class="p">(</span><span class="nx">files</span><span class="p">).</span><span class="nx">parallel</span><span class="p">()</span>
+<span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">item</span><span class="p">,</span> <span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">item</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">//do something with data</span>
+        <span class="nx">done</span><span class="p">(</span><span class="nx">someResult</span><span class="p">);</span> <span class="c1">//&lt;---- yes, you must still call done in parallel, this way we can know when to trigger `end()`.</span>
+    <span class="p">});</span>
+<span class="p">}).</span><span class="nx">end</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//analyze results</span>
+<span class="p">});</span>
+</pre></div>
+
 <pre><code>
 What&#39;s that, your data is not stored in an array? Oh, you say it&#39;s
 stored in an object? That&#39;s OK too...
@@ -120,66 +126,74 @@ batch(files).sequential()
     //analyze results
 });</code></pre>
 <p>How about the parallel example? <strong>Parallel:</strong></p>
-<pre><code class="lang-javascript"><span class="keyword">var</span> batch = <span class="keyword">require</span>(<span class="string">'batchflow'</span>);
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">batch</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;batchflow&#39;</span><span class="p">);</span>
 
-<span class="keyword">var</span> files = {<span class="string">'file1'</span>: <span class="string">'path'</span>.... <span class="string">'filen'</span>: <span class="string">'pathn'</span>}
-batch(files).parallel()
-.each(<span class="keyword">function</span>(key, val, done) {
-    fs.readFile(val, <span class="keyword">function</span>(err, data) {
-        <span class="comment">//do something with data</span>
-        done(someResult);
-    });
-}).end(<span class="keyword">function</span>(results) {
-    <span class="comment">//analyze results</span>
-});</code></pre>
+<span class="kd">var</span> <span class="nx">files</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;file1&#39;</span><span class="o">:</span> <span class="s1">&#39;path&#39;</span><span class="p">....</span> <span class="s1">&#39;filen&#39;</span><span class="o">:</span> <span class="s1">&#39;pathn&#39;</span><span class="p">}</span>
+<span class="nx">batch</span><span class="p">(</span><span class="nx">files</span><span class="p">).</span><span class="nx">parallel</span><span class="p">()</span>
+<span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">key</span><span class="p">,</span> <span class="nx">val</span><span class="p">,</span> <span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">val</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="c1">//do something with data</span>
+        <span class="nx">done</span><span class="p">(</span><span class="nx">someResult</span><span class="p">);</span>
+    <span class="p">});</span>
+<span class="p">}).</span><span class="nx">end</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//analyze results</span>
+<span class="p">});</span>
+</pre></div>
+
 <h2>Misc</h2>
 <p>​1. Is `sequential()` or `parallel()` too long? Fine. `series()`
 and `seq()` are aliases for `sequential()` and `par()` is an alias
 for `parallel()`. 2. You don&#39;t like the fluent API? That&#39;s OK too:</p>
 <p>Non-fluent API BatchFlow</p>
-<pre><code class="lang-javascript"><span class="keyword">var</span> batch = <span class="keyword">require</span>(<span class="string">'batchflow'</span>);
-<span class="keyword">var</span> bf = batch(files);
-bf.isSequential = <span class="keyword">true</span>;
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">batch</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;batchflow&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">bf</span> <span class="o">=</span> <span class="nx">batch</span><span class="p">(</span><span class="nx">files</span><span class="p">);</span>
+<span class="nx">bf</span><span class="p">.</span><span class="nx">isSequential</span> <span class="o">=</span> <span class="kc">true</span><span class="p">;</span>
 
-bf.each(<span class="keyword">function</span>(i, file, done) {
-    done(someResult);
-});
+<span class="nx">bf</span><span class="p">.</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">file</span><span class="p">,</span> <span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">done</span><span class="p">(</span><span class="nx">someResult</span><span class="p">);</span>
+<span class="p">});</span>
 
-bf.end(<span class="keyword">function</span>(results) {
-    <span class="comment">//blah blah</span>
-});</code></pre>
+<span class="nx">bf</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">//blah blah</span>
+<span class="p">});</span>
+</pre></div>
+
 <h2>CoffeeScript</h2>
-<pre><code class="lang-ruby">batch = <span class="keyword">require</span>(<span class="string">'batchflow'</span>)
-files = [... <span class="keyword">list</span> of files ...]
-bf = batch(files).seq().each (i, file, done) ->
-  fs.readFile file, done
-bf.error (err) ->
-  console.log(err);
-bf.end (results) ->
-  console.log fr.toString() <span class="keyword">for</span> fr in results</code></pre>
+<div class="highlight"><pre><span class="n">batch</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;batchflow&#39;</span><span class="p">)</span>
+<span class="n">files</span> <span class="o">=</span> <span class="o">[.</span><span class="n">.</span><span class="o">.</span> <span class="n">list</span> <span class="n">of</span> <span class="n">files</span> <span class="o">.</span><span class="n">.</span><span class="o">.]</span>
+<span class="n">bf</span> <span class="o">=</span> <span class="n">batch</span><span class="p">(</span><span class="n">files</span><span class="p">)</span><span class="o">.</span><span class="n">seq</span><span class="p">()</span><span class="o">.</span><span class="n">each</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">done</span><span class="p">)</span> <span class="o">-&gt;</span>
+  <span class="n">fs</span><span class="o">.</span><span class="n">readFile</span> <span class="n">file</span><span class="p">,</span> <span class="n">done</span>
+<span class="n">bf</span><span class="o">.</span><span class="n">error</span> <span class="p">(</span><span class="n">err</span><span class="p">)</span> <span class="o">-&gt;</span>
+  <span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">err</span><span class="p">);</span>
+<span class="n">bf</span><span class="o">.</span><span class="n">end</span> <span class="p">(</span><span class="n">results</span><span class="p">)</span> <span class="o">-&gt;</span>
+  <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">fr</span><span class="o">.</span><span class="n">toString</span><span class="p">()</span> <span class="k">for</span> <span class="n">fr</span> <span class="k">in</span> <span class="n">results</span>
+</pre></div>
+
 <h2>Error Handling</h2>
 <p>What&#39;s that, you want error handling? Well, you might as well call me
 Burger King... have it your way.</p>
-<pre><code class="lang-javascript"><span class="keyword">var</span> a = {<span class="string">'f'</span>: <span class="string">'/tmp/file_DOES_NOT_exist_hopefully'</span> + Math.random()};
-batch(a).parallel().each(<span class="keyword">function</span>(i, item, done) {
-    fs.readFile(item, done);
-}).error(<span class="keyword">function</span>(err) {
-    assert(err);
-    done();
-}).end(<span class="keyword">function</span>() {
-    assert(<span class="keyword">false</span>); <span class="comment">//&lt;--- shouldn't get here</span>
-});
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;f&#39;</span><span class="o">:</span> <span class="s1">&#39;/tmp/file_DOES_NOT_exist_hopefully&#39;</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()};</span>
+<span class="nx">batch</span><span class="p">(</span><span class="nx">a</span><span class="p">).</span><span class="nx">parallel</span><span class="p">().</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">item</span><span class="p">,</span> <span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">item</span><span class="p">,</span> <span class="nx">done</span><span class="p">);</span>
+<span class="p">}).</span><span class="nx">error</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">assert</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="nx">done</span><span class="p">();</span>
+<span class="p">}).</span><span class="nx">end</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">assert</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span> <span class="c1">//&lt;--- shouldn&#39;t get here</span>
+<span class="p">});</span>
 
 
-<span class="keyword">var</span> a = [<span class="string">'/tmp/file_DOES_NOT_exist_hopefully'</span> + Math.random()];
-batch(a).series().each(<span class="keyword">function</span>(i, item, done) {
-    <span class="keyword">throw</span> <span class="keyword">new</span> Error(<span class="string">'err'</span>);
-}).error(<span class="keyword">function</span>(err) {
-    assert(err);
-    done();
-}).end(<span class="keyword">function</span>() {
-    assert(<span class="keyword">false</span>); <span class="comment">//&lt;--- shouldn't get here</span>
-});</code></pre>
+<span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;/tmp/file_DOES_NOT_exist_hopefully&#39;</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()];</span>
+<span class="nx">batch</span><span class="p">(</span><span class="nx">a</span><span class="p">).</span><span class="nx">series</span><span class="p">().</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">item</span><span class="p">,</span> <span class="nx">done</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">throw</span> <span class="k">new</span> <span class="nb">Error</span><span class="p">(</span><span class="s1">&#39;err&#39;</span><span class="p">);</span>
+<span class="p">}).</span><span class="nx">error</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">assert</span><span class="p">(</span><span class="nx">err</span><span class="p">);</span>
+    <span class="nx">done</span><span class="p">();</span>
+<span class="p">}).</span><span class="nx">end</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">assert</span><span class="p">(</span><span class="kc">false</span><span class="p">);</span> <span class="c1">//&lt;--- shouldn&#39;t get here</span>
+<span class="p">});</span>
+</pre></div>
+
 <p>You can grab the source on
 <a href="https://github.com/jprichardson/node-batchflow">Github</a>.</p>
 <p>If you use Git with others, you should checkout
@@ -187,8 +201,7 @@ batch(a).series().each(<span class="keyword">function</span>(i, item, done) {
 using a different GUI. We would love your feedback.</p>
 <p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
 <p>-JP</p>
-]]></description><link>http://procbits.com/2012/08/14/batchflow-easily-batch-process-collections-sequentially-or-in-parallel-in-javascriptnode-js</link><guid isPermaLink="true">http://procbits.com/2012/08/14/batchflow-easily-batch-process-collections-sequentially-or-in-parallel-in-javascriptnode-js</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Tue, 14 Aug 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[Like Unix Expect: Automate Command Line Programs in Node.js with Suppose]]></title><description><![CDATA[<h1>Like Unix Expect: Automate Command Line Programs in Node.js with Suppose</h1>
-<p>Have you ever heard of the command line program
+]]></description><link>http://procbits.com/2012/08/14/batchflow-easily-batch-process-collections-sequentially-or-in-parallel-in-javascriptnode-js</link><guid isPermaLink="true">http://procbits.com/2012/08/14/batchflow-easily-batch-process-collections-sequentially-or-in-parallel-in-javascriptnode-js</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Tue, 14 Aug 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[Like Unix Expect]]></title><description><![CDATA[<p>Have you ever heard of the command line program
 <a href="http://en.wikipedia.org/wiki/Expect">expect</a>? Basically, expect allows
 you to automate command line programs.
 <a href="https://github.com/jprichardson/node-suppose">suppose</a> is a
@@ -198,35 +211,37 @@ maybe you want to test the external interface of on of your Node.js
 command line scripts.</p>
 <p>Install: <code>npm install suppose</code></p>
 <p>Example:</p>
-<pre><code class="lang-javascript">process.chdir(<span class="string">'/tmp/awesome'</span>);
-suppose(<span class="string">'npm'</span>, [<span class="string">'init'</span>])
-  .on(<span class="string">'name: (awesome) '</span>).respond(<span class="string">'awesome_package\n'</span>)
-  .on(<span class="string">'version: (0.0.0) '</span>).respond(<span class="string">'0.0.1\n'</span>)
-  .on(<span class="string">'description: '</span>).respond(<span class="string">"It's an awesome package man!\n"</span>)
-  .on(<span class="string">'entry point: (index.js) '</span>).respond(<span class="string">"\n"</span>)
-  .on(<span class="string">'test command: '</span>).respond(<span class="string">'npm test\n'</span>)
-  .on(<span class="string">'git repository: '</span>).respond(<span class="string">"\n"</span>)
-  .on(<span class="string">'keywords: '</span>).respond(<span class="string">'awesome, cool\n'</span>)
-  .on(<span class="string">'author: '</span>).respond(<span class="string">'JP Richardson\n'</span>)
-  .on(<span class="string">'license: (BSD) '</span>).respond(<span class="string">'MIT\n'</span>)
-  .on(<span class="string">'ok? (yes) '</span> ).respond(<span class="string">'yes\n'</span>)
-.end(<span class="keyword">function</span>(code){
-    assert(code === <span class="number">0</span>);
-    <span class="keyword">var</span> packageFile = <span class="string">'/tmp/awesome/package.json'</span>;
-    fs.readFile(packageFile, <span class="keyword">function</span>(err, data){
-        <span class="keyword">var</span> packageObj = JSON.parse(data.toString());
-        assert(packageObj.name === <span class="string">'awesome_package'</span>);
-        assert(packageObj.version === <span class="string">'0.0.1'</span>);
-        assert(packageObj.description === <span class="string">"It's an awesome package man!"</span>);
-        assert(packageObj.main === <span class="string">'index.js'</span>);
-        assert(packageObj.scripts.test === <span class="string">'npm test'</span>);
-        assert(packageObj.keywords[<span class="number">0</span>] === <span class="string">'awesome'</span>);
-        assert(packageObj.keywords[<span class="number">1</span>] === <span class="string">'cool'</span>);
-        assert(packageObj.author === <span class="string">'JP Richardson'</span>);
-        assert(packageObj.license === <span class="string">'MIT'</span>);
-        done();
-    });
-});</code></pre>
+<div class="highlight"><pre><span class="nx">process</span><span class="p">.</span><span class="nx">chdir</span><span class="p">(</span><span class="s1">&#39;/tmp/awesome&#39;</span><span class="p">);</span>
+<span class="nx">suppose</span><span class="p">(</span><span class="s1">&#39;npm&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;init&#39;</span><span class="p">])</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;name: (awesome) &#39;</span><span class="p">).</span><span class="nx">respond</span><span class="p">(</span><span class="s1">&#39;awesome_package\n&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;version: (0.0.0) &#39;</span><span class="p">).</span><span class="nx">respond</span><span class="p">(</span><span class="s1">&#39;0.0.1\n&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;description: &#39;</span><span class="p">).</span><span class="nx">respond</span><span class="p">(</span><span class="s2">&quot;It&#39;s an awesome package man!\n&quot;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;entry point: (index.js) &#39;</span><span class="p">).</span><span class="nx">respond</span><span class="p">(</span><span class="s2">&quot;\n&quot;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;test command: &#39;</span><span class="p">).</span><span class="nx">respond</span><span class="p">(</span><span class="s1">&#39;npm test\n&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;git repository: &#39;</span><span class="p">).</span><span class="nx">respond</span><span class="p">(</span><span class="s2">&quot;\n&quot;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;keywords: &#39;</span><span class="p">).</span><span class="nx">respond</span><span class="p">(</span><span class="s1">&#39;awesome, cool\n&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;author: &#39;</span><span class="p">).</span><span class="nx">respond</span><span class="p">(</span><span class="s1">&#39;JP Richardson\n&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;license: (BSD) &#39;</span><span class="p">).</span><span class="nx">respond</span><span class="p">(</span><span class="s1">&#39;MIT\n&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;ok? (yes) &#39;</span> <span class="p">).</span><span class="nx">respond</span><span class="p">(</span><span class="s1">&#39;yes\n&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">code</span><span class="p">){</span>
+    <span class="nx">assert</span><span class="p">(</span><span class="nx">code</span> <span class="o">===</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">packageFile</span> <span class="o">=</span> <span class="s1">&#39;/tmp/awesome/package.json&#39;</span><span class="p">;</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">packageFile</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">packageObj</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+        <span class="nx">assert</span><span class="p">(</span><span class="nx">packageObj</span><span class="p">.</span><span class="nx">name</span> <span class="o">===</span> <span class="s1">&#39;awesome_package&#39;</span><span class="p">);</span>
+        <span class="nx">assert</span><span class="p">(</span><span class="nx">packageObj</span><span class="p">.</span><span class="nx">version</span> <span class="o">===</span> <span class="s1">&#39;0.0.1&#39;</span><span class="p">);</span>
+        <span class="nx">assert</span><span class="p">(</span><span class="nx">packageObj</span><span class="p">.</span><span class="nx">description</span> <span class="o">===</span> <span class="s2">&quot;It&#39;s an awesome package man!&quot;</span><span class="p">);</span>
+        <span class="nx">assert</span><span class="p">(</span><span class="nx">packageObj</span><span class="p">.</span><span class="nx">main</span> <span class="o">===</span> <span class="s1">&#39;index.js&#39;</span><span class="p">);</span>
+        <span class="nx">assert</span><span class="p">(</span><span class="nx">packageObj</span><span class="p">.</span><span class="nx">scripts</span><span class="p">.</span><span class="nx">test</span> <span class="o">===</span> <span class="s1">&#39;npm test&#39;</span><span class="p">);</span>
+        <span class="nx">assert</span><span class="p">(</span><span class="nx">packageObj</span><span class="p">.</span><span class="nx">keywords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;awesome&#39;</span><span class="p">);</span>
+        <span class="nx">assert</span><span class="p">(</span><span class="nx">packageObj</span><span class="p">.</span><span class="nx">keywords</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;cool&#39;</span><span class="p">);</span>
+        <span class="nx">assert</span><span class="p">(</span><span class="nx">packageObj</span><span class="p">.</span><span class="nx">author</span> <span class="o">===</span> <span class="s1">&#39;JP Richardson&#39;</span><span class="p">);</span>
+        <span class="nx">assert</span><span class="p">(</span><span class="nx">packageObj</span><span class="p">.</span><span class="nx">license</span> <span class="o">===</span> <span class="s1">&#39;MIT&#39;</span><span class="p">);</span>
+        <span class="nx">done</span><span class="p">();</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+
 <p>Pretty easy, huh? You can grab the source on
 <a href="https://github.com/jprichardson/node-suppose">Github</a>.</p>
 <p>If you use Git with others, you should checkout
@@ -234,42 +249,47 @@ suppose(<span class="string">'npm'</span>, [<span class="string">'init'</span>])
 using a different GUI. We would love your feedback.</p>
 <p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
 <p>-JP</p>
-]]></description><link>http://procbits.com/2012/08/03/like-unix-expect-automate-command-line-programs-in-node-js-with-suppose</link><guid isPermaLink="true">http://procbits.com/2012/08/03/like-unix-expect-automate-command-line-programs-in-node-js-with-suppose</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Fri, 03 Aug 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[NextFlow: Sane CoffeeScript Flow Control]]></title><description><![CDATA[<h1>NextFlow: Sane CoffeeScript Flow Control</h1>
-<p>Take a look at the most prominent JavaScript control flow libraries:
+]]></description><link>http://procbits.com/2012/08/03/like-unix-expect-automate-command-line-programs-in-node-js-with-suppose</link><guid isPermaLink="true">http://procbits.com/2012/08/03/like-unix-expect-automate-command-line-programs-in-node-js-with-suppose</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Fri, 03 Aug 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[NextFlow]]></title><description><![CDATA[<p>Take a look at the most prominent JavaScript control flow libraries:
 <a href="https://github.com/caolan/async">Async.js</a>,
 <a href="https://github.com/creationix/step">Step</a>,
 <a href="https://github.com/substack/node-seq">Seq</a>. If you were to use these
 libraries in CoffeeScript, your code would be an ugly mess.</p>
 <p><strong>Async.js / CoffeeScript</strong></p>
-<pre><code class="lang-ruby">async = <span class="keyword">require</span>(<span class="string">'async'</span>)
+<div class="highlight"><pre><span class="n">async</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;async&#39;</span><span class="p">)</span>
 
-async.series(
-  (->
-    <span class="comment">#first function</span>
-  ),
-  (->
-    <span class="comment">#second function</span>
-  )
-)</code></pre>
+<span class="n">async</span><span class="o">.</span><span class="n">series</span><span class="p">(</span>
+  <span class="p">(</span><span class="o">-&gt;</span>
+    <span class="c1">#first function</span>
+  <span class="p">),</span>
+  <span class="p">(</span><span class="o">-&gt;</span>
+    <span class="c1">#second function</span>
+  <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+
 <p><strong>Step / CoffeeScript</strong></p>
-<pre><code class="lang-ruby">Step = <span class="keyword">require</span>(<span class="string">'step'</span>)
+<div class="highlight"><pre><span class="no">Step</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;step&#39;</span><span class="p">)</span>
 
-Step(
-  (->
-    <span class="comment">#first function</span>
-  ),
-  (->
-    <span class="comment">#second function</span>
-  )
-)</code></pre>
+<span class="no">Step</span><span class="p">(</span>
+  <span class="p">(</span><span class="o">-&gt;</span>
+    <span class="c1">#first function</span>
+  <span class="p">),</span>
+  <span class="p">(</span><span class="o">-&gt;</span>
+    <span class="c1">#second function</span>
+  <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+
 <p><strong>Seq / CoffeeScript</strong></p>
-<pre><code class="lang-ruby">Seq = <span class="keyword">require</span>(<span class="string">'seq'</span>)
+<div class="highlight"><pre><span class="no">Seq</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;seq&#39;</span><span class="p">)</span>
 
-Seq().seq(->
-  <span class="comment">#first function</span>
-).seq(->
-  <span class="comment">#second function</span>
-)</code></pre>
+<span class="no">Seq</span><span class="p">()</span><span class="o">.</span><span class="n">seq</span><span class="p">(</span><span class="o">-&gt;</span>
+  <span class="c1">#first function</span>
+<span class="p">)</span><span class="o">.</span><span class="n">seq</span><span class="p">(</span><span class="o">-&gt;</span>
+  <span class="c1">#second function</span>
+<span class="p">)</span>
+</pre></div>
+
 <p>Yuck. If you&#39;re programming in JavaScript, all of them are very usable
 solutions. Also, to be fair, they do a lot more than NextFlow. But
 NextFlow looks much nicer with CoffeeScript programs.</p>
@@ -277,108 +297,117 @@ NextFlow looks much nicer with CoffeeScript programs.</p>
 <p><code>npm install --production nextflow</code></p>
 <p>Can be used in the browser too.</p>
 <p>Execute sequentially, calling the `next()` function:</p>
-<pre><code class="lang-ruby">next = <span class="keyword">require</span>(<span class="string">'nextflow'</span>)
+<div class="highlight"><pre><span class="k">next</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;nextflow&#39;</span><span class="p">)</span>
 
-vals = []
-x = <span class="number">0</span>
+<span class="n">vals</span> <span class="o">=</span> <span class="o">[]</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
 
-flow =
-  <span class="number">1</span>: ->
-    vals.push(<span class="number">1</span>)
-    @next()
-  <span class="number">2</span>: ->
-    vals.push(<span class="number">2</span>)
-    x = Math.random()
-    @next(x)
-  <span class="number">3</span>: (num) ->
-    vals.push(num)
-    @next()
-  <span class="number">4</span>: ->
-    vals.push(<span class="number">4</span>)
-    @next()
-  <span class="number">5</span>: ->
-    console.log vals[<span class="number">0</span>] <span class="comment">#is 1</span>
-    console.log vals[<span class="number">1</span>] <span class="comment">#is 2</span>
-    console.log vals[<span class="number">2</span>] <span class="comment">#is x</span>
-    console.log vals[<span class="number">3</span>] <span class="comment">#is 4</span>
+<span class="n">flow</span> <span class="o">=</span>
+  <span class="mi">1</span><span class="p">:</span> <span class="o">-&gt;</span>
+    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="vi">@next</span><span class="p">()</span>
+  <span class="mi">2</span><span class="p">:</span> <span class="o">-&gt;</span>
+    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="no">Math</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+    <span class="vi">@next</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+  <span class="mi">3</span><span class="p">:</span> <span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+    <span class="vi">@next</span><span class="p">()</span>
+  <span class="mi">4</span><span class="p">:</span> <span class="o">-&gt;</span>
+    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+    <span class="vi">@next</span><span class="p">()</span>
+  <span class="mi">5</span><span class="p">:</span> <span class="o">-&gt;</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="c1">#is 1</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="c1">#is 2</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="c1">#is x</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">3</span><span class="o">]</span> <span class="c1">#is 4</span>
 
-next(flow)</code></pre>
+<span class="k">next</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span>
+</pre></div>
+
 <p>Call functions by the label:</p>
-<pre><code class="lang-ruby">vals = []
-x = <span class="number">0</span>
+<div class="highlight"><pre><span class="n">vals</span> <span class="o">=</span> <span class="o">[]</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
 
-flow =
-  a1: ->
-    vals.push(<span class="number">1</span>)
-    @a2()
-  a2: ->
-    vals.push(<span class="number">2</span>)
-    x = Math.random()
-    @a3(x)
-  a3: (num) ->
-    vals.push(num)
-    @a4()
-  a4: ->
-    vals.push(<span class="number">4</span>)
-    @a5()
-  a5: ->
-    console.log vals[<span class="number">0</span>] <span class="comment">#is 1</span>
-    console.log vals[<span class="number">1</span>] <span class="comment">#is 2</span>
-    console.log vals[<span class="number">2</span>] <span class="comment">#is x</span>
-    console.log vals[<span class="number">3</span>] <span class="comment">#is 4</span>
+<span class="n">flow</span> <span class="o">=</span>
+  <span class="n">a1</span><span class="p">:</span> <span class="o">-&gt;</span>
+    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="vi">@a2</span><span class="p">()</span>
+  <span class="n">a2</span><span class="p">:</span> <span class="o">-&gt;</span>
+    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="no">Math</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+    <span class="vi">@a3</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+  <span class="n">a3</span><span class="p">:</span> <span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+    <span class="vi">@a4</span><span class="p">()</span>
+  <span class="n">a4</span><span class="p">:</span> <span class="o">-&gt;</span>
+    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+    <span class="vi">@a5</span><span class="p">()</span>
+  <span class="n">a5</span><span class="p">:</span> <span class="o">-&gt;</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="c1">#is 1</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="c1">#is 2</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="c1">#is x</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">3</span><span class="o">]</span> <span class="c1">#is 4</span>
 
-next(flow)</code></pre>
+<span class="k">next</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span>
+</pre></div>
+
 <p>Call either `next()` or call the label:</p>
-<pre><code class="lang-ruby">vals = []
-x = <span class="number">0</span>
-y = <span class="number">0</span>
+<div class="highlight"><pre><span class="n">vals</span> <span class="o">=</span> <span class="o">[]</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
 
-flow =
-  a1: ->
-    vals.push(<span class="number">1</span>)
-    @a2()
-  a2: ->
-    vals.push(<span class="number">2</span>)
-    x = Math.random()
-    @a3(x)
-  a3: (num) ->
-    vals.push(num)
-    y = Math.random()
-    @next(y)
-  a4: (num) ->
-    vals.push(num)
-    @a5()
-  a5: ->
-    console.log vals[<span class="number">0</span>] <span class="comment">#is 1</span>
-    console.log vals[<span class="number">1</span>] <span class="comment">#is 2</span>
-    console.log vals[<span class="number">2</span>] <span class="comment">#is x</span>
-    console.log vals[<span class="number">3</span>] <span class="comment">#is y</span>
+<span class="n">flow</span> <span class="o">=</span>
+  <span class="n">a1</span><span class="p">:</span> <span class="o">-&gt;</span>
+    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="vi">@a2</span><span class="p">()</span>
+  <span class="n">a2</span><span class="p">:</span> <span class="o">-&gt;</span>
+    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="no">Math</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+    <span class="vi">@a3</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+  <span class="n">a3</span><span class="p">:</span> <span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="no">Math</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+    <span class="vi">@next</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+  <span class="n">a4</span><span class="p">:</span> <span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+    <span class="vi">@a5</span><span class="p">()</span>
+  <span class="n">a5</span><span class="p">:</span> <span class="o">-&gt;</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="c1">#is 1</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="c1">#is 2</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="c1">#is x</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">3</span><span class="o">]</span> <span class="c1">#is y</span>
 
-next(flow)</code></pre>
+<span class="k">next</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span>
+</pre></div>
+
 <p><a href="https://github.com/jprichardson/node-nextflow">NextFlow on Github</a></p>
 <p>Checkout <a href="http://gitpilot.com">Gitpilot</a>, to become more productive with
 Git.</p>
 <p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
 <p>-JP</p>
-]]></description><link>http://procbits.com/2012/06/28/nextflow-sane-coffeescript-flow-control</link><guid isPermaLink="true">http://procbits.com/2012/06/28/nextflow-sane-coffeescript-flow-control</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 28 Jun 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[Thinking Asynchronously in CoffeeScript/JavaScript: Loops and Callbacks]]></title><description><![CDATA[<h1>Thinking Asynchronously in CoffeeScript/JavaScript: Loops and Callbacks</h1>
-<p>Awhile back, I wrote about my new experience in learning Node.js: <a href="http://procbits.com/2011/10/29/a-node-js-experiment-thinking-asynchronously-recursion-calculate-file-size-directory/">A
+]]></description><link>http://procbits.com/2012/06/28/nextflow-sane-coffeescript-flow-control</link><guid isPermaLink="true">http://procbits.com/2012/06/28/nextflow-sane-coffeescript-flow-control</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 28 Jun 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[Thinking Asynchronously in CoffeeScript/JavaScript]]></title><description><![CDATA[<p>Awhile back, I wrote about my new experience in learning Node.js: <a href="http://procbits.com/2011/10/29/a-node-js-experiment-thinking-asynchronously-recursion-calculate-file-size-directory/">A
 Node.js Experiment: Thinking Asynchronously, Using Recursion to
 Calculate the Total File Size in a
 Directory</a>.</p>
 <p>Consider this snippet of code:</p>
-<pre><code class="lang-javascript"><span class="keyword">var</span> names = [<span class="string">'JP'</span>, <span class="string">'Chris'</span>, <span class="string">'Leslie'</span>];
-<span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; names.length; ++i){
-  <span class="keyword">var</span> name = names[i];
-  setTimeout(<span class="keyword">function</span>(){
-    alert(name);              
-  },<span class="number">10</span>);
-}​</code></pre>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;JP&#39;</span><span class="p">,</span> <span class="s1">&#39;Chris&#39;</span><span class="p">,</span> <span class="s1">&#39;Leslie&#39;</span><span class="p">];</span>
+<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">names</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">names</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+  <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">alert</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>              
+  <span class="p">},</span><span class="mi">10</span><span class="p">);</span>
+<span class="p">}</span><span class="err">​</span>
+</pre></div>
+
 <p>Equivalent CoffeeScript:</p>
-<pre><code class="lang-ruby">names = [<span class="string">'JP'</span>, <span class="string">'Chris'</span>, <span class="string">'Leslie'</span>]
-<span class="keyword">for</span> name in names
-  setTimeout(->
-    alert(name)
-  ,<span class="number">10</span>)</code></pre>
+<div class="highlight"><pre><span class="n">names</span> <span class="o">=</span> <span class="o">[</span><span class="s1">&#39;JP&#39;</span><span class="p">,</span> <span class="s1">&#39;Chris&#39;</span><span class="p">,</span> <span class="s1">&#39;Leslie&#39;</span><span class="o">]</span>
+<span class="k">for</span> <span class="nb">name</span> <span class="k">in</span> <span class="n">names</span>
+  <span class="n">setTimeout</span><span class="p">(</span><span class="o">-&gt;</span>
+    <span class="n">alert</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+  <span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
 <p>Click
 <a href="http://coffeescript.org/#try:names%20%3D%20%5B&#39;JP&#39;%2C%20&#39;Chris&#39;%2C%20&#39;Leslie&#39;%5D%0Afor%20name%20in%20names%0A%20%20setTimeout(-%3E%0A%20%20%20%20alert(name">here</a>%0A%20%20%2C10))
 to run it. If you guessed that the loop would alert &quot;Leslie&quot; three
@@ -388,22 +417,26 @@ completed. Thus callback always has the last value.</p>
 <p>How do you solve this problem? You wrap the callback in a closure that
 executes immediately.</p>
 <p>JavaScript:</p>
-<pre><code class="lang-javascript"><span class="keyword">var</span> names = [<span class="string">'JP'</span>, <span class="string">'Chris'</span>, <span class="string">'Leslie'</span>];
-<span class="keyword">for</span> (<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; names.length; ++i){
-  <span class="keyword">var</span> name = names[i];
-  (<span class="keyword">function</span>(name){
-    setTimeout(<span class="keyword">function</span>(){
-      alert(name);              
-    },<span class="number">10</span>);
-  })(name);
-}​</code></pre>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;JP&#39;</span><span class="p">,</span> <span class="s1">&#39;Chris&#39;</span><span class="p">,</span> <span class="s1">&#39;Leslie&#39;</span><span class="p">];</span>
+<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">names</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">){</span>
+  <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">names</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
+  <span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">){</span>
+    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+      <span class="nx">alert</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>              
+    <span class="p">},</span><span class="mi">10</span><span class="p">);</span>
+  <span class="p">})(</span><span class="nx">name</span><span class="p">);</span>
+<span class="p">}</span><span class="err">​</span>
+</pre></div>
+
 <p>CoffeeScript:</p>
-<pre><code class="lang-ruby">names = [<span class="string">'JP'</span>, <span class="string">'Chris'</span>, <span class="string">'Leslie'</span>]
-<span class="keyword">for</span> name in names
-  <span class="keyword">do</span> (name) ->
-    setTimeout(->
-      alert(name)
-    ,<span class="number">10</span>)</code></pre>
+<div class="highlight"><pre><span class="n">names</span> <span class="o">=</span> <span class="o">[</span><span class="s1">&#39;JP&#39;</span><span class="p">,</span> <span class="s1">&#39;Chris&#39;</span><span class="p">,</span> <span class="s1">&#39;Leslie&#39;</span><span class="o">]</span>
+<span class="k">for</span> <span class="nb">name</span> <span class="k">in</span> <span class="n">names</span>
+  <span class="k">do</span> <span class="p">(</span><span class="nb">name</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="n">setTimeout</span><span class="p">(</span><span class="o">-&gt;</span>
+      <span class="n">alert</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
+    <span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+
 <p>Click
 <a href="http://coffeescript.org/#try:names%20%3D%20%5B&#39;JP&#39;%2C%20&#39;Chris&#39;%2C%20&#39;Leslie&#39;%5D%0Afor%20name%20in%20names%0A%20%20do%20(name">here</a>%20-%3E%0A%20%20%20%20setTimeout(-%3E%0A%20%20%20%20%20%20alert(name)%0A%20%20%20%20%2C10))
 to run it.</p>
@@ -415,24 +448,28 @@ if you were opening files, all of them would be opened approximately
 manner?</p>
 <p>Using the previous simple example, it&#39;d look like this:</p>
 <p>JavaScript:</p>
-<pre><code class="lang-javascript"><span class="keyword">var</span> names = [<span class="string">'JP'</span>, <span class="string">'Chris'</span>, <span class="string">'Leslie'</span>];
-loop = <span class="keyword">function</span>(i){
-    setTimeout(<span class="keyword">function</span>(){
-      alert(names[i]);
-      <span class="keyword">if</span> (i &lt; names.length - <span class="number">1</span>)
-        loop(i + <span class="number">1</span>);       
-    },<span class="number">10</span>);
-}
-loop(<span class="number">0</span>);</code></pre>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;JP&#39;</span><span class="p">,</span> <span class="s1">&#39;Chris&#39;</span><span class="p">,</span> <span class="s1">&#39;Leslie&#39;</span><span class="p">];</span>
+<span class="nx">loop</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">){</span>
+    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+      <span class="nx">alert</span><span class="p">(</span><span class="nx">names</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">names</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="nx">loop</span><span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>       
+    <span class="p">},</span><span class="mi">10</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">loop</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</pre></div>
+
 <p>CoffeeScript:</p>
-<pre><code class="lang-ruby">names = [<span class="string">'JP'</span>, <span class="string">'Chris'</span>, <span class="string">'Leslie'</span>];
-doloop = (i) ->
-  setTimeout(->
-    alert(names[i])
-    <span class="keyword">if</span> i &lt; names.length - <span class="number">1</span>
-      doloop(i + <span class="number">1</span>)       
-  ,<span class="number">10</span>);
-doloop(<span class="number">0</span>)</code></pre>
+<div class="highlight"><pre><span class="n">names</span> <span class="o">=</span> <span class="o">[</span><span class="s1">&#39;JP&#39;</span><span class="p">,</span> <span class="s1">&#39;Chris&#39;</span><span class="p">,</span> <span class="s1">&#39;Leslie&#39;</span><span class="o">]</span><span class="p">;</span>
+<span class="n">doloop</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">-&gt;</span>
+  <span class="n">setTimeout</span><span class="p">(</span><span class="o">-&gt;</span>
+    <span class="n">alert</span><span class="p">(</span><span class="n">names</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">names</span><span class="o">.</span><span class="n">length</span> <span class="o">-</span> <span class="mi">1</span>
+      <span class="n">doloop</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>       
+  <span class="p">,</span><span class="mi">10</span><span class="p">);</span>
+<span class="n">doloop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+
 <p><a href="http://coffeescript.org/#try:names%20%3D%20%5B&#39;JP&#39;%2C%20&#39;Chris&#39;%2C%20&#39;Leslie&#39;%5D%3B%0Adoloop%20%3D%20(i">Run
 it.</a>%20-%3E%0A%20%20setTimeout(-%3E%0A%20%20%20%20alert(names%5Bi%5D)%0A%20%20%20%20if%20i%20%3C%20names.length%20-%201%0A%20%20%20%20%20%20doloop(i%20%2B%201)%20%20%20%20%20%20%20%0A%20%20%2C10)%3B%0Adoloop(0))</p>
 <p>If you were doing file processing in the loop, it would be executed
@@ -442,20 +479,21 @@ algorithms in JavaScript.</p>
 <p><strong>Update:</strong> I forgot about the forEach function that exists in Node.js
 and most modern browsers. This function pretty much solves the problem.</p>
 <p>Here&#39;s the JavaScript code:</p>
-<pre><code class="lang-javascript"><span class="keyword">var</span> names = [<span class="string">'JP'</span>, <span class="string">'Chris'</span>, <span class="string">'Leslie'</span>];
-names.<span class="keyword">forEach</span>(<span class="keyword">function</span>(name){
-  setTimeout(<span class="keyword">function</span>(){
-    alert(name);              
-  },<span class="number">10</span>);
-}​);</code></pre>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;JP&#39;</span><span class="p">,</span> <span class="s1">&#39;Chris&#39;</span><span class="p">,</span> <span class="s1">&#39;Leslie&#39;</span><span class="p">];</span>
+<span class="nx">names</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">){</span>
+  <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+    <span class="nx">alert</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>              
+  <span class="p">},</span><span class="mi">10</span><span class="p">);</span>
+<span class="p">}</span><span class="err">​</span><span class="p">);</span>
+</pre></div>
+
 <p>Much cleaner. Thanks to <a href="http://www.reddit.com/r/programming/comments/u34ed/thinking_asynchronously_in_coffeescriptjavascript/c4ryifw">smog_alado
 [Reddit]</a>
 for the reminder.</p>
 <p>Checkout <a href="http://gitpilot.com">Gitpilot</a>, a different kind of Git GUI.</p>
 <p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
 <p>-JP</p>
-]]></description><link>http://procbits.com/2012/05/24/thinking-asynchronously-in-coffeescriptjavascript-loops-and-callbacks</link><guid isPermaLink="true">http://procbits.com/2012/05/24/thinking-asynchronously-in-coffeescriptjavascript-loops-and-callbacks</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 24 May 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[Why Do All the Great Node.js Developers Hate CoffeeScript?]]></title><description><![CDATA[<h1>Why Do All the Great Node.js Developers Hate CoffeeScript?</h1>
-<p>Why do all the great Node.js developers hate CoffeeScript?</p>
+]]></description><link>http://procbits.com/2012/05/24/thinking-asynchronously-in-coffeescriptjavascript-loops-and-callbacks</link><guid isPermaLink="true">http://procbits.com/2012/05/24/thinking-asynchronously-in-coffeescriptjavascript-loops-and-callbacks</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 24 May 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[Why Do All the Great Node.js Developers Hate CoffeeScript?]]></title><description><![CDATA[<p>Why do all the great Node.js developers hate CoffeeScript?</p>
 <p>Take a look at the following Github repositories of the well-known
 Node.js developers:</p>
 <ul>
@@ -530,27 +568,28 @@ We would love your advice.</p>
 <p>If you made it this far, follow me on Twitter:
 <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
 <p>-JP</p>
-]]></description><link>http://procbits.com/2012/05/18/why-do-all-the-great-node-js-developers-hate-coffeescript</link><guid isPermaLink="true">http://procbits.com/2012/05/18/why-do-all-the-great-node-js-developers-hate-coffeescript</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Fri, 18 May 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[Quick and Dirty Screen Scraping with Node.js using Request and Cheerio]]></title><description><![CDATA[<h1>Quick and Dirty Screen Scraping with Node.js using Request and Cheerio</h1>
-<p>I wrote my own screen scraping module built on
+]]></description><link>http://procbits.com/2012/05/18/why-do-all-the-great-node-js-developers-hate-coffeescript</link><guid isPermaLink="true">http://procbits.com/2012/05/18/why-do-all-the-great-node-js-developers-hate-coffeescript</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Fri, 18 May 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[Quick and Dirty Screen Scraping with Node.js using Request and Cheerio]]></title><description><![CDATA[<p>I wrote my own screen scraping module built on
 <a href="http://www.phantomjs.org/">PhantomJS</a>, but unfortunately it&#39;s too slow
 for most screen scraping tasks that don&#39;t require browser-side
 JavaScript. One easy way to scrape pages with Node.js is to use
 <a href="https://github.com/mikeal/request">Request</a> and
 <a href="https://github.com/MatthewMueller/cheerio">Cheerio</a>.</p>
 <p>Here is an example of scraping Bing to get all of the search results:</p>
-<pre><code class="lang-javascript"><span class="keyword">var</span> request = <span class="keyword">require</span>(<span class="string">'request'</span>);
-<span class="keyword">var</span> cheerio = <span class="keyword">require</span>(<span class="string">'cheerio'</span>);
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;request&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">cheerio</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;cheerio&#39;</span><span class="p">);</span>
 
-<span class="keyword">var</span> searchTerm = <span class="string">'screen+scraping'</span>;
-<span class="keyword">var</span> url = <span class="string">'http://www.bing.com/search?q='</span> + searchTerm;
+<span class="kd">var</span> <span class="nx">searchTerm</span> <span class="o">=</span> <span class="s1">&#39;screen+scraping&#39;</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="s1">&#39;http://www.bing.com/search?q=&#39;</span> <span class="o">+</span> <span class="nx">searchTerm</span><span class="p">;</span>
 
-request(url, <span class="keyword">function</span>(err, resp, body){
-  $ = cheerio.load(body);
-  links = $(<span class="string">'.sb_tlst h3 a'</span>); <span class="comment">//use your CSS selector here</span>
-  $(links).each(<span class="keyword">function</span>(i, link){
-    console.log($(link).text() + <span class="string">':\n  '</span> + $(link).attr(<span class="string">'href'</span>));
-  });
-});</code></pre>
+<span class="nx">request</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">resp</span><span class="p">,</span> <span class="nx">body</span><span class="p">){</span>
+  <span class="nx">$</span> <span class="o">=</span> <span class="nx">cheerio</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="nx">body</span><span class="p">);</span>
+  <span class="nx">links</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.sb_tlst h3 a&#39;</span><span class="p">);</span> <span class="c1">//use your CSS selector here</span>
+  <span class="nx">$</span><span class="p">(</span><span class="nx">links</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">link</span><span class="p">){</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="nx">link</span><span class="p">).</span><span class="nx">text</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;:\n  &#39;</span> <span class="o">+</span> <span class="nx">$</span><span class="p">(</span><span class="nx">link</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">));</span>
+  <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+
 <p>Cheerio acts a jQuery replacement for a lot of jQuery tasks. It doesn&#39;t
 replicate jQuery in every way, and most importantly it&#39;s not meant for
 the browser but for the server. But it beats the pants off of the
@@ -561,8 +600,7 @@ collaborating on software development easy.</p>
 <p>You should follow me on Twitter:
 <a href="http://twitter.com/jprichardson">@jprichardson</a>.</p>
 <p>-JP</p>
-]]></description><link>http://procbits.com/2012/04/11/quick-and-dirty-screen-scraping-with-node-js-using-request-and-cheerio</link><guid isPermaLink="true">http://procbits.com/2012/04/11/quick-and-dirty-screen-scraping-with-node-js-using-request-and-cheerio</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Wed, 11 Apr 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[Submitting/Posting Files and Fields to an HTTP Form using C#/.NET ]]></title><description><![CDATA[<h1>Submitting/Posting Files and Fields to an HTTP Form using C#/.NET </h1>
-<p>Awhile back, I had to integrate a C# program with a web system that
+]]></description><link>http://procbits.com/2012/04/11/quick-and-dirty-screen-scraping-with-node-js-using-request-and-cheerio</link><guid isPermaLink="true">http://procbits.com/2012/04/11/quick-and-dirty-screen-scraping-with-node-js-using-request-and-cheerio</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Wed, 11 Apr 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[Submitting/Posting Files and Fields to an HTTP Form using C#/.NET]]></title><description><![CDATA[<p>Awhile back, I had to integrate a C# program with a web system that
 allowed the user to upload a few files and include some misc. data. I
 Googled around and didn&#39;t find a comprehensive solution.</p>
 <p>I did use some code I found on the internet, unfortunately I don&#39;t
@@ -570,163 +608,166 @@ remember where, so I can&#39;t give proper attribution. If you know, please
 let me know; it&#39;s the code relevant to the <code>MimePart</code> class. I added the
 form values code and packaged it up into the <code>HttpForm</code> sugar.</p>
 <p>Here is the code:</p>
-<pre><code class="lang-csharp"><span class="keyword">public</span> <span class="keyword">class</span> HttpForm {
+<div class="highlight"><pre><span class="k">public</span> <span class="k">class</span> <span class="nc">HttpForm</span> <span class="p">{</span>
 
-    <span class="keyword">private</span> Dictionary&lt;string, string> _files = <span class="keyword">new</span> Dictionary&lt;string, string>();
-    <span class="keyword">private</span> Dictionary&lt;string, string> _values = <span class="keyword">new</span> Dictionary&lt;string, string>();
+    <span class="k">private</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span> <span class="n">_files</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;();</span>
+    <span class="k">private</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span> <span class="n">_values</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;();</span>
 
-    <span class="keyword">public</span> HttpForm(string url) {
-        <span class="keyword">this</span>.Url = url;
-        <span class="keyword">this</span>.Method = <span class="string">"POST"</span>;
-    }
+    <span class="k">public</span> <span class="nf">HttpForm</span><span class="p">(</span><span class="kt">string</span> <span class="n">url</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">Url</span> <span class="p">=</span> <span class="n">url</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">Method</span> <span class="p">=</span> <span class="s">&quot;POST&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    <span class="keyword">public</span> string Method { get; set; }
-    <span class="keyword">public</span> string Url { get; set; }
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Method</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Url</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 
-    <span class="comment">//return self so that we can chain</span>
-    <span class="keyword">public</span> HttpForm AttachFile(string field, string fileName) {
-        _files[field] = fileName;
-        <span class="keyword">return</span> <span class="keyword">this</span>;
-    }
+    <span class="c1">//return self so that we can chain</span>
+    <span class="k">public</span> <span class="n">HttpForm</span> <span class="nf">AttachFile</span><span class="p">(</span><span class="kt">string</span> <span class="n">field</span><span class="p">,</span> <span class="kt">string</span> <span class="n">fileName</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">_files</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="p">=</span> <span class="n">fileName</span><span class="p">;</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    <span class="keyword">public</span> HttpForm ResetForm(){
-        _files.Clear();
-        _values.Clear();
-        <span class="keyword">return</span> <span class="keyword">this</span>;
-    }
+    <span class="k">public</span> <span class="n">HttpForm</span> <span class="nf">ResetForm</span><span class="p">(){</span>
+        <span class="n">_files</span><span class="p">.</span><span class="n">Clear</span><span class="p">();</span>
+        <span class="n">_values</span><span class="p">.</span><span class="n">Clear</span><span class="p">();</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    <span class="comment">//return self so that we can chain</span>
-    <span class="keyword">public</span> HttpForm SetValue(string field, string value) {
-        _values[field] = value;
-        <span class="keyword">return</span> <span class="keyword">this</span>;
-    }
+    <span class="c1">//return self so that we can chain</span>
+    <span class="k">public</span> <span class="n">HttpForm</span> <span class="nf">SetValue</span><span class="p">(</span><span class="kt">string</span> <span class="n">field</span><span class="p">,</span> <span class="kt">string</span> <span class="k">value</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">_values</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
 
-    <span class="keyword">public</span> HttpWebResponse Submit() {
-        <span class="keyword">return</span> <span class="keyword">this</span>.UploadFiles(_files, _values);
-    }
+    <span class="k">public</span> <span class="n">HttpWebResponse</span> <span class="nf">Submit</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="n">UploadFiles</span><span class="p">(</span><span class="n">_files</span><span class="p">,</span> <span class="n">_values</span><span class="p">);</span>
+    <span class="p">}</span>
 
 
-    <span class="keyword">private</span> HttpWebResponse UploadFiles(Dictionary&lt;string, string> files, Dictionary&lt;string, string> otherValues) {
-        <span class="keyword">var</span> req = (HttpWebRequest)WebRequest.Create(<span class="keyword">this</span>.Url);
+    <span class="k">private</span> <span class="n">HttpWebResponse</span> <span class="nf">UploadFiles</span><span class="p">(</span><span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span> <span class="n">files</span><span class="p">,</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span> <span class="n">otherValues</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">req</span> <span class="p">=</span> <span class="p">(</span><span class="n">HttpWebRequest</span><span class="p">)</span><span class="n">WebRequest</span><span class="p">.</span><span class="n">Create</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">Url</span><span class="p">);</span>
 
-        req.Timeout = <span class="number">10000</span> * <span class="number">1000</span>;
-        req.Accept = <span class="string">"text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8"</span>;
-        req.AllowAutoRedirect = <span class="keyword">false</span>;
+        <span class="n">req</span><span class="p">.</span><span class="n">Timeout</span> <span class="p">=</span> <span class="m">10000</span> <span class="p">*</span> <span class="m">1000</span><span class="p">;</span>
+        <span class="n">req</span><span class="p">.</span><span class="n">Accept</span> <span class="p">=</span> <span class="s">&quot;text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&quot;</span><span class="p">;</span>
+        <span class="n">req</span><span class="p">.</span><span class="n">AllowAutoRedirect</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
 
-        <span class="keyword">var</span> mimeParts = <span class="keyword">new</span> <span class="keyword">List</span>&lt;MimePart>();
-        <span class="keyword">try</span> {
-            <span class="keyword">if</span> (otherValues != <span class="keyword">null</span>) {
-                <span class="keyword">foreach</span> (<span class="keyword">var</span> fieldName in otherValues.Keys) {
-                    <span class="keyword">var</span> part = <span class="keyword">new</span> MimePart();
+        <span class="kt">var</span> <span class="n">mimeParts</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">MimePart</span><span class="p">&gt;();</span>
+        <span class="k">try</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">otherValues</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">fieldName</span> <span class="k">in</span> <span class="n">otherValues</span><span class="p">.</span><span class="n">Keys</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="kt">var</span> <span class="n">part</span> <span class="p">=</span> <span class="k">new</span> <span class="n">MimePart</span><span class="p">();</span>
 
-                    part.Headers[<span class="string">"Content-Disposition"</span>] = <span class="string">"form-data; name=\""</span> + fieldName + <span class="string">"\""</span>;
-                    part.Data = <span class="keyword">new</span> MemoryStream(Encoding.UTF8.GetBytes(otherValues[fieldName]));
+                    <span class="n">part</span><span class="p">.</span><span class="n">Headers</span><span class="p">[</span><span class="s">&quot;Content-Disposition&quot;</span><span class="p">]</span> <span class="p">=</span> <span class="s">&quot;form-data; name=\&quot;&quot;</span> <span class="p">+</span> <span class="n">fieldName</span> <span class="p">+</span> <span class="s">&quot;\&quot;&quot;</span><span class="p">;</span>
+                    <span class="n">part</span><span class="p">.</span><span class="n">Data</span> <span class="p">=</span> <span class="k">new</span> <span class="n">MemoryStream</span><span class="p">(</span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="n">otherValues</span><span class="p">[</span><span class="n">fieldName</span><span class="p">]));</span>
 
-                    mimeParts.Add(part);
-                }
-            }
+                    <span class="n">mimeParts</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">part</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
 
-            <span class="keyword">if</span> (files != <span class="keyword">null</span>) {
-                <span class="keyword">foreach</span> (<span class="keyword">var</span> fieldName in files.Keys) {
-                    <span class="keyword">var</span> part = <span class="keyword">new</span> MimePart();
+            <span class="k">if</span> <span class="p">(</span><span class="n">files</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">fieldName</span> <span class="k">in</span> <span class="n">files</span><span class="p">.</span><span class="n">Keys</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="kt">var</span> <span class="n">part</span> <span class="p">=</span> <span class="k">new</span> <span class="n">MimePart</span><span class="p">();</span>
 
-                    part.Headers[<span class="string">"Content-Disposition"</span>] = <span class="string">"form-data; name=\""</span> + fieldName + <span class="string">"\"; filename=\""</span> + files[fieldName] + <span class="string">"\""</span>;
-                    part.Headers[<span class="string">"Content-Type"</span>] = <span class="string">"application/octet-stream"</span>;
-                    part.Data = File.OpenRead(files[fieldName]);
+                    <span class="n">part</span><span class="p">.</span><span class="n">Headers</span><span class="p">[</span><span class="s">&quot;Content-Disposition&quot;</span><span class="p">]</span> <span class="p">=</span> <span class="s">&quot;form-data; name=\&quot;&quot;</span> <span class="p">+</span> <span class="n">fieldName</span> <span class="p">+</span> <span class="s">&quot;\&quot;; filename=\&quot;&quot;</span> <span class="p">+</span> <span class="n">files</span><span class="p">[</span><span class="n">fieldName</span><span class="p">]</span> <span class="p">+</span> <span class="s">&quot;\&quot;&quot;</span><span class="p">;</span>
+                    <span class="n">part</span><span class="p">.</span><span class="n">Headers</span><span class="p">[</span><span class="s">&quot;Content-Type&quot;</span><span class="p">]</span> <span class="p">=</span> <span class="s">&quot;application/octet-stream&quot;</span><span class="p">;</span>
+                    <span class="n">part</span><span class="p">.</span><span class="n">Data</span> <span class="p">=</span> <span class="n">File</span><span class="p">.</span><span class="n">OpenRead</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="n">fieldName</span><span class="p">]);</span>
 
-                    mimeParts.Add(part);
-                }
-            }
+                    <span class="n">mimeParts</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">part</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
 
-            string boundary = <span class="string">"----------"</span> + DateTime.Now.Ticks.ToString(<span class="string">"x"</span>);
+            <span class="kt">string</span> <span class="n">boundary</span> <span class="p">=</span> <span class="s">&quot;----------&quot;</span> <span class="p">+</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">.</span><span class="n">Ticks</span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s">&quot;x&quot;</span><span class="p">);</span>
 
-            req.ContentType = <span class="string">"multipart/form-data; boundary="</span> + boundary;
-            req.Method = <span class="keyword">this</span>.Method;
+            <span class="n">req</span><span class="p">.</span><span class="n">ContentType</span> <span class="p">=</span> <span class="s">&quot;multipart/form-data; boundary=&quot;</span> <span class="p">+</span> <span class="n">boundary</span><span class="p">;</span>
+            <span class="n">req</span><span class="p">.</span><span class="n">Method</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">Method</span><span class="p">;</span>
 
-            long contentLength = <span class="number">0</span>;
+            <span class="kt">long</span> <span class="n">contentLength</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
 
-            byte[] _footer = Encoding.UTF8.GetBytes(<span class="string">"--"</span> + boundary + <span class="string">"--\r\n"</span>);
+            <span class="kt">byte</span><span class="p">[]</span> <span class="n">_footer</span> <span class="p">=</span> <span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="s">&quot;--&quot;</span> <span class="p">+</span> <span class="n">boundary</span> <span class="p">+</span> <span class="s">&quot;--\r\n&quot;</span><span class="p">);</span>
 
-            <span class="keyword">foreach</span> (MimePart part in mimeParts) {
-                contentLength += part.GenerateHeaderFooterData(boundary);
-            }
+            <span class="k">foreach</span> <span class="p">(</span><span class="n">MimePart</span> <span class="n">part</span> <span class="k">in</span> <span class="n">mimeParts</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">contentLength</span> <span class="p">+=</span> <span class="n">part</span><span class="p">.</span><span class="n">GenerateHeaderFooterData</span><span class="p">(</span><span class="n">boundary</span><span class="p">);</span>
+            <span class="p">}</span>
 
-            req.ContentLength = contentLength + _footer.Length;
+            <span class="n">req</span><span class="p">.</span><span class="n">ContentLength</span> <span class="p">=</span> <span class="n">contentLength</span> <span class="p">+</span> <span class="n">_footer</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
 
-            byte[] buffer = <span class="keyword">new</span> byte[<span class="number">8192</span>];
-            byte[] afterFile = Encoding.UTF8.GetBytes(<span class="string">"\r\n"</span>);
-            int read;
+            <span class="kt">byte</span><span class="p">[]</span> <span class="n">buffer</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="p">[</span><span class="m">8192</span><span class="p">];</span>
+            <span class="kt">byte</span><span class="p">[]</span> <span class="n">afterFile</span> <span class="p">=</span> <span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="s">&quot;\r\n&quot;</span><span class="p">);</span>
+            <span class="kt">int</span> <span class="n">read</span><span class="p">;</span>
 
-            using (Stream s = req.GetRequestStream()) {
-                <span class="keyword">foreach</span> (MimePart part in mimeParts) {
-                    s.Write(part.Header, <span class="number">0</span>, part.Header.Length);
+            <span class="k">using</span> <span class="p">(</span><span class="n">Stream</span> <span class="n">s</span> <span class="p">=</span> <span class="n">req</span><span class="p">.</span><span class="n">GetRequestStream</span><span class="p">())</span> <span class="p">{</span>
+                <span class="k">foreach</span> <span class="p">(</span><span class="n">MimePart</span> <span class="n">part</span> <span class="k">in</span> <span class="n">mimeParts</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">s</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">part</span><span class="p">.</span><span class="n">Header</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">part</span><span class="p">.</span><span class="n">Header</span><span class="p">.</span><span class="n">Length</span><span class="p">);</span>
 
-                    <span class="keyword">while</span> ((read = part.Data.Read(buffer, <span class="number">0</span>, buffer.Length)) > <span class="number">0</span>)
-                        s.Write(buffer, <span class="number">0</span>, read);
+                    <span class="k">while</span> <span class="p">((</span><span class="n">read</span> <span class="p">=</span> <span class="n">part</span><span class="p">.</span><span class="n">Data</span><span class="p">.</span><span class="n">Read</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">buffer</span><span class="p">.</span><span class="n">Length</span><span class="p">))</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span>
+                        <span class="n">s</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">read</span><span class="p">);</span>
 
-                    part.Data.Dispose();
+                    <span class="n">part</span><span class="p">.</span><span class="n">Data</span><span class="p">.</span><span class="n">Dispose</span><span class="p">();</span>
 
-                    s.Write(afterFile, <span class="number">0</span>, afterFile.Length);
-                }
+                    <span class="n">s</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">afterFile</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">afterFile</span><span class="p">.</span><span class="n">Length</span><span class="p">);</span>
+                <span class="p">}</span>
 
-                s.Write(_footer, <span class="number">0</span>, _footer.Length);
-            }
+                <span class="n">s</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">_footer</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">_footer</span><span class="p">.</span><span class="n">Length</span><span class="p">);</span>
+            <span class="p">}</span>
 
-            <span class="keyword">var</span> res = (HttpWebResponse)req.GetResponse();
+            <span class="kt">var</span> <span class="n">res</span> <span class="p">=</span> <span class="p">(</span><span class="n">HttpWebResponse</span><span class="p">)</span><span class="n">req</span><span class="p">.</span><span class="n">GetResponse</span><span class="p">();</span>
 
-            <span class="keyword">return</span> res;
-        } <span class="keyword">catch</span> (<span class="keyword">Exception</span> ex) {
-            Console.WriteLine(ex.Message);
-            <span class="keyword">foreach</span> (MimePart part in mimeParts)
-                <span class="keyword">if</span> (part.Data != <span class="keyword">null</span>)
-                    part.Data.Dispose();
+            <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">ex</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>
+            <span class="k">foreach</span> <span class="p">(</span><span class="n">MimePart</span> <span class="n">part</span> <span class="k">in</span> <span class="n">mimeParts</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">part</span><span class="p">.</span><span class="n">Data</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+                    <span class="n">part</span><span class="p">.</span><span class="n">Data</span><span class="p">.</span><span class="n">Dispose</span><span class="p">();</span>
 
-            <span class="keyword">return</span> (HttpWebResponse)req.GetResponse();
-        }
-    }
+            <span class="k">return</span> <span class="p">(</span><span class="n">HttpWebResponse</span><span class="p">)</span><span class="n">req</span><span class="p">.</span><span class="n">GetResponse</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
-    <span class="keyword">private</span> <span class="keyword">class</span> MimePart {
-        <span class="keyword">private</span> NameValueCollection _headers = <span class="keyword">new</span> NameValueCollection();
-        <span class="keyword">public</span> NameValueCollection Headers { get { <span class="keyword">return</span> _headers; } }
+    <span class="k">private</span> <span class="k">class</span> <span class="nc">MimePart</span> <span class="p">{</span>
+        <span class="k">private</span> <span class="n">NameValueCollection</span> <span class="n">_headers</span> <span class="p">=</span> <span class="k">new</span> <span class="n">NameValueCollection</span><span class="p">();</span>
+        <span class="k">public</span> <span class="n">NameValueCollection</span> <span class="n">Headers</span> <span class="p">{</span> <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_headers</span><span class="p">;</span> <span class="p">}</span> <span class="p">}</span>
 
-        <span class="keyword">public</span> byte[] Header { get; <span class="keyword">protected</span> set; }
+        <span class="k">public</span> <span class="kt">byte</span><span class="p">[]</span> <span class="n">Header</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">protected</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
 
-        <span class="keyword">public</span> long GenerateHeaderFooterData(string boundary) {
-            StringBuilder sb = <span class="keyword">new</span> StringBuilder();
+        <span class="k">public</span> <span class="kt">long</span> <span class="nf">GenerateHeaderFooterData</span><span class="p">(</span><span class="kt">string</span> <span class="n">boundary</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">StringBuilder</span> <span class="n">sb</span> <span class="p">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="p">();</span>
 
-            sb.Append(<span class="string">"--"</span>);
-            sb.Append(boundary);
-            sb.AppendLine();
-            <span class="keyword">foreach</span> (string key in _headers.AllKeys) {
-                sb.Append(key);
-                sb.Append(<span class="string">": "</span>);
-                sb.AppendLine(_headers[key]);
-            }
-            sb.AppendLine();
+            <span class="n">sb</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span><span class="s">&quot;--&quot;</span><span class="p">);</span>
+            <span class="n">sb</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span><span class="n">boundary</span><span class="p">);</span>
+            <span class="n">sb</span><span class="p">.</span><span class="n">AppendLine</span><span class="p">();</span>
+            <span class="k">foreach</span> <span class="p">(</span><span class="kt">string</span> <span class="n">key</span> <span class="k">in</span> <span class="n">_headers</span><span class="p">.</span><span class="n">AllKeys</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">sb</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+                <span class="n">sb</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span><span class="s">&quot;: &quot;</span><span class="p">);</span>
+                <span class="n">sb</span><span class="p">.</span><span class="n">AppendLine</span><span class="p">(</span><span class="n">_headers</span><span class="p">[</span><span class="n">key</span><span class="p">]);</span>
+            <span class="p">}</span>
+            <span class="n">sb</span><span class="p">.</span><span class="n">AppendLine</span><span class="p">();</span>
 
-            Header = Encoding.UTF8.GetBytes(sb.ToString());
+            <span class="n">Header</span> <span class="p">=</span> <span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="n">sb</span><span class="p">.</span><span class="n">ToString</span><span class="p">());</span>
 
-            <span class="keyword">return</span> Header.Length + Data.Length + <span class="number">2</span>;
-        }
+            <span class="k">return</span> <span class="n">Header</span><span class="p">.</span><span class="n">Length</span> <span class="p">+</span> <span class="n">Data</span><span class="p">.</span><span class="n">Length</span> <span class="p">+</span> <span class="m">2</span><span class="p">;</span>
+        <span class="p">}</span>
 
-        <span class="keyword">public</span> Stream Data { get; set; }
-    }
-}</code></pre>
+        <span class="k">public</span> <span class="n">Stream</span> <span class="n">Data</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
 <p>You can easily use it like so:</p>
-<pre><code class="lang-csharp"><span class="keyword">var</span> file1 = @<span class="string">"C:\file"</span>;
-<span class="keyword">var</span> file2 = @<span class="string">"C:\file2"</span>;
+<div class="highlight"><pre><span class="kt">var</span> <span class="n">file1</span> <span class="p">=</span> <span class="s">@&quot;C:\file&quot;</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">file2</span> <span class="p">=</span> <span class="s">@&quot;C:\file2&quot;</span><span class="p">;</span>
 
-<span class="keyword">var</span> yourUrl = <span class="string">"http://yourdomain.com/process.php"</span>;
-<span class="keyword">var</span> httpForm = <span class="keyword">new</span> HttpForm(yourUrl);
-httpForm.AttachFile(<span class="string">"file1"</span>, file1).AttachFile(<span class="string">"file2"</span>, file2);
-httpForm.setValue(<span class="string">"foo"</span>, <span class="string">"some foo"</span>).setValue(<span class="string">"blah"</span>, <span class="string">"rarrr!"</span>);
-httpForm.Submit();</code></pre>
+<span class="kt">var</span> <span class="n">yourUrl</span> <span class="p">=</span> <span class="s">&quot;http://yourdomain.com/process.php&quot;</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">httpForm</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpForm</span><span class="p">(</span><span class="n">yourUrl</span><span class="p">);</span>
+<span class="n">httpForm</span><span class="p">.</span><span class="n">AttachFile</span><span class="p">(</span><span class="s">&quot;file1&quot;</span><span class="p">,</span> <span class="n">file1</span><span class="p">).</span><span class="n">AttachFile</span><span class="p">(</span><span class="s">&quot;file2&quot;</span><span class="p">,</span> <span class="n">file2</span><span class="p">);</span>
+<span class="n">httpForm</span><span class="p">.</span><span class="n">setValue</span><span class="p">(</span><span class="s">&quot;foo&quot;</span><span class="p">,</span> <span class="s">&quot;some foo&quot;</span><span class="p">).</span><span class="n">setValue</span><span class="p">(</span><span class="s">&quot;blah&quot;</span><span class="p">,</span> <span class="s">&quot;rarrr!&quot;</span><span class="p">);</span>
+<span class="n">httpForm</span><span class="p">.</span><span class="n">Submit</span><span class="p">();</span>
+</pre></div>
+
 <p>Do you use Git? If so, checkout <a href="http://gitpilot.com">Gitpilot</a> to make
 using Git thoughtless.</p>
 <p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>.</p>
 <p>-JP Richardson</p>
-]]></description><link>http://procbits.com/2012/02/29/submittingposting-files-and-fields-to-an-http-form-using-c-net</link><guid isPermaLink="true">http://procbits.com/2012/02/29/submittingposting-files-and-fields-to-an-http-form-using-c-net</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 01 Mar 2012 06:00:00 GMT</pubDate></item><item><title><![CDATA[Installing Node.js on Ubuntu 10.04 LTS ]]></title><description><![CDATA[<h1>Installing Node.js on Ubuntu 10.04 LTS </h1>
-<p>Installing Node.js on Ubuntu 10.04 LTS is pretty straight forward.</p>
+]]></description><link>http://procbits.com/2012/02/29/submittingposting-files-and-fields-to-an-http-form-using-c-net</link><guid isPermaLink="true">http://procbits.com/2012/02/29/submittingposting-files-and-fields-to-an-http-form-using-c-net</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 01 Mar 2012 06:00:00 GMT</pubDate></item><item><title><![CDATA[Installing Node.js on Ubuntu 10.04 LTS]]></title><description><![CDATA[<p>Installing Node.js on Ubuntu 10.04 LTS is pretty straight forward.</p>
 <p>You will want a Node.js versioning manager. Node.js has a quick release
 cycle, point releases happen quite frequently. A Node.js versioning
 manager will help you keep all of your versions isolated from each
@@ -758,15 +799,23 @@ be informed about its existence.</li>
 </ol>
 <p>Use NVM. Seriously, it just works.</p>
 <p>On your clean Ubuntu machine, make sure that Git is installed:</p>
-<pre><code class="lang-bash">sudo apt-get install git-core</code></pre>
+<div class="highlight"><pre>sudo apt-get install git-core
+</pre></div>
+
 <p>Then install NVM:</p>
-<pre><code class="lang-bash">git <span class="keyword">clone</span> git:<span class="comment">//github.com/creationix/nvm.git ~/.nvm</span>
-. ~/.nvm/nvm.sh <span class="comment"># &lt;------ be sure to add this line to the end of your ~./profile or ~./bashrc file</span></code></pre>
+<div class="highlight"><pre>git clone git://github.com/creationix/nvm.git ~/.nvm
+. ~/.nvm/nvm.sh <span class="c"># &lt;------ be sure to add this line to the end of your ~./profile or ~./bashrc file</span>
+</pre></div>
+
 <p>Now install all of the packages need to build Node.js:</p>
-<pre><code class="lang-bash">sudo apt-get install build-essential openssl libssl-dev pkg-config</code></pre>
+<div class="highlight"><pre>sudo apt-get install build-essential openssl libssl-dev pkg-config
+</pre></div>
+
 <p>Now install the latest version of Node.js, at the time of this writing
 it&#39;s v0.6.9</p>
-<pre><code class="lang-bash">nvm install v0.6.9</code></pre>
+<div class="highlight"><pre>nvm install v0.6.9
+</pre></div>
+
 <p>You now have a Node.js environment on your machine! Just run <code>node</code> on
 the command line to experiment with the Node.js REPL. You can also run
 <code>npm</code> to install Node.js packages. Read more about <a href="http://npmjs.org/">NPM
@@ -776,90 +825,99 @@ using Git mindless.</p>
 <p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>
 and read my blog on entrepreneurship: <a href="http://techneur.com">Techneur</a>.</p>
 <p>-JP Richardson</p>
-]]></description><link>http://procbits.com/2012/01/29/installing-node-js-on-ubuntu-10-4-lts</link><guid isPermaLink="true">http://procbits.com/2012/01/29/installing-node-js-on-ubuntu-10-4-lts</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Mon, 30 Jan 2012 06:00:00 GMT</pubDate></item><item><title><![CDATA[Comparing Two Javascript Objects]]></title><description><![CDATA[<h1>Comparing Two Javascript Objects</h1>
-<p>Recently, I was faced with a problem where I needed to compare two
+]]></description><link>http://procbits.com/2012/01/29/installing-node-js-on-ubuntu-10-4-lts</link><guid isPermaLink="true">http://procbits.com/2012/01/29/installing-node-js-on-ubuntu-10-4-lts</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Mon, 30 Jan 2012 06:00:00 GMT</pubDate></item><item><title><![CDATA[Comparing Two Javascript Objects]]></title><description><![CDATA[<p>Recently, I was faced with a problem where I needed to compare two
 Javascript objects. My initial strategy was to convert them to JSON and
 compare the JSON strings.</p>
 <p>Sort of like this:</p>
-<pre><code class="lang-javascript"><span class="keyword">var</span> a = JSON.stringify(person1);<span class="comment">//'{"firstName":"JP","lastName":"Richardson"}'</span>
-<span class="keyword">var</span> b = JSON.stringify(person2);<span class="comment">//'{"firstName":"JP","lastName":"Richardson"}'</span>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">person1</span><span class="p">);</span><span class="c1">//&#39;{&quot;firstName&quot;:&quot;JP&quot;,&quot;lastName&quot;:&quot;Richardson&quot;}&#39;</span>
+<span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">person2</span><span class="p">);</span><span class="c1">//&#39;{&quot;firstName&quot;:&quot;JP&quot;,&quot;lastName&quot;:&quot;Richardson&quot;}&#39;</span>
 
-assert(a === b);</code></pre>
+<span class="nx">assert</span><span class="p">(</span><span class="nx">a</span> <span class="o">===</span> <span class="nx">b</span><span class="p">);</span>
+</pre></div>
+
 <p>Simple enough, right?</p>
 <p>Not so fast. I encountered a case like this:</p>
-<pre><code class="lang-javascript"><span class="keyword">var</span> a = JSON.stringify(person1);<span class="comment">//'{"firstName":"JP","lastName":"Richardson"}'</span>
-<span class="keyword">var</span> b = JSON.stringify(person2);<span class="comment">//'{"lastName":"Richardson","firstName":"JP"}'</span>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">person1</span><span class="p">);</span><span class="c1">//&#39;{&quot;firstName&quot;:&quot;JP&quot;,&quot;lastName&quot;:&quot;Richardson&quot;}&#39;</span>
+<span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">person2</span><span class="p">);</span><span class="c1">//&#39;{&quot;lastName&quot;:&quot;Richardson&quot;,&quot;firstName&quot;:&quot;JP&quot;}&#39;</span>
 
-assert(a === b);</code></pre>
+<span class="nx">assert</span><span class="p">(</span><span class="nx">a</span> <span class="o">===</span> <span class="nx">b</span><span class="p">);</span>
+</pre></div>
+
 <p>The data is the same, but the string is different. Fortunately,
 Stackoverflow had a nice <a href="http://stackoverflow.com/questions/1068834/object-comparison-in-javascript">Javascript object comparison
 algorithm</a>
 to dump into my app.</p>
-<pre><code class="lang-javascript">Object.prototype.equals = <span class="keyword">function</span>(x)
-{
-  <span class="keyword">var</span> p;
-  <span class="keyword">for</span>(p in <span class="keyword">this</span>) {
-      <span class="keyword">if</span>(typeof(x[p])==<span class="string">'undefined'</span>) {<span class="keyword">return</span> <span class="keyword">false</span>;}
-  }
+<div class="highlight"><pre><span class="nb">Object</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">equals</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">p</span><span class="p">;</span>
+  <span class="k">for</span><span class="p">(</span><span class="nx">p</span> <span class="k">in</span> <span class="k">this</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="nx">x</span><span class="p">[</span><span class="nx">p</span><span class="p">])</span><span class="o">==</span><span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="kc">false</span><span class="p">;}</span>
+  <span class="p">}</span>
 
-  <span class="keyword">for</span>(p in <span class="keyword">this</span>) {
-      <span class="keyword">if</span> (<span class="keyword">this</span>[p]) {
-          <span class="keyword">switch</span>(typeof(<span class="keyword">this</span>[p])) {
-              <span class="keyword">case</span> <span class="string">'object'</span>:
-                  <span class="keyword">if</span> (!<span class="keyword">this</span>[p].equals(x[p])) { <span class="keyword">return</span> <span class="keyword">false</span>; } <span class="keyword">break</span>;
-              <span class="keyword">case</span> <span class="string">'function'</span>:
-                  <span class="keyword">if</span> (typeof(x[p])==<span class="string">'undefined'</span> ||
-                      (p != <span class="string">'equals'</span> &amp;&amp; <span class="keyword">this</span>[p].toString() != x[p].toString()))
-                      <span class="keyword">return</span> <span class="keyword">false</span>;
-                  <span class="keyword">break</span>;
-              <span class="keyword">default</span>:
-                  <span class="keyword">if</span> (<span class="keyword">this</span>[p] != x[p]) { <span class="keyword">return</span> <span class="keyword">false</span>; }
-          }
-      } <span class="keyword">else</span> {
-          <span class="keyword">if</span> (x[p])
-              <span class="keyword">return</span> <span class="keyword">false</span>;
-      }
-  }
+  <span class="k">for</span><span class="p">(</span><span class="nx">p</span> <span class="k">in</span> <span class="k">this</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">p</span><span class="p">])</span> <span class="p">{</span>
+          <span class="k">switch</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">p</span><span class="p">]))</span> <span class="p">{</span>
+              <span class="k">case</span> <span class="s1">&#39;object&#39;</span><span class="o">:</span>
+                  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">[</span><span class="nx">p</span><span class="p">].</span><span class="nx">equals</span><span class="p">(</span><span class="nx">x</span><span class="p">[</span><span class="nx">p</span><span class="p">]))</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
+              <span class="k">case</span> <span class="s1">&#39;function&#39;</span><span class="o">:</span>
+                  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="nx">x</span><span class="p">[</span><span class="nx">p</span><span class="p">])</span><span class="o">==</span><span class="s1">&#39;undefined&#39;</span> <span class="o">||</span>
+                      <span class="p">(</span><span class="nx">p</span> <span class="o">!=</span> <span class="s1">&#39;equals&#39;</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">[</span><span class="nx">p</span><span class="p">].</span><span class="nx">toString</span><span class="p">()</span> <span class="o">!=</span> <span class="nx">x</span><span class="p">[</span><span class="nx">p</span><span class="p">].</span><span class="nx">toString</span><span class="p">()))</span>
+                      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+                  <span class="k">break</span><span class="p">;</span>
+              <span class="k">default</span><span class="o">:</span>
+                  <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">p</span><span class="p">]</span> <span class="o">!=</span> <span class="nx">x</span><span class="p">[</span><span class="nx">p</span><span class="p">])</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="p">}</span>
+          <span class="p">}</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">x</span><span class="p">[</span><span class="nx">p</span><span class="p">])</span>
+              <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+      <span class="p">}</span>
+  <span class="p">}</span>
 
-  <span class="keyword">for</span>(p in x) {
-      <span class="keyword">if</span>(typeof(<span class="keyword">this</span>[p])==<span class="string">'undefined'</span>) {<span class="keyword">return</span> <span class="keyword">false</span>;}
-  }
+  <span class="k">for</span><span class="p">(</span><span class="nx">p</span> <span class="k">in</span> <span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">p</span><span class="p">])</span><span class="o">==</span><span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="kc">false</span><span class="p">;}</span>
+  <span class="p">}</span>
 
-  <span class="keyword">return</span> <span class="keyword">true</span>;
-}</code></pre>
+  <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
 <p>Test passed. I eventually hit a situation where I had some code with an
 Object that had a Person prototype and some data that came from JSON.
 Kinda like this:</p>
-<pre><code class="lang-javascript"><span class="keyword">var</span> person1 = <span class="keyword">new</span> Person(<span class="string">'JP'</span>, <span class="string">'Richardson'</span>);
-<span class="keyword">var</span> person2 = JSON.parse(<span class="string">'{"firstName":"JP","lastName":"Richardson"}'</span>);
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">person1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">(</span><span class="s1">&#39;JP&#39;</span><span class="p">,</span> <span class="s1">&#39;Richardson&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">person2</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="s1">&#39;{&quot;firstName&quot;:&quot;JP&quot;,&quot;lastName&quot;:&quot;Richardson&quot;}&#39;</span><span class="p">);</span>
 
-<span class="comment">//deepEquals is code snippet above ^</span>
-person1.deepEquals(person2); <span class="comment">// &lt;--- THIS FAILS</span></code></pre>
+<span class="c1">//deepEquals is code snippet above ^</span>
+<span class="nx">person1</span><span class="p">.</span><span class="nx">deepEquals</span><span class="p">(</span><span class="nx">person2</span><span class="p">);</span> <span class="c1">// &lt;--- THIS FAILS</span>
+</pre></div>
+
 <p>I only cared about comparing the data. The methods associated with the
 object (Prototype) didn&#39;t matter. Let&#39;s modify the above algorithm. I
 use CoffeeScript. Here&#39;s the modification:</p>
-<pre><code class="lang-ruby">Object::jsonEquals = (x) ->
-  <span class="comment">#we do this because two objects may have the same data fields and data but different prototypes</span>
-  x1 = JSON.parse(JSON.stringify(<span class="keyword">this</span>))
-  x2 = JSON.parse(JSON.stringify(x))
+<div class="highlight"><pre><span class="no">Object</span><span class="o">::</span><span class="n">jsonEquals</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-&gt;</span>
+  <span class="c1">#we do this because two objects may have the same data fields and data but different prototypes</span>
+  <span class="n">x1</span> <span class="o">=</span> <span class="no">JSON</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="no">JSON</span><span class="o">.</span><span class="n">stringify</span><span class="p">(</span><span class="n">this</span><span class="p">))</span>
+  <span class="n">x2</span> <span class="o">=</span> <span class="no">JSON</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="no">JSON</span><span class="o">.</span><span class="n">stringify</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
 
-  p = <span class="keyword">null</span>
-  <span class="keyword">for</span> p of x1
-    <span class="keyword">return</span> <span class="keyword">false</span> <span class="keyword">if</span> typeof (x2[p]) is <span class="string">'undefined'</span>
-  <span class="keyword">for</span> p of x1
-    <span class="keyword">if</span> x1[p]
-      <span class="keyword">switch</span> typeof (x1[p])
-        when <span class="string">'object'</span>
-          <span class="keyword">return</span> <span class="keyword">false</span> unless x1[p].jsonEquals(x2[p])
-        when <span class="string">'function'</span>
-          <span class="keyword">return</span> <span class="keyword">false</span> <span class="keyword">if</span> typeof (x2[p]) is <span class="string">'undefined'</span> <span class="keyword">or</span> (p isnt <span class="string">'equals'</span> <span class="keyword">and</span> x1[p].toString() isnt x2[p].toString())
-        <span class="keyword">else</span>
-          <span class="keyword">return</span> <span class="keyword">false</span>  unless x1[p] is x2[p]
-    <span class="keyword">else</span>
-      <span class="keyword">return</span> <span class="keyword">false</span> <span class="keyword">if</span> x2[p]
-  <span class="keyword">for</span> p of x2
-    <span class="keyword">return</span> <span class="keyword">false</span> <span class="keyword">if</span> typeof (x1[p]) is <span class="string">'undefined'</span>
-  <span class="keyword">true</span></code></pre>
+  <span class="nb">p</span> <span class="o">=</span> <span class="n">null</span>
+  <span class="k">for</span> <span class="nb">p</span> <span class="n">of</span> <span class="n">x1</span>
+    <span class="k">return</span> <span class="kp">false</span> <span class="k">if</span> <span class="n">typeof</span> <span class="p">(</span><span class="n">x2</span><span class="o">[</span><span class="nb">p</span><span class="o">]</span><span class="p">)</span> <span class="n">is</span> <span class="s1">&#39;undefined&#39;</span>
+  <span class="k">for</span> <span class="nb">p</span> <span class="n">of</span> <span class="n">x1</span>
+    <span class="k">if</span> <span class="n">x1</span><span class="o">[</span><span class="nb">p</span><span class="o">]</span>
+      <span class="n">switch</span> <span class="n">typeof</span> <span class="p">(</span><span class="n">x1</span><span class="o">[</span><span class="nb">p</span><span class="o">]</span><span class="p">)</span>
+        <span class="k">when</span> <span class="s1">&#39;object&#39;</span>
+          <span class="k">return</span> <span class="kp">false</span> <span class="k">unless</span> <span class="n">x1</span><span class="o">[</span><span class="nb">p</span><span class="o">].</span><span class="n">jsonEquals</span><span class="p">(</span><span class="n">x2</span><span class="o">[</span><span class="nb">p</span><span class="o">]</span><span class="p">)</span>
+        <span class="k">when</span> <span class="s1">&#39;function&#39;</span>
+          <span class="k">return</span> <span class="kp">false</span> <span class="k">if</span> <span class="n">typeof</span> <span class="p">(</span><span class="n">x2</span><span class="o">[</span><span class="nb">p</span><span class="o">]</span><span class="p">)</span> <span class="n">is</span> <span class="s1">&#39;undefined&#39;</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">p</span> <span class="n">isnt</span> <span class="s1">&#39;equals&#39;</span> <span class="ow">and</span> <span class="n">x1</span><span class="o">[</span><span class="nb">p</span><span class="o">].</span><span class="n">toString</span><span class="p">()</span> <span class="n">isnt</span> <span class="n">x2</span><span class="o">[</span><span class="nb">p</span><span class="o">].</span><span class="n">toString</span><span class="p">())</span>
+        <span class="k">else</span>
+          <span class="k">return</span> <span class="kp">false</span>  <span class="k">unless</span> <span class="n">x1</span><span class="o">[</span><span class="nb">p</span><span class="o">]</span> <span class="n">is</span> <span class="n">x2</span><span class="o">[</span><span class="nb">p</span><span class="o">]</span>
+    <span class="k">else</span>
+      <span class="k">return</span> <span class="kp">false</span> <span class="k">if</span> <span class="n">x2</span><span class="o">[</span><span class="nb">p</span><span class="o">]</span>
+  <span class="k">for</span> <span class="nb">p</span> <span class="n">of</span> <span class="n">x2</span>
+    <span class="k">return</span> <span class="kp">false</span> <span class="k">if</span> <span class="n">typeof</span> <span class="p">(</span><span class="n">x1</span><span class="o">[</span><span class="nb">p</span><span class="o">]</span><span class="p">)</span> <span class="n">is</span> <span class="s1">&#39;undefined&#39;</span>
+  <span class="kp">true</span>
+</pre></div>
+
 <p>This causes the situation like I described above to pass. Essentially
 convert to JSON to remove the prototype. I suppose you could make this
 more efficient my just manually setting the prototype to Object before

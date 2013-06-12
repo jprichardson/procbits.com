@@ -6,77 +6,41 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="JP Richardson">
-    <mete name="description" content="">
-
     <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
-    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
-    <!--<link href="style.css" rel="stylesheet">-->
-
-    <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
-
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-      <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-35069840-2']);
-    _gaq.push(['_trackPageview']);
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/highlight.css" rel="stylesheet">
   </head>
   <body>
-    
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid nav-container">
-          <nav role="navigation">
-            <a class="brand" title="" href="http://procbits.com">procbits</a>
-            
-            <p class="navbar-text pull-left">
-              source code snippets and other random musings about software
-            </p>
-          </nav>
-
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </a>
-
-
-
+          <nav role="navigation"><a title="" href="http://procbits.com" class="brand">procbits</a>
+            <p class="navbar-text pull-left">source code snippets and other random musings about software</p>
+            <ul class="nav pull-right">             
+              <li><a href="/tags">Tags</a></li>
+              <li><a href="/rss.xml">RSS</a></li>
+            </ul>
+          </nav><a data-toggle="collapse" data-target=".nav-collapse" href="http://procbits.com" class="btn btn-navbar">procbits<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a>
         </div>
       </div>
     </div>
-
-
     <div class="container-fluid">
       <div id="content" class="clearfix row-fluid">
-        <div id="main" class="span8 clearfix" role="main">
+        <div id="main" role="main" class="span8 clearfix"><h1>Open a New Tab in Terminal.app in the Same Directory on Mac OS X</h1>
 
-
-<h1>Open a New Tab in Terminal.app in the Same Directory on Mac OS X</h1>
 <p>When working with Rails on my Mac OS X machine, I often find myself
 opening a lot of terminal tabs. Unfortunately I then need to navigate to
 the same directory as the other tabs. It&#39;s a big pain. Fortunately
 <a href="http://superuser.com/questions/232835/zsh-open-a-new-tab-in-the-same-directory/232862#232862">superuser.com has a
 solution</a>.</p>
 <p>Create a new file in &quot;/usr/local/bin&quot; named &quot;nt&quot;</p>
-<pre><code class="lang-bash"><span class="comment">#!/bin/bash</span>
-osascript -e <span class="string">'tell application "Terminal"'</span> \
--e <span class="string">'tell application "System Events" to tell process "Terminal" to keystroke "t" using command down'</span> \
--e <span class="string">"do script with command \"cd `pwd`;clear\" in selected tab of the front window"</span> \
--e <span class="string">'end tell'</span> &amp;> /dev/<span class="keyword">null</span></code></pre>
+<div class="highlight"><pre><span class="c">#!/bin/bash</span>
+osascript -e <span class="s1">&#39;tell application &quot;Terminal&quot;&#39;</span> <span class="se">\</span>
+-e <span class="s1">&#39;tell application &quot;System Events&quot; to tell process &quot;Terminal&quot; to keystroke &quot;t&quot; using command down&#39;</span> <span class="se">\</span>
+-e <span class="s2">&quot;do script with command \&quot;cd `pwd`;clear\&quot; in selected tab of the front window&quot;</span> <span class="se">\</span>
+-e <span class="s1">&#39;end tell&#39;</span> &amp;&gt; /dev/null
+</pre></div>
+
 <p>Then set its executable bit. &quot;chmod +x /usr/local/bin/nt&quot;</p>
 <p>That&#39;s it!</p>
 <p>Advertisement: Make Git simple. Let <a href="http://gitpilot.com">Gitpilot</a> show
@@ -106,17 +70,19 @@ will help you write software faster.</p>
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-    
-
-          <span id="footer">
-            <br/>
-            <span style="font-size: 10px">
-              Proudly built with <a href="https://github.com/skywrite">Sky</a>.
-            </span>
-          </span>
-        </div>
+    <span id="footer"><br><span style="font-size: 10px;">Proudly built with<a href="https://github.com/skywrite"> Sky</a></span></span></div>
       </div>
     </div>
-    
+    <div class="scripts">  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35069840-2']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+    </div>
   </body>
 </html>

@@ -6,149 +6,121 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="JP Richardson">
-    <mete name="description" content="">
-
     <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
-    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
-    <!--<link href="style.css" rel="stylesheet">-->
-
-    <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
-
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-      <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-35069840-2']);
-    _gaq.push(['_trackPageview']);
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/highlight.css" rel="stylesheet">
   </head>
   <body>
-    
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid nav-container">
-          <nav role="navigation">
-            <a class="brand" title="" href="http://procbits.com">procbits</a>
-            
-            <p class="navbar-text pull-left">
-              source code snippets and other random musings about software
-            </p>
-          </nav>
-
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </a>
-
-
-
+          <nav role="navigation"><a title="" href="http://procbits.com" class="brand">procbits</a>
+            <p class="navbar-text pull-left">source code snippets and other random musings about software</p>
+            <ul class="nav pull-right">             
+              <li><a href="/tags">Tags</a></li>
+              <li><a href="/rss.xml">RSS</a></li>
+            </ul>
+          </nav><a data-toggle="collapse" data-target=".nav-collapse" href="http://procbits.com" class="btn btn-navbar">procbits<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a>
         </div>
       </div>
     </div>
-
-
     <div class="container-fluid">
       <div id="content" class="clearfix row-fluid">
-        <div id="main" class="span8 clearfix" role="main">
+        <div id="main" role="main" class="span8 clearfix"><h1>Comparing Two Javascript Objects</h1>
 
-
-<h1>Comparing Two Javascript Objects</h1>
 <p>Recently, I was faced with a problem where I needed to compare two
 Javascript objects. My initial strategy was to convert them to JSON and
 compare the JSON strings.</p>
 <p>Sort of like this:</p>
-<pre><code class="lang-javascript"><span class="keyword">var</span> a = JSON.stringify(person1);<span class="comment">//'{"firstName":"JP","lastName":"Richardson"}'</span>
-<span class="keyword">var</span> b = JSON.stringify(person2);<span class="comment">//'{"firstName":"JP","lastName":"Richardson"}'</span>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">person1</span><span class="p">);</span><span class="c1">//&#39;{&quot;firstName&quot;:&quot;JP&quot;,&quot;lastName&quot;:&quot;Richardson&quot;}&#39;</span>
+<span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">person2</span><span class="p">);</span><span class="c1">//&#39;{&quot;firstName&quot;:&quot;JP&quot;,&quot;lastName&quot;:&quot;Richardson&quot;}&#39;</span>
 
-assert(a === b);</code></pre>
+<span class="nx">assert</span><span class="p">(</span><span class="nx">a</span> <span class="o">===</span> <span class="nx">b</span><span class="p">);</span>
+</pre></div>
+
 <p>Simple enough, right?</p>
 <p>Not so fast. I encountered a case like this:</p>
-<pre><code class="lang-javascript"><span class="keyword">var</span> a = JSON.stringify(person1);<span class="comment">//'{"firstName":"JP","lastName":"Richardson"}'</span>
-<span class="keyword">var</span> b = JSON.stringify(person2);<span class="comment">//'{"lastName":"Richardson","firstName":"JP"}'</span>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">person1</span><span class="p">);</span><span class="c1">//&#39;{&quot;firstName&quot;:&quot;JP&quot;,&quot;lastName&quot;:&quot;Richardson&quot;}&#39;</span>
+<span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">person2</span><span class="p">);</span><span class="c1">//&#39;{&quot;lastName&quot;:&quot;Richardson&quot;,&quot;firstName&quot;:&quot;JP&quot;}&#39;</span>
 
-assert(a === b);</code></pre>
+<span class="nx">assert</span><span class="p">(</span><span class="nx">a</span> <span class="o">===</span> <span class="nx">b</span><span class="p">);</span>
+</pre></div>
+
 <p>The data is the same, but the string is different. Fortunately,
 Stackoverflow had a nice <a href="http://stackoverflow.com/questions/1068834/object-comparison-in-javascript">Javascript object comparison
 algorithm</a>
 to dump into my app.</p>
-<pre><code class="lang-javascript">Object.prototype.equals = <span class="keyword">function</span>(x)
-{
-  <span class="keyword">var</span> p;
-  <span class="keyword">for</span>(p in <span class="keyword">this</span>) {
-      <span class="keyword">if</span>(typeof(x[p])==<span class="string">'undefined'</span>) {<span class="keyword">return</span> <span class="keyword">false</span>;}
-  }
+<div class="highlight"><pre><span class="nb">Object</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">equals</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span>
+<span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">p</span><span class="p">;</span>
+  <span class="k">for</span><span class="p">(</span><span class="nx">p</span> <span class="k">in</span> <span class="k">this</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="nx">x</span><span class="p">[</span><span class="nx">p</span><span class="p">])</span><span class="o">==</span><span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="kc">false</span><span class="p">;}</span>
+  <span class="p">}</span>
 
-  <span class="keyword">for</span>(p in <span class="keyword">this</span>) {
-      <span class="keyword">if</span> (<span class="keyword">this</span>[p]) {
-          <span class="keyword">switch</span>(typeof(<span class="keyword">this</span>[p])) {
-              <span class="keyword">case</span> <span class="string">'object'</span>:
-                  <span class="keyword">if</span> (!<span class="keyword">this</span>[p].equals(x[p])) { <span class="keyword">return</span> <span class="keyword">false</span>; } <span class="keyword">break</span>;
-              <span class="keyword">case</span> <span class="string">'function'</span>:
-                  <span class="keyword">if</span> (typeof(x[p])==<span class="string">'undefined'</span> ||
-                      (p != <span class="string">'equals'</span> &amp;&amp; <span class="keyword">this</span>[p].toString() != x[p].toString()))
-                      <span class="keyword">return</span> <span class="keyword">false</span>;
-                  <span class="keyword">break</span>;
-              <span class="keyword">default</span>:
-                  <span class="keyword">if</span> (<span class="keyword">this</span>[p] != x[p]) { <span class="keyword">return</span> <span class="keyword">false</span>; }
-          }
-      } <span class="keyword">else</span> {
-          <span class="keyword">if</span> (x[p])
-              <span class="keyword">return</span> <span class="keyword">false</span>;
-      }
-  }
+  <span class="k">for</span><span class="p">(</span><span class="nx">p</span> <span class="k">in</span> <span class="k">this</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">p</span><span class="p">])</span> <span class="p">{</span>
+          <span class="k">switch</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">p</span><span class="p">]))</span> <span class="p">{</span>
+              <span class="k">case</span> <span class="s1">&#39;object&#39;</span><span class="o">:</span>
+                  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">[</span><span class="nx">p</span><span class="p">].</span><span class="nx">equals</span><span class="p">(</span><span class="nx">x</span><span class="p">[</span><span class="nx">p</span><span class="p">]))</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
+              <span class="k">case</span> <span class="s1">&#39;function&#39;</span><span class="o">:</span>
+                  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="nx">x</span><span class="p">[</span><span class="nx">p</span><span class="p">])</span><span class="o">==</span><span class="s1">&#39;undefined&#39;</span> <span class="o">||</span>
+                      <span class="p">(</span><span class="nx">p</span> <span class="o">!=</span> <span class="s1">&#39;equals&#39;</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">[</span><span class="nx">p</span><span class="p">].</span><span class="nx">toString</span><span class="p">()</span> <span class="o">!=</span> <span class="nx">x</span><span class="p">[</span><span class="nx">p</span><span class="p">].</span><span class="nx">toString</span><span class="p">()))</span>
+                      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+                  <span class="k">break</span><span class="p">;</span>
+              <span class="k">default</span><span class="o">:</span>
+                  <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">p</span><span class="p">]</span> <span class="o">!=</span> <span class="nx">x</span><span class="p">[</span><span class="nx">p</span><span class="p">])</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="p">}</span>
+          <span class="p">}</span>
+      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+          <span class="k">if</span> <span class="p">(</span><span class="nx">x</span><span class="p">[</span><span class="nx">p</span><span class="p">])</span>
+              <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+      <span class="p">}</span>
+  <span class="p">}</span>
 
-  <span class="keyword">for</span>(p in x) {
-      <span class="keyword">if</span>(typeof(<span class="keyword">this</span>[p])==<span class="string">'undefined'</span>) {<span class="keyword">return</span> <span class="keyword">false</span>;}
-  }
+  <span class="k">for</span><span class="p">(</span><span class="nx">p</span> <span class="k">in</span> <span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">if</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">p</span><span class="p">])</span><span class="o">==</span><span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="kc">false</span><span class="p">;}</span>
+  <span class="p">}</span>
 
-  <span class="keyword">return</span> <span class="keyword">true</span>;
-}</code></pre>
+  <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
 <p>Test passed. I eventually hit a situation where I had some code with an
 Object that had a Person prototype and some data that came from JSON.
 Kinda like this:</p>
-<pre><code class="lang-javascript"><span class="keyword">var</span> person1 = <span class="keyword">new</span> Person(<span class="string">'JP'</span>, <span class="string">'Richardson'</span>);
-<span class="keyword">var</span> person2 = JSON.parse(<span class="string">'{"firstName":"JP","lastName":"Richardson"}'</span>);
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">person1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">(</span><span class="s1">&#39;JP&#39;</span><span class="p">,</span> <span class="s1">&#39;Richardson&#39;</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">person2</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="s1">&#39;{&quot;firstName&quot;:&quot;JP&quot;,&quot;lastName&quot;:&quot;Richardson&quot;}&#39;</span><span class="p">);</span>
 
-<span class="comment">//deepEquals is code snippet above ^</span>
-person1.deepEquals(person2); <span class="comment">// &lt;--- THIS FAILS</span></code></pre>
+<span class="c1">//deepEquals is code snippet above ^</span>
+<span class="nx">person1</span><span class="p">.</span><span class="nx">deepEquals</span><span class="p">(</span><span class="nx">person2</span><span class="p">);</span> <span class="c1">// &lt;--- THIS FAILS</span>
+</pre></div>
+
 <p>I only cared about comparing the data. The methods associated with the
 object (Prototype) didn&#39;t matter. Let&#39;s modify the above algorithm. I
 use CoffeeScript. Here&#39;s the modification:</p>
-<pre><code class="lang-ruby">Object::jsonEquals = (x) ->
-  <span class="comment">#we do this because two objects may have the same data fields and data but different prototypes</span>
-  x1 = JSON.parse(JSON.stringify(<span class="keyword">this</span>))
-  x2 = JSON.parse(JSON.stringify(x))
+<div class="highlight"><pre><span class="no">Object</span><span class="o">::</span><span class="n">jsonEquals</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-&gt;</span>
+  <span class="c1">#we do this because two objects may have the same data fields and data but different prototypes</span>
+  <span class="n">x1</span> <span class="o">=</span> <span class="no">JSON</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="no">JSON</span><span class="o">.</span><span class="n">stringify</span><span class="p">(</span><span class="n">this</span><span class="p">))</span>
+  <span class="n">x2</span> <span class="o">=</span> <span class="no">JSON</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="no">JSON</span><span class="o">.</span><span class="n">stringify</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
 
-  p = <span class="keyword">null</span>
-  <span class="keyword">for</span> p of x1
-    <span class="keyword">return</span> <span class="keyword">false</span> <span class="keyword">if</span> typeof (x2[p]) is <span class="string">'undefined'</span>
-  <span class="keyword">for</span> p of x1
-    <span class="keyword">if</span> x1[p]
-      <span class="keyword">switch</span> typeof (x1[p])
-        when <span class="string">'object'</span>
-          <span class="keyword">return</span> <span class="keyword">false</span> unless x1[p].jsonEquals(x2[p])
-        when <span class="string">'function'</span>
-          <span class="keyword">return</span> <span class="keyword">false</span> <span class="keyword">if</span> typeof (x2[p]) is <span class="string">'undefined'</span> <span class="keyword">or</span> (p isnt <span class="string">'equals'</span> <span class="keyword">and</span> x1[p].toString() isnt x2[p].toString())
-        <span class="keyword">else</span>
-          <span class="keyword">return</span> <span class="keyword">false</span>  unless x1[p] is x2[p]
-    <span class="keyword">else</span>
-      <span class="keyword">return</span> <span class="keyword">false</span> <span class="keyword">if</span> x2[p]
-  <span class="keyword">for</span> p of x2
-    <span class="keyword">return</span> <span class="keyword">false</span> <span class="keyword">if</span> typeof (x1[p]) is <span class="string">'undefined'</span>
-  <span class="keyword">true</span></code></pre>
+  <span class="nb">p</span> <span class="o">=</span> <span class="n">null</span>
+  <span class="k">for</span> <span class="nb">p</span> <span class="n">of</span> <span class="n">x1</span>
+    <span class="k">return</span> <span class="kp">false</span> <span class="k">if</span> <span class="n">typeof</span> <span class="p">(</span><span class="n">x2</span><span class="o">[</span><span class="nb">p</span><span class="o">]</span><span class="p">)</span> <span class="n">is</span> <span class="s1">&#39;undefined&#39;</span>
+  <span class="k">for</span> <span class="nb">p</span> <span class="n">of</span> <span class="n">x1</span>
+    <span class="k">if</span> <span class="n">x1</span><span class="o">[</span><span class="nb">p</span><span class="o">]</span>
+      <span class="n">switch</span> <span class="n">typeof</span> <span class="p">(</span><span class="n">x1</span><span class="o">[</span><span class="nb">p</span><span class="o">]</span><span class="p">)</span>
+        <span class="k">when</span> <span class="s1">&#39;object&#39;</span>
+          <span class="k">return</span> <span class="kp">false</span> <span class="k">unless</span> <span class="n">x1</span><span class="o">[</span><span class="nb">p</span><span class="o">].</span><span class="n">jsonEquals</span><span class="p">(</span><span class="n">x2</span><span class="o">[</span><span class="nb">p</span><span class="o">]</span><span class="p">)</span>
+        <span class="k">when</span> <span class="s1">&#39;function&#39;</span>
+          <span class="k">return</span> <span class="kp">false</span> <span class="k">if</span> <span class="n">typeof</span> <span class="p">(</span><span class="n">x2</span><span class="o">[</span><span class="nb">p</span><span class="o">]</span><span class="p">)</span> <span class="n">is</span> <span class="s1">&#39;undefined&#39;</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">p</span> <span class="n">isnt</span> <span class="s1">&#39;equals&#39;</span> <span class="ow">and</span> <span class="n">x1</span><span class="o">[</span><span class="nb">p</span><span class="o">].</span><span class="n">toString</span><span class="p">()</span> <span class="n">isnt</span> <span class="n">x2</span><span class="o">[</span><span class="nb">p</span><span class="o">].</span><span class="n">toString</span><span class="p">())</span>
+        <span class="k">else</span>
+          <span class="k">return</span> <span class="kp">false</span>  <span class="k">unless</span> <span class="n">x1</span><span class="o">[</span><span class="nb">p</span><span class="o">]</span> <span class="n">is</span> <span class="n">x2</span><span class="o">[</span><span class="nb">p</span><span class="o">]</span>
+    <span class="k">else</span>
+      <span class="k">return</span> <span class="kp">false</span> <span class="k">if</span> <span class="n">x2</span><span class="o">[</span><span class="nb">p</span><span class="o">]</span>
+  <span class="k">for</span> <span class="nb">p</span> <span class="n">of</span> <span class="n">x2</span>
+    <span class="k">return</span> <span class="kp">false</span> <span class="k">if</span> <span class="n">typeof</span> <span class="p">(</span><span class="n">x1</span><span class="o">[</span><span class="nb">p</span><span class="o">]</span><span class="p">)</span> <span class="n">is</span> <span class="s1">&#39;undefined&#39;</span>
+  <span class="kp">true</span>
+</pre></div>
+
 <p>This causes the situation like I described above to pass. Essentially
 convert to JSON to remove the prototype. I suppose you could make this
 more efficient my just manually setting the prototype to Object before
@@ -182,17 +154,19 @@ and read my blog on entrepreneurship: <a href="http://techneur.com">Techneur</a>
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-    
-
-          <span id="footer">
-            <br/>
-            <span style="font-size: 10px">
-              Proudly built with <a href="https://github.com/skywrite">Sky</a>.
-            </span>
-          </span>
-        </div>
+    <span id="footer"><br><span style="font-size: 10px;">Proudly built with<a href="https://github.com/skywrite"> Sky</a></span></span></div>
       </div>
     </div>
-    
+    <div class="scripts">  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35069840-2']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+    </div>
   </body>
 </html>

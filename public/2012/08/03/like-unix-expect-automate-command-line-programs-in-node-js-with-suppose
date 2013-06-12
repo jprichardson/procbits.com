@@ -1,71 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Like Unix Expect: Automate Command Line Programs in Node.js with Suppose</title>
+    <title>Like Unix Expect</title>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="JP Richardson">
-    <mete name="description" content="">
-
     <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
-    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
-    <!--<link href="style.css" rel="stylesheet">-->
-
-    <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
-
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-      <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-35069840-2']);
-    _gaq.push(['_trackPageview']);
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/highlight.css" rel="stylesheet">
   </head>
   <body>
-    
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid nav-container">
-          <nav role="navigation">
-            <a class="brand" title="" href="http://procbits.com">procbits</a>
-            
-            <p class="navbar-text pull-left">
-              source code snippets and other random musings about software
-            </p>
-          </nav>
-
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </a>
-
-
-
+          <nav role="navigation"><a title="" href="http://procbits.com" class="brand">procbits</a>
+            <p class="navbar-text pull-left">source code snippets and other random musings about software</p>
+            <ul class="nav pull-right">             
+              <li><a href="/tags">Tags</a></li>
+              <li><a href="/rss.xml">RSS</a></li>
+            </ul>
+          </nav><a data-toggle="collapse" data-target=".nav-collapse" href="http://procbits.com" class="btn btn-navbar">procbits<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a>
         </div>
       </div>
     </div>
-
-
     <div class="container-fluid">
       <div id="content" class="clearfix row-fluid">
-        <div id="main" class="span8 clearfix" role="main">
+        <div id="main" role="main" class="span8 clearfix"><h1>Like Unix Expect</h1>
 
-
-<h1>Like Unix Expect: Automate Command Line Programs in Node.js with Suppose</h1>
 <p>Have you ever heard of the command line program
 <a href="http://en.wikipedia.org/wiki/Expect">expect</a>? Basically, expect allows
 you to automate command line programs.
@@ -76,35 +38,37 @@ maybe you want to test the external interface of on of your Node.js
 command line scripts.</p>
 <p>Install: <code>npm install suppose</code></p>
 <p>Example:</p>
-<pre><code class="lang-javascript">process.chdir(<span class="string">'/tmp/awesome'</span>);
-suppose(<span class="string">'npm'</span>, [<span class="string">'init'</span>])
-  .on(<span class="string">'name: (awesome) '</span>).respond(<span class="string">'awesome_package\n'</span>)
-  .on(<span class="string">'version: (0.0.0) '</span>).respond(<span class="string">'0.0.1\n'</span>)
-  .on(<span class="string">'description: '</span>).respond(<span class="string">"It's an awesome package man!\n"</span>)
-  .on(<span class="string">'entry point: (index.js) '</span>).respond(<span class="string">"\n"</span>)
-  .on(<span class="string">'test command: '</span>).respond(<span class="string">'npm test\n'</span>)
-  .on(<span class="string">'git repository: '</span>).respond(<span class="string">"\n"</span>)
-  .on(<span class="string">'keywords: '</span>).respond(<span class="string">'awesome, cool\n'</span>)
-  .on(<span class="string">'author: '</span>).respond(<span class="string">'JP Richardson\n'</span>)
-  .on(<span class="string">'license: (BSD) '</span>).respond(<span class="string">'MIT\n'</span>)
-  .on(<span class="string">'ok? (yes) '</span> ).respond(<span class="string">'yes\n'</span>)
-.end(<span class="keyword">function</span>(code){
-    assert(code === <span class="number">0</span>);
-    <span class="keyword">var</span> packageFile = <span class="string">'/tmp/awesome/package.json'</span>;
-    fs.readFile(packageFile, <span class="keyword">function</span>(err, data){
-        <span class="keyword">var</span> packageObj = JSON.parse(data.toString());
-        assert(packageObj.name === <span class="string">'awesome_package'</span>);
-        assert(packageObj.version === <span class="string">'0.0.1'</span>);
-        assert(packageObj.description === <span class="string">"It's an awesome package man!"</span>);
-        assert(packageObj.main === <span class="string">'index.js'</span>);
-        assert(packageObj.scripts.test === <span class="string">'npm test'</span>);
-        assert(packageObj.keywords[<span class="number">0</span>] === <span class="string">'awesome'</span>);
-        assert(packageObj.keywords[<span class="number">1</span>] === <span class="string">'cool'</span>);
-        assert(packageObj.author === <span class="string">'JP Richardson'</span>);
-        assert(packageObj.license === <span class="string">'MIT'</span>);
-        done();
-    });
-});</code></pre>
+<div class="highlight"><pre><span class="nx">process</span><span class="p">.</span><span class="nx">chdir</span><span class="p">(</span><span class="s1">&#39;/tmp/awesome&#39;</span><span class="p">);</span>
+<span class="nx">suppose</span><span class="p">(</span><span class="s1">&#39;npm&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;init&#39;</span><span class="p">])</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;name: (awesome) &#39;</span><span class="p">).</span><span class="nx">respond</span><span class="p">(</span><span class="s1">&#39;awesome_package\n&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;version: (0.0.0) &#39;</span><span class="p">).</span><span class="nx">respond</span><span class="p">(</span><span class="s1">&#39;0.0.1\n&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;description: &#39;</span><span class="p">).</span><span class="nx">respond</span><span class="p">(</span><span class="s2">&quot;It&#39;s an awesome package man!\n&quot;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;entry point: (index.js) &#39;</span><span class="p">).</span><span class="nx">respond</span><span class="p">(</span><span class="s2">&quot;\n&quot;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;test command: &#39;</span><span class="p">).</span><span class="nx">respond</span><span class="p">(</span><span class="s1">&#39;npm test\n&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;git repository: &#39;</span><span class="p">).</span><span class="nx">respond</span><span class="p">(</span><span class="s2">&quot;\n&quot;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;keywords: &#39;</span><span class="p">).</span><span class="nx">respond</span><span class="p">(</span><span class="s1">&#39;awesome, cool\n&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;author: &#39;</span><span class="p">).</span><span class="nx">respond</span><span class="p">(</span><span class="s1">&#39;JP Richardson\n&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;license: (BSD) &#39;</span><span class="p">).</span><span class="nx">respond</span><span class="p">(</span><span class="s1">&#39;MIT\n&#39;</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;ok? (yes) &#39;</span> <span class="p">).</span><span class="nx">respond</span><span class="p">(</span><span class="s1">&#39;yes\n&#39;</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">code</span><span class="p">){</span>
+    <span class="nx">assert</span><span class="p">(</span><span class="nx">code</span> <span class="o">===</span> <span class="mi">0</span><span class="p">);</span>
+    <span class="kd">var</span> <span class="nx">packageFile</span> <span class="o">=</span> <span class="s1">&#39;/tmp/awesome/package.json&#39;</span><span class="p">;</span>
+    <span class="nx">fs</span><span class="p">.</span><span class="nx">readFile</span><span class="p">(</span><span class="nx">packageFile</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">){</span>
+        <span class="kd">var</span> <span class="nx">packageObj</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">toString</span><span class="p">());</span>
+        <span class="nx">assert</span><span class="p">(</span><span class="nx">packageObj</span><span class="p">.</span><span class="nx">name</span> <span class="o">===</span> <span class="s1">&#39;awesome_package&#39;</span><span class="p">);</span>
+        <span class="nx">assert</span><span class="p">(</span><span class="nx">packageObj</span><span class="p">.</span><span class="nx">version</span> <span class="o">===</span> <span class="s1">&#39;0.0.1&#39;</span><span class="p">);</span>
+        <span class="nx">assert</span><span class="p">(</span><span class="nx">packageObj</span><span class="p">.</span><span class="nx">description</span> <span class="o">===</span> <span class="s2">&quot;It&#39;s an awesome package man!&quot;</span><span class="p">);</span>
+        <span class="nx">assert</span><span class="p">(</span><span class="nx">packageObj</span><span class="p">.</span><span class="nx">main</span> <span class="o">===</span> <span class="s1">&#39;index.js&#39;</span><span class="p">);</span>
+        <span class="nx">assert</span><span class="p">(</span><span class="nx">packageObj</span><span class="p">.</span><span class="nx">scripts</span><span class="p">.</span><span class="nx">test</span> <span class="o">===</span> <span class="s1">&#39;npm test&#39;</span><span class="p">);</span>
+        <span class="nx">assert</span><span class="p">(</span><span class="nx">packageObj</span><span class="p">.</span><span class="nx">keywords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;awesome&#39;</span><span class="p">);</span>
+        <span class="nx">assert</span><span class="p">(</span><span class="nx">packageObj</span><span class="p">.</span><span class="nx">keywords</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">===</span> <span class="s1">&#39;cool&#39;</span><span class="p">);</span>
+        <span class="nx">assert</span><span class="p">(</span><span class="nx">packageObj</span><span class="p">.</span><span class="nx">author</span> <span class="o">===</span> <span class="s1">&#39;JP Richardson&#39;</span><span class="p">);</span>
+        <span class="nx">assert</span><span class="p">(</span><span class="nx">packageObj</span><span class="p">.</span><span class="nx">license</span> <span class="o">===</span> <span class="s1">&#39;MIT&#39;</span><span class="p">);</span>
+        <span class="nx">done</span><span class="p">();</span>
+    <span class="p">});</span>
+<span class="p">});</span>
+</pre></div>
+
 <p>Pretty easy, huh? You can grab the source on
 <a href="https://github.com/jprichardson/node-suppose">Github</a>.</p>
 <p>If you use Git with others, you should checkout
@@ -136,17 +100,19 @@ using a different GUI. We would love your feedback.</p>
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-    
-
-          <span id="footer">
-            <br/>
-            <span style="font-size: 10px">
-              Proudly built with <a href="https://github.com/skywrite">Sky</a>.
-            </span>
-          </span>
-        </div>
+    <span id="footer"><br><span style="font-size: 10px;">Proudly built with<a href="https://github.com/skywrite"> Sky</a></span></span></div>
       </div>
     </div>
-    
+    <div class="scripts">  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35069840-2']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+    </div>
   </body>
 </html>

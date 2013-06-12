@@ -6,90 +6,54 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="JP Richardson">
-    <mete name="description" content="">
-
     <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
-    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
-    <!--<link href="style.css" rel="stylesheet">-->
-
-    <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
-
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-      <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-35069840-2']);
-    _gaq.push(['_trackPageview']);
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/highlight.css" rel="stylesheet">
   </head>
   <body>
-    
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid nav-container">
-          <nav role="navigation">
-            <a class="brand" title="" href="http://procbits.com">procbits</a>
-            
-            <p class="navbar-text pull-left">
-              source code snippets and other random musings about software
-            </p>
-          </nav>
-
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </a>
-
-
-
+          <nav role="navigation"><a title="" href="http://procbits.com" class="brand">procbits</a>
+            <p class="navbar-text pull-left">source code snippets and other random musings about software</p>
+            <ul class="nav pull-right">             
+              <li><a href="/tags">Tags</a></li>
+              <li><a href="/rss.xml">RSS</a></li>
+            </ul>
+          </nav><a data-toggle="collapse" data-target=".nav-collapse" href="http://procbits.com" class="btn btn-navbar">procbits<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a>
         </div>
       </div>
     </div>
-
-
     <div class="container-fluid">
       <div id="content" class="clearfix row-fluid">
-        <div id="main" class="span8 clearfix" role="main">
+        <div id="main" role="main" class="span8 clearfix"><h1>Synchronous File Copy in Node.js</h1>
 
-
-<h1>Synchronous File Copy in Node.js</h1>
 <p>Sometimes, asynchronous operations can be a burden. Especially when
 you&#39;re writing small console utilities like to batch process files.</p>
 <p>There are many asynchronous ways to copy a file. Here is a synchronous
 version (CoffeeScript):</p>
-<pre><code class="lang-ruby">copyFileSync = (srcFile, destFile) ->
-  BUF_LENGTH = <span class="number">64</span>*<span class="number">1024</span>
-  buff = <span class="keyword">new</span> Buffer(BUF_LENGTH)
-  fdr = fs.openSync(srcFile, <span class="string">'r'</span>)
-  fdw = fs.openSync(destFile, <span class="string">'w'</span>)
-  bytesRead = <span class="number">1</span>
-  pos = <span class="number">0</span>
-  <span class="keyword">while</span> bytesRead > <span class="number">0</span>
-    bytesRead = fs.readSync(fdr, buff, <span class="number">0</span>, BUF_LENGTH, pos)
-    fs.writeSync(fdw,buff,<span class="number">0</span>,bytesRead)
-    pos += bytesRead
-  fs.closeSync(fdr)
-  fs.closeSync(fdw)</code></pre>
-<p>You can view the <a href="http://jashkenas.github.com/coffee-script/#try:copyFileSync%20%3D%20(srcFile%2C%20destFile">converted version in
-JavaScript</a>%20-%3E%0A%20%20BUF_LENGTH%20%3D%2064*1024%0A%20%20buff%20%3D%20new%20Buffer(BUF_LENGTH)%0A%20%20fdr%20%3D%20fs.openSync(srcFile%2C%20&#39;r&#39;)%0A%20%20fdw%20%3D%20fs.openSync(destFile%2C%20&#39;w&#39;)%0A%20%20bytesRead%20%3D%201%0A%20%20pos%20%3D%200%0A%20%20while%20bytesRead%20%3E%200%0A%20%20%20%20bytesRead%20%3D%20fs.readSync(fdr%2C%20buff%2C%200%2C%20BUF_LENGTH%2C%20pos)%0A%20%20%20%20fs.writeSync(fdw%2Cbuff%2C0%2CbytesRead)%0A%20%20%20%20pos%20%2B%3D%20bytesRead%0A%20%20fs.closeSync(fdr)%0A%20%20fs.closeSync(fdw)).</p>
+<div class="highlight"><pre><span class="n">copyFileSync</span> <span class="o">=</span> <span class="p">(</span><span class="n">srcFile</span><span class="p">,</span> <span class="n">destFile</span><span class="p">)</span> <span class="o">-&gt;</span>
+  <span class="no">BUF_LENGTH</span> <span class="o">=</span> <span class="mi">64</span><span class="o">*</span><span class="mi">1024</span>
+  <span class="n">buff</span> <span class="o">=</span> <span class="kp">new</span> <span class="no">Buffer</span><span class="p">(</span><span class="no">BUF_LENGTH</span><span class="p">)</span>
+  <span class="n">fdr</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">openSync</span><span class="p">(</span><span class="n">srcFile</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+  <span class="n">fdw</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">openSync</span><span class="p">(</span><span class="n">destFile</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+  <span class="n">bytesRead</span> <span class="o">=</span> <span class="mi">1</span>
+  <span class="n">pos</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="k">while</span> <span class="n">bytesRead</span> <span class="o">&gt;</span> <span class="mi">0</span>
+    <span class="n">bytesRead</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">readSync</span><span class="p">(</span><span class="n">fdr</span><span class="p">,</span> <span class="n">buff</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="no">BUF_LENGTH</span><span class="p">,</span> <span class="n">pos</span><span class="p">)</span>
+    <span class="n">fs</span><span class="o">.</span><span class="n">writeSync</span><span class="p">(</span><span class="n">fdw</span><span class="p">,</span><span class="n">buff</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="n">bytesRead</span><span class="p">)</span>
+    <span class="n">pos</span> <span class="o">+=</span> <span class="n">bytesRead</span>
+  <span class="n">fs</span><span class="o">.</span><span class="n">closeSync</span><span class="p">(</span><span class="n">fdr</span><span class="p">)</span>
+  <span class="n">fs</span><span class="o">.</span><span class="n">closeSync</span><span class="p">(</span><span class="n">fdw</span><span class="p">)</span>
+</pre></div>
+
+<p>You can view the <a href="http://jashkenas.github.io/coffee-script/#try:copyFileSync%20%3D%20(srcFile%2C%20destFile)%20-%3E%0A%20%20BUF_LENGTH%20%3D%2064*1024%0A%20%20buff%20%3D%20new%20Buffer(BUF_LENGTH)%0A%20%20fdr%20%3D%20fs.openSync(srcFile%2C%20%22r%22)%0A%20%20fdw%20%3D%20fs.openSync(destFile%2C%20%22w%22)%0A%20%20bytesRead%20%3D%201%0A%20%20pos%20%3D%200%0A%20%20while%20bytesRead%20%3E%200%0A%20%20%20%20bytesRead%20%3D%20fs.readSync(fdr%2C%20buff%2C%200%2C%20BUF_LENGTH%2C%20pos)%0A%20%20%20%20fs.writeSync(fdw%2Cbuff%2C0%2CbytesRead)%0A%20%20%20%20pos%20%2B%3D%20bytesRead%0A%20%20fs.closeSync(fdr)%0A%20%20fs.closeSync(fdw)">converted version in
+JavaScript</a>.</p>
 <p>Do you use Git? If so, checkout <a href="http://gitpilot.com">Gitpilot</a> to make
 using Git thoughtless.</p>
 <p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>
 and read my blog on entrepreneurship: <a href="http://techneur.com">Techneur</a>.</p>
-<p>-JP Richardson</p>
+<p>-JP</p>
 
 
  <div id="disqus_thread"></div>
@@ -114,17 +78,19 @@ and read my blog on entrepreneurship: <a href="http://techneur.com">Techneur</a>
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-    
-
-          <span id="footer">
-            <br/>
-            <span style="font-size: 10px">
-              Proudly built with <a href="https://github.com/skywrite">Sky</a>.
-            </span>
-          </span>
-        </div>
+    <span id="footer"><br><span style="font-size: 10px;">Proudly built with<a href="https://github.com/skywrite"> Sky</a></span></span></div>
       </div>
     </div>
-    
+    <div class="scripts">  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35069840-2']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+    </div>
   </body>
 </html>

@@ -1,71 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>A Node.js Experiment: Thinking Asynchronously, Using Recursion to Calculate the Total File Size in a Directory</title>
+    <title>A Node.js Experiment</title>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="JP Richardson">
-    <mete name="description" content="">
-
     <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
-    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
-    <!--<link href="style.css" rel="stylesheet">-->
-
-    <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
-
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-      <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-35069840-2']);
-    _gaq.push(['_trackPageview']);
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/highlight.css" rel="stylesheet">
   </head>
   <body>
-    
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid nav-container">
-          <nav role="navigation">
-            <a class="brand" title="" href="http://procbits.com">procbits</a>
-            
-            <p class="navbar-text pull-left">
-              source code snippets and other random musings about software
-            </p>
-          </nav>
-
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </a>
-
-
-
+          <nav role="navigation"><a title="" href="http://procbits.com" class="brand">procbits</a>
+            <p class="navbar-text pull-left">source code snippets and other random musings about software</p>
+            <ul class="nav pull-right">             
+              <li><a href="/tags">Tags</a></li>
+              <li><a href="/rss.xml">RSS</a></li>
+            </ul>
+          </nav><a data-toggle="collapse" data-target=".nav-collapse" href="http://procbits.com" class="btn btn-navbar">procbits<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a>
         </div>
       </div>
     </div>
-
-
     <div class="container-fluid">
       <div id="content" class="clearfix row-fluid">
-        <div id="main" class="span8 clearfix" role="main">
+        <div id="main" role="main" class="span8 clearfix"><h1>A Node.js Experiment</h1>
 
-
-<h1>A Node.js Experiment: Thinking Asynchronously, Using Recursion to Calculate the Total File Size in a Directory</h1>
 <p>I recently picked up Node.js/CoffeeScript; I figured that since
 JavaScript can run on about every modern computing device, it&#39;s about
 time that I accept JavaScript instead of side-stepping it by using dying
@@ -77,77 +39,83 @@ For the sake of this blog post and for the sake of your attention span,
 the problem can be reduced to a simple algorithm that computes the total
 space that a directory and its contents use.</p>
 <p>Let&#39;s start by creating a simple synchronous version:</p>
-<pre><code class="lang-ruby">fs = <span class="keyword">require</span>(<span class="string">'fs'</span>)
-path = <span class="keyword">require</span>(<span class="string">'path'</span>)
+<div class="highlight"><pre><span class="n">fs</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">)</span>
+<span class="n">path</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">)</span>
 
-du = (dir) ->
-  total = <span class="number">0</span>
-  <span class="keyword">try</span> 
-    stat = fs.lstatSync(dir)
-    <span class="keyword">if</span> stat.isFile()
-      total += stat.size
-    <span class="keyword">else</span> <span class="keyword">if</span> stat.isDirectory()
-      files = fs.readdirSync(dir)
-      <span class="keyword">for</span> file in files
-        total += du(path.join(dir, file))
-  <span class="keyword">catch</span> e
+<span class="n">du</span> <span class="o">=</span> <span class="p">(</span><span class="n">dir</span><span class="p">)</span> <span class="o">-&gt;</span>
+  <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="n">try</span> 
+    <span class="n">stat</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">lstatSync</span><span class="p">(</span><span class="n">dir</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">stat</span><span class="o">.</span><span class="n">isFile</span><span class="p">()</span>
+      <span class="n">total</span> <span class="o">+=</span> <span class="n">stat</span><span class="o">.</span><span class="n">size</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="n">stat</span><span class="o">.</span><span class="n">isDirectory</span><span class="p">()</span>
+      <span class="n">files</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">readdirSync</span><span class="p">(</span><span class="n">dir</span><span class="p">)</span>
+      <span class="k">for</span> <span class="n">file</span> <span class="k">in</span> <span class="n">files</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="n">du</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dir</span><span class="p">,</span> <span class="n">file</span><span class="p">))</span>
+  <span class="kp">catch</span> <span class="n">e</span>
 
-  total
+  <span class="n">total</span>
 
-DIR = <span class="string">'/'</span>
-total_bytes = du(DIR)
-total_kb = total_bytes / <span class="number">1024.0</span>
-total_mb = total_kb / <span class="number">1024.0</span>
+<span class="no">DIR</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span>
+<span class="n">total_bytes</span> <span class="o">=</span> <span class="n">du</span><span class="p">(</span><span class="no">DIR</span><span class="p">)</span>
+<span class="n">total_kb</span> <span class="o">=</span> <span class="n">total_bytes</span> <span class="o">/</span> <span class="mi">1024</span><span class="o">.</span><span class="mi">0</span>
+<span class="n">total_mb</span> <span class="o">=</span> <span class="n">total_kb</span> <span class="o">/</span> <span class="mi">1024</span><span class="o">.</span><span class="mi">0</span>
 
-console.log(<span class="string">"#{DIR}: #{total_mb.toFixed(3)} MB"</span>)</code></pre>
+<span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">#{</span><span class="no">DIR</span><span class="si">}</span><span class="s2">: </span><span class="si">#{</span><span class="n">total_mb</span><span class="o">.</span><span class="n">toFixed</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2"> MB&quot;</span><span class="p">)</span>
+</pre></div>
+
 <p>This code works fine and as expected. It displays the total size of your
 entire directory in MiB. Ya, I know, I wrote &quot;MB&quot;.</p>
 <p>But... we are using Node.js here. The asynchronous nature should be
 embraced. Let&#39;s rewrite this algorithm in an asynchronous form.</p>
-<pre><code class="lang-ruby">fs = <span class="keyword">require</span>(<span class="string">'fs'</span>)
-path = <span class="keyword">require</span>(<span class="string">'path'</span>)
+<div class="highlight"><pre><span class="n">fs</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">)</span>
+<span class="n">path</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;path&#39;</span><span class="p">)</span>
 
-duAsync = (dir, cb) ->
-  total = <span class="number">0</span>
-  fs.lstat dir, (err, stat) ->
-    <span class="keyword">if</span> err then <span class="keyword">return</span>
-    <span class="keyword">if</span> stat.isFile()
-      total += stat.size
-    <span class="keyword">else</span> <span class="keyword">if</span> stat.isDirectory()
-      fs.readdir dir, (err, files) ->
-        <span class="keyword">if</span> err then <span class="keyword">return</span>
-        <span class="keyword">for</span> file in files
-          duAsync path.join(dir,file), cb
-    cb(<span class="keyword">null</span>,total)
+<span class="n">duAsync</span> <span class="o">=</span> <span class="p">(</span><span class="n">dir</span><span class="p">,</span> <span class="n">cb</span><span class="p">)</span> <span class="o">-&gt;</span>
+  <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="n">fs</span><span class="o">.</span><span class="n">lstat</span> <span class="n">dir</span><span class="p">,</span> <span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="n">stat</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="k">if</span> <span class="n">err</span> <span class="k">then</span> <span class="k">return</span>
+    <span class="k">if</span> <span class="n">stat</span><span class="o">.</span><span class="n">isFile</span><span class="p">()</span>
+      <span class="n">total</span> <span class="o">+=</span> <span class="n">stat</span><span class="o">.</span><span class="n">size</span>
+    <span class="k">else</span> <span class="k">if</span> <span class="n">stat</span><span class="o">.</span><span class="n">isDirectory</span><span class="p">()</span>
+      <span class="n">fs</span><span class="o">.</span><span class="n">readdir</span> <span class="n">dir</span><span class="p">,</span> <span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="n">files</span><span class="p">)</span> <span class="o">-&gt;</span>
+        <span class="k">if</span> <span class="n">err</span> <span class="k">then</span> <span class="k">return</span>
+        <span class="k">for</span> <span class="n">file</span> <span class="k">in</span> <span class="n">files</span>
+          <span class="n">duAsync</span> <span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dir</span><span class="p">,</span><span class="n">file</span><span class="p">),</span> <span class="n">cb</span>
+    <span class="n">cb</span><span class="p">(</span><span class="n">null</span><span class="p">,</span><span class="n">total</span><span class="p">)</span>
 
-DIR = <span class="string">'/'</span>
-duAsync DIR, (err, total_bytes) ->
-  total_kb = total_bytes / <span class="number">1000.0</span>
-  total_mb = total_kb / <span class="number">1000.0</span>
+<span class="no">DIR</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span>
+<span class="n">duAsync</span> <span class="no">DIR</span><span class="p">,</span> <span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="n">total_bytes</span><span class="p">)</span> <span class="o">-&gt;</span>
+  <span class="n">total_kb</span> <span class="o">=</span> <span class="n">total_bytes</span> <span class="o">/</span> <span class="mi">1000</span><span class="o">.</span><span class="mi">0</span>
+  <span class="n">total_mb</span> <span class="o">=</span> <span class="n">total_kb</span> <span class="o">/</span> <span class="mi">1000</span><span class="o">.</span><span class="mi">0</span>
 
-  console.log(<span class="string">"#{DIR}: #{total_mb.toFixed(3)} MB"</span>)</code></pre>
+  <span class="n">console</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">#{</span><span class="no">DIR</span><span class="si">}</span><span class="s2">: </span><span class="si">#{</span><span class="n">total_mb</span><span class="o">.</span><span class="n">toFixed</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="si">}</span><span class="s2"> MB&quot;</span><span class="p">)</span>
+</pre></div>
+
 <p>Hmm, this doesn&#39;t output the correct values. I&#39;m not passing the totals
 up the callback chain.</p>
 <p>Also, from here on out, I&#39;m only going to show the algorithm.</p>
 <p>Let&#39;s take advantage of closures and modify this a bit. If we could
 remove the recursion, that may simplify things a bit.</p>
-<pre><code class="lang-ruby">duAsync2 = (dir,cb) ->
-  total = <span class="number">0</span>
-  files = []
-  all_files.push(dir)
+<div class="highlight"><pre><span class="n">duAsync2</span> <span class="o">=</span> <span class="p">(</span><span class="n">dir</span><span class="p">,</span><span class="n">cb</span><span class="p">)</span> <span class="o">-&gt;</span>
+  <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="n">files</span> <span class="o">=</span> <span class="o">[]</span>
+  <span class="n">all_files</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">dir</span><span class="p">)</span>
 
-  <span class="keyword">while</span> all_files.length > <span class="number">0</span>
-    current_dir = files.pop
-    fs.lstat current_dir, (err,stat) ->
-      <span class="keyword">if</span> err then <span class="keyword">return</span>
-      <span class="keyword">if</span> stat.isFile()
-        total += stat.size
-      <span class="keyword">else</span> <span class="keyword">if</span> stat.isDirectory()
-        fs.readdir current_dir, (err,files) ->
-          <span class="keyword">if</span> err then <span class="keyword">return</span>
-          <span class="keyword">for</span> file in files
-            all_files.push(path.join(current_dir, file))
-      cb(<span class="keyword">null</span>,total)</code></pre>
+  <span class="k">while</span> <span class="n">all_files</span><span class="o">.</span><span class="n">length</span> <span class="o">&gt;</span> <span class="mi">0</span>
+    <span class="n">current_dir</span> <span class="o">=</span> <span class="n">files</span><span class="o">.</span><span class="n">pop</span>
+    <span class="n">fs</span><span class="o">.</span><span class="n">lstat</span> <span class="n">current_dir</span><span class="p">,</span> <span class="p">(</span><span class="n">err</span><span class="p">,</span><span class="n">stat</span><span class="p">)</span> <span class="o">-&gt;</span>
+      <span class="k">if</span> <span class="n">err</span> <span class="k">then</span> <span class="k">return</span>
+      <span class="k">if</span> <span class="n">stat</span><span class="o">.</span><span class="n">isFile</span><span class="p">()</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="n">stat</span><span class="o">.</span><span class="n">size</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="n">stat</span><span class="o">.</span><span class="n">isDirectory</span><span class="p">()</span>
+        <span class="n">fs</span><span class="o">.</span><span class="n">readdir</span> <span class="n">current_dir</span><span class="p">,</span> <span class="p">(</span><span class="n">err</span><span class="p">,</span><span class="n">files</span><span class="p">)</span> <span class="o">-&gt;</span>
+          <span class="k">if</span> <span class="n">err</span> <span class="k">then</span> <span class="k">return</span>
+          <span class="k">for</span> <span class="n">file</span> <span class="k">in</span> <span class="n">files</span>
+            <span class="n">all_files</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">current_dir</span><span class="p">,</span> <span class="n">file</span><span class="p">))</span>
+      <span class="n">cb</span><span class="p">(</span><span class="n">null</span><span class="p">,</span><span class="n">total</span><span class="p">)</span>
+</pre></div>
+
 <p>On the surface, this looks fairly simple. We have removed the recursive
 aspect to simplify it a bit. The code in the while block will always see
 &#39;total&#39; so we don&#39;t run into the same problem as the last
@@ -159,22 +127,24 @@ iteration.</p>
 <p>Maybe recursion is unavoidable? Let&#39;s still leverage closures though.</p>
 <p>This version is very similar to the last, I&#39;ve just managed to use
 recursion within a function. The &#39;again&#39; function is called recursively.</p>
-<pre><code class="lang-ruby">duAsync3 = (dir,cb) ->
-  total = <span class="number">0</span>
+<div class="highlight"><pre><span class="n">duAsync3</span> <span class="o">=</span> <span class="p">(</span><span class="n">dir</span><span class="p">,</span><span class="n">cb</span><span class="p">)</span> <span class="o">-&gt;</span>
+  <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
 
-  again = (current_dir) ->
-    fs.lstat current_dir, (err, stat) ->
-      <span class="keyword">if</span> err then <span class="keyword">return</span>
-      <span class="keyword">if</span> stat.isFile()
-        total += stat.size
-      <span class="keyword">else</span> <span class="keyword">if</span> stat.isDirectory()
-        fs.readdir current_dir, (err,files) ->
-          <span class="keyword">if</span> err then <span class="keyword">return</span>
-          <span class="keyword">for</span> file in files
-            again(path.join(current_dir, file))
-      cb(<span class="keyword">null</span>, total)
+  <span class="n">again</span> <span class="o">=</span> <span class="p">(</span><span class="n">current_dir</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="n">fs</span><span class="o">.</span><span class="n">lstat</span> <span class="n">current_dir</span><span class="p">,</span> <span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="n">stat</span><span class="p">)</span> <span class="o">-&gt;</span>
+      <span class="k">if</span> <span class="n">err</span> <span class="k">then</span> <span class="k">return</span>
+      <span class="k">if</span> <span class="n">stat</span><span class="o">.</span><span class="n">isFile</span><span class="p">()</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="n">stat</span><span class="o">.</span><span class="n">size</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="n">stat</span><span class="o">.</span><span class="n">isDirectory</span><span class="p">()</span>
+        <span class="n">fs</span><span class="o">.</span><span class="n">readdir</span> <span class="n">current_dir</span><span class="p">,</span> <span class="p">(</span><span class="n">err</span><span class="p">,</span><span class="n">files</span><span class="p">)</span> <span class="o">-&gt;</span>
+          <span class="k">if</span> <span class="n">err</span> <span class="k">then</span> <span class="k">return</span>
+          <span class="k">for</span> <span class="n">file</span> <span class="k">in</span> <span class="n">files</span>
+            <span class="n">again</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">current_dir</span><span class="p">,</span> <span class="n">file</span><span class="p">))</span>
+      <span class="n">cb</span><span class="p">(</span><span class="n">null</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>
 
-  again(dir)</code></pre>
+  <span class="n">again</span><span class="p">(</span><span class="n">dir</span><span class="p">)</span>
+</pre></div>
+
 <p>It works! Consider this: what if you only want the results at the very
 end? That is, you only want the callback to occur once, and at the
 end... then what do you do?</p>
@@ -215,32 +185,34 @@ suggested the following:</p>
 close. But it never quite worked. Then I thought about it a bit more and
 kept the concept of a &#39;running&#39; variable and added a variable to denote
 the number of files left to process.</p>
-<pre><code class="lang-ruby">duAsync4 = (dir,cb) ->
-  total = <span class="number">0</span>
-  file_counter = <span class="number">1</span> <span class="comment">#starts at one because of the initial directory</span>
-  async_running = <span class="number">0</span>
+<div class="highlight"><pre><span class="n">duAsync4</span> <span class="o">=</span> <span class="p">(</span><span class="n">dir</span><span class="p">,</span><span class="n">cb</span><span class="p">)</span> <span class="o">-&gt;</span>
+  <span class="n">total</span> <span class="o">=</span> <span class="mi">0</span>
+  <span class="n">file_counter</span> <span class="o">=</span> <span class="mi">1</span> <span class="c1">#starts at one because of the initial directory</span>
+  <span class="n">async_running</span> <span class="o">=</span> <span class="mi">0</span>
 
-  again = (current_dir) ->
-    fs.lstat current_dir, (err, stat) ->
-      <span class="keyword">if</span> err then file_counter--; <span class="keyword">return</span>
-      <span class="keyword">if</span> stat.isFile()
-        file_counter--
-        total += stat.size
-      <span class="keyword">else</span> <span class="keyword">if</span> stat.isDirectory()
-        file_counter--
-        async_running++
-        fs.readdir current_dir, (err,files) ->
-          async_running--
-          <span class="keyword">if</span> err then <span class="keyword">return</span> <span class="comment">#console.log err.message</span>
-          file_counter += files.length
-          <span class="keyword">for</span> file in files
-            again path.join(current_dir, file)
-      <span class="keyword">else</span>
-        file_counter--
-      <span class="keyword">if</span> file_counter is <span class="number">0</span> <span class="keyword">and</span> async_running is <span class="number">0</span>
-        cb(<span class="keyword">null</span>, total)
+  <span class="n">again</span> <span class="o">=</span> <span class="p">(</span><span class="n">current_dir</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="n">fs</span><span class="o">.</span><span class="n">lstat</span> <span class="n">current_dir</span><span class="p">,</span> <span class="p">(</span><span class="n">err</span><span class="p">,</span> <span class="n">stat</span><span class="p">)</span> <span class="o">-&gt;</span>
+      <span class="k">if</span> <span class="n">err</span> <span class="k">then</span> <span class="n">file_counter</span><span class="o">--</span><span class="p">;</span> <span class="k">return</span>
+      <span class="k">if</span> <span class="n">stat</span><span class="o">.</span><span class="n">isFile</span><span class="p">()</span>
+        <span class="n">file_counter</span><span class="o">--</span>
+        <span class="n">total</span> <span class="o">+=</span> <span class="n">stat</span><span class="o">.</span><span class="n">size</span>
+      <span class="k">else</span> <span class="k">if</span> <span class="n">stat</span><span class="o">.</span><span class="n">isDirectory</span><span class="p">()</span>
+        <span class="n">file_counter</span><span class="o">--</span>
+        <span class="n">async_running</span><span class="o">++</span>
+        <span class="n">fs</span><span class="o">.</span><span class="n">readdir</span> <span class="n">current_dir</span><span class="p">,</span> <span class="p">(</span><span class="n">err</span><span class="p">,</span><span class="n">files</span><span class="p">)</span> <span class="o">-&gt;</span>
+          <span class="n">async_running</span><span class="o">--</span>
+          <span class="k">if</span> <span class="n">err</span> <span class="k">then</span> <span class="k">return</span> <span class="c1">#console.log err.message</span>
+          <span class="n">file_counter</span> <span class="o">+=</span> <span class="n">files</span><span class="o">.</span><span class="n">length</span>
+          <span class="k">for</span> <span class="n">file</span> <span class="k">in</span> <span class="n">files</span>
+            <span class="n">again</span> <span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">current_dir</span><span class="p">,</span> <span class="n">file</span><span class="p">)</span>
+      <span class="k">else</span>
+        <span class="n">file_counter</span><span class="o">--</span>
+      <span class="k">if</span> <span class="n">file_counter</span> <span class="n">is</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">async_running</span> <span class="n">is</span> <span class="mi">0</span>
+        <span class="n">cb</span><span class="p">(</span><span class="n">null</span><span class="p">,</span> <span class="n">total</span><span class="p">)</span>
 
-  again dir</code></pre>
+  <span class="n">again</span> <span class="n">dir</span>
+</pre></div>
+
 <p>This works. What&#39;s important to note is that there are many ways to
 solve problems using Node.js. On my Quad-Core MBP 8 GB Ram, this is
 almost <strong>twice as fast</strong> as the synchronous version!</p>
@@ -275,17 +247,19 @@ and read my blog on entrepreneurship: <a href="http://techneur.com">Techneur</a>
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-    
-
-          <span id="footer">
-            <br/>
-            <span style="font-size: 10px">
-              Proudly built with <a href="https://github.com/skywrite">Sky</a>.
-            </span>
-          </span>
-        </div>
+    <span id="footer"><br><span style="font-size: 10px;">Proudly built with<a href="https://github.com/skywrite"> Sky</a></span></span></div>
       </div>
     </div>
-    
+    <div class="scripts">  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35069840-2']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+    </div>
   </body>
 </html>

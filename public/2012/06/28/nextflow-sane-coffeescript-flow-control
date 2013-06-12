@@ -1,106 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>NextFlow: Sane CoffeeScript Flow Control</title>
+    <title>NextFlow</title>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="JP Richardson">
-    <mete name="description" content="">
-
     <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
-    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
-    <!--<link href="style.css" rel="stylesheet">-->
-
-    <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
-
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-      <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-35069840-2']);
-    _gaq.push(['_trackPageview']);
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/highlight.css" rel="stylesheet">
   </head>
   <body>
-    
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid nav-container">
-          <nav role="navigation">
-            <a class="brand" title="" href="http://procbits.com">procbits</a>
-            
-            <p class="navbar-text pull-left">
-              source code snippets and other random musings about software
-            </p>
-          </nav>
-
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </a>
-
-
-
+          <nav role="navigation"><a title="" href="http://procbits.com" class="brand">procbits</a>
+            <p class="navbar-text pull-left">source code snippets and other random musings about software</p>
+            <ul class="nav pull-right">             
+              <li><a href="/tags">Tags</a></li>
+              <li><a href="/rss.xml">RSS</a></li>
+            </ul>
+          </nav><a data-toggle="collapse" data-target=".nav-collapse" href="http://procbits.com" class="btn btn-navbar">procbits<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a>
         </div>
       </div>
     </div>
-
-
     <div class="container-fluid">
       <div id="content" class="clearfix row-fluid">
-        <div id="main" class="span8 clearfix" role="main">
+        <div id="main" role="main" class="span8 clearfix"><h1>NextFlow</h1>
 
-
-<h1>NextFlow: Sane CoffeeScript Flow Control</h1>
 <p>Take a look at the most prominent JavaScript control flow libraries:
 <a href="https://github.com/caolan/async">Async.js</a>,
 <a href="https://github.com/creationix/step">Step</a>,
 <a href="https://github.com/substack/node-seq">Seq</a>. If you were to use these
 libraries in CoffeeScript, your code would be an ugly mess.</p>
 <p><strong>Async.js / CoffeeScript</strong></p>
-<pre><code class="lang-ruby">async = <span class="keyword">require</span>(<span class="string">'async'</span>)
+<div class="highlight"><pre><span class="n">async</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;async&#39;</span><span class="p">)</span>
 
-async.series(
-  (->
-    <span class="comment">#first function</span>
-  ),
-  (->
-    <span class="comment">#second function</span>
-  )
-)</code></pre>
+<span class="n">async</span><span class="o">.</span><span class="n">series</span><span class="p">(</span>
+  <span class="p">(</span><span class="o">-&gt;</span>
+    <span class="c1">#first function</span>
+  <span class="p">),</span>
+  <span class="p">(</span><span class="o">-&gt;</span>
+    <span class="c1">#second function</span>
+  <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+
 <p><strong>Step / CoffeeScript</strong></p>
-<pre><code class="lang-ruby">Step = <span class="keyword">require</span>(<span class="string">'step'</span>)
+<div class="highlight"><pre><span class="no">Step</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;step&#39;</span><span class="p">)</span>
 
-Step(
-  (->
-    <span class="comment">#first function</span>
-  ),
-  (->
-    <span class="comment">#second function</span>
-  )
-)</code></pre>
+<span class="no">Step</span><span class="p">(</span>
+  <span class="p">(</span><span class="o">-&gt;</span>
+    <span class="c1">#first function</span>
+  <span class="p">),</span>
+  <span class="p">(</span><span class="o">-&gt;</span>
+    <span class="c1">#second function</span>
+  <span class="p">)</span>
+<span class="p">)</span>
+</pre></div>
+
 <p><strong>Seq / CoffeeScript</strong></p>
-<pre><code class="lang-ruby">Seq = <span class="keyword">require</span>(<span class="string">'seq'</span>)
+<div class="highlight"><pre><span class="no">Seq</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;seq&#39;</span><span class="p">)</span>
 
-Seq().seq(->
-  <span class="comment">#first function</span>
-).seq(->
-  <span class="comment">#second function</span>
-)</code></pre>
+<span class="no">Seq</span><span class="p">()</span><span class="o">.</span><span class="n">seq</span><span class="p">(</span><span class="o">-&gt;</span>
+  <span class="c1">#first function</span>
+<span class="p">)</span><span class="o">.</span><span class="n">seq</span><span class="p">(</span><span class="o">-&gt;</span>
+  <span class="c1">#second function</span>
+<span class="p">)</span>
+</pre></div>
+
 <p>Yuck. If you&#39;re programming in JavaScript, all of them are very usable
 solutions. Also, to be fair, they do a lot more than NextFlow. But
 NextFlow looks much nicer with CoffeeScript programs.</p>
@@ -108,84 +76,90 @@ NextFlow looks much nicer with CoffeeScript programs.</p>
 <p><code>npm install --production nextflow</code></p>
 <p>Can be used in the browser too.</p>
 <p>Execute sequentially, calling the `next()` function:</p>
-<pre><code class="lang-ruby">next = <span class="keyword">require</span>(<span class="string">'nextflow'</span>)
+<div class="highlight"><pre><span class="k">next</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;nextflow&#39;</span><span class="p">)</span>
 
-vals = []
-x = <span class="number">0</span>
+<span class="n">vals</span> <span class="o">=</span> <span class="o">[]</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
 
-flow =
-  <span class="number">1</span>: ->
-    vals.push(<span class="number">1</span>)
-    @next()
-  <span class="number">2</span>: ->
-    vals.push(<span class="number">2</span>)
-    x = Math.random()
-    @next(x)
-  <span class="number">3</span>: (num) ->
-    vals.push(num)
-    @next()
-  <span class="number">4</span>: ->
-    vals.push(<span class="number">4</span>)
-    @next()
-  <span class="number">5</span>: ->
-    console.log vals[<span class="number">0</span>] <span class="comment">#is 1</span>
-    console.log vals[<span class="number">1</span>] <span class="comment">#is 2</span>
-    console.log vals[<span class="number">2</span>] <span class="comment">#is x</span>
-    console.log vals[<span class="number">3</span>] <span class="comment">#is 4</span>
+<span class="n">flow</span> <span class="o">=</span>
+  <span class="mi">1</span><span class="p">:</span> <span class="o">-&gt;</span>
+    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="vi">@next</span><span class="p">()</span>
+  <span class="mi">2</span><span class="p">:</span> <span class="o">-&gt;</span>
+    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="no">Math</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+    <span class="vi">@next</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+  <span class="mi">3</span><span class="p">:</span> <span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+    <span class="vi">@next</span><span class="p">()</span>
+  <span class="mi">4</span><span class="p">:</span> <span class="o">-&gt;</span>
+    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+    <span class="vi">@next</span><span class="p">()</span>
+  <span class="mi">5</span><span class="p">:</span> <span class="o">-&gt;</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="c1">#is 1</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="c1">#is 2</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="c1">#is x</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">3</span><span class="o">]</span> <span class="c1">#is 4</span>
 
-next(flow)</code></pre>
+<span class="k">next</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span>
+</pre></div>
+
 <p>Call functions by the label:</p>
-<pre><code class="lang-ruby">vals = []
-x = <span class="number">0</span>
+<div class="highlight"><pre><span class="n">vals</span> <span class="o">=</span> <span class="o">[]</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
 
-flow =
-  a1: ->
-    vals.push(<span class="number">1</span>)
-    @a2()
-  a2: ->
-    vals.push(<span class="number">2</span>)
-    x = Math.random()
-    @a3(x)
-  a3: (num) ->
-    vals.push(num)
-    @a4()
-  a4: ->
-    vals.push(<span class="number">4</span>)
-    @a5()
-  a5: ->
-    console.log vals[<span class="number">0</span>] <span class="comment">#is 1</span>
-    console.log vals[<span class="number">1</span>] <span class="comment">#is 2</span>
-    console.log vals[<span class="number">2</span>] <span class="comment">#is x</span>
-    console.log vals[<span class="number">3</span>] <span class="comment">#is 4</span>
+<span class="n">flow</span> <span class="o">=</span>
+  <span class="n">a1</span><span class="p">:</span> <span class="o">-&gt;</span>
+    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="vi">@a2</span><span class="p">()</span>
+  <span class="n">a2</span><span class="p">:</span> <span class="o">-&gt;</span>
+    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="no">Math</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+    <span class="vi">@a3</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+  <span class="n">a3</span><span class="p">:</span> <span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+    <span class="vi">@a4</span><span class="p">()</span>
+  <span class="n">a4</span><span class="p">:</span> <span class="o">-&gt;</span>
+    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+    <span class="vi">@a5</span><span class="p">()</span>
+  <span class="n">a5</span><span class="p">:</span> <span class="o">-&gt;</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="c1">#is 1</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="c1">#is 2</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="c1">#is x</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">3</span><span class="o">]</span> <span class="c1">#is 4</span>
 
-next(flow)</code></pre>
+<span class="k">next</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span>
+</pre></div>
+
 <p>Call either `next()` or call the label:</p>
-<pre><code class="lang-ruby">vals = []
-x = <span class="number">0</span>
-y = <span class="number">0</span>
+<div class="highlight"><pre><span class="n">vals</span> <span class="o">=</span> <span class="o">[]</span>
+<span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
 
-flow =
-  a1: ->
-    vals.push(<span class="number">1</span>)
-    @a2()
-  a2: ->
-    vals.push(<span class="number">2</span>)
-    x = Math.random()
-    @a3(x)
-  a3: (num) ->
-    vals.push(num)
-    y = Math.random()
-    @next(y)
-  a4: (num) ->
-    vals.push(num)
-    @a5()
-  a5: ->
-    console.log vals[<span class="number">0</span>] <span class="comment">#is 1</span>
-    console.log vals[<span class="number">1</span>] <span class="comment">#is 2</span>
-    console.log vals[<span class="number">2</span>] <span class="comment">#is x</span>
-    console.log vals[<span class="number">3</span>] <span class="comment">#is y</span>
+<span class="n">flow</span> <span class="o">=</span>
+  <span class="n">a1</span><span class="p">:</span> <span class="o">-&gt;</span>
+    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="vi">@a2</span><span class="p">()</span>
+  <span class="n">a2</span><span class="p">:</span> <span class="o">-&gt;</span>
+    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="no">Math</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+    <span class="vi">@a3</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+  <span class="n">a3</span><span class="p">:</span> <span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="no">Math</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+    <span class="vi">@next</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+  <span class="n">a4</span><span class="p">:</span> <span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">-&gt;</span>
+    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
+    <span class="vi">@a5</span><span class="p">()</span>
+  <span class="n">a5</span><span class="p">:</span> <span class="o">-&gt;</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="c1">#is 1</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="c1">#is 2</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="c1">#is x</span>
+    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">3</span><span class="o">]</span> <span class="c1">#is y</span>
 
-next(flow)</code></pre>
+<span class="k">next</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span>
+</pre></div>
+
 <p><a href="https://github.com/jprichardson/node-nextflow">NextFlow on Github</a></p>
 <p>Checkout <a href="http://gitpilot.com">Gitpilot</a>, to become more productive with
 Git.</p>
@@ -215,17 +189,19 @@ Git.</p>
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-    
-
-          <span id="footer">
-            <br/>
-            <span style="font-size: 10px">
-              Proudly built with <a href="https://github.com/skywrite">Sky</a>.
-            </span>
-          </span>
-        </div>
+    <span id="footer"><br><span style="font-size: 10px;">Proudly built with<a href="https://github.com/skywrite"> Sky</a></span></span></div>
       </div>
     </div>
-    
+    <div class="scripts">  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35069840-2']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+    </div>
   </body>
 </html>

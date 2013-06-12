@@ -6,66 +6,28 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="JP Richardson">
-    <mete name="description" content="">
-
     <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
-    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
-    <!--<link href="style.css" rel="stylesheet">-->
-
-    <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
-
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-      <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-35069840-2']);
-    _gaq.push(['_trackPageview']);
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/highlight.css" rel="stylesheet">
   </head>
   <body>
-    
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid nav-container">
-          <nav role="navigation">
-            <a class="brand" title="" href="http://procbits.com">procbits</a>
-            
-            <p class="navbar-text pull-left">
-              source code snippets and other random musings about software
-            </p>
-          </nav>
-
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </a>
-
-
-
+          <nav role="navigation"><a title="" href="http://procbits.com" class="brand">procbits</a>
+            <p class="navbar-text pull-left">source code snippets and other random musings about software</p>
+            <ul class="nav pull-right">             
+              <li><a href="/tags">Tags</a></li>
+              <li><a href="/rss.xml">RSS</a></li>
+            </ul>
+          </nav><a data-toggle="collapse" data-target=".nav-collapse" href="http://procbits.com" class="btn btn-navbar">procbits<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a>
         </div>
       </div>
     </div>
-
-
     <div class="container-fluid">
       <div id="content" class="clearfix row-fluid">
-        <div id="main" class="span8 clearfix" role="main">
+        <div id="main" role="main" class="span8 clearfix"><h1>StreamWriter Share Read Access in Another Process</h1>
 
-
-<h1>StreamWriter Share Read Access in Another Process</h1>
 <p>I have two applications, one is the main application that generates a
 log file, the other is an application that reads the log file to compute
 statistics.</p>
@@ -74,49 +36,57 @@ the other app is running and generating the log file. If you just use
 the default StreamWriter and StreamReader constructors you will get a
 file access in error in one of the processes.</p>
 <p>Log file generator: (1st process)</p>
-<pre><code class="lang-csharp"><span class="keyword">static</span> void Main(string[] args) {
-    <span class="keyword">var</span> file = @<span class="string">"C:\logfile.txt"</span>;
-    <span class="keyword">var</span> sw = <span class="keyword">new</span> StreamWriter(file);
-    sw.AutoFlush = <span class="keyword">true</span>;
-    sw.WriteLine(<span class="string">"some data"</span>);
-    sw.WriteLine(<span class="string">"some data2"</span>); <span class="comment">//set breakpoint here</span>
+<div class="highlight"><pre><span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">var</span> <span class="n">file</span> <span class="p">=</span> <span class="s">@&quot;C:\logfile.txt&quot;</span><span class="p">;</span>
+    <span class="kt">var</span> <span class="n">sw</span> <span class="p">=</span> <span class="k">new</span> <span class="n">StreamWriter</span><span class="p">(</span><span class="n">file</span><span class="p">);</span>
+    <span class="n">sw</span><span class="p">.</span><span class="n">AutoFlush</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+    <span class="n">sw</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;some data&quot;</span><span class="p">);</span>
+    <span class="n">sw</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;some data2&quot;</span><span class="p">);</span> <span class="c1">//set breakpoint here</span>
 
-    sw.Close();
-}</code></pre>
+    <span class="n">sw</span><span class="p">.</span><span class="n">Close</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+
 <p>Log file reader: (2nd process)</p>
-<pre><code class="lang-csharp"><span class="keyword">static</span> void Main(string[] args) {
-    <span class="keyword">var</span> file = @<span class="string">"C:\logfile.txt"</span>;
-    <span class="keyword">var</span> sr = <span class="keyword">new</span> StreamReader(file);
+<div class="highlight"><pre><span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">var</span> <span class="n">file</span> <span class="p">=</span> <span class="s">@&quot;C:\logfile.txt&quot;</span><span class="p">;</span>
+    <span class="kt">var</span> <span class="n">sr</span> <span class="p">=</span> <span class="k">new</span> <span class="n">StreamReader</span><span class="p">(</span><span class="n">file</span><span class="p">);</span>
 
-    <span class="keyword">var</span> l1 = sr.ReadLine();
-    <span class="keyword">var</span> l2 = sr.ReadLine(); <span class="comment">//set breakpoint here</span>
+    <span class="kt">var</span> <span class="n">l1</span> <span class="p">=</span> <span class="n">sr</span><span class="p">.</span><span class="n">ReadLine</span><span class="p">();</span>
+    <span class="kt">var</span> <span class="n">l2</span> <span class="p">=</span> <span class="n">sr</span><span class="p">.</span><span class="n">ReadLine</span><span class="p">();</span> <span class="c1">//set breakpoint here</span>
 
-    sr.Close();
-}</code></pre>
+    <span class="n">sr</span><span class="p">.</span><span class="n">Close</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+
 <p>Startup the &quot;log file generator&quot; app and then startup the &quot;log file
 reader&quot; app, you&#39;ll get an IOException. Here&#39;s how you can fix this:</p>
 <p>Log file generator: (1st process)</p>
-<pre><code class="lang-csharp"><span class="keyword">static</span> void Main(string[] args) {
-    <span class="keyword">var</span> file = @<span class="string">"C:\logfile.txt"</span>;
-    <span class="keyword">var</span> fs = File.Open(file, FileMode.Append, FileAccess.Write, FileShare.Read);
-    <span class="keyword">var</span> sw = <span class="keyword">new</span> StreamWriter(fs);
-    sw.AutoFlush = <span class="keyword">true</span>;
-    sw.WriteLine(<span class="string">"some data"</span>);
-    sw.WriteLine(<span class="string">"some data2"</span>); <span class="comment">//set breakpoint here</span>
+<div class="highlight"><pre><span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">var</span> <span class="n">file</span> <span class="p">=</span> <span class="s">@&quot;C:\logfile.txt&quot;</span><span class="p">;</span>
+    <span class="kt">var</span> <span class="n">fs</span> <span class="p">=</span> <span class="n">File</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">FileMode</span><span class="p">.</span><span class="n">Append</span><span class="p">,</span> <span class="n">FileAccess</span><span class="p">.</span><span class="n">Write</span><span class="p">,</span> <span class="n">FileShare</span><span class="p">.</span><span class="n">Read</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">sw</span> <span class="p">=</span> <span class="k">new</span> <span class="n">StreamWriter</span><span class="p">(</span><span class="n">fs</span><span class="p">);</span>
+    <span class="n">sw</span><span class="p">.</span><span class="n">AutoFlush</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+    <span class="n">sw</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;some data&quot;</span><span class="p">);</span>
+    <span class="n">sw</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="s">&quot;some data2&quot;</span><span class="p">);</span> <span class="c1">//set breakpoint here</span>
 
-    sw.Close();
-}</code></pre>
+    <span class="n">sw</span><span class="p">.</span><span class="n">Close</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+
 <p>Log file reader: (2nd process)</p>
-<pre><code class="lang-csharp"><span class="keyword">static</span> void Main(string[] args) {
-    <span class="keyword">var</span> file = @<span class="string">"C:\logfile.txt"</span>;
-    <span class="keyword">var</span> fs = File.Open(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-    <span class="keyword">var</span> sr = <span class="keyword">new</span> StreamReader(fs);
+<div class="highlight"><pre><span class="k">static</span> <span class="k">void</span> <span class="nf">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">var</span> <span class="n">file</span> <span class="p">=</span> <span class="s">@&quot;C:\logfile.txt&quot;</span><span class="p">;</span>
+    <span class="kt">var</span> <span class="n">fs</span> <span class="p">=</span> <span class="n">File</span><span class="p">.</span><span class="n">Open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">FileMode</span><span class="p">.</span><span class="n">Open</span><span class="p">,</span> <span class="n">FileAccess</span><span class="p">.</span><span class="n">Read</span><span class="p">,</span> <span class="n">FileShare</span><span class="p">.</span><span class="n">ReadWrite</span><span class="p">);</span>
+    <span class="kt">var</span> <span class="n">sr</span> <span class="p">=</span> <span class="k">new</span> <span class="n">StreamReader</span><span class="p">(</span><span class="n">fs</span><span class="p">);</span>
 
-    <span class="keyword">var</span> l1 = sr.ReadLine();
-    <span class="keyword">var</span> l2 = sr.ReadLine(); <span class="comment">//set breakpoint here</span>
+    <span class="kt">var</span> <span class="n">l1</span> <span class="p">=</span> <span class="n">sr</span><span class="p">.</span><span class="n">ReadLine</span><span class="p">();</span>
+    <span class="kt">var</span> <span class="n">l2</span> <span class="p">=</span> <span class="n">sr</span><span class="p">.</span><span class="n">ReadLine</span><span class="p">();</span> <span class="c1">//set breakpoint here</span>
 
-    sr.Close();
-}</code></pre>
+    <span class="n">sr</span><span class="p">.</span><span class="n">Close</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+
 <p>You&#39;ll notice that the breakpoint on the 2nd process will now work
 without getting an IOException. In short this works because the
 <a href="http://msdn.microsoft.com/en-us/library/system.io.fileshare.aspx">FileShare</a>
@@ -151,17 +121,19 @@ and read my <a href="http://techneur.com">blog on entrepreneurship</a>.</p>
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-    
-
-          <span id="footer">
-            <br/>
-            <span style="font-size: 10px">
-              Proudly built with <a href="https://github.com/skywrite">Sky</a>.
-            </span>
-          </span>
-        </div>
+    <span id="footer"><br><span style="font-size: 10px;">Proudly built with<a href="https://github.com/skywrite"> Sky</a></span></span></div>
       </div>
     </div>
-    
+    <div class="scripts">  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35069840-2']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+    </div>
   </body>
 </html>

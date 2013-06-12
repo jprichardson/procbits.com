@@ -6,66 +6,28 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="JP Richardson">
-    <mete name="description" content="">
-
     <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
-    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
-    <!--<link href="style.css" rel="stylesheet">-->
-
-    <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
-
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-      <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-35069840-2']);
-    _gaq.push(['_trackPageview']);
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/highlight.css" rel="stylesheet">
   </head>
   <body>
-    
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid nav-container">
-          <nav role="navigation">
-            <a class="brand" title="" href="http://procbits.com">procbits</a>
-            
-            <p class="navbar-text pull-left">
-              source code snippets and other random musings about software
-            </p>
-          </nav>
-
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </a>
-
-
-
+          <nav role="navigation"><a title="" href="http://procbits.com" class="brand">procbits</a>
+            <p class="navbar-text pull-left">source code snippets and other random musings about software</p>
+            <ul class="nav pull-right">             
+              <li><a href="/tags">Tags</a></li>
+              <li><a href="/rss.xml">RSS</a></li>
+            </ul>
+          </nav><a data-toggle="collapse" data-target=".nav-collapse" href="http://procbits.com" class="btn btn-navbar">procbits<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a>
         </div>
       </div>
     </div>
-
-
     <div class="container-fluid">
       <div id="content" class="clearfix row-fluid">
-        <div id="main" class="span8 clearfix" role="main">
+        <div id="main" role="main" class="span8 clearfix"><h1>FridayThe13th the Best JSON Parser for Silverlight and C#/.NET</h1>
 
-
-<h1>FridayThe13th the Best JSON Parser for Silverlight and C#/.NET</h1>
 <p>Up until a couple of months ago I was writing most of my code using WPF.
 Recently, a project came up where Silverlight made more sense to use.
 I&#39;d thought that wouldn&#39;t be a problem since I&#39;d just use
@@ -81,35 +43,41 @@ is here! Or so I thought.</p>
 actually create POCOs to backup this &quot;data contract.&quot; I didn&#39;t want to
 do that.</p>
 <p>I wanted to turn this...</p>
-<pre><code class="lang-javascript">{
-    &quot;some_number&quot;: 108.541,
-    &quot;date_time&quot;: &quot;2011-04-13T15:34:09Z&quot;,
-    &quot;serial_number&quot;: &quot;SN1234&quot;
-    &quot;more_data&quot;: {
-        &quot;field1&quot;: 1.0
-        &quot;field2&quot;: &quot;hello&quot;
-    }
-}</code></pre>
+<div class="highlight"><pre><span class="p">{</span>
+    <span class="s2">&quot;some_number&quot;</span><span class="o">:</span> <span class="mf">108.541</span><span class="p">,</span>
+    <span class="s2">&quot;date_time&quot;</span><span class="o">:</span> <span class="s2">&quot;2011-04-13T15:34:09Z&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;serial_number&quot;</span><span class="o">:</span> <span class="s2">&quot;SN1234&quot;</span>
+    <span class="s2">&quot;more_data&quot;</span><span class="o">:</span> <span class="p">{</span>
+        <span class="s2">&quot;field1&quot;</span><span class="o">:</span> <span class="mf">1.0</span>
+        <span class="s2">&quot;field2&quot;</span><span class="o">:</span> <span class="s2">&quot;hello&quot;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
 <p>into..</p>
-<pre><code class="lang-csharp">using System.Web.Script.Serialization;
+<div class="highlight"><pre><span class="k">using</span> <span class="nn">System.Web.Script.Serialization</span><span class="p">;</span>
 
-<span class="keyword">var</span> jss = <span class="keyword">new</span> JavaScriptSerializer();
-<span class="keyword">var</span> dict = jss.Deserialize&lt;dynamic>(jsonText);
+<span class="kt">var</span> <span class="n">jss</span> <span class="p">=</span> <span class="k">new</span> <span class="n">JavaScriptSerializer</span><span class="p">();</span>
+<span class="kt">var</span> <span class="n">dict</span> <span class="p">=</span> <span class="n">jss</span><span class="p">.</span><span class="n">Deserialize</span><span class="p">&lt;</span><span class="kt">dynamic</span><span class="p">&gt;(</span><span class="n">jsonText</span><span class="p">);</span>
 
-Console.WriteLine(dict[<span class="string">"some_number"</span>]); <span class="comment">//outputs 108.541</span>
-Console.WriteLine(dict[<span class="string">"more_data"</span>][<span class="string">"field2"</span>]); <span class="comment">//outputs hello</span></code></pre>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">dict</span><span class="p">[</span><span class="s">&quot;some_number&quot;</span><span class="p">]);</span> <span class="c1">//outputs 108.541</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">dict</span><span class="p">[</span><span class="s">&quot;more_data&quot;</span><span class="p">][</span><span class="s">&quot;field2&quot;</span><span class="p">]);</span> <span class="c1">//outputs hello</span>
+</pre></div>
+
 <p>So I set out to write my own JSON parser. I call it FridayThe13th... how
 fitting huh? Now, using either Silverlight or .NET 4.0, you can parse
 the previous JSON into the following:</p>
-<pre><code class="lang-csharp">using FridayThe13th;
+<div class="highlight"><pre><span class="k">using</span> <span class="nn">FridayThe13th</span><span class="p">;</span>
 
-<span class="keyword">var</span> jsonText = File.ReadAllText(<span class="string">"mydata.json"</span>);
+<span class="kt">var</span> <span class="n">jsonText</span> <span class="p">=</span> <span class="n">File</span><span class="p">.</span><span class="n">ReadAllText</span><span class="p">(</span><span class="s">&quot;mydata.json&quot;</span><span class="p">);</span>
 
-<span class="keyword">var</span> jsp = <span class="keyword">new</span> JsonParser(){CamelizeProperties = <span class="keyword">true</span>};
-dynamic json = jsp.Parse(jsonText);
+<span class="kt">var</span> <span class="n">jsp</span> <span class="p">=</span> <span class="k">new</span> <span class="n">JsonParser</span><span class="p">(){</span><span class="n">CamelizeProperties</span> <span class="p">=</span> <span class="k">true</span><span class="p">};</span>
+<span class="kt">dynamic</span> <span class="n">json</span> <span class="p">=</span> <span class="n">jsp</span><span class="p">.</span><span class="n">Parse</span><span class="p">(</span><span class="n">jsonText</span><span class="p">);</span>
 
-Console.WriteLine(json.SomeNumber); <span class="comment">//outputs 108.541</span>
-Console.WriteLine(json.MoreData.Field2); <span class="comment">//outputs hello</span></code></pre>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="n">SomeNumber</span><span class="p">);</span> <span class="c1">//outputs 108.541</span>
+<span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="n">MoreData</span><span class="p">.</span><span class="n">Field2</span><span class="p">);</span> <span class="c1">//outputs hello</span>
+</pre></div>
+
 <p>Since I work with a lot of Ruby on Rails backends, I want to add a
 property &quot;CamelizeProperties&quot; to turn &quot;some_number&quot; into
 &quot;SomeNumber&quot;... it&#39;s more .NET like.</p>
@@ -147,17 +115,19 @@ entrepreneurship</a> and follow me on Twitter:
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-    
-
-          <span id="footer">
-            <br/>
-            <span style="font-size: 10px">
-              Proudly built with <a href="https://github.com/skywrite">Sky</a>.
-            </span>
-          </span>
-        </div>
+    <span id="footer"><br><span style="font-size: 10px;">Proudly built with<a href="https://github.com/skywrite"> Sky</a></span></span></div>
       </div>
     </div>
-    
+    <div class="scripts">  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35069840-2']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+    </div>
   </body>
 </html>

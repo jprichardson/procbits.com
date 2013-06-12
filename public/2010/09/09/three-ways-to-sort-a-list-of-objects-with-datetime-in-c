@@ -6,94 +6,64 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="JP Richardson">
-    <mete name="description" content="">
-
     <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
-    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
-    <!--<link href="style.css" rel="stylesheet">-->
-
-    <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
-
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-      <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-35069840-2']);
-    _gaq.push(['_trackPageview']);
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/highlight.css" rel="stylesheet">
   </head>
   <body>
-    
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid nav-container">
-          <nav role="navigation">
-            <a class="brand" title="" href="http://procbits.com">procbits</a>
-            
-            <p class="navbar-text pull-left">
-              source code snippets and other random musings about software
-            </p>
-          </nav>
-
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </a>
-
-
-
+          <nav role="navigation"><a title="" href="http://procbits.com" class="brand">procbits</a>
+            <p class="navbar-text pull-left">source code snippets and other random musings about software</p>
+            <ul class="nav pull-right">             
+              <li><a href="/tags">Tags</a></li>
+              <li><a href="/rss.xml">RSS</a></li>
+            </ul>
+          </nav><a data-toggle="collapse" data-target=".nav-collapse" href="http://procbits.com" class="btn btn-navbar">procbits<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a>
         </div>
       </div>
     </div>
-
-
     <div class="container-fluid">
       <div id="content" class="clearfix row-fluid">
-        <div id="main" class="span8 clearfix" role="main">
+        <div id="main" role="main" class="span8 clearfix"><h1>Three Ways to Sort a List of Objects with DateTime in C#</h1>
 
-
-<h1>Three Ways to Sort a List of Objects with DateTime in C#</h1>
 <p>Here are three quick ways to sort a List of objects that have DateTime
 properties in C#.</p>
 <p>Initial Code:</p>
-<pre><code class="lang-csharp"><span class="keyword">public</span> <span class="keyword">class</span> Person{
-    <span class="keyword">public</span> string Name;
-    <span class="keyword">public</span> DateTime Birthday;
-}
+<div class="highlight"><pre><span class="k">public</span> <span class="k">class</span> <span class="nc">Person</span><span class="p">{</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Name</span><span class="p">;</span>
+    <span class="k">public</span> <span class="n">DateTime</span> <span class="n">Birthday</span><span class="p">;</span>
+<span class="p">}</span>
 
-<span class="keyword">var</span> people = <span class="keyword">new</span> <span class="keyword">List</span>&lt;Person>();
-<span class="keyword">var</span> p1 = <span class="keyword">new</span> Person() { Name = <span class="string">"Leslie"</span>, Birthday = <span class="keyword">new</span> DateTime(<span class="number">1983</span>, <span class="number">9</span>, <span class="number">4</span>) };
-<span class="keyword">var</span> p2 = <span class="keyword">new</span> Person() { Name = <span class="string">"Chris"</span>, Birthday = <span class="keyword">new</span> DateTime(<span class="number">2001</span>, <span class="number">6</span>, <span class="number">19</span>) };
-<span class="keyword">var</span> p3 = <span class="keyword">new</span> Person() { Name = <span class="string">"JP"</span>, Birthday = <span class="keyword">new</span> DateTime(<span class="number">1983</span>, <span class="number">4</span>, <span class="number">5</span>) };
+<span class="kt">var</span> <span class="n">people</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">Person</span><span class="p">&gt;();</span>
+<span class="kt">var</span> <span class="n">p1</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Person</span><span class="p">()</span> <span class="p">{</span> <span class="n">Name</span> <span class="p">=</span> <span class="s">&quot;Leslie&quot;</span><span class="p">,</span> <span class="n">Birthday</span> <span class="p">=</span> <span class="k">new</span> <span class="n">DateTime</span><span class="p">(</span><span class="m">1983</span><span class="p">,</span> <span class="m">9</span><span class="p">,</span> <span class="m">4</span><span class="p">)</span> <span class="p">};</span>
+<span class="kt">var</span> <span class="n">p2</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Person</span><span class="p">()</span> <span class="p">{</span> <span class="n">Name</span> <span class="p">=</span> <span class="s">&quot;Chris&quot;</span><span class="p">,</span> <span class="n">Birthday</span> <span class="p">=</span> <span class="k">new</span> <span class="n">DateTime</span><span class="p">(</span><span class="m">2001</span><span class="p">,</span> <span class="m">6</span><span class="p">,</span> <span class="m">19</span><span class="p">)</span> <span class="p">};</span>
+<span class="kt">var</span> <span class="n">p3</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Person</span><span class="p">()</span> <span class="p">{</span> <span class="n">Name</span> <span class="p">=</span> <span class="s">&quot;JP&quot;</span><span class="p">,</span> <span class="n">Birthday</span> <span class="p">=</span> <span class="k">new</span> <span class="n">DateTime</span><span class="p">(</span><span class="m">1983</span><span class="p">,</span> <span class="m">4</span><span class="p">,</span> <span class="m">5</span><span class="p">)</span> <span class="p">};</span>
 
-people.Add(p1); people.Add(p2); people.Add(p3);
-people.<span class="keyword">ForEach</span>(p => Console.WriteLine(p.Name));</code></pre>
+<span class="n">people</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">p1</span><span class="p">);</span> <span class="n">people</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">p2</span><span class="p">);</span> <span class="n">people</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">p3</span><span class="p">);</span>
+<span class="n">people</span><span class="p">.</span><span class="n">ForEach</span><span class="p">(</span><span class="n">p</span> <span class="p">=&gt;</span> <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">Name</span><span class="p">));</span>
+</pre></div>
+
 <p>You can see that the output is: &quot;Leslie&quot;, &quot;Chris&quot;, and then &quot;JP&quot;</p>
 <p>Let&#39;s start with the LINQ way:</p>
-<pre><code class="lang-csharp"><span class="keyword">var</span> persons = from p in people
-            orderby p.Birthday
-            select p;
-persons.ToList().<span class="keyword">ForEach</span>(p => Console.WriteLine(p.Name));</code></pre>
+<div class="highlight"><pre><span class="kt">var</span> <span class="n">persons</span> <span class="p">=</span> <span class="k">from</span> <span class="n">p</span> <span class="k">in</span> <span class="n">people</span>
+            <span class="k">orderby</span> <span class="n">p</span><span class="p">.</span><span class="n">Birthday</span>
+            <span class="k">select</span> <span class="n">p</span><span class="p">;</span>
+<span class="n">persons</span><span class="p">.</span><span class="n">ToList</span><span class="p">().</span><span class="n">ForEach</span><span class="p">(</span><span class="n">p</span> <span class="p">=&gt;</span> <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">Name</span><span class="p">));</span>
+</pre></div>
+
 <p>You can see the correct output: &quot;JP&quot;, &quot;Leslie&quot;, and then &quot;Chris&quot;</p>
 <p>Old fashion way using a Delegate:</p>
-<pre><code class="lang-csharp">people.Sort(delegate(Person ps1, Person ps2) { <span class="keyword">return</span> DateTime.Compare(ps1.Birthday, ps2.Birthday); });
-people.<span class="keyword">ForEach</span>(p => Console.WriteLine(p.Name));</code></pre>
+<div class="highlight"><pre><span class="n">people</span><span class="p">.</span><span class="n">Sort</span><span class="p">(</span><span class="k">delegate</span><span class="p">(</span><span class="n">Person</span> <span class="n">ps1</span><span class="p">,</span> <span class="n">Person</span> <span class="n">ps2</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Compare</span><span class="p">(</span><span class="n">ps1</span><span class="p">.</span><span class="n">Birthday</span><span class="p">,</span> <span class="n">ps2</span><span class="p">.</span><span class="n">Birthday</span><span class="p">);</span> <span class="p">});</span>
+<span class="n">people</span><span class="p">.</span><span class="n">ForEach</span><span class="p">(</span><span class="n">p</span> <span class="p">=&gt;</span> <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">Name</span><span class="p">));</span>
+</pre></div>
+
 <p>Cleaner way using a Lambda:</p>
-<pre><code class="lang-csharp">people.Sort((ps1, ps2) => DateTime.Compare(ps1.Birthday, ps2.Birthday));
-people.<span class="keyword">ForEach</span>(p => Console.WriteLine(p.Name));</code></pre>
+<div class="highlight"><pre><span class="n">people</span><span class="p">.</span><span class="n">Sort</span><span class="p">((</span><span class="n">ps1</span><span class="p">,</span> <span class="n">ps2</span><span class="p">)</span> <span class="p">=&gt;</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Compare</span><span class="p">(</span><span class="n">ps1</span><span class="p">.</span><span class="n">Birthday</span><span class="p">,</span> <span class="n">ps2</span><span class="p">.</span><span class="n">Birthday</span><span class="p">));</span>
+<span class="n">people</span><span class="p">.</span><span class="n">ForEach</span><span class="p">(</span><span class="n">p</span> <span class="p">=&gt;</span> <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">p</span><span class="p">.</span><span class="n">Name</span><span class="p">));</span>
+</pre></div>
+
 <p>Are you a <a href="http://gitpilot.com">Git</a> user? Let me help you make project
 management with Git simple. Checkout <a href="http://gitpilot.com">Gitpilot</a>.</p>
 <p>Read me blog on entrepreneurship: <a href="http://techneur.com">Techneur</a> Follow
@@ -123,17 +93,19 @@ me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-    
-
-          <span id="footer">
-            <br/>
-            <span style="font-size: 10px">
-              Proudly built with <a href="https://github.com/skywrite">Sky</a>.
-            </span>
-          </span>
-        </div>
+    <span id="footer"><br><span style="font-size: 10px;">Proudly built with<a href="https://github.com/skywrite"> Sky</a></span></span></div>
       </div>
     </div>
-    
+    <div class="scripts">  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35069840-2']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+    </div>
   </body>
 </html>

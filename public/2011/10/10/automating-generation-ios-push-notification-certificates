@@ -6,66 +6,28 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="JP Richardson">
-    <mete name="description" content="">
-
     <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
-    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
-    <!--<link href="style.css" rel="stylesheet">-->
-
-    <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
-
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-      <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-35069840-2']);
-    _gaq.push(['_trackPageview']);
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/highlight.css" rel="stylesheet">
   </head>
   <body>
-    
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid nav-container">
-          <nav role="navigation">
-            <a class="brand" title="" href="http://procbits.com">procbits</a>
-            
-            <p class="navbar-text pull-left">
-              source code snippets and other random musings about software
-            </p>
-          </nav>
-
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </a>
-
-
-
+          <nav role="navigation"><a title="" href="http://procbits.com" class="brand">procbits</a>
+            <p class="navbar-text pull-left">source code snippets and other random musings about software</p>
+            <ul class="nav pull-right">             
+              <li><a href="/tags">Tags</a></li>
+              <li><a href="/rss.xml">RSS</a></li>
+            </ul>
+          </nav><a data-toggle="collapse" data-target=".nav-collapse" href="http://procbits.com" class="btn btn-navbar">procbits<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a>
         </div>
       </div>
     </div>
-
-
     <div class="container-fluid">
       <div id="content" class="clearfix row-fluid">
-        <div id="main" class="span8 clearfix" role="main">
+        <div id="main" role="main" class="span8 clearfix"><h1>Automating the Generation of iOS Push Notification Certificates</h1>
 
-
-<h1>Automating the Generation of iOS Push Notification Certificates</h1>
 <p>I have a large number (200+) of iOS applications. I needed to generate
 push notification certificates for each of them. If you&#39;ve ever gone
 through the process, it can be a huge pain to do just a few. I needed to
@@ -82,10 +44,12 @@ have Chrome and Ruby 1.9.2 installed.</p>
 <li>Move the binary to /usr/local</li>
 </ol>
 <p>Next, run these commands:</p>
-<pre><code class="lang-bash">git <span class="keyword">clone</span> git:<span class="comment">//github.com/jprichardson/GeneratePushCerts.git</span>
-gem install <span class="string">'keychain_manager'</span>
-gem install <span class="string">'watir-webdriver'</span>
-cd ./GeneratePushCerts</code></pre>
+<div class="highlight"><pre>git clone git://github.com/jprichardson/GeneratePushCerts.git
+gem install <span class="s1">&#39;keychain_manager&#39;</span>
+gem install <span class="s1">&#39;watir-webdriver&#39;</span>
+<span class="nb">cd</span> ./GeneratePushCerts
+</pre></div>
+
 <p>Modify the &#39;config.example.yml&#39; file with your iOS
 developer/provisioning portal credentials. Rename the file to
 &#39;config.yml&#39;.</p>
@@ -93,40 +57,42 @@ developer/provisioning portal credentials. Rename the file to
 it to &#39;&#39;. I should have created a regular expression around line 60.</p>
 <p>Run the app &#39;ruby app.rb&#39;.</p>
 <p>Let&#39;s take a look at some watir code from the file:</p>
-<pre><code class="lang-ruby">  browser.checkbox(id: <span class="string">'enablePush'</span>).click() <span class="comment">#enable configure buttons</span>
-  browser.button(id: <span class="string">'aps-assistant-btn-prod-en'</span>).click() <span class="comment">#configure button</span>
+<div class="highlight"><pre>  <span class="n">browser</span><span class="o">.</span><span class="n">checkbox</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="s1">&#39;enablePush&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">()</span> <span class="c1">#enable configure buttons</span>
+  <span class="n">browser</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="s1">&#39;aps-assistant-btn-prod-en&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">()</span> <span class="c1">#configure button</span>
 
-  Watir::Wait.until { browser.body.text.<span class="keyword">include</span>?(<span class="string">'Generate a Certificate Signing Request'</span>) }
+  <span class="no">Watir</span><span class="o">::</span><span class="no">Wait</span><span class="o">.</span><span class="n">until</span> <span class="p">{</span> <span class="n">browser</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="s1">&#39;Generate a Certificate Signing Request&#39;</span><span class="p">)</span> <span class="p">}</span>
 
-  browser.button(id: <span class="string">'ext-gen59'</span>).click() <span class="comment">#on lightbox overlay, click continue</span>
+  <span class="n">browser</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="s1">&#39;ext-gen59&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">()</span> <span class="c1">#on lightbox overlay, click continue</span>
 
-  Watir::Wait.until { browser.body.text.<span class="keyword">include</span>?(<span class="string">'Submit Certificate Signing Request'</span>) }
+  <span class="no">Watir</span><span class="o">::</span><span class="no">Wait</span><span class="o">.</span><span class="n">until</span> <span class="p">{</span> <span class="n">browser</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="s1">&#39;Submit Certificate Signing Request&#39;</span><span class="p">)</span> <span class="p">}</span>
 
-  browser.file_field(name: <span class="string">'upload'</span>).set(CERT_REQUEST_FILE)
-  browser.execute_script(<span class="string">"callFileValidate();"</span>)
-  <span class="comment">#browser.file_field(name: 'upload').click() #calls some local javascript to validate the file and enable continue button, unfortunately File Browse dialog shows up</span>
+  <span class="n">browser</span><span class="o">.</span><span class="n">file_field</span><span class="p">(</span><span class="nb">name</span><span class="p">:</span> <span class="s1">&#39;upload&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="no">CERT_REQUEST_FILE</span><span class="p">)</span>
+  <span class="n">browser</span><span class="o">.</span><span class="n">execute_script</span><span class="p">(</span><span class="s2">&quot;callFileValidate();&quot;</span><span class="p">)</span>
+  <span class="c1">#browser.file_field(name: &#39;upload&#39;).click() #calls some local javascript to validate the file and enable continue button, unfortunately File Browse dialog shows up</span>
 
-  browser.button(id: <span class="string">'ext-gen75'</span>).click()
+  <span class="n">browser</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="s1">&#39;ext-gen75&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
 
-  Watir::Wait.until(WAIT_TO) { browser.body.text.<span class="keyword">include</span>?(<span class="string">'Your APNs SSL Certificate has been generated.'</span>) }
+  <span class="no">Watir</span><span class="o">::</span><span class="no">Wait</span><span class="o">.</span><span class="n">until</span><span class="p">(</span><span class="no">WAIT_TO</span><span class="p">)</span> <span class="p">{</span> <span class="n">browser</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="s1">&#39;Your APNs SSL Certificate has been generated.&#39;</span><span class="p">)</span> <span class="p">}</span>
 
-  browser.button(id: <span class="string">'ext-gen59'</span>).click() <span class="comment">#continue</span>
+  <span class="n">browser</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="s1">&#39;ext-gen59&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">()</span> <span class="c1">#continue</span>
 
-  Watir::Wait.until { browser.body.text.<span class="keyword">include</span>?(<span class="string">'Step 1: Download'</span>) }
+  <span class="no">Watir</span><span class="o">::</span><span class="no">Wait</span><span class="o">.</span><span class="n">until</span> <span class="p">{</span> <span class="n">browser</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="s1">&#39;Step 1: Download&#39;</span><span class="p">)</span> <span class="p">}</span>
 
-  File.delete(DOWNLOADED_CERT_FILE) <span class="keyword">if</span> File.exists?(DOWNLOADED_CERT_FILE)
+  <span class="no">File</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="no">DOWNLOADED_CERT_FILE</span><span class="p">)</span> <span class="k">if</span> <span class="no">File</span><span class="o">.</span><span class="n">exists?</span><span class="p">(</span><span class="no">DOWNLOADED_CERT_FILE</span><span class="p">)</span>
 
-  browser.button(alt: <span class="string">'Download'</span>).click() <span class="comment">#download cert</span>
+  <span class="n">browser</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="n">alt</span><span class="p">:</span> <span class="s1">&#39;Download&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">()</span> <span class="c1">#download cert</span>
 
-  puts(<span class="string">'Checking for existence of downloaded certificate file...'</span>)
-  <span class="keyword">while</span> !File.exists?(DOWNLOADED_CERT_FILE)
-    sleep <span class="number">1</span>
-  end
+  <span class="nb">puts</span><span class="p">(</span><span class="s1">&#39;Checking for existence of downloaded certificate file...&#39;</span><span class="p">)</span>
+  <span class="k">while</span> <span class="o">!</span><span class="no">File</span><span class="o">.</span><span class="n">exists?</span><span class="p">(</span><span class="no">DOWNLOADED_CERT_FILE</span><span class="p">)</span>
+    <span class="nb">sleep</span> <span class="mi">1</span>
+  <span class="k">end</span>
 
-  Watir::Wait.until { browser.body.text.<span class="keyword">include</span>?(<span class="string">"Download &amp; Install Your Apple Push Notification service SSL Certificate"</span>) }
+  <span class="no">Watir</span><span class="o">::</span><span class="no">Wait</span><span class="o">.</span><span class="n">until</span> <span class="p">{</span> <span class="n">browser</span><span class="o">.</span><span class="n">body</span><span class="o">.</span><span class="n">text</span><span class="o">.</span><span class="n">include?</span><span class="p">(</span><span class="s2">&quot;Download &amp; Install Your Apple Push Notification service SSL Certificate&quot;</span><span class="p">)</span> <span class="p">}</span>
 
-  browser.button(id: <span class="string">'ext-gen91'</span>).click()
-  browser.goto(APP_IDS_URL)</code></pre>
+  <span class="n">browser</span><span class="o">.</span><span class="n">button</span><span class="p">(</span><span class="nb">id</span><span class="p">:</span> <span class="s1">&#39;ext-gen91&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">click</span><span class="p">()</span>
+  <span class="n">browser</span><span class="o">.</span><span class="n">goto</span><span class="p">(</span><span class="no">APP_IDS_URL</span><span class="p">)</span>
+</pre></div>
+
 <p>You can browse the entire <a href="https://github.com/jprichardson/GeneratePushCerts">source code on
 Github</a>.</p>
 <p>I think watir is pretty intuitive and is a swiss army knife for
@@ -162,17 +128,19 @@ and read my blog on entrepreneurship: <a href="http://techneur.com">Techneur</a>
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-    
-
-          <span id="footer">
-            <br/>
-            <span style="font-size: 10px">
-              Proudly built with <a href="https://github.com/skywrite">Sky</a>.
-            </span>
-          </span>
-        </div>
+    <span id="footer"><br><span style="font-size: 10px;">Proudly built with<a href="https://github.com/skywrite"> Sky</a></span></span></div>
       </div>
     </div>
-    
+    <div class="scripts">  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35069840-2']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+    </div>
   </body>
 </html>

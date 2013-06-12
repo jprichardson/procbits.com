@@ -6,94 +6,68 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="JP Richardson">
-    <mete name="description" content="">
-
     <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
-    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
-    <!--<link href="style.css" rel="stylesheet">-->
-
-    <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
-
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-      <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-35069840-2']);
-    _gaq.push(['_trackPageview']);
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/highlight.css" rel="stylesheet">
   </head>
   <body>
-    
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid nav-container">
-          <nav role="navigation">
-            <a class="brand" title="" href="http://procbits.com">procbits</a>
-            
-            <p class="navbar-text pull-left">
-              source code snippets and other random musings about software
-            </p>
-          </nav>
-
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </a>
-
-
-
+          <nav role="navigation"><a title="" href="http://procbits.com" class="brand">procbits</a>
+            <p class="navbar-text pull-left">source code snippets and other random musings about software</p>
+            <ul class="nav pull-right">             
+              <li><a href="/tags">Tags</a></li>
+              <li><a href="/rss.xml">RSS</a></li>
+            </ul>
+          </nav><a data-toggle="collapse" data-target=".nav-collapse" href="http://procbits.com" class="btn btn-navbar">procbits<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a>
         </div>
       </div>
     </div>
-
-
     <div class="container-fluid">
       <div id="content" class="clearfix row-fluid">
-        <div id="main" class="span8 clearfix" role="main">
+        <div id="main" role="main" class="span8 clearfix"><h1>A for-loop conversion from JavaScript to CoffeeScript</h1>
 
-
-<h1>A for-loop conversion from JavaScript to CoffeeScript</h1>
 <p>I was stumbling along StackOverflow when I ran into this question:</p>
 <p><a href="http://stackoverflow.com/questions/7337351/how-can-i-convert-a-javascript-for-loop-to-coffeescript">How can I convert a Javascript for-loop to
 Coffee?</a>
 With this example:</p>
-<pre><code class="lang-javascript"><span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) {
-    doStuff();
-}</code></pre>
+<div class="highlight"><pre><span class="k">for</span> <span class="p">(</span><span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">doStuff</span><span class="p">();</span>
+<span class="p">}</span>
+</pre></div>
+
 <p>The answer: (I&#39;ve since edited and updated the Stackoverflow answer)</p>
-<pre><code class="lang-ruby">doStuff() <span class="keyword">for</span> i in [<span class="number">0</span> .. <span class="number">9</span>]</code></pre>
+<div class="highlight"><pre><span class="n">doStuff</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="o">[</span><span class="mi">0</span> <span class="o">.</span><span class="n">.</span> <span class="mi">9</span><span class="o">]</span>
+</pre></div>
+
 <p><a href="http://jashkenas.github.com/coffee-script/\#loops">http://jashkenas.github.com/coffee-script/\#loops</a></p>
 <p>This answer works for this contrived case.</p>
 <p>What happens when you have a case like this:</p>
-<pre><code class="lang-javascript"><span class="keyword">for</span> (<span class="keyword">var</span> x = <span class="number">0</span>; x &lt; myArray.length; ++x)
-  alert(x);</code></pre>
+<div class="highlight"><pre><span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">x</span> <span class="o">&lt;</span> <span class="nx">myArray</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">x</span><span class="p">)</span>
+  <span class="nx">alert</span><span class="p">(</span><span class="nx">x</span><span class="p">);</span>
+</pre></div>
+
 <p>What&#39;s the answer smarty pants? If you answered:</p>
-<pre><code class="lang-ruby">alert(i) <span class="keyword">for</span> i in [<span class="number">0</span> .. myArray.length-<span class="number">1</span>]</code></pre>
+<div class="highlight"><pre><span class="n">alert</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="o">[</span><span class="mi">0</span> <span class="o">.</span><span class="n">.</span> <span class="n">myArray</span><span class="o">.</span><span class="n">length</span><span class="o">-</span><span class="mi">1</span><span class="o">]</span>
+</pre></div>
+
 <p>You get a pass if myArray has anything in it. What will happen if
 myArray is an empty (not null) array? Go ahead and execute it. Go here
 to the <a href="http://jashkenas.github.com/coffee-script/">CoffeeScript page</a>,
 and paste this code in the &quot;Try CoffeeScript&quot;, I&#39;ll wait.</p>
-<pre><code class="lang-ruby">myArray = []
-alert(i) <span class="keyword">for</span> i in [<span class="number">0</span> .. myArray.length-<span class="number">1</span>]</code></pre>
+<div class="highlight"><pre><span class="n">myArray</span> <span class="o">=</span> <span class="o">[]</span>
+<span class="n">alert</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="o">[</span><span class="mi">0</span> <span class="o">.</span><span class="n">.</span> <span class="n">myArray</span><span class="o">.</span><span class="n">length</span><span class="o">-</span><span class="mi">1</span><span class="o">]</span>
+</pre></div>
+
 <p>What&#39;s that? You say it returned &quot;0&quot; and &quot;-1&quot;???</p>
-<pre><code>The secret is in the <span class="string">".."</span> which implies <span class="string">"=>"</span> <span class="keyword">or</span> <span class="string">"&lt;="</span> 
-<span class="keyword">and</span> the <span class="string">"..."</span> implies <span class="string">"&amp;lt"</span> <span class="keyword">or</span> <span class="string">"&amp;gt"</span>.</code></pre>
+<pre><code>The secret is in the &quot;..&quot; which implies &quot;=&gt;&quot; or &quot;&lt;=&quot; 
+and the &quot;...&quot; implies &quot;&amp;lt&quot; or &quot;&amp;gt&quot;.</code></pre>
 <p>So this is probably what you expect:</p>
-<pre><code class="lang-ruby">myArray = []
-alert(i) <span class="keyword">for</span> i in [<span class="number">0</span> ... myArray.length]</code></pre>
+<div class="highlight"><pre><span class="n">myArray</span> <span class="o">=</span> <span class="o">[]</span>
+<span class="n">alert</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="k">in</span> <span class="o">[</span><span class="mi">0</span> <span class="o">.</span><span class="n">.</span><span class="o">.</span> <span class="n">myArray</span><span class="o">.</span><span class="n">length</span><span class="o">]</span>
+</pre></div>
+
 <p>It&#39;s too bad the <a href="http://jashkenas.github.com/coffee-script/#loops">loops
 section</a> at this time
 doesn&#39;t mention this.</p>
@@ -130,17 +104,19 @@ and read my blog on entrepreneurship: <a href="http://techneur.com">Techneur</a>
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-    
-
-          <span id="footer">
-            <br/>
-            <span style="font-size: 10px">
-              Proudly built with <a href="https://github.com/skywrite">Sky</a>.
-            </span>
-          </span>
-        </div>
+    <span id="footer"><br><span style="font-size: 10px;">Proudly built with<a href="https://github.com/skywrite"> Sky</a></span></span></div>
       </div>
     </div>
-    
+    <div class="scripts">  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35069840-2']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+    </div>
   </body>
 </html>

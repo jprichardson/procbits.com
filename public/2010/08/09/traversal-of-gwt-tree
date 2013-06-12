@@ -6,66 +6,28 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="JP Richardson">
-    <mete name="description" content="">
-
     <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
-    <link href="/vendor/highlight.js/styles/vs.css" rel="stylesheet">
-    <!--<link href="style.css" rel="stylesheet">-->
-
-    <style>
-      body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
-      }
-    </style>
-
-    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
-    <!--[if lt IE 9]>
-      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-      <script type="text/javascript">
-    var _gaq = _gaq || [];
-    _gaq.push(['_setAccount', 'UA-35069840-2']);
-    _gaq.push(['_trackPageview']);
-    (function() {
-      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-    })();
-  </script>
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/highlight.css" rel="stylesheet">
   </head>
   <body>
-    
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container-fluid nav-container">
-          <nav role="navigation">
-            <a class="brand" title="" href="http://procbits.com">procbits</a>
-            
-            <p class="navbar-text pull-left">
-              source code snippets and other random musings about software
-            </p>
-          </nav>
-
-            <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </a>
-
-
-
+          <nav role="navigation"><a title="" href="http://procbits.com" class="brand">procbits</a>
+            <p class="navbar-text pull-left">source code snippets and other random musings about software</p>
+            <ul class="nav pull-right">             
+              <li><a href="/tags">Tags</a></li>
+              <li><a href="/rss.xml">RSS</a></li>
+            </ul>
+          </nav><a data-toggle="collapse" data-target=".nav-collapse" href="http://procbits.com" class="btn btn-navbar">procbits<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a>
         </div>
       </div>
     </div>
-
-
     <div class="container-fluid">
       <div id="content" class="clearfix row-fluid">
-        <div id="main" class="span8 clearfix" role="main">
+        <div id="main" role="main" class="span8 clearfix"><h1>Traversal of GWT Tree</h1>
 
-
-<h1>Traversal of GWT Tree</h1>
 <p>Recently, an app I&#39;m working on needed two trees. I just so happened
 that I needed to deep copy part of one of the trees to the other tree.
 The copied tree will then have checkboxes as nodes instead of just
@@ -75,114 +37,122 @@ depth-first traversal of the tree. This method could be adapted to any
 tree structure in just about any language.</p>
 <p>We need a callback function for everytime we &#39;hit&#39; a tree node. Let&#39;s
 create an interface called &#39;Action&#39;: Action.java:</p>
-<pre><code class="lang-java"><span class="keyword">public</span> <span class="keyword">interface</span> Action&lt;T> {
-    <span class="keyword">public</span> void execute(T object);
-}</code></pre>
+<div class="highlight"><pre><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Action</span><span class="o">&lt;</span><span class="n">T</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">execute</span><span class="o">(</span><span class="n">T</span> <span class="n">object</span><span class="o">);</span>
+<span class="o">}</span>
+</pre></div>
+
 <p>Now, we need to create a file called TreeItemUtil.java. This will
 include the algorithm. The algorithm is really straightforward, it just
 uses a stack for each node and iterates the stack. If a node has
 children, they are pushed onto the stack. TreeItemUtil.java:</p>
-<pre><code class="lang-java"><span class="keyword">public</span> <span class="keyword">class</span> TreeItemUtil {
+<div class="highlight"><pre><span class="kd">public</span> <span class="kd">class</span> <span class="nc">TreeItemUtil</span> <span class="o">{</span>
 
-    <span class="keyword">public</span> <span class="keyword">static</span> Collection&lt;TreeItem> fetchChildren(TreeItem ti){
-        <span class="keyword">List</span>&lt;TreeItem> children = <span class="keyword">new</span> ArrayList&lt;TreeItem>();
+    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Collection</span><span class="o">&lt;</span><span class="n">TreeItem</span><span class="o">&gt;</span> <span class="nf">fetchChildren</span><span class="o">(</span><span class="n">TreeItem</span> <span class="n">ti</span><span class="o">){</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">TreeItem</span><span class="o">&gt;</span> <span class="n">children</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">TreeItem</span><span class="o">&gt;();</span>
 
-        <span class="keyword">for</span> (int i = <span class="number">0</span>; i &lt; ti.getChildCount(); ++i)
-            children.add(ti.getChild(i));
-        <span class="keyword">return</span> children;
-    }
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">ti</span><span class="o">.</span><span class="na">getChildCount</span><span class="o">();</span> <span class="o">++</span><span class="n">i</span><span class="o">)</span>
+            <span class="n">children</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">ti</span><span class="o">.</span><span class="na">getChild</span><span class="o">(</span><span class="n">i</span><span class="o">));</span>
+        <span class="k">return</span> <span class="n">children</span><span class="o">;</span>
+    <span class="o">}</span>
 
-    <span class="keyword">public</span> <span class="keyword">static</span> void traverseDfs(TreeItem root, Action&lt;TreeItem> onNode){
-        <span class="keyword">if</span> (onNode == <span class="keyword">null</span>)
-            <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Must pass an action."</span>);
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">traverseDfs</span><span class="o">(</span><span class="n">TreeItem</span> <span class="n">root</span><span class="o">,</span> <span class="n">Action</span><span class="o">&lt;</span><span class="n">TreeItem</span><span class="o">&gt;</span> <span class="n">onNode</span><span class="o">){</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">onNode</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span>
+            <span class="k">throw</span> <span class="k">new</span> <span class="nf">IllegalArgumentException</span><span class="o">(</span><span class="s">&quot;Must pass an action.&quot;</span><span class="o">);</span>
 
-        Stack&lt;TreeItem> children = <span class="keyword">new</span> Stack&lt;TreeItem>();
-        children.add(root);
+        <span class="n">Stack</span><span class="o">&lt;</span><span class="n">TreeItem</span><span class="o">&gt;</span> <span class="n">children</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Stack</span><span class="o">&lt;</span><span class="n">TreeItem</span><span class="o">&gt;();</span>
+        <span class="n">children</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">root</span><span class="o">);</span>
 
-        <span class="keyword">while</span> (!children.isEmpty()){
-            TreeItem current = children.pop();
-            onNode.execute(current);
-            <span class="keyword">List</span>&lt;TreeItem> currentChildren = fetchChildren(current);
-            children.addAll(currentChildren);
-        }
-    }
-}</code></pre>
+        <span class="k">while</span> <span class="o">(!</span><span class="n">children</span><span class="o">.</span><span class="na">isEmpty</span><span class="o">()){</span>
+            <span class="n">TreeItem</span> <span class="n">current</span> <span class="o">=</span> <span class="n">children</span><span class="o">.</span><span class="na">pop</span><span class="o">();</span>
+            <span class="n">onNode</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="n">current</span><span class="o">);</span>
+            <span class="n">List</span><span class="o">&lt;</span><span class="n">TreeItem</span><span class="o">&gt;</span> <span class="n">currentChildren</span> <span class="o">=</span> <span class="n">fetchChildren</span><span class="o">(</span><span class="n">current</span><span class="o">);</span>
+            <span class="n">children</span><span class="o">.</span><span class="na">addAll</span><span class="o">(</span><span class="n">currentChildren</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</pre></div>
+
 <p>Here is our TreeItemUtilTest.java that uses Mockito:</p>
-<pre><code class="lang-java"><span class="keyword">public</span> void testTraverseDfs(){
-        <span class="keyword">final</span> StringBuffer sb = <span class="keyword">new</span> StringBuffer();
+<div class="highlight"><pre><span class="kd">public</span> <span class="kt">void</span> <span class="nf">testTraverseDfs</span><span class="o">(){</span>
+        <span class="kd">final</span> <span class="n">StringBuffer</span> <span class="n">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuffer</span><span class="o">();</span>
 
-        TreeItem a = createMockedTI(<span class="string">"a"</span>);
-        TreeItem b = createMockedTI(<span class="string">"b"</span>);
-        TreeItem c = createMockedTI(<span class="string">"c"</span>);
-        TreeItem d = createMockedTI(<span class="string">"d"</span>);
-        TreeItem e = createMockedTI(<span class="string">"e"</span>);
-        TreeItem f = createMockedTI(<span class="string">"f"</span>);
-        TreeItem g = createMockedTI(<span class="string">"g"</span>);
-        TreeItem h = createMockedTI(<span class="string">"h"</span>);
-        TreeItem i = createMockedTI(<span class="string">"i"</span>);
-        TreeItem j = createMockedTI(<span class="string">"j"</span>);
-        TreeItem k = createMockedTI(<span class="string">"k"</span>);
-        TreeItem l = createMockedTI(<span class="string">"l"</span>);
-        TreeItem m = createMockedTI(<span class="string">"m"</span>);
-        TreeItem n = createMockedTI(<span class="string">"n"</span>);
-        TreeItem o = createMockedTI(<span class="string">"o"</span>);
-        TreeItem p = createMockedTI(<span class="string">"p"</span>);
+        <span class="n">TreeItem</span> <span class="n">a</span> <span class="o">=</span> <span class="n">createMockedTI</span><span class="o">(</span><span class="s">&quot;a&quot;</span><span class="o">);</span>
+        <span class="n">TreeItem</span> <span class="n">b</span> <span class="o">=</span> <span class="n">createMockedTI</span><span class="o">(</span><span class="s">&quot;b&quot;</span><span class="o">);</span>
+        <span class="n">TreeItem</span> <span class="n">c</span> <span class="o">=</span> <span class="n">createMockedTI</span><span class="o">(</span><span class="s">&quot;c&quot;</span><span class="o">);</span>
+        <span class="n">TreeItem</span> <span class="n">d</span> <span class="o">=</span> <span class="n">createMockedTI</span><span class="o">(</span><span class="s">&quot;d&quot;</span><span class="o">);</span>
+        <span class="n">TreeItem</span> <span class="n">e</span> <span class="o">=</span> <span class="n">createMockedTI</span><span class="o">(</span><span class="s">&quot;e&quot;</span><span class="o">);</span>
+        <span class="n">TreeItem</span> <span class="n">f</span> <span class="o">=</span> <span class="n">createMockedTI</span><span class="o">(</span><span class="s">&quot;f&quot;</span><span class="o">);</span>
+        <span class="n">TreeItem</span> <span class="n">g</span> <span class="o">=</span> <span class="n">createMockedTI</span><span class="o">(</span><span class="s">&quot;g&quot;</span><span class="o">);</span>
+        <span class="n">TreeItem</span> <span class="n">h</span> <span class="o">=</span> <span class="n">createMockedTI</span><span class="o">(</span><span class="s">&quot;h&quot;</span><span class="o">);</span>
+        <span class="n">TreeItem</span> <span class="n">i</span> <span class="o">=</span> <span class="n">createMockedTI</span><span class="o">(</span><span class="s">&quot;i&quot;</span><span class="o">);</span>
+        <span class="n">TreeItem</span> <span class="n">j</span> <span class="o">=</span> <span class="n">createMockedTI</span><span class="o">(</span><span class="s">&quot;j&quot;</span><span class="o">);</span>
+        <span class="n">TreeItem</span> <span class="n">k</span> <span class="o">=</span> <span class="n">createMockedTI</span><span class="o">(</span><span class="s">&quot;k&quot;</span><span class="o">);</span>
+        <span class="n">TreeItem</span> <span class="n">l</span> <span class="o">=</span> <span class="n">createMockedTI</span><span class="o">(</span><span class="s">&quot;l&quot;</span><span class="o">);</span>
+        <span class="n">TreeItem</span> <span class="n">m</span> <span class="o">=</span> <span class="n">createMockedTI</span><span class="o">(</span><span class="s">&quot;m&quot;</span><span class="o">);</span>
+        <span class="n">TreeItem</span> <span class="n">n</span> <span class="o">=</span> <span class="n">createMockedTI</span><span class="o">(</span><span class="s">&quot;n&quot;</span><span class="o">);</span>
+        <span class="n">TreeItem</span> <span class="n">o</span> <span class="o">=</span> <span class="n">createMockedTI</span><span class="o">(</span><span class="s">&quot;o&quot;</span><span class="o">);</span>
+        <span class="n">TreeItem</span> <span class="n">p</span> <span class="o">=</span> <span class="n">createMockedTI</span><span class="o">(</span><span class="s">&quot;p&quot;</span><span class="o">);</span>
 
-        addMockedChildren(a, b, o);
-        addMockedChildren(b, c, i);
-        addMockedChildren(o, n, p);
-        addMockedChildren(c, d);
-        addMockedChildren(i, j, m);
-        addMockedChildren(d, e);
-        addMockedChildren(j, k, l);
-        addMockedChildren(e, f, g);
-        addMockedChildren(g, h);
+        <span class="n">addMockedChildren</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="n">b</span><span class="o">,</span> <span class="n">o</span><span class="o">);</span>
+        <span class="n">addMockedChildren</span><span class="o">(</span><span class="n">b</span><span class="o">,</span> <span class="n">c</span><span class="o">,</span> <span class="n">i</span><span class="o">);</span>
+        <span class="n">addMockedChildren</span><span class="o">(</span><span class="n">o</span><span class="o">,</span> <span class="n">n</span><span class="o">,</span> <span class="n">p</span><span class="o">);</span>
+        <span class="n">addMockedChildren</span><span class="o">(</span><span class="n">c</span><span class="o">,</span> <span class="n">d</span><span class="o">);</span>
+        <span class="n">addMockedChildren</span><span class="o">(</span><span class="n">i</span><span class="o">,</span> <span class="n">j</span><span class="o">,</span> <span class="n">m</span><span class="o">);</span>
+        <span class="n">addMockedChildren</span><span class="o">(</span><span class="n">d</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
+        <span class="n">addMockedChildren</span><span class="o">(</span><span class="n">j</span><span class="o">,</span> <span class="n">k</span><span class="o">,</span> <span class="n">l</span><span class="o">);</span>
+        <span class="n">addMockedChildren</span><span class="o">(</span><span class="n">e</span><span class="o">,</span> <span class="n">f</span><span class="o">,</span> <span class="n">g</span><span class="o">);</span>
+        <span class="n">addMockedChildren</span><span class="o">(</span><span class="n">g</span><span class="o">,</span> <span class="n">h</span><span class="o">);</span>
 
-        TreeItemUtil.traverseDfs(a, <span class="keyword">new</span> Action&lt;TreeItem>(){
-            <span class="keyword">public</span> void execute(TreeItem current){
-                sb.append(current.getText());
-            }
-        });
+        <span class="n">TreeItemUtil</span><span class="o">.</span><span class="na">traverseDfs</span><span class="o">(</span><span class="n">a</span><span class="o">,</span> <span class="k">new</span> <span class="n">Action</span><span class="o">&lt;</span><span class="n">TreeItem</span><span class="o">&gt;(){</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">execute</span><span class="o">(</span><span class="n">TreeItem</span> <span class="n">current</span><span class="o">){</span>
+                <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">current</span><span class="o">.</span><span class="na">getText</span><span class="o">());</span>
+            <span class="o">}</span>
+        <span class="o">});</span>
 
-        <span class="comment">//I was assuming it would be leftmost child first, if so, it would be in alphabetical order</span>
-        <span class="comment">//but it starts with rightmost node first.</span>
-        assertEquals(<span class="string">"aopnbimjlkcdeghf"</span>, sb.toString());
-    }
+        <span class="c1">//I was assuming it would be leftmost child first, if so, it would be in alphabetical order</span>
+        <span class="c1">//but it starts with rightmost node first.</span>
+        <span class="n">assertEquals</span><span class="o">(</span><span class="s">&quot;aopnbimjlkcdeghf&quot;</span><span class="o">,</span> <span class="n">sb</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+    <span class="o">}</span>
 
-    <span class="keyword">private</span> TreeItem createMockedTI(String text){
-        TreeItem ti = mock(TreeItem.<span class="keyword">class</span>);
-        when(ti.getText()).thenReturn(text);
-        <span class="keyword">return</span> ti;
-    }
+    <span class="kd">private</span> <span class="n">TreeItem</span> <span class="nf">createMockedTI</span><span class="o">(</span><span class="n">String</span> <span class="n">text</span><span class="o">){</span>
+        <span class="n">TreeItem</span> <span class="n">ti</span> <span class="o">=</span> <span class="n">mock</span><span class="o">(</span><span class="n">TreeItem</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">when</span><span class="o">(</span><span class="n">ti</span><span class="o">.</span><span class="na">getText</span><span class="o">()).</span><span class="na">thenReturn</span><span class="o">(</span><span class="n">text</span><span class="o">);</span>
+        <span class="k">return</span> <span class="n">ti</span><span class="o">;</span>
+    <span class="o">}</span>
 
-    <span class="keyword">private</span> void addMockedChildren(TreeItem <span class="keyword">parent</span>, TreeItem... children){
-        <span class="keyword">for</span> (int x = <span class="number">0</span>; x &lt; children.length; ++x){
-            when(<span class="keyword">parent</span>.getChild(x)).thenReturn(children[x]);
-            when(children[x].getParentItem()).thenReturn(<span class="keyword">parent</span>);
-        }
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">addMockedChildren</span><span class="o">(</span><span class="n">TreeItem</span> <span class="n">parent</span><span class="o">,</span> <span class="n">TreeItem</span><span class="o">...</span> <span class="n">children</span><span class="o">){</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">children</span><span class="o">.</span><span class="na">length</span><span class="o">;</span> <span class="o">++</span><span class="n">x</span><span class="o">){</span>
+            <span class="n">when</span><span class="o">(</span><span class="n">parent</span><span class="o">.</span><span class="na">getChild</span><span class="o">(</span><span class="n">x</span><span class="o">)).</span><span class="na">thenReturn</span><span class="o">(</span><span class="n">children</span><span class="o">[</span><span class="n">x</span><span class="o">]);</span>
+            <span class="n">when</span><span class="o">(</span><span class="n">children</span><span class="o">[</span><span class="n">x</span><span class="o">].</span><span class="na">getParentItem</span><span class="o">()).</span><span class="na">thenReturn</span><span class="o">(</span><span class="n">parent</span><span class="o">);</span>
+        <span class="o">}</span>
 
-        when(<span class="keyword">parent</span>.getChildCount()).thenReturn(children.length);
-    }</code></pre>
+        <span class="n">when</span><span class="o">(</span><span class="n">parent</span><span class="o">.</span><span class="na">getChildCount</span><span class="o">()).</span><span class="na">thenReturn</span><span class="o">(</span><span class="n">children</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>
+    <span class="o">}</span>
+</pre></div>
+
 <p>Now for the actual algorithm that clones the TreeItem into a TreeItem
 with checkboxes:</p>
-<pre><code class="lang-java"><span class="keyword">private</span> TreeItem cloneTreeItemsWithCheckboxes(TreeItem root){
-        <span class="keyword">final</span> HashMap&lt;TreeItem, TreeItem> oldNew = <span class="keyword">new</span> HashMap&lt;TreeItem, TreeItem>();
+<div class="highlight"><pre><span class="kd">private</span> <span class="n">TreeItem</span> <span class="nf">cloneTreeItemsWithCheckboxes</span><span class="o">(</span><span class="n">TreeItem</span> <span class="n">root</span><span class="o">){</span>
+        <span class="kd">final</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">TreeItem</span><span class="o">,</span> <span class="n">TreeItem</span><span class="o">&gt;</span> <span class="n">oldNew</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">TreeItem</span><span class="o">,</span> <span class="n">TreeItem</span><span class="o">&gt;();</span>
 
-        TreeItemUtil.traverseDfs(root, <span class="keyword">new</span> Action&lt;TreeItem>(){
-            <span class="keyword">public</span> void execute(TreeItem current){
-                TreeItem newTi = <span class="keyword">new</span> TreeItem(<span class="keyword">new</span> CheckBox(current.getText()));
-                newTi.setUserObject(current.getUserObject());
-                oldNew.put(current, newTi);
+        <span class="n">TreeItemUtil</span><span class="o">.</span><span class="na">traverseDfs</span><span class="o">(</span><span class="n">root</span><span class="o">,</span> <span class="k">new</span> <span class="n">Action</span><span class="o">&lt;</span><span class="n">TreeItem</span><span class="o">&gt;(){</span>
+            <span class="kd">public</span> <span class="kt">void</span> <span class="nf">execute</span><span class="o">(</span><span class="n">TreeItem</span> <span class="n">current</span><span class="o">){</span>
+                <span class="n">TreeItem</span> <span class="n">newTi</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TreeItem</span><span class="o">(</span><span class="k">new</span> <span class="n">CheckBox</span><span class="o">(</span><span class="n">current</span><span class="o">.</span><span class="na">getText</span><span class="o">()));</span>
+                <span class="n">newTi</span><span class="o">.</span><span class="na">setUserObject</span><span class="o">(</span><span class="n">current</span><span class="o">.</span><span class="na">getUserObject</span><span class="o">());</span>
+                <span class="n">oldNew</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">current</span><span class="o">,</span> <span class="n">newTi</span><span class="o">);</span>
 
-                <span class="keyword">if</span> (current.getParentItem() != <span class="keyword">null</span> &amp;&amp; oldNew.containsKey(current.getParentItem())){
-                    TreeItem newParent = oldNew.get(current.getParentItem());
-                    newParent.addItem(newTi);
-                }
-            }
-        });
+                <span class="k">if</span> <span class="o">(</span><span class="n">current</span><span class="o">.</span><span class="na">getParentItem</span><span class="o">()</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">oldNew</span><span class="o">.</span><span class="na">containsKey</span><span class="o">(</span><span class="n">current</span><span class="o">.</span><span class="na">getParentItem</span><span class="o">())){</span>
+                    <span class="n">TreeItem</span> <span class="n">newParent</span> <span class="o">=</span> <span class="n">oldNew</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">current</span><span class="o">.</span><span class="na">getParentItem</span><span class="o">());</span>
+                    <span class="n">newParent</span><span class="o">.</span><span class="na">addItem</span><span class="o">(</span><span class="n">newTi</span><span class="o">);</span>
+                <span class="o">}</span>
+            <span class="o">}</span>
+        <span class="o">});</span>
 
-        <span class="keyword">return</span> oldNew.get(root);
-    }</code></pre>
+        <span class="k">return</span> <span class="n">oldNew</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">root</span><span class="o">);</span>
+    <span class="o">}</span>
+</pre></div>
+
 <p>Are you a <a href="http://gitpilot.com">Git</a> user? Let me help you make project
 management with Git simple. Checkout <a href="http://gitpilot.com">Gitpilot</a>.</p>
 <p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
@@ -211,17 +181,19 @@ management with Git simple. Checkout <a href="http://gitpilot.com">Gitpilot</a>.
 </script>
 <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 <a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
-    
-
-          <span id="footer">
-            <br/>
-            <span style="font-size: 10px">
-              Proudly built with <a href="https://github.com/skywrite">Sky</a>.
-            </span>
-          </span>
-        </div>
+    <span id="footer"><br><span style="font-size: 10px;">Proudly built with<a href="https://github.com/skywrite"> Sky</a></span></span></div>
       </div>
     </div>
-    
+    <div class="scripts">  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35069840-2']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+    </div>
   </body>
 </html>
