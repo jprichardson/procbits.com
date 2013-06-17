@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Client-Side JavaScript Management, Browserify vs Component</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="JP Richardson">
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/highlight.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid nav-container">
+          <nav role="navigation"><a title="" href="http://procbits.com" class="brand">procbits</a>
+            <p class="navbar-text pull-left">source code snippets and other random musings about software</p>
+            <ul class="nav pull-right">             
+              <li><a href="/tags">Tags</a></li>
+              <li><a href="/rss.xml">RSS</a></li>
+            </ul>
+          </nav><a data-toggle="collapse" data-target=".nav-collapse" href="http://procbits.com" class="btn btn-navbar">procbits<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <div id="content" class="clearfix row-fluid">
+        <div id="main" role="main" class="span8 clearfix"><h1>Client-Side JavaScript Management, Browserify vs Component</h1>
+
+<p>I&#39;ve been writing mostly JavaScript for the last 1.5 years; primarily Node.js using server side only. I started working on a big project that required a single-page web app. For my recent client-side work, I&#39;ve been using <a href="http://angularjs.org">AngularJS</a>. </p>
+<p>Most of my apps haven&#39;t been large enough to require any client-side JavaScript dependency management; I&#39;ve also been fortunate enough, up to this point, to avoid the <a href="http://requirejs.org/docs/whyamd.html">AMD</a> vs <a href="http://dailyjs.com/2010/10/18/modules/">CommonJS</a> on the client-side.</p>
+<p>On the client-side, there are two primary problems with JavaScript packages: </p>
+<ol>
+<li>Dependency management.</li>
+<li>Module composition. With the most frequent styles being: CommonJS and AMD.</li>
+</ol>
+<p>Because of m ybias towards CommonJS because of Node.js and the fact that I agree with TJ Holowaychuk that <a href="http://tjholowaychuk.com/post/27984551477/components">AMD is ugly</a>, automatically rules out any solution that prefers AMD, namely: <a href="http://requirejs.org/">RequireJS</a>, <a href="http://volojs.org/">Volo</a>, or <a href="http://jamjs.org/">Jam</a>. <a href="http://bowerjs.org">Bower</a> is intriguing because it does a great job of client-side dependency management and it was created by Twitter, so there is a big name backing it. However, Bower doesn&#39;t care if you use AMD or CommonJS. I cared more about using CommonJS in the browser than I did package management. So, it&#39;s preferable to find a solution that does dependency management and CommonJS.</p>
+<p>This left me with a choice of <a href="http://browserify.org/">Browserify</a> and <a href="https://github.com/component/component">Component</a>. They are both created by well known members of the Node.js community: <a href="https://github.com/substack">Substack</a> and <a href="https://github.com/visionmedia">TJ Holowaychuk</a> respectively.</p>
+<h2>Browserify</h2>
+<h3>Pros</h3>
+<ol>
+<li>Can reuse Node.js modules on the client with relative ease. Obviously, there are limits such as modules that use any of the networking or file system API.</li>
+<li>You use NPM for installation and dependency management. Isaac (the Node.js benevolent dictator) has <a href="http://esa-matti.suuronen.org/blog/2013/03/22/journey-from-requirejs-to-browserify/#comment-838581508">said that storing pure client-side modules in NPM is OK</a>. </li>
+<li>Source maps.</li>
+<li>Simple to use. If you&#39;re already using Node.js and NPM, there isn&#39;t much you need to do with Browserify, other than require your code client-side. There is no dependency listing or anything like that, Browserify will traverse your <code>require()</code> statements and include the necessary code.</li>
+</ol>
+<h3>Cons</h3>
+<ol>
+<li>There is no dependency management. This could be a pro as well if you&#39;re satisfied with NPM for dependency management.</li>
+<li>It may feel a bit magical. You can use <code>EventEmitter</code> and other Node.js core modules on the client.</li>
+<li>Build step. (A watcher can help this)</li>
+<li>Client-side libraries in NPM feels weird and a bit wrong.</li>
+<li>NPM dependency graph could get bloated if you include the wrong module client-side. i.e. The same module with different versions.</li>
+<li>Documentation is really bad.</li>
+<li>Node.js naming conflicts. Getting harder to come up with good names. Fortunately you can just append a <code>.js</code> to give yourself more choices but will probably introduce ambiguity.</li>
+</ol>
+<h2>Component</h2>
+<h3>Pros</h3>
+<ol>
+<li>Encouragement of simplicity. This could become a bit unwieldy because some Component modules are just a few lines. Your app might need 100&#39;s of components. But again, this could be a big plus.</li>
+<li>Github is the de facto repository for storage and retrieval of your components. This makes publishing easy.</li>
+<li>Github style naming. i.e. <code>jprichardson/mymodule</code> vs <code>tjholowaychuk/mymodule</code>.</li>
+<li>Momentum seems to be increasing.</li>
+<li>Flat dependency tree. Only one version of a component allowed, this reduces the amount of client-side JavaScript.</li>
+</ol>
+<h3>Cons</h3>
+<ol>
+<li>Feels like there is a bit too much ceremony to get up and going if you&#39;re already using NPM. This makes sense given that it supports dependency management though.</li>
+<li>Build step.</li>
+<li><code>Component</code> is hard to Google. Anytime you Google anything with the search term <code>Component</code>, a lot of unrelated articles come up. Picking such a generic name was a bad idea IMHO. Overtime, this may get better.</li>
+<li>HTTP only remotes. You can have private Component repos, but it must support HTTP. I know that this <a href="https://github.com/godmodelabs/contre">https://github.com/godmodelabs/contre</a> can help with that. I really bothers me. I&#39;d like to <code>component install jp@myprivateserver.com/var/lib/git/mymodule.git</code>.</li>
+<li>Extra <code>component.json</code> file. I&#39;m being a bit nitpicky here, but managing the version number in two places (assuming you have a package.json) sucks. I understand TJ&#39;s <a href="https://github.com/component/component/wiki/F.A.Q">reason for doing this though</a>.</li>
+</ol>
+<h2>Conclusion</h2>
+<p>I ultimately chose Browserify. At this point it seems that my main problem to solve is getting some of my JavaScript modules (specific algorithms) on the client. I love NPM and so Browserify feels natural and makes sense. To be fair, it seems that Component&#39;s main goal is to encourage you to write reusable web (or JavaScript) components. This isn&#39;t a problem that I need to solve, especially given that I&#39;m pretty invested in the AngularJS ecosystem and Angular way of doing things. But Component is a pure client-side solution. It may feel like a bit much if you&#39;re already using NPM.</p>
+<p>I&#39;m also hoping that <a href="http://wiki.ecmascript.org/doku.php?id=harmony:modules">ES Harmony modules</a> and <a href="http://www.w3.org/TR/2013/WD-components-intro-20130606/">Web Components standard</a> help to solve some of these problems.</p>
+<p>Honorable mention: <a href="http://ender.jit.su/">Ender</a>. I have no idea why Ender hasn&#39;t seen a lot of adoption.</p>
+<p>More reading:</p>
+<ol>
+<li><a href="http://www.reddit.com/r/javascript/comments/vc9d9/npm_vs_jam_requirejs_vs_browserify_vs_ender/">http://www.reddit.com/r/javascript/comments/vc9d9/npm_vs_jam_requirejs_vs_browserify_vs_ender/</a></li>
+<li><a href="http://stackoverflow.com/questions/15603095/jam-vs-bower-whats-the-difference">http://stackoverflow.com/questions/15603095/jam-vs-bower-whats-the-difference</a></li>
+<li><a href="http://yeoman.io/packagemanager.html">http://yeoman.io/packagemanager.html</a></li>
+<li><a href="https://github.com/webpack/webpack">https://github.com/webpack/webpack</a></li>
+<li><a href="http://kpuputti.github.io/perkele.js/examples/javascript-package-managers/index.html">http://kpuputti.github.io/perkele.js/examples/javascript-package-managers/index.html</a></li>
+<li><a href="http://wibblycode.wordpress.com/2013/01/01/the-state-of-javascript-package-management/">http://wibblycode.wordpress.com/2013/01/01/the-state-of-javascript-package-management/</a></li>
+<li><a href="https://github.com/medikoo/modules-webmake">https://github.com/medikoo/modules-webmake</a></li>
+<li><a href="http://dailyjs.com/2013/01/28/components/">http://dailyjs.com/2013/01/28/components/</a></li>
+<li><a href="http://www.forbeslindesay.co.uk/post/44144487088/browserify-vs-component">http://www.forbeslindesay.co.uk/post/44144487088/browserify-vs-component</a></li>
+<li><a href="https://github.com/stagas/browserify-vs-component/wiki/Browserify-vs-Component">https://github.com/stagas/browserify-vs-component/wiki/Browserify-vs-Component</a></li>
+<li><a href="http://anthonyshort.me/2012/12/building-projects-with-component">http://anthonyshort.me/2012/12/building-projects-with-component</a></li>
+<li><a href="http://esa-matti.suuronen.org/blog/2013/03/22/journey-from-requirejs-to-browserify/">http://esa-matti.suuronen.org/blog/2013/03/22/journey-from-requirejs-to-browserify/</a></li>
+</ol>
+<p><a href="http://requirejs.org/">requirejs</a>:</p>
+
+
+<p>
+  If you made it this far, you should follow me on Twitter. &nbsp; <a style="margin-top: -3px" href="https://twitter.com/jprichardson" class="twitter-follow-button" data-show-count="false">Follow @jprichardson</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</p>
+
+<p>
+  -JP
+</p>
+
+ <div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'procbits'; // required: replace example with your forum shortname
+
+  //optional url
+  
+    var disqus_url = 'http://procbits.com/2013/06/17/client-side-javascript-management-browserify-vs-component/';
+  
+
+  //optional id
+  
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    <span id="footer"><br><span style="font-size: 10px;">Proudly built with<a href="https://github.com/skywrite"> Sky</a></span></span></div>
+      </div>
+    </div>
+    <div class="scripts">  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35069840-2']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+    </div>
+  </body>
+</html>

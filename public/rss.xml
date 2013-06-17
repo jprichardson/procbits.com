@@ -1,5 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[procbits]]></title><description><![CDATA[source code snippets and other random musings about software]]></description><link>http://procbits.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Wed, 12 Jun 2013 09:16:43 GMT</lastBuildDate><atom:link href="http://procbits.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Wordpress Export to Markdown Hosted on Amazon S3]]></title><description><![CDATA[<p>You may have been able to tell, but this blog looks different. Yes, I finally left Wordpress. I converted my Wordpress blog to a static generated Markdown blog. It&#39;s fairly straight forward.</p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[procbits]]></title><description><![CDATA[source code snippets and other random musings about software]]></description><link>http://procbits.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Mon, 17 Jun 2013 21:52:00 GMT</lastBuildDate><atom:link href="http://procbits.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Client-Side JavaScript Management, Browserify vs Component]]></title><description><![CDATA[<p>I&#39;ve been writing mostly JavaScript for the last 1.5 years; primarily Node.js using server side only. I started working on a big project that required a single-page web app. For my recent client-side work, I&#39;ve been using <a href="http://angularjs.org">AngularJS</a>. </p>
+<p>Most of my apps haven&#39;t been large enough to require any client-side JavaScript dependency management; I&#39;ve also been fortunate enough, up to this point, to avoid the <a href="http://requirejs.org/docs/whyamd.html">AMD</a> vs <a href="http://dailyjs.com/2010/10/18/modules/">CommonJS</a> on the client-side.</p>
+<p>On the client-side, there are two primary problems with JavaScript packages: </p>
+<ol>
+<li>Dependency management.</li>
+<li>Module composition. With the most frequent styles being: CommonJS and AMD.</li>
+</ol>
+<p>Because of m ybias towards CommonJS because of Node.js and the fact that I agree with TJ Holowaychuk that <a href="http://tjholowaychuk.com/post/27984551477/components">AMD is ugly</a>, automatically rules out any solution that prefers AMD, namely: <a href="http://requirejs.org/">RequireJS</a>, <a href="http://volojs.org/">Volo</a>, or <a href="http://jamjs.org/">Jam</a>. <a href="http://bowerjs.org">Bower</a> is intriguing because it does a great job of client-side dependency management and it was created by Twitter, so there is a big name backing it. However, Bower doesn&#39;t care if you use AMD or CommonJS. I cared more about using CommonJS in the browser than I did package management. So, it&#39;s preferable to find a solution that does dependency management and CommonJS.</p>
+<p>This left me with a choice of <a href="http://browserify.org/">Browserify</a> and <a href="https://github.com/component/component">Component</a>. They are both created by well known members of the Node.js community: <a href="https://github.com/substack">Substack</a> and <a href="https://github.com/visionmedia">TJ Holowaychuk</a> respectively.</p>
+<h2>Browserify</h2>
+<h3>Pros</h3>
+<ol>
+<li>Can reuse Node.js modules on the client with relative ease. Obviously, there are limits such as modules that use any of the networking or file system API.</li>
+<li>You use NPM for installation and dependency management. Isaac (the Node.js benevolent dictator) has <a href="http://esa-matti.suuronen.org/blog/2013/03/22/journey-from-requirejs-to-browserify/#comment-838581508">said that storing pure client-side modules in NPM is OK</a>. </li>
+<li>Source maps.</li>
+<li>Simple to use. If you&#39;re already using Node.js and NPM, there isn&#39;t much you need to do with Browserify, other than require your code client-side. There is no dependency listing or anything like that, Browserify will traverse your <code>require()</code> statements and include the necessary code.</li>
+</ol>
+<h3>Cons</h3>
+<ol>
+<li>There is no dependency management. This could be a pro as well if you&#39;re satisfied with NPM for dependency management.</li>
+<li>It may feel a bit magical. You can use <code>EventEmitter</code> and other Node.js core modules on the client.</li>
+<li>Build step. (A watcher can help this)</li>
+<li>Client-side libraries in NPM feels weird and a bit wrong.</li>
+<li>NPM dependency graph could get bloated if you include the wrong module client-side. i.e. The same module with different versions.</li>
+<li>Documentation is really bad.</li>
+<li>Node.js naming conflicts. Getting harder to come up with good names. Fortunately you can just append a <code>.js</code> to give yourself more choices but will probably introduce ambiguity.</li>
+</ol>
+<h2>Component</h2>
+<h3>Pros</h3>
+<ol>
+<li>Encouragement of simplicity. This could become a bit unwieldy because some Component modules are just a few lines. Your app might need 100&#39;s of components. But again, this could be a big plus.</li>
+<li>Github is the de facto repository for storage and retrieval of your components. This makes publishing easy.</li>
+<li>Github style naming. i.e. <code>jprichardson/mymodule</code> vs <code>tjholowaychuk/mymodule</code>.</li>
+<li>Momentum seems to be increasing.</li>
+<li>Flat dependency tree. Only one version of a component allowed, this reduces the amount of client-side JavaScript.</li>
+</ol>
+<h3>Cons</h3>
+<ol>
+<li>Feels like there is a bit too much ceremony to get up and going if you&#39;re already using NPM. This makes sense given that it supports dependency management though.</li>
+<li>Build step.</li>
+<li><code>Component</code> is hard to Google. Anytime you Google anything with the search term <code>Component</code>, a lot of unrelated articles come up. Picking such a generic name was a bad idea IMHO. Overtime, this may get better.</li>
+<li>HTTP only remotes. You can have private Component repos, but it must support HTTP. I know that this <a href="https://github.com/godmodelabs/contre">https://github.com/godmodelabs/contre</a> can help with that. I really bothers me. I&#39;d like to <code>component install jp@myprivateserver.com/var/lib/git/mymodule.git</code>.</li>
+<li>Extra <code>component.json</code> file. I&#39;m being a bit nitpicky here, but managing the version number in two places (assuming you have a package.json) sucks. I understand TJ&#39;s <a href="https://github.com/component/component/wiki/F.A.Q">reason for doing this though</a>.</li>
+</ol>
+<h2>Conclusion</h2>
+<p>I ultimately chose Browserify. At this point it seems that my main problem to solve is getting some of my JavaScript modules (specific algorithms) on the client. I love NPM and so Browserify feels natural and makes sense. To be fair, it seems that Component&#39;s main goal is to encourage you to write reusable web (or JavaScript) components. This isn&#39;t a problem that I need to solve, especially given that I&#39;m pretty invested in the AngularJS ecosystem and Angular way of doing things. But Component is a pure client-side solution. It may feel like a bit much if you&#39;re already using NPM.</p>
+<p>I&#39;m also hoping that <a href="http://wiki.ecmascript.org/doku.php?id=harmony:modules">ES Harmony modules</a> and <a href="http://www.w3.org/TR/2013/WD-components-intro-20130606/">Web Components standard</a> help to solve some of these problems.</p>
+<p>Honorable mention: <a href="http://ender.jit.su/">Ender</a>. I have no idea why Ender hasn&#39;t seen a lot of adoption.</p>
+<p>More reading:</p>
+<ol>
+<li><a href="http://www.reddit.com/r/javascript/comments/vc9d9/npm_vs_jam_requirejs_vs_browserify_vs_ender/">http://www.reddit.com/r/javascript/comments/vc9d9/npm_vs_jam_requirejs_vs_browserify_vs_ender/</a></li>
+<li><a href="http://stackoverflow.com/questions/15603095/jam-vs-bower-whats-the-difference">http://stackoverflow.com/questions/15603095/jam-vs-bower-whats-the-difference</a></li>
+<li><a href="http://yeoman.io/packagemanager.html">http://yeoman.io/packagemanager.html</a></li>
+<li><a href="https://github.com/webpack/webpack">https://github.com/webpack/webpack</a></li>
+<li><a href="http://kpuputti.github.io/perkele.js/examples/javascript-package-managers/index.html">http://kpuputti.github.io/perkele.js/examples/javascript-package-managers/index.html</a></li>
+<li><a href="http://wibblycode.wordpress.com/2013/01/01/the-state-of-javascript-package-management/">http://wibblycode.wordpress.com/2013/01/01/the-state-of-javascript-package-management/</a></li>
+<li><a href="https://github.com/medikoo/modules-webmake">https://github.com/medikoo/modules-webmake</a></li>
+<li><a href="http://dailyjs.com/2013/01/28/components/">http://dailyjs.com/2013/01/28/components/</a></li>
+<li><a href="http://www.forbeslindesay.co.uk/post/44144487088/browserify-vs-component">http://www.forbeslindesay.co.uk/post/44144487088/browserify-vs-component</a></li>
+<li><a href="https://github.com/stagas/browserify-vs-component/wiki/Browserify-vs-Component">https://github.com/stagas/browserify-vs-component/wiki/Browserify-vs-Component</a></li>
+<li><a href="http://anthonyshort.me/2012/12/building-projects-with-component">http://anthonyshort.me/2012/12/building-projects-with-component</a></li>
+<li><a href="http://esa-matti.suuronen.org/blog/2013/03/22/journey-from-requirejs-to-browserify/">http://esa-matti.suuronen.org/blog/2013/03/22/journey-from-requirejs-to-browserify/</a></li>
+</ol>
+<p><a href="http://requirejs.org/">requirejs</a>:</p>
+]]></description><link>http://procbits.com/2013/06/17/client-side-javascript-management-browserify-vs-component</link><guid isPermaLink="true">http://procbits.com/2013/06/17/client-side-javascript-management-browserify-vs-component</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Mon, 17 Jun 2013 00:00:00 GMT</pubDate></item><item><title><![CDATA[Wordpress Export to Markdown Hosted on Amazon S3]]></title><description><![CDATA[<p>You may have been able to tell, but this blog looks different. Yes, I finally left Wordpress. I converted my Wordpress blog to a static generated Markdown blog. It&#39;s fairly straight forward.</p>
 <h2>Why?</h2>
 <ul>
 <li>I hated writing my blog posts in Wordpress. I wanted to write in pure Markdown since I&#39;m such a big <a href="https://github.com/jprichardson">open source advocate</a> and have been using Markdown a lot with Github.</li>
@@ -825,106 +889,4 @@ using Git mindless.</p>
 <p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>
 and read my blog on entrepreneurship: <a href="http://techneur.com">Techneur</a>.</p>
 <p>-JP Richardson</p>
-]]></description><link>http://procbits.com/2012/01/29/installing-node-js-on-ubuntu-10-4-lts</link><guid isPermaLink="true">http://procbits.com/2012/01/29/installing-node-js-on-ubuntu-10-4-lts</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Mon, 30 Jan 2012 06:00:00 GMT</pubDate></item><item><title><![CDATA[Comparing Two Javascript Objects]]></title><description><![CDATA[<p>Recently, I was faced with a problem where I needed to compare two
-Javascript objects. My initial strategy was to convert them to JSON and
-compare the JSON strings.</p>
-<p>Sort of like this:</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">person1</span><span class="p">);</span><span class="c1">//&#39;{&quot;firstName&quot;:&quot;JP&quot;,&quot;lastName&quot;:&quot;Richardson&quot;}&#39;</span>
-<span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">person2</span><span class="p">);</span><span class="c1">//&#39;{&quot;firstName&quot;:&quot;JP&quot;,&quot;lastName&quot;:&quot;Richardson&quot;}&#39;</span>
-
-<span class="nx">assert</span><span class="p">(</span><span class="nx">a</span> <span class="o">===</span> <span class="nx">b</span><span class="p">);</span>
-</pre></div>
-
-<p>Simple enough, right?</p>
-<p>Not so fast. I encountered a case like this:</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">person1</span><span class="p">);</span><span class="c1">//&#39;{&quot;firstName&quot;:&quot;JP&quot;,&quot;lastName&quot;:&quot;Richardson&quot;}&#39;</span>
-<span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">person2</span><span class="p">);</span><span class="c1">//&#39;{&quot;lastName&quot;:&quot;Richardson&quot;,&quot;firstName&quot;:&quot;JP&quot;}&#39;</span>
-
-<span class="nx">assert</span><span class="p">(</span><span class="nx">a</span> <span class="o">===</span> <span class="nx">b</span><span class="p">);</span>
-</pre></div>
-
-<p>The data is the same, but the string is different. Fortunately,
-Stackoverflow had a nice <a href="http://stackoverflow.com/questions/1068834/object-comparison-in-javascript">Javascript object comparison
-algorithm</a>
-to dump into my app.</p>
-<div class="highlight"><pre><span class="nb">Object</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">equals</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">x</span><span class="p">)</span>
-<span class="p">{</span>
-  <span class="kd">var</span> <span class="nx">p</span><span class="p">;</span>
-  <span class="k">for</span><span class="p">(</span><span class="nx">p</span> <span class="k">in</span> <span class="k">this</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="nx">x</span><span class="p">[</span><span class="nx">p</span><span class="p">])</span><span class="o">==</span><span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="kc">false</span><span class="p">;}</span>
-  <span class="p">}</span>
-
-  <span class="k">for</span><span class="p">(</span><span class="nx">p</span> <span class="k">in</span> <span class="k">this</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">p</span><span class="p">])</span> <span class="p">{</span>
-          <span class="k">switch</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">p</span><span class="p">]))</span> <span class="p">{</span>
-              <span class="k">case</span> <span class="s1">&#39;object&#39;</span><span class="o">:</span>
-                  <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">this</span><span class="p">[</span><span class="nx">p</span><span class="p">].</span><span class="nx">equals</span><span class="p">(</span><span class="nx">x</span><span class="p">[</span><span class="nx">p</span><span class="p">]))</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="p">}</span> <span class="k">break</span><span class="p">;</span>
-              <span class="k">case</span> <span class="s1">&#39;function&#39;</span><span class="o">:</span>
-                  <span class="k">if</span> <span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="nx">x</span><span class="p">[</span><span class="nx">p</span><span class="p">])</span><span class="o">==</span><span class="s1">&#39;undefined&#39;</span> <span class="o">||</span>
-                      <span class="p">(</span><span class="nx">p</span> <span class="o">!=</span> <span class="s1">&#39;equals&#39;</span> <span class="o">&amp;&amp;</span> <span class="k">this</span><span class="p">[</span><span class="nx">p</span><span class="p">].</span><span class="nx">toString</span><span class="p">()</span> <span class="o">!=</span> <span class="nx">x</span><span class="p">[</span><span class="nx">p</span><span class="p">].</span><span class="nx">toString</span><span class="p">()))</span>
-                      <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-                  <span class="k">break</span><span class="p">;</span>
-              <span class="k">default</span><span class="o">:</span>
-                  <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">p</span><span class="p">]</span> <span class="o">!=</span> <span class="nx">x</span><span class="p">[</span><span class="nx">p</span><span class="p">])</span> <span class="p">{</span> <span class="k">return</span> <span class="kc">false</span><span class="p">;</span> <span class="p">}</span>
-          <span class="p">}</span>
-      <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-          <span class="k">if</span> <span class="p">(</span><span class="nx">x</span><span class="p">[</span><span class="nx">p</span><span class="p">])</span>
-              <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-      <span class="p">}</span>
-  <span class="p">}</span>
-
-  <span class="k">for</span><span class="p">(</span><span class="nx">p</span> <span class="k">in</span> <span class="nx">x</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span><span class="p">(</span><span class="k">typeof</span><span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">p</span><span class="p">])</span><span class="o">==</span><span class="s1">&#39;undefined&#39;</span><span class="p">)</span> <span class="p">{</span><span class="k">return</span> <span class="kc">false</span><span class="p">;}</span>
-  <span class="p">}</span>
-
-  <span class="k">return</span> <span class="kc">true</span><span class="p">;</span>
-<span class="p">}</span>
-</pre></div>
-
-<p>Test passed. I eventually hit a situation where I had some code with an
-Object that had a Person prototype and some data that came from JSON.
-Kinda like this:</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">person1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Person</span><span class="p">(</span><span class="s1">&#39;JP&#39;</span><span class="p">,</span> <span class="s1">&#39;Richardson&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">person2</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="s1">&#39;{&quot;firstName&quot;:&quot;JP&quot;,&quot;lastName&quot;:&quot;Richardson&quot;}&#39;</span><span class="p">);</span>
-
-<span class="c1">//deepEquals is code snippet above ^</span>
-<span class="nx">person1</span><span class="p">.</span><span class="nx">deepEquals</span><span class="p">(</span><span class="nx">person2</span><span class="p">);</span> <span class="c1">// &lt;--- THIS FAILS</span>
-</pre></div>
-
-<p>I only cared about comparing the data. The methods associated with the
-object (Prototype) didn&#39;t matter. Let&#39;s modify the above algorithm. I
-use CoffeeScript. Here&#39;s the modification:</p>
-<div class="highlight"><pre><span class="no">Object</span><span class="o">::</span><span class="n">jsonEquals</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">-&gt;</span>
-  <span class="c1">#we do this because two objects may have the same data fields and data but different prototypes</span>
-  <span class="n">x1</span> <span class="o">=</span> <span class="no">JSON</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="no">JSON</span><span class="o">.</span><span class="n">stringify</span><span class="p">(</span><span class="n">this</span><span class="p">))</span>
-  <span class="n">x2</span> <span class="o">=</span> <span class="no">JSON</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="no">JSON</span><span class="o">.</span><span class="n">stringify</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
-
-  <span class="nb">p</span> <span class="o">=</span> <span class="n">null</span>
-  <span class="k">for</span> <span class="nb">p</span> <span class="n">of</span> <span class="n">x1</span>
-    <span class="k">return</span> <span class="kp">false</span> <span class="k">if</span> <span class="n">typeof</span> <span class="p">(</span><span class="n">x2</span><span class="o">[</span><span class="nb">p</span><span class="o">]</span><span class="p">)</span> <span class="n">is</span> <span class="s1">&#39;undefined&#39;</span>
-  <span class="k">for</span> <span class="nb">p</span> <span class="n">of</span> <span class="n">x1</span>
-    <span class="k">if</span> <span class="n">x1</span><span class="o">[</span><span class="nb">p</span><span class="o">]</span>
-      <span class="n">switch</span> <span class="n">typeof</span> <span class="p">(</span><span class="n">x1</span><span class="o">[</span><span class="nb">p</span><span class="o">]</span><span class="p">)</span>
-        <span class="k">when</span> <span class="s1">&#39;object&#39;</span>
-          <span class="k">return</span> <span class="kp">false</span> <span class="k">unless</span> <span class="n">x1</span><span class="o">[</span><span class="nb">p</span><span class="o">].</span><span class="n">jsonEquals</span><span class="p">(</span><span class="n">x2</span><span class="o">[</span><span class="nb">p</span><span class="o">]</span><span class="p">)</span>
-        <span class="k">when</span> <span class="s1">&#39;function&#39;</span>
-          <span class="k">return</span> <span class="kp">false</span> <span class="k">if</span> <span class="n">typeof</span> <span class="p">(</span><span class="n">x2</span><span class="o">[</span><span class="nb">p</span><span class="o">]</span><span class="p">)</span> <span class="n">is</span> <span class="s1">&#39;undefined&#39;</span> <span class="ow">or</span> <span class="p">(</span><span class="nb">p</span> <span class="n">isnt</span> <span class="s1">&#39;equals&#39;</span> <span class="ow">and</span> <span class="n">x1</span><span class="o">[</span><span class="nb">p</span><span class="o">].</span><span class="n">toString</span><span class="p">()</span> <span class="n">isnt</span> <span class="n">x2</span><span class="o">[</span><span class="nb">p</span><span class="o">].</span><span class="n">toString</span><span class="p">())</span>
-        <span class="k">else</span>
-          <span class="k">return</span> <span class="kp">false</span>  <span class="k">unless</span> <span class="n">x1</span><span class="o">[</span><span class="nb">p</span><span class="o">]</span> <span class="n">is</span> <span class="n">x2</span><span class="o">[</span><span class="nb">p</span><span class="o">]</span>
-    <span class="k">else</span>
-      <span class="k">return</span> <span class="kp">false</span> <span class="k">if</span> <span class="n">x2</span><span class="o">[</span><span class="nb">p</span><span class="o">]</span>
-  <span class="k">for</span> <span class="nb">p</span> <span class="n">of</span> <span class="n">x2</span>
-    <span class="k">return</span> <span class="kp">false</span> <span class="k">if</span> <span class="n">typeof</span> <span class="p">(</span><span class="n">x1</span><span class="o">[</span><span class="nb">p</span><span class="o">]</span><span class="p">)</span> <span class="n">is</span> <span class="s1">&#39;undefined&#39;</span>
-  <span class="kp">true</span>
-</pre></div>
-
-<p>This causes the situation like I described above to pass. Essentially
-convert to JSON to remove the prototype. I suppose you could make this
-more efficient my just manually setting the prototype to Object before
-doing the comparison, but oh well this works for the time being.</p>
-<p>Do you use Git? If so, checkout <a href="http://gitpilot.com">Gitpilot</a> to make
-project management and collaborating on projects seamless.</p>
-<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>
-and read my blog on entrepreneurship: <a href="http://techneur.com">Techneur</a>.</p>
-<p>-JP Richardson</p>
-]]></description><link>http://procbits.com/2012/01/19/comparing-two-javascript-objects</link><guid isPermaLink="true">http://procbits.com/2012/01/19/comparing-two-javascript-objects</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 19 Jan 2012 06:00:00 GMT</pubDate></item></channel></rss>
+]]></description><link>http://procbits.com/2012/01/29/installing-node-js-on-ubuntu-10-4-lts</link><guid isPermaLink="true">http://procbits.com/2012/01/29/installing-node-js-on-ubuntu-10-4-lts</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Mon, 30 Jan 2012 06:00:00 GMT</pubDate></item></channel></rss>
