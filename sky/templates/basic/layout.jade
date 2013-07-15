@@ -1,0 +1,43 @@
+!!! 5
+html(lang='en')
+  head
+    title= ctx.title
+    meta(charset='utf-8')
+    meta(http-equiv='Content-Type', content='text/html; charset=utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    meta(name='author', content=ctx.author)
+    link(href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css", rel="stylesheet")
+    link(href="/css/style.css", rel="stylesheet")
+    link(href="/css/highlight.css", rel="stylesheet")
+
+  body
+    .navbar.navbar-fixed-top
+      .navbar-inner
+        .container-fluid.nav-container
+          nav(role='navigation')
+            a.brand(title='', href=sky.site.url)= sky.site.name
+            p.navbar-text.pull-left= sky.site.tagline
+            ul.nav.pull-right              
+              li
+                a(href="/tags") Tags
+              li
+                a(href='/rss.xml') RSS
+            
+          a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse', href=sky.site.url)= sky.site.name
+            span.icon-bar
+            span.icon-bar
+            span.icon-bar
+
+      
+    .container-fluid
+      #content.clearfix.row-fluid
+        #main.span8.clearfix(role='main')!= sky.view
+
+          span#footer
+            br
+            span(style='font-size: 10px;')
+              | Proudly built with
+              a(href=sky.homepage)  Sky
+              
+    .scripts
+      != fn.partial('googleAnalytics')

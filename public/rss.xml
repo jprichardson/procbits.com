@@ -1,5 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[procbits]]></title><description><![CDATA[source code snippets and other random musings about software]]></description><link>http://procbits.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Mon, 17 Jun 2013 21:52:00 GMT</lastBuildDate><atom:link href="http://procbits.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Client-Side JavaScript Management, Browserify vs Component]]></title><description><![CDATA[<p>I&#39;ve been writing mostly JavaScript for the last 1.5 years; primarily Node.js using server side only. I started working on a big project that required a single-page web app. For my recent client-side work, I&#39;ve been using <a href="http://angularjs.org">AngularJS</a>. </p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[procbits]]></title><description><![CDATA[source code snippets and other random musings about software]]></description><link>http://procbits.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Mon, 15 Jul 2013 18:16:11 GMT</lastBuildDate><atom:link href="http://procbits.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[CSS Resets]]></title><description><![CDATA[<p>This is the first of <a href="http://procbits.com/tags/css">many articles</a> related to my adventures with CSS. I haven&#39;t actually really had the need to use CSS for about 6 years. I always had avoided it. When <a href="http://twitter.github.io/bootstrap/">Twitter Bootstrap</a> was released I was pumped because there was a way for developers to just focus on code and ignore the style. Recently, I decide that I&#39;m going to write a cross-platform app using <a href="http://phonegap.com/">Adobe Phonegap</a>. So, I&#39;ll need to get really familiar with CSS3 hardware transitions and styles.</p>
+<p>Let&#39;s start with the basics. CSS resets.</p>
+<p>Huh? What&#39;s the point?</p>
+<p>Each browser renders elements in its own default way. Consider the following HTML:</p>
+<div class="highlight"><pre><span class="cp">&lt;!doctype html&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+  <span class="nt">&lt;p&gt;</span>Some paragraph<span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;ul&gt;</span>
+    <span class="nt">&lt;li&gt;</span>item 1<span class="nt">&lt;/li&gt;</span>
+    <span class="nt">&lt;li&gt;</span>item 2<span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;/ul&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+</pre></div>
+
+<h4>output:</h4>
+<iframe src="http://embed.plnkr.co/RRptESb8sbIeWWk4JzXf/preview" ></iframe>
+
+<p>It looks liked you&#39;d expect. </p>
+<p>Now, let&#39;s modify it a bit, and add the following style:</p>
+<div class="highlight"><pre><span class="o">*</span> <span class="p">{</span>
+  <span class="k">padding</span><span class="o">:</span> <span class="m">0px</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<h4>output:</h4>
+<iframe src="http://embed.plnkr.co/rxRPPHnK9ploDznjhAD5/preview"></iframe>
+
+<p>Notice the item list bullets are gone?</p>
+<p>Let&#39;s modify it a bit more:</p>
+<div class="highlight"><pre><span class="o">*</span> <span class="p">{</span>
+  <span class="k">padding</span><span class="o">:</span> <span class="m">0px</span><span class="p">;</span>
+  <span class="k">margin</span><span class="o">:</span> <span class="m">0px</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<h4>output:</h4>
+<iframe src="http://embed.plnkr.co/VlVoTlypjSKWo4CGvSSu/preview"></iframe>
+
+<p>Now you&#39;ll notice that the margins are removed.</p>
+<p>There is a case to be made against using the universal selector <code>*</code>, and that is that it ruins the margins and padding
+of form elements. But it&#39;s definitely a good start to understanding on you can make cross browser HTML look consistent.</p>
+<h3>CSS Reset Frameworks</h3>
+<ul>
+<li><a href="http://necolas.github.io/normalize.css/">Normalize.css</a></li>
+<li><a href="http://meyerweb.com/eric/thoughts/2011/01/03/reset-revisited/">Eric Meyer&#39;s Reset</a></li>
+</ul>
+<h3>Resources</h3>
+<ul>
+<li><a href="http://sixrevisions.com/css/css-tips/css-tip-1-resetting-your-styles-with-css-reset/">http://sixrevisions.com/css/css-tips/css-tip-1-resetting-your-styles-with-css-reset/</a></li>
+<li><a href="http://snook.ca/archives/html_and_css/no_css_reset/">http://snook.ca/archives/html_and_css/no_css_reset/</a></li>
+<li><a href="https://mondaybynoon.com/why-i-like-and-use-reset-css/">https://mondaybynoon.com/why-i-like-and-use-reset-css/</a></li>
+<li><a href="http://stackoverflow.com/questions/99643/css-reset-default-styles-for-common-elements">http://stackoverflow.com/questions/99643/css-reset-default-styles-for-common-elements</a></li>
+</ul>
+]]></description><link>http://procbits.com/css-resets</link><guid isPermaLink="true">http://procbits.com/css-resets</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Fri, 12 Jul 2013 00:00:00 GMT</pubDate></item><item><title><![CDATA[Client-Side JavaScript Management, Browserify vs Component]]></title><description><![CDATA[<p>I&#39;ve been writing mostly JavaScript for the last 1.5 years; primarily Node.js using server side only. I started working on a big project that required a single-page web app. For my recent client-side work, I&#39;ve been using <a href="http://angularjs.org">AngularJS</a>. </p>
 <p>Most of my apps haven&#39;t been large enough to require any client-side JavaScript dependency management; I&#39;ve also been fortunate enough, up to this point, to avoid the <a href="http://requirejs.org/docs/whyamd.html">AMD</a> vs <a href="http://dailyjs.com/2010/10/18/modules/">CommonJS</a> on the client-side.</p>
 <p>On the client-side, there are two primary problems with JavaScript packages: </p>
 <ol>
@@ -831,62 +884,4 @@ form values code and packaged it up into the <code>HttpForm</code> sugar.</p>
 using Git thoughtless.</p>
 <p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>.</p>
 <p>-JP Richardson</p>
-]]></description><link>http://procbits.com/2012/02/29/submittingposting-files-and-fields-to-an-http-form-using-c-net</link><guid isPermaLink="true">http://procbits.com/2012/02/29/submittingposting-files-and-fields-to-an-http-form-using-c-net</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 01 Mar 2012 06:00:00 GMT</pubDate></item><item><title><![CDATA[Installing Node.js on Ubuntu 10.04 LTS]]></title><description><![CDATA[<p>Installing Node.js on Ubuntu 10.04 LTS is pretty straight forward.</p>
-<p>You will want a Node.js versioning manager. Node.js has a quick release
-cycle, point releases happen quite frequently. A Node.js versioning
-manager will help you keep all of your versions isolated from each
-other.</p>
-<p>As it stands today, there are four Node.js version managers. They are:</p>
-<ol>
-<li><a href="https://github.com/creationix/nvm">NVM</a> - NVM works like RVM. It
-must be sourced in your ~./bashrc or ~./profile file. Some people
-don&#39;t like this. It&#39;s my understanding that some find this to be a
-bit of hackery.</li>
-<li><a href="https://github.com/isaacs/nave">Nave</a> - Nave doesn&#39;t need to be
-sourced or loaded up into your bash profile. But, when you use Nave
-it executes commands into a
-<a href="http://docstore.mik.ua/orelly/unix/upt/ch38_04.htm">subshell</a>. It&#39;s
-my understanding that if any process in a subshell modifies the
-environment then these changes won&#39;t persist to the parent process.
-It&#39;s not entirely clear these changes persist or not. But the
-rhetoric from some regarding using subshells for version management
-was enough to drive me away.</li>
-<li><a href="https://github.com/visionmedia/n">n</a> - I love the simplicity of
-&#39;n&#39;. It doesn&#39;t use subshells and it doesn&#39;t require that you modify
-your bash profile. I would use &#39;n&#39; if it installed NPM (Node.js
-package manager) with each release, and <a href="https://github.com/visionmedia/n/issues/47">it
-doesn&#39;t</a>.</li>
-<li><a href="https://github.com/ekalinin/nodeenv">nodeenv</a>- I never seriously
-considered this one as it requires Python to be installed. I haven&#39;t
-read about anyone using this. But I wanted to list it so that you&#39;d
-be informed about its existence.</li>
-</ol>
-<p>Use NVM. Seriously, it just works.</p>
-<p>On your clean Ubuntu machine, make sure that Git is installed:</p>
-<div class="highlight"><pre>sudo apt-get install git-core
-</pre></div>
-
-<p>Then install NVM:</p>
-<div class="highlight"><pre>git clone git://github.com/creationix/nvm.git ~/.nvm
-. ~/.nvm/nvm.sh <span class="c"># &lt;------ be sure to add this line to the end of your ~./profile or ~./bashrc file</span>
-</pre></div>
-
-<p>Now install all of the packages need to build Node.js:</p>
-<div class="highlight"><pre>sudo apt-get install build-essential openssl libssl-dev pkg-config
-</pre></div>
-
-<p>Now install the latest version of Node.js, at the time of this writing
-it&#39;s v0.6.9</p>
-<div class="highlight"><pre>nvm install v0.6.9
-</pre></div>
-
-<p>You now have a Node.js environment on your machine! Just run <code>node</code> on
-the command line to experiment with the Node.js REPL. You can also run
-<code>npm</code> to install Node.js packages. Read more about <a href="http://npmjs.org/">NPM
-here</a>.</p>
-<p>Do you use Git? If so, checkout <a href="http://gitpilot.com">Gitpilot</a> to make
-using Git mindless.</p>
-<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>
-and read my blog on entrepreneurship: <a href="http://techneur.com">Techneur</a>.</p>
-<p>-JP Richardson</p>
-]]></description><link>http://procbits.com/2012/01/29/installing-node-js-on-ubuntu-10-4-lts</link><guid isPermaLink="true">http://procbits.com/2012/01/29/installing-node-js-on-ubuntu-10-4-lts</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Mon, 30 Jan 2012 06:00:00 GMT</pubDate></item></channel></rss>
+]]></description><link>http://procbits.com/2012/02/29/submittingposting-files-and-fields-to-an-http-form-using-c-net</link><guid isPermaLink="true">http://procbits.com/2012/02/29/submittingposting-files-and-fields-to-an-http-form-using-c-net</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 01 Mar 2012 06:00:00 GMT</pubDate></item></channel></rss>

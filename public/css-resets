@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>CSS Resets</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="JP Richardson">
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/highlight.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid nav-container">
+          <nav role="navigation"><a title="" href="http://procbits.com" class="brand">procbits</a>
+            <p class="navbar-text pull-left">source code snippets and other random musings about software</p>
+            <ul class="nav pull-right">             
+              <li><a href="/tags">Tags</a></li>
+              <li><a href="/rss.xml">RSS</a></li>
+            </ul>
+          </nav><a data-toggle="collapse" data-target=".nav-collapse" href="http://procbits.com" class="btn btn-navbar">procbits<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <div id="content" class="clearfix row-fluid">
+        <div id="main" role="main" class="span8 clearfix"><h1>CSS Resets</h1>
+
+<p>This is the first of <a href="http://procbits.com/tags/css">many articles</a> related to my adventures with CSS. I haven&#39;t actually really had the need to use CSS for about 6 years. I always had avoided it. When <a href="http://twitter.github.io/bootstrap/">Twitter Bootstrap</a> was released I was pumped because there was a way for developers to just focus on code and ignore the style. Recently, I decide that I&#39;m going to write a cross-platform app using <a href="http://phonegap.com/">Adobe Phonegap</a>. So, I&#39;ll need to get really familiar with CSS3 hardware transitions and styles.</p>
+<p>Let&#39;s start with the basics. CSS resets.</p>
+<p>Huh? What&#39;s the point?</p>
+<p>Each browser renders elements in its own default way. Consider the following HTML:</p>
+<div class="highlight"><pre><span class="cp">&lt;!doctype html&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+  <span class="nt">&lt;p&gt;</span>Some paragraph<span class="nt">&lt;/p&gt;</span>
+  <span class="nt">&lt;ul&gt;</span>
+    <span class="nt">&lt;li&gt;</span>item 1<span class="nt">&lt;/li&gt;</span>
+    <span class="nt">&lt;li&gt;</span>item 2<span class="nt">&lt;/li&gt;</span>
+  <span class="nt">&lt;/ul&gt;</span>
+<span class="nt">&lt;/body&gt;</span>
+</pre></div>
+
+<h4>output:</h4>
+<iframe src="http://embed.plnkr.co/RRptESb8sbIeWWk4JzXf/preview" ></iframe>
+
+<p>It looks liked you&#39;d expect. </p>
+<p>Now, let&#39;s modify it a bit, and add the following style:</p>
+<div class="highlight"><pre><span class="o">*</span> <span class="p">{</span>
+  <span class="k">padding</span><span class="o">:</span> <span class="m">0px</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<h4>output:</h4>
+<iframe src="http://embed.plnkr.co/rxRPPHnK9ploDznjhAD5/preview"></iframe>
+
+<p>Notice the item list bullets are gone?</p>
+<p>Let&#39;s modify it a bit more:</p>
+<div class="highlight"><pre><span class="o">*</span> <span class="p">{</span>
+  <span class="k">padding</span><span class="o">:</span> <span class="m">0px</span><span class="p">;</span>
+  <span class="k">margin</span><span class="o">:</span> <span class="m">0px</span><span class="p">;</span>
+<span class="p">}</span>
+</pre></div>
+
+<h4>output:</h4>
+<iframe src="http://embed.plnkr.co/VlVoTlypjSKWo4CGvSSu/preview"></iframe>
+
+<p>Now you&#39;ll notice that the margins are removed.</p>
+<p>There is a case to be made against using the universal selector <code>*</code>, and that is that it ruins the margins and padding
+of form elements. But it&#39;s definitely a good start to understanding on you can make cross browser HTML look consistent.</p>
+<h3>CSS Reset Frameworks</h3>
+<ul>
+<li><a href="http://necolas.github.io/normalize.css/">Normalize.css</a></li>
+<li><a href="http://meyerweb.com/eric/thoughts/2011/01/03/reset-revisited/">Eric Meyer&#39;s Reset</a></li>
+</ul>
+<h3>Resources</h3>
+<ul>
+<li><a href="http://sixrevisions.com/css/css-tips/css-tip-1-resetting-your-styles-with-css-reset/">http://sixrevisions.com/css/css-tips/css-tip-1-resetting-your-styles-with-css-reset/</a></li>
+<li><a href="http://snook.ca/archives/html_and_css/no_css_reset/">http://snook.ca/archives/html_and_css/no_css_reset/</a></li>
+<li><a href="https://mondaybynoon.com/why-i-like-and-use-reset-css/">https://mondaybynoon.com/why-i-like-and-use-reset-css/</a></li>
+<li><a href="http://stackoverflow.com/questions/99643/css-reset-default-styles-for-common-elements">http://stackoverflow.com/questions/99643/css-reset-default-styles-for-common-elements</a></li>
+</ul>
+
+
+<p>
+  If you made it this far, you should follow me on Twitter. &nbsp; <a style="margin-top: -3px" href="https://twitter.com/jprichardson" class="twitter-follow-button" data-show-count="false">Follow @jprichardson</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</p>
+
+<p>
+  -JP
+</p>
+
+ <div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'procbits'; // required: replace example with your forum shortname
+
+  //optional url
+  
+    var disqus_url = 'http://procbits.com/css-resets/';
+  
+
+  //optional id
+  
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    <span id="footer"><br><span style="font-size: 10px;">Proudly built with<a href="https://github.com/skywrite"> Sky</a></span></span></div>
+      </div>
+    </div>
+    <div class="scripts">  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35069840-2']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+    </div>
+  </body>
+</html>
