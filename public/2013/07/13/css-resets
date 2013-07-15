@@ -99,7 +99,7 @@ of form elements. But it&#39;s definitely a good start to understanding on you c
 
   //optional url
   
-    var disqus_url = 'http://procbits.com/css-resets/';
+    var disqus_url = 'http://procbits.com/2013/07/13/css-resets/';
   
 
   //optional id

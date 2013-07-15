@@ -1,6 +1,7 @@
 <!--
 title: CSS Resets
 publish: 2013-07-12
+slug: 2013/07/13/css-resets
 tags: CSS
 -->
 

@@ -35,12 +35,12 @@
     
       
       <li>
-        <a href="/2009/04/07/backup-a-mysql-database-on-ubuntu">Backup a MySQL Database on Ubuntu</a>
+        <a href="/2009/04/07/convert-innodb-tables-to-myisam">Convert InnoDB Tables to MyISAM</a>
       </li>
     
       
       <li>
-        <a href="/2009/04/07/convert-innodb-tables-to-myisam">Convert InnoDB Tables to MyISAM</a>
+        <a href="/2009/04/07/backup-a-mysql-database-on-ubuntu">Backup a MySQL Database on Ubuntu</a>
       </li>
     
   </ul>
