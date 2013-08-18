@@ -1,5 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[procbits]]></title><description><![CDATA[source code snippets and other random musings about software]]></description><link>http://procbits.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Mon, 15 Jul 2013 18:18:47 GMT</lastBuildDate><atom:link href="http://procbits.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[CSS Resets]]></title><description><![CDATA[<p>This is the first of <a href="http://procbits.com/tags/css">many articles</a> related to my adventures with CSS. I haven&#39;t actually really had the need to use CSS for about 6 years. I always had avoided it. When <a href="http://twitter.github.io/bootstrap/">Twitter Bootstrap</a> was released I was pumped because there was a way for developers to just focus on code and ignore the style. Recently, I decide that I&#39;m going to write a cross-platform app using <a href="http://phonegap.com/">Adobe Phonegap</a>. So, I&#39;ll need to get really familiar with CSS3 hardware transitions and styles.</p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[procbits]]></title><description><![CDATA[source code snippets and other random musings about software]]></description><link>http://procbits.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Sun, 18 Aug 2013 04:08:27 GMT</lastBuildDate><atom:link href="http://procbits.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Generating a Bitcoin Address with JavaScript]]></title><description><![CDATA[<h2>Random Number Generation</h2>
+<p>I&#39;d be remiss if I didn&#39;t mention anything about random number generation. Random number generation is the basis of most cryptography and Bitcoin. Your Bitcoin addresses are only as secure as your random number generator. A random number generator that is said to be cryptographically secure is good enough to use for cryptography. <code>Math.random()</code> is not cryptographically secure. This is because <code>Math.random()</code> is predictable. If it&#39;s predictable, an attacked could figure out your private key from your public key.</p>
+<p>At the time of this writing, the predominant <a href="">JavaScript Bitcoin library</a> uses <a href="https://code.google.com/p/crypto-js/">CryptoJS</a> which surprisingly uses <code>Math.random()</code>. You may want to find a way to substitute with the up and coming <a href="https://developer.mozilla.org/en-US/docs/Web/API/window.crypto.getRandomValues"><code>window.crytpo</code> standard</a>.</p>
+<p>further reading:</p>
+<ul>
+<li><a href="http://nakedsecurity.sophos.com/2013/07/09/anatomy-of-a-pseudorandom-number-generator-visualising-cryptocats-buggy-prng/">Anatomy of a pseudorandom number generator - Visualizing Cryptocat&#39;s buggy PRNG</a></li>
+<li><a href="http://crypto.stackexchange.com/questions/394/what-tests-can-i-do-to-ensure-my-prng-is-working-correctly">What tests can I do to ensure my PRNG is working correctly?</a></li>
+<li><a href="http://cacr.uwaterloo.ca/hac/about/chap5.pdf">Handbook of Applied Cryptography - Chapter 5: Pseudorandom Bits and Sequences</a></li>
+<li><a href="https://bitcointalk.org/index.php?topic=271831.0">Bitcoin Talk: Android Key Rotation</a></li>
+<li><a href="https://bitcointalk.org/index.php?topic=271486.0/">Bitcoin Talk: Bad Signatures leading to 55.82 BTC theft</a></li>
+<li><a href="http://android-developers.blogspot.com/2013/08/some-securerandom-thoughts.html">Android Developers: Some SecureRandom Thoughts</a></li>
+<li><a href="http://arstechnica.com/security/2013/08/all-android-created-bitcoin-wallets-vulnerable-to-theft/">All Android-created Bitcoin wallets vulnerable to theft</a></li>
+<li><a href="http://arstechnica.com/security/2013/08/google-confirms-critical-android-crypto-flaw-used-in-5700-bitcoin-heist/">Google confirms critical Android crypto flaw used in $5,700 Bitcoin heist</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/window.crypto.getRandomValues">window.crypto.getRandomValues()</a></li>
+</ul>
+<h2>Bitcoin Keys, Addresses, &amp; Formats</h2>
+<p>Bitcoin addresses are generated using the public-key crypto scheme <a href="http://en.wikipedia.org/wiki/Elliptic_curve_cryptography">Elliptic Curve Cryptography</a>. Specifically, the public address is <a href="https://en.bitcoin.it/wiki/Protocol_specification#Addresses">generated</a> like the following:</p>
+<blockquote>
+<p>Version = 1 byte of 0 (zero); on the test network, this is 1 byte of 111
+Key hash = Version concatenated with RIPEMD-160(SHA-256(public key))
+Checksum = 1st 4 bytes of SHA-256(SHA-256(Key hash))
+Bitcoin Address = Base58Encode(Key hash concatenated with Checksum)</p>
+<p>-- <cite>Bitcoin Wiki: Addresses</cite> </p>
+</blockquote>
+]]></description><link>http://procbits.com/generating-a-bitcoin-address-with-javascript</link><guid isPermaLink="true">http://procbits.com/generating-a-bitcoin-address-with-javascript</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Sat, 17 Aug 2013 00:00:00 GMT</pubDate></item><item><title><![CDATA[CSS Resets]]></title><description><![CDATA[<p>This is the first of <a href="http://procbits.com/tags/css">many articles</a> related to my adventures with CSS. I haven&#39;t actually really had the need to use CSS for about 6 years. I always had avoided it. When <a href="http://twitter.github.io/bootstrap/">Twitter Bootstrap</a> was released I was pumped because there was a way for developers to just focus on code and ignore the style. Recently, I decide that I&#39;m going to write a cross-platform app using <a href="http://phonegap.com/">Adobe Phonegap</a>. So, I&#39;ll need to get really familiar with CSS3 hardware transitions and styles.</p>
 <p>Let&#39;s start with the basics. CSS resets.</p>
 <p>Huh? What&#39;s the point?</p>
 <p>Each browser renders elements in its own default way. Consider the following HTML:</p>
@@ -141,7 +165,7 @@ of form elements. But it&#39;s definitely a good start to understanding on you c
 </ol>
 <p>There are still a lot of things to do. But for now, I&#39;m satisfied.</p>
 <p>-JP</p>
-]]></description><link>http://procbits.com/2013/03/02/wordpress-export-to-markdown-hosted-on-amazon-s3</link><guid isPermaLink="true">http://procbits.com/2013/03/02/wordpress-export-to-markdown-hosted-on-amazon-s3</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Sat, 23 Mar 2013 00:00:00 GMT</pubDate></item><item><title><![CDATA[BatchFlow]]></title><description><![CDATA[<h2>Why?</h2>
+]]></description><link>http://procbits.com/2013/03/02/wordpress-export-to-markdown-hosted-on-amazon-s3</link><guid isPermaLink="true">http://procbits.com/2013/03/02/wordpress-export-to-markdown-hosted-on-amazon-s3</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Sat, 23 Mar 2013 00:00:00 GMT</pubDate></item><item><title><![CDATA[BatchFlow: Easily batch process collections sequentially or in parallel in JavaScript/Node.js]]></title><description><![CDATA[<h2>Why?</h2>
 <p>I really got tired of writing the following patterns over and over
 again:</p>
 <p><strong>Sequential:</strong></p>
@@ -318,7 +342,7 @@ Burger King... have it your way.</p>
 using a different GUI. We would love your feedback.</p>
 <p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
 <p>-JP</p>
-]]></description><link>http://procbits.com/2012/08/14/batchflow-easily-batch-process-collections-sequentially-or-in-parallel-in-javascriptnode-js</link><guid isPermaLink="true">http://procbits.com/2012/08/14/batchflow-easily-batch-process-collections-sequentially-or-in-parallel-in-javascriptnode-js</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Tue, 14 Aug 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[Like Unix Expect]]></title><description><![CDATA[<p>Have you ever heard of the command line program
+]]></description><link>http://procbits.com/2012/08/14/batchflow-easily-batch-process-collections-sequentially-or-in-parallel-in-javascriptnode-js</link><guid isPermaLink="true">http://procbits.com/2012/08/14/batchflow-easily-batch-process-collections-sequentially-or-in-parallel-in-javascriptnode-js</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Wed, 15 Aug 2012 00:26:33 GMT</pubDate></item><item><title><![CDATA[Like Unix Expect: Automate Command Line Programs in Node.js with Suppose]]></title><description><![CDATA[<p>Have you ever heard of the command line program
 <a href="http://en.wikipedia.org/wiki/Expect">expect</a>? Basically, expect allows
 you to automate command line programs.
 <a href="https://github.com/jprichardson/node-suppose">suppose</a> is a
@@ -366,7 +390,7 @@ command line scripts.</p>
 using a different GUI. We would love your feedback.</p>
 <p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
 <p>-JP</p>
-]]></description><link>http://procbits.com/2012/08/03/like-unix-expect-automate-command-line-programs-in-node-js-with-suppose</link><guid isPermaLink="true">http://procbits.com/2012/08/03/like-unix-expect-automate-command-line-programs-in-node-js-with-suppose</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Fri, 03 Aug 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[NextFlow]]></title><description><![CDATA[<p>Take a look at the most prominent JavaScript control flow libraries:
+]]></description><link>http://procbits.com/2012/08/03/like-unix-expect-automate-command-line-programs-in-node-js-with-suppose</link><guid isPermaLink="true">http://procbits.com/2012/08/03/like-unix-expect-automate-command-line-programs-in-node-js-with-suppose</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Fri, 03 Aug 2012 21:09:40 GMT</pubDate></item><item><title><![CDATA[NextFlow: Sane CoffeeScript Flow Control]]></title><description><![CDATA[<p>Take a look at the most prominent JavaScript control flow libraries:
 <a href="https://github.com/caolan/async">Async.js</a>,
 <a href="https://github.com/creationix/step">Step</a>,
 <a href="https://github.com/substack/node-seq">Seq</a>. If you were to use these
@@ -503,7 +527,7 @@ NextFlow looks much nicer with CoffeeScript programs.</p>
 Git.</p>
 <p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
 <p>-JP</p>
-]]></description><link>http://procbits.com/2012/06/28/nextflow-sane-coffeescript-flow-control</link><guid isPermaLink="true">http://procbits.com/2012/06/28/nextflow-sane-coffeescript-flow-control</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 28 Jun 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[Thinking Asynchronously in CoffeeScript/JavaScript]]></title><description><![CDATA[<p>Awhile back, I wrote about my new experience in learning Node.js: <a href="http://procbits.com/2011/10/29/a-node-js-experiment-thinking-asynchronously-recursion-calculate-file-size-directory/">A
+]]></description><link>http://procbits.com/2012/06/28/nextflow-sane-coffeescript-flow-control</link><guid isPermaLink="true">http://procbits.com/2012/06/28/nextflow-sane-coffeescript-flow-control</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 28 Jun 2012 18:23:54 GMT</pubDate></item><item><title><![CDATA[Thinking Asynchronously in CoffeeScript/JavaScript: Loops and Callbacks]]></title><description><![CDATA[<p>Awhile back, I wrote about my new experience in learning Node.js: <a href="http://procbits.com/2011/10/29/a-node-js-experiment-thinking-asynchronously-recursion-calculate-file-size-directory/">A
 Node.js Experiment: Thinking Asynchronously, Using Recursion to
 Calculate the Total File Size in a
 Directory</a>.</p>
@@ -610,7 +634,7 @@ for the reminder.</p>
 <p>Checkout <a href="http://gitpilot.com">Gitpilot</a>, a different kind of Git GUI.</p>
 <p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
 <p>-JP</p>
-]]></description><link>http://procbits.com/2012/05/24/thinking-asynchronously-in-coffeescriptjavascript-loops-and-callbacks</link><guid isPermaLink="true">http://procbits.com/2012/05/24/thinking-asynchronously-in-coffeescriptjavascript-loops-and-callbacks</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 24 May 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[Why Do All the Great Node.js Developers Hate CoffeeScript?]]></title><description><![CDATA[<p>Why do all the great Node.js developers hate CoffeeScript?</p>
+]]></description><link>http://procbits.com/2012/05/24/thinking-asynchronously-in-coffeescriptjavascript-loops-and-callbacks</link><guid isPermaLink="true">http://procbits.com/2012/05/24/thinking-asynchronously-in-coffeescriptjavascript-loops-and-callbacks</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 24 May 2012 23:19:20 GMT</pubDate></item><item><title><![CDATA[Why Do All the Great Node.js Developers Hate CoffeeScript?]]></title><description><![CDATA[<p>Why do all the great Node.js developers hate CoffeeScript?</p>
 <p>Take a look at the following Github repositories of the well-known
 Node.js developers:</p>
 <ul>
@@ -685,7 +709,7 @@ We would love your advice.</p>
 <p>If you made it this far, follow me on Twitter:
 <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
 <p>-JP</p>
-]]></description><link>http://procbits.com/2012/05/18/why-do-all-the-great-node-js-developers-hate-coffeescript</link><guid isPermaLink="true">http://procbits.com/2012/05/18/why-do-all-the-great-node-js-developers-hate-coffeescript</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Fri, 18 May 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[Quick and Dirty Screen Scraping with Node.js using Request and Cheerio]]></title><description><![CDATA[<p>I wrote my own screen scraping module built on
+]]></description><link>http://procbits.com/2012/05/18/why-do-all-the-great-node-js-developers-hate-coffeescript</link><guid isPermaLink="true">http://procbits.com/2012/05/18/why-do-all-the-great-node-js-developers-hate-coffeescript</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Sat, 19 May 2012 01:40:11 GMT</pubDate></item><item><title><![CDATA[Quick and Dirty Screen Scraping with Node.js using Request and Cheerio]]></title><description><![CDATA[<p>I wrote my own screen scraping module built on
 <a href="http://www.phantomjs.org/">PhantomJS</a>, but unfortunately it&#39;s too slow
 for most screen scraping tasks that don&#39;t require browser-side
 JavaScript. One easy way to scrape pages with Node.js is to use
@@ -717,171 +741,4 @@ collaborating on software development easy.</p>
 <p>You should follow me on Twitter:
 <a href="http://twitter.com/jprichardson">@jprichardson</a>.</p>
 <p>-JP</p>
-]]></description><link>http://procbits.com/2012/04/11/quick-and-dirty-screen-scraping-with-node-js-using-request-and-cheerio</link><guid isPermaLink="true">http://procbits.com/2012/04/11/quick-and-dirty-screen-scraping-with-node-js-using-request-and-cheerio</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Wed, 11 Apr 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[Submitting/Posting Files and Fields to an HTTP Form using C#/.NET]]></title><description><![CDATA[<p>Awhile back, I had to integrate a C# program with a web system that
-allowed the user to upload a few files and include some misc. data. I
-Googled around and didn&#39;t find a comprehensive solution.</p>
-<p>I did use some code I found on the internet, unfortunately I don&#39;t
-remember where, so I can&#39;t give proper attribution. If you know, please
-let me know; it&#39;s the code relevant to the <code>MimePart</code> class. I added the
-form values code and packaged it up into the <code>HttpForm</code> sugar.</p>
-<p>Here is the code:</p>
-<div class="highlight"><pre><span class="k">public</span> <span class="k">class</span> <span class="nc">HttpForm</span> <span class="p">{</span>
-
-    <span class="k">private</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span> <span class="n">_files</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;();</span>
-    <span class="k">private</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span> <span class="n">_values</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;();</span>
-
-    <span class="k">public</span> <span class="nf">HttpForm</span><span class="p">(</span><span class="kt">string</span> <span class="n">url</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">this</span><span class="p">.</span><span class="n">Url</span> <span class="p">=</span> <span class="n">url</span><span class="p">;</span>
-        <span class="k">this</span><span class="p">.</span><span class="n">Method</span> <span class="p">=</span> <span class="s">&quot;POST&quot;</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">Method</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="k">public</span> <span class="kt">string</span> <span class="n">Url</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-
-    <span class="c1">//return self so that we can chain</span>
-    <span class="k">public</span> <span class="n">HttpForm</span> <span class="nf">AttachFile</span><span class="p">(</span><span class="kt">string</span> <span class="n">field</span><span class="p">,</span> <span class="kt">string</span> <span class="n">fileName</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">_files</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="p">=</span> <span class="n">fileName</span><span class="p">;</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">public</span> <span class="n">HttpForm</span> <span class="nf">ResetForm</span><span class="p">(){</span>
-        <span class="n">_files</span><span class="p">.</span><span class="n">Clear</span><span class="p">();</span>
-        <span class="n">_values</span><span class="p">.</span><span class="n">Clear</span><span class="p">();</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="c1">//return self so that we can chain</span>
-    <span class="k">public</span> <span class="n">HttpForm</span> <span class="nf">SetValue</span><span class="p">(</span><span class="kt">string</span> <span class="n">field</span><span class="p">,</span> <span class="kt">string</span> <span class="k">value</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">_values</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
-    <span class="p">}</span>
-
-    <span class="k">public</span> <span class="n">HttpWebResponse</span> <span class="nf">Submit</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="n">UploadFiles</span><span class="p">(</span><span class="n">_files</span><span class="p">,</span> <span class="n">_values</span><span class="p">);</span>
-    <span class="p">}</span>
-
-
-    <span class="k">private</span> <span class="n">HttpWebResponse</span> <span class="nf">UploadFiles</span><span class="p">(</span><span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span> <span class="n">files</span><span class="p">,</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span> <span class="n">otherValues</span><span class="p">)</span> <span class="p">{</span>
-        <span class="kt">var</span> <span class="n">req</span> <span class="p">=</span> <span class="p">(</span><span class="n">HttpWebRequest</span><span class="p">)</span><span class="n">WebRequest</span><span class="p">.</span><span class="n">Create</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">Url</span><span class="p">);</span>
-
-        <span class="n">req</span><span class="p">.</span><span class="n">Timeout</span> <span class="p">=</span> <span class="m">10000</span> <span class="p">*</span> <span class="m">1000</span><span class="p">;</span>
-        <span class="n">req</span><span class="p">.</span><span class="n">Accept</span> <span class="p">=</span> <span class="s">&quot;text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&quot;</span><span class="p">;</span>
-        <span class="n">req</span><span class="p">.</span><span class="n">AllowAutoRedirect</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
-
-        <span class="kt">var</span> <span class="n">mimeParts</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">MimePart</span><span class="p">&gt;();</span>
-        <span class="k">try</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="n">otherValues</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">fieldName</span> <span class="k">in</span> <span class="n">otherValues</span><span class="p">.</span><span class="n">Keys</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="kt">var</span> <span class="n">part</span> <span class="p">=</span> <span class="k">new</span> <span class="n">MimePart</span><span class="p">();</span>
-
-                    <span class="n">part</span><span class="p">.</span><span class="n">Headers</span><span class="p">[</span><span class="s">&quot;Content-Disposition&quot;</span><span class="p">]</span> <span class="p">=</span> <span class="s">&quot;form-data; name=\&quot;&quot;</span> <span class="p">+</span> <span class="n">fieldName</span> <span class="p">+</span> <span class="s">&quot;\&quot;&quot;</span><span class="p">;</span>
-                    <span class="n">part</span><span class="p">.</span><span class="n">Data</span> <span class="p">=</span> <span class="k">new</span> <span class="n">MemoryStream</span><span class="p">(</span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="n">otherValues</span><span class="p">[</span><span class="n">fieldName</span><span class="p">]));</span>
-
-                    <span class="n">mimeParts</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">part</span><span class="p">);</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-
-            <span class="k">if</span> <span class="p">(</span><span class="n">files</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
-                <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">fieldName</span> <span class="k">in</span> <span class="n">files</span><span class="p">.</span><span class="n">Keys</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="kt">var</span> <span class="n">part</span> <span class="p">=</span> <span class="k">new</span> <span class="n">MimePart</span><span class="p">();</span>
-
-                    <span class="n">part</span><span class="p">.</span><span class="n">Headers</span><span class="p">[</span><span class="s">&quot;Content-Disposition&quot;</span><span class="p">]</span> <span class="p">=</span> <span class="s">&quot;form-data; name=\&quot;&quot;</span> <span class="p">+</span> <span class="n">fieldName</span> <span class="p">+</span> <span class="s">&quot;\&quot;; filename=\&quot;&quot;</span> <span class="p">+</span> <span class="n">files</span><span class="p">[</span><span class="n">fieldName</span><span class="p">]</span> <span class="p">+</span> <span class="s">&quot;\&quot;&quot;</span><span class="p">;</span>
-                    <span class="n">part</span><span class="p">.</span><span class="n">Headers</span><span class="p">[</span><span class="s">&quot;Content-Type&quot;</span><span class="p">]</span> <span class="p">=</span> <span class="s">&quot;application/octet-stream&quot;</span><span class="p">;</span>
-                    <span class="n">part</span><span class="p">.</span><span class="n">Data</span> <span class="p">=</span> <span class="n">File</span><span class="p">.</span><span class="n">OpenRead</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="n">fieldName</span><span class="p">]);</span>
-
-                    <span class="n">mimeParts</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">part</span><span class="p">);</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-
-            <span class="kt">string</span> <span class="n">boundary</span> <span class="p">=</span> <span class="s">&quot;----------&quot;</span> <span class="p">+</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">.</span><span class="n">Ticks</span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s">&quot;x&quot;</span><span class="p">);</span>
-
-            <span class="n">req</span><span class="p">.</span><span class="n">ContentType</span> <span class="p">=</span> <span class="s">&quot;multipart/form-data; boundary=&quot;</span> <span class="p">+</span> <span class="n">boundary</span><span class="p">;</span>
-            <span class="n">req</span><span class="p">.</span><span class="n">Method</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">Method</span><span class="p">;</span>
-
-            <span class="kt">long</span> <span class="n">contentLength</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
-
-            <span class="kt">byte</span><span class="p">[]</span> <span class="n">_footer</span> <span class="p">=</span> <span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="s">&quot;--&quot;</span> <span class="p">+</span> <span class="n">boundary</span> <span class="p">+</span> <span class="s">&quot;--\r\n&quot;</span><span class="p">);</span>
-
-            <span class="k">foreach</span> <span class="p">(</span><span class="n">MimePart</span> <span class="n">part</span> <span class="k">in</span> <span class="n">mimeParts</span><span class="p">)</span> <span class="p">{</span>
-                <span class="n">contentLength</span> <span class="p">+=</span> <span class="n">part</span><span class="p">.</span><span class="n">GenerateHeaderFooterData</span><span class="p">(</span><span class="n">boundary</span><span class="p">);</span>
-            <span class="p">}</span>
-
-            <span class="n">req</span><span class="p">.</span><span class="n">ContentLength</span> <span class="p">=</span> <span class="n">contentLength</span> <span class="p">+</span> <span class="n">_footer</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
-
-            <span class="kt">byte</span><span class="p">[]</span> <span class="n">buffer</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="p">[</span><span class="m">8192</span><span class="p">];</span>
-            <span class="kt">byte</span><span class="p">[]</span> <span class="n">afterFile</span> <span class="p">=</span> <span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="s">&quot;\r\n&quot;</span><span class="p">);</span>
-            <span class="kt">int</span> <span class="n">read</span><span class="p">;</span>
-
-            <span class="k">using</span> <span class="p">(</span><span class="n">Stream</span> <span class="n">s</span> <span class="p">=</span> <span class="n">req</span><span class="p">.</span><span class="n">GetRequestStream</span><span class="p">())</span> <span class="p">{</span>
-                <span class="k">foreach</span> <span class="p">(</span><span class="n">MimePart</span> <span class="n">part</span> <span class="k">in</span> <span class="n">mimeParts</span><span class="p">)</span> <span class="p">{</span>
-                    <span class="n">s</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">part</span><span class="p">.</span><span class="n">Header</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">part</span><span class="p">.</span><span class="n">Header</span><span class="p">.</span><span class="n">Length</span><span class="p">);</span>
-
-                    <span class="k">while</span> <span class="p">((</span><span class="n">read</span> <span class="p">=</span> <span class="n">part</span><span class="p">.</span><span class="n">Data</span><span class="p">.</span><span class="n">Read</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">buffer</span><span class="p">.</span><span class="n">Length</span><span class="p">))</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span>
-                        <span class="n">s</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">read</span><span class="p">);</span>
-
-                    <span class="n">part</span><span class="p">.</span><span class="n">Data</span><span class="p">.</span><span class="n">Dispose</span><span class="p">();</span>
-
-                    <span class="n">s</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">afterFile</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">afterFile</span><span class="p">.</span><span class="n">Length</span><span class="p">);</span>
-                <span class="p">}</span>
-
-                <span class="n">s</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">_footer</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">_footer</span><span class="p">.</span><span class="n">Length</span><span class="p">);</span>
-            <span class="p">}</span>
-
-            <span class="kt">var</span> <span class="n">res</span> <span class="p">=</span> <span class="p">(</span><span class="n">HttpWebResponse</span><span class="p">)</span><span class="n">req</span><span class="p">.</span><span class="n">GetResponse</span><span class="p">();</span>
-
-            <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
-        <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">ex</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>
-            <span class="k">foreach</span> <span class="p">(</span><span class="n">MimePart</span> <span class="n">part</span> <span class="k">in</span> <span class="n">mimeParts</span><span class="p">)</span>
-                <span class="k">if</span> <span class="p">(</span><span class="n">part</span><span class="p">.</span><span class="n">Data</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
-                    <span class="n">part</span><span class="p">.</span><span class="n">Data</span><span class="p">.</span><span class="n">Dispose</span><span class="p">();</span>
-
-            <span class="k">return</span> <span class="p">(</span><span class="n">HttpWebResponse</span><span class="p">)</span><span class="n">req</span><span class="p">.</span><span class="n">GetResponse</span><span class="p">();</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="k">private</span> <span class="k">class</span> <span class="nc">MimePart</span> <span class="p">{</span>
-        <span class="k">private</span> <span class="n">NameValueCollection</span> <span class="n">_headers</span> <span class="p">=</span> <span class="k">new</span> <span class="n">NameValueCollection</span><span class="p">();</span>
-        <span class="k">public</span> <span class="n">NameValueCollection</span> <span class="n">Headers</span> <span class="p">{</span> <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_headers</span><span class="p">;</span> <span class="p">}</span> <span class="p">}</span>
-
-        <span class="k">public</span> <span class="kt">byte</span><span class="p">[]</span> <span class="n">Header</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">protected</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-
-        <span class="k">public</span> <span class="kt">long</span> <span class="nf">GenerateHeaderFooterData</span><span class="p">(</span><span class="kt">string</span> <span class="n">boundary</span><span class="p">)</span> <span class="p">{</span>
-            <span class="n">StringBuilder</span> <span class="n">sb</span> <span class="p">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="p">();</span>
-
-            <span class="n">sb</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span><span class="s">&quot;--&quot;</span><span class="p">);</span>
-            <span class="n">sb</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span><span class="n">boundary</span><span class="p">);</span>
-            <span class="n">sb</span><span class="p">.</span><span class="n">AppendLine</span><span class="p">();</span>
-            <span class="k">foreach</span> <span class="p">(</span><span class="kt">string</span> <span class="n">key</span> <span class="k">in</span> <span class="n">_headers</span><span class="p">.</span><span class="n">AllKeys</span><span class="p">)</span> <span class="p">{</span>
-                <span class="n">sb</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
-                <span class="n">sb</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span><span class="s">&quot;: &quot;</span><span class="p">);</span>
-                <span class="n">sb</span><span class="p">.</span><span class="n">AppendLine</span><span class="p">(</span><span class="n">_headers</span><span class="p">[</span><span class="n">key</span><span class="p">]);</span>
-            <span class="p">}</span>
-            <span class="n">sb</span><span class="p">.</span><span class="n">AppendLine</span><span class="p">();</span>
-
-            <span class="n">Header</span> <span class="p">=</span> <span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="n">sb</span><span class="p">.</span><span class="n">ToString</span><span class="p">());</span>
-
-            <span class="k">return</span> <span class="n">Header</span><span class="p">.</span><span class="n">Length</span> <span class="p">+</span> <span class="n">Data</span><span class="p">.</span><span class="n">Length</span> <span class="p">+</span> <span class="m">2</span><span class="p">;</span>
-        <span class="p">}</span>
-
-        <span class="k">public</span> <span class="n">Stream</span> <span class="n">Data</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</pre></div>
-
-<p>You can easily use it like so:</p>
-<div class="highlight"><pre><span class="kt">var</span> <span class="n">file1</span> <span class="p">=</span> <span class="s">@&quot;C:\file&quot;</span><span class="p">;</span>
-<span class="kt">var</span> <span class="n">file2</span> <span class="p">=</span> <span class="s">@&quot;C:\file2&quot;</span><span class="p">;</span>
-
-<span class="kt">var</span> <span class="n">yourUrl</span> <span class="p">=</span> <span class="s">&quot;http://yourdomain.com/process.php&quot;</span><span class="p">;</span>
-<span class="kt">var</span> <span class="n">httpForm</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpForm</span><span class="p">(</span><span class="n">yourUrl</span><span class="p">);</span>
-<span class="n">httpForm</span><span class="p">.</span><span class="n">AttachFile</span><span class="p">(</span><span class="s">&quot;file1&quot;</span><span class="p">,</span> <span class="n">file1</span><span class="p">).</span><span class="n">AttachFile</span><span class="p">(</span><span class="s">&quot;file2&quot;</span><span class="p">,</span> <span class="n">file2</span><span class="p">);</span>
-<span class="n">httpForm</span><span class="p">.</span><span class="n">setValue</span><span class="p">(</span><span class="s">&quot;foo&quot;</span><span class="p">,</span> <span class="s">&quot;some foo&quot;</span><span class="p">).</span><span class="n">setValue</span><span class="p">(</span><span class="s">&quot;blah&quot;</span><span class="p">,</span> <span class="s">&quot;rarrr!&quot;</span><span class="p">);</span>
-<span class="n">httpForm</span><span class="p">.</span><span class="n">Submit</span><span class="p">();</span>
-</pre></div>
-
-<p>Do you use Git? If so, checkout <a href="http://gitpilot.com">Gitpilot</a> to make
-using Git thoughtless.</p>
-<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>.</p>
-<p>-JP Richardson</p>
-]]></description><link>http://procbits.com/2012/02/29/submittingposting-files-and-fields-to-an-http-form-using-c-net</link><guid isPermaLink="true">http://procbits.com/2012/02/29/submittingposting-files-and-fields-to-an-http-form-using-c-net</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 01 Mar 2012 06:00:00 GMT</pubDate></item></channel></rss>
+]]></description><link>http://procbits.com/2012/04/11/quick-and-dirty-screen-scraping-with-node-js-using-request-and-cheerio</link><guid isPermaLink="true">http://procbits.com/2012/04/11/quick-and-dirty-screen-scraping-with-node-js-using-request-and-cheerio</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 12 Apr 2012 03:24:09 GMT</pubDate></item></channel></rss>

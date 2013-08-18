@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Generating a Bitcoin Address with JavaScript</title>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="JP Richardson">
+    <link href="http://netdna.bootstrapcdn.com/bootswatch/2.1.1/spacelab/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/style.css" rel="stylesheet">
+    <link href="/css/highlight.css" rel="stylesheet">
+  </head>
+  <body>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid nav-container">
+          <nav role="navigation"><a title="" href="http://procbits.com" class="brand">procbits</a>
+            <p class="navbar-text pull-left">source code snippets and other random musings about software</p>
+            <ul class="nav pull-right">             
+              <li><a href="/tags">Tags</a></li>
+              <li><a href="/rss.xml">RSS</a></li>
+            </ul>
+          </nav><a data-toggle="collapse" data-target=".nav-collapse" href="http://procbits.com" class="btn btn-navbar">procbits<span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a>
+        </div>
+      </div>
+    </div>
+    <div class="container-fluid">
+      <div id="content" class="clearfix row-fluid">
+        <div id="main" role="main" class="span8 clearfix"><h1>Generating a Bitcoin Address with JavaScript</h1>
+
+<h2>Random Number Generation</h2>
+<p>I&#39;d be remiss if I didn&#39;t mention anything about random number generation. Random number generation is the basis of most cryptography and Bitcoin. Your Bitcoin addresses are only as secure as your random number generator. A random number generator that is said to be cryptographically secure is good enough to use for cryptography. <code>Math.random()</code> is not cryptographically secure. This is because <code>Math.random()</code> is predictable. If it&#39;s predictable, an attacked could figure out your private key from your public key.</p>
+<p>At the time of this writing, the predominant <a href="">JavaScript Bitcoin library</a> uses <a href="https://code.google.com/p/crypto-js/">CryptoJS</a> which surprisingly uses <code>Math.random()</code>. You may want to find a way to substitute with the up and coming <a href="https://developer.mozilla.org/en-US/docs/Web/API/window.crypto.getRandomValues"><code>window.crytpo</code> standard</a>.</p>
+<p>further reading:</p>
+<ul>
+<li><a href="http://nakedsecurity.sophos.com/2013/07/09/anatomy-of-a-pseudorandom-number-generator-visualising-cryptocats-buggy-prng/">Anatomy of a pseudorandom number generator - Visualizing Cryptocat&#39;s buggy PRNG</a></li>
+<li><a href="http://crypto.stackexchange.com/questions/394/what-tests-can-i-do-to-ensure-my-prng-is-working-correctly">What tests can I do to ensure my PRNG is working correctly?</a></li>
+<li><a href="http://cacr.uwaterloo.ca/hac/about/chap5.pdf">Handbook of Applied Cryptography - Chapter 5: Pseudorandom Bits and Sequences</a></li>
+<li><a href="https://bitcointalk.org/index.php?topic=271831.0">Bitcoin Talk: Android Key Rotation</a></li>
+<li><a href="https://bitcointalk.org/index.php?topic=271486.0/">Bitcoin Talk: Bad Signatures leading to 55.82 BTC theft</a></li>
+<li><a href="http://android-developers.blogspot.com/2013/08/some-securerandom-thoughts.html">Android Developers: Some SecureRandom Thoughts</a></li>
+<li><a href="http://arstechnica.com/security/2013/08/all-android-created-bitcoin-wallets-vulnerable-to-theft/">All Android-created Bitcoin wallets vulnerable to theft</a></li>
+<li><a href="http://arstechnica.com/security/2013/08/google-confirms-critical-android-crypto-flaw-used-in-5700-bitcoin-heist/">Google confirms critical Android crypto flaw used in $5,700 Bitcoin heist</a></li>
+<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/window.crypto.getRandomValues">window.crypto.getRandomValues()</a></li>
+</ul>
+<h2>Bitcoin Keys, Addresses, &amp; Formats</h2>
+<p>Bitcoin addresses are generated using the public-key crypto scheme <a href="http://en.wikipedia.org/wiki/Elliptic_curve_cryptography">Elliptic Curve Cryptography</a>. Specifically, the public address is <a href="https://en.bitcoin.it/wiki/Protocol_specification#Addresses">generated</a> like the following:</p>
+<blockquote>
+<p>Version = 1 byte of 0 (zero); on the test network, this is 1 byte of 111
+Key hash = Version concatenated with RIPEMD-160(SHA-256(public key))
+Checksum = 1st 4 bytes of SHA-256(SHA-256(Key hash))
+Bitcoin Address = Base58Encode(Key hash concatenated with Checksum)</p>
+<p>-- <cite>Bitcoin Wiki: Addresses</cite> </p>
+</blockquote>
+
+
+<p>
+  If you made it this far, you should follow me on Twitter. &nbsp; <a style="margin-top: -3px" href="https://twitter.com/jprichardson" class="twitter-follow-button" data-show-count="false">Follow @jprichardson</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</p>
+
+<p>
+  -JP
+</p>
+
+ <div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'procbits'; // required: replace example with your forum shortname
+
+  //optional url
+  
+    var disqus_url = 'http://procbits.com/generating-a-bitcoin-address-with-javascript/';
+  
+
+  //optional id
+  
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    <span id="footer"><br><span style="font-size: 10px;">Proudly built with<a href="https://github.com/skywrite"> Sky</a></span></span></div>
+      </div>
+    </div>
+    <div class="scripts">  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35069840-2']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+    </div>
+  </body>
+</html>
