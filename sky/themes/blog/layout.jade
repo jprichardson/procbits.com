@@ -1,0 +1,50 @@
+!!! 5
+title= ctx.title
+meta(charset='utf-8')
+meta(name='viewport', content='width=device-width, initial-scale=1.0')
+meta(name='author', content=ctx.author)
+link(href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc2/css/bootstrap.min.css", rel="stylesheet", media="screen")
+link(href="/assets/css/style.css", rel="stylesheet")
+link(href="/assets/css/highlight.css", rel="stylesheet")
+
+script(src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js")
+script(src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc2/js/bootstrap.min.js")
+link(href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc2/css/bootstrap-glyphicons.css", rel="stylesheet")
+
+
+script(src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML")
+script(type="text/x-mathjax-config").
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+
+
+
+#wrap
+  .navbar.navbar-default
+    .container
+      .navbar-header
+        button.navbar-toggle(data-toggle="collapse", data-target=".navbar-collapse")
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
+        a.navbar-brand(href=sky.site.url)= sky.site.name
+      .collapse.navbar-collapse
+        ul.nav.navbar-nav.pull-right  
+          li
+            a(href="/pages/about") About            
+          li
+            a(href="/tags") Tags
+          li
+            a(href='/rss.xml') RSS
+            
+  .container 
+    != sky.view
+
+#footer
+  .container
+    p.text-muted.credit
+      | Proudly built with
+      a(href=sky.homepage)  Sky
+  
+
+.scripts
+  != fn.partial('googleAnalytics')

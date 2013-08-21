@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<title>About</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="JP Richardson">
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc2/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="/assets/css/style.css" rel="stylesheet">
+<link href="/assets/css/highlight.css" rel="stylesheet">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc2/js/bootstrap.min.js"></script>
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc2/css/bootstrap-glyphicons.css" rel="stylesheet">
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+  
+  
+  
+</script>
+<div id="wrap">
+  <div class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <button data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="http://procbits.com" class="navbar-brand">procbits</a>
+      </div>
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav pull-right"> 
+          <li><a href="/pages/about">About            </a></li>
+          <li><a href="/tags">Tags</a></li>
+          <li><a href="/rss.xml">RSS</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="container"> <h1>About</h1>
+
+<p><a href="http://procbits.files.wordpress.com/2009/03/twitter.jpg"><img src="http://procbits.files.wordpress.com/2009/03/twitter.jpg" alt="JP Richardson, Software Developer & Entrepreneur" title="JP Richardson" width="174" height="234" style="float:right; padding: 3px; border: 3px solid gray; margin-left: 20px; margin-top: 20px; " /></a></p>
+<p>Hi!</p>
+<p>I&#39;m a programming language junkie with a passion for software, technology, entrepreneurship, bitcoin, people and relationships. I love learning about others and what makes them tick. If you&#39;re ever in Lincoln, Nebraska, look me up and let&#39;s grab a drink. I strongly aspire to change the world through software.</p>
+<p>I&#39;m a strong advocate of the open source software (OSS) philosophy. I write a lot of open source <a href="http://github.com/jprichardson">code on Github</a> and lately have found Node.js, AngularJS, and Go to be fun.</p>
+<h3>What&#39;s procbits?</h3>
+<p>Well, codebits.com was taken, funcbits.com sounded like it would be difficult to relay via speech, and I just had to have &quot;bits&quot; at the end of the domain name. I don&#39;t really remember where &quot;proc&quot; came from... maybe procedural? </p>
+<h3>Presence on the Web</h3>
+<ul>
+<li>email me at jprichardson@gmail.com</li>
+<li>twitter: <a href="http://twitter.com/jprichardson">http://twitter.com/jprichardson</a></li>
+<li>google+: <a href="https://plus.google.com/u/0/117996975742030675047">https://plus.google.com/u/0/117996975742030675047</a></li>
+<li>stack overflow: <a href="http://stackoverflow.com/users/10333/jp">http://stackoverflow.com/users/10333/jp</a></li>
+<li>github: <a href="http://github.com/jprichardson">http://github.com/jprichardson</a></li>
+</ul>
+
+
+  </div>
+</div>
+<div id="footer">
+  <div class="container">
+    <p class="text-muted credit">Proudly built with<a href="https://github.com/skywrite"> Sky</a></p>
+  </div>
+</div>
+<div class="scripts">  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35069840-2']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+</div>

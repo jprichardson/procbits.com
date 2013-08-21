@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[procbits]]></title><description><![CDATA[source code snippets and other random musings about software]]></description><link>http://procbits.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Mon, 19 Aug 2013 03:35:11 GMT</lastBuildDate><atom:link href="http://procbits.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Generating a Bitcoin Address with JavaScript]]></title><description><![CDATA[<h2>Random Number Generation</h2>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[procbits]]></title><description><![CDATA[source code snippets and other random musings about software]]></description><link>http://procbits.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Wed, 21 Aug 2013 02:14:01 GMT</lastBuildDate><atom:link href="http://procbits.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Generating a Bitcoin Address with JavaScript]]></title><description><![CDATA[<h2>Random Number Generation</h2>
+<mjax>
+When $a \ne 0$, there are two solutions to (ax^2 + bx + c = 0) and they are
+$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
+</mjax>
+
 <p>I&#39;d be remiss if I didn&#39;t mention anything about random number generation. Random number generation is the basis of most cryptography and Bitcoin. Your Bitcoin addresses are only as secure as your random number generator. A random number generator that is said to be cryptographically secure is good enough to use for cryptography. <code>Math.random()</code> is not cryptographically secure. This is because <code>Math.random()</code> is predictable. If it&#39;s predictable, an attacked could figure out your private key from your public key.</p>
 <p>At the time of this writing, the predominant <a href="">JavaScript Bitcoin library</a> uses <a href="https://code.google.com/p/crypto-js/">CryptoJS</a> which surprisingly uses <code>Math.random()</code>. You may want to find a way to substitute with the up and coming <a href="https://developer.mozilla.org/en-US/docs/Web/API/window.crypto.getRandomValues"><code>window.crytpo</code> standard</a> or the <a href="http://bitwiseshiftleft.github.io/sjcl/">Stanford JavaScript Crypto Library</a></p>
 <p>further reading:</p>
@@ -36,7 +41,8 @@
 <pre><code>y^2 = (x^3 + 7) mod p</code></pre>
 <p>you really don&#39;t need to understand much of this. I mainly presented this material for academic purposes.</p>
 <h3>Private Keys</h3>
-<p>Private keys are what allows you to spend your coins. A private key is any random number between 1 and <code>n</code> - 1.</p>
+<p>Private keys are what allows you to spend your coins. A private key, <code>d</code> is any random number between <code>1</code> and <code>n - 1</code>. According to the <a href="http://www.secg.org/collateral/sec1_final.pdf">spec (3.2.1)</a>: &quot;an elliptic
+curve key pair <code>(d, Q)</code> associated with <code>T</code> consists of an elliptic curve secret key <code>d</code> which is an integer in the interval <code>[1, n - 1]</code>, and an elliptic curve public key <code>Q = (xQ, yQ)</code> which is the point <code>Q = d*G</code>.</p>
 <h3>Address</h3>
 <p>Bitcoin uses <a href="https://en.bitcoin.it/wiki/Address">addresses</a> as a means to receive coins from someone else. An address is a <a href="https://en.bitcoin.it/wiki/Base58Check_encoding">base58</a> encoded string of a 25 byte binary address. All Bitcoin addresses start with <code>1</code>.  A person can have as many addresses as they&#39;d like. Using more than one address is said to increase anonymity. </p>
 <h3>Public Key</h3>
@@ -61,17 +67,21 @@
 <p>further reading:</p>
 <ul>
 <li><a href="http://www.nsa.gov/business/programs/elliptic_curve.shtml">NSA: The Case for Elliptic Curve Cryptography</a></li>
+<li><a href="http://crypto.stackexchange.com/questions/653/basic-explanation-of-elliptic-curve-cryptography">Basic Explanation of Elliptic Curve Cryptography</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Elliptic_Curve_DSA">Wikipedia: Elliptic Curve DSA</a></li>
+<li><a href="https://engineering.purdue.edu/kak/compsec/NewLectures/Lecture14.pdf">Elliptic Curve Cryptography and Digital Rights Management</a></li>
 <li><a href="https://en.bitcoin.it/wiki/Technical_background_of_version_1_Bitcoin_addresses#How_to_create_Bitcoin_Address">How to create a Bitcoin Address</a></li>
 <li><a href="http://bitcoin.stackexchange.com/questions/9202/why-does-bitcoin-use-two-hash-functions-sha-256-and-ripemd-160-to-create-an-ad">Why does Bitcoin use two hash functions (SHA-256 and RIPEMD-160) to create an address?</a></li>
 <li><a href="http://bitcoin.stackexchange.com/questions/3609/can-an-sha256-hash-be-used-as-an-ecdsa-private-key">Can a SHA256 hash be used as an ECDSA private key?</a></li>
 <li><a href="http://bitcoin.stackexchange.com/questions/3059/what-is-a-compressed-bitcoin-key">What is a compressed Bitcoin key?</a></li>
 <li><a href="http://bitcoin.stackexchange.com/questions/1730/what-are-green-addresses">What are Green Addresses?</a></li>
+<li><a href="http://crypto.stackexchange.com/questions/1638/compressing-ec-private-keys">Compressing EC Private Keys</a></li>
 <li><a href="https://bitcointalk.org/?topic=2699.0">Bitcoin Talk: secp256k1</a></li>
 <li><a href="http://bitcoin.stackexchange.com/questions/7683/why-is-it-impossible-to-derive-public-key-from-address">Why is it impossible to derive the public key from the address?</a></li>
 <li><a href="https://en.bitcoin.it/wiki/List_of_address_prefixes">List of address prefixes</a></li>
 </ul>
-<p>[secp256k1]: </p>
-]]></description><link>http://procbits.com/generating-a-bitcoin-address-with-javascript</link><guid isPermaLink="true">http://procbits.com/generating-a-bitcoin-address-with-javascript</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Sat, 17 Aug 2013 00:00:00 GMT</pubDate></item><item><title><![CDATA[CSS Resets]]></title><description><![CDATA[<p>This is the first of <a href="http://procbits.com/tags/css">many articles</a> related to my adventures with CSS. I haven&#39;t actually really had the need to use CSS for about 6 years. I always had avoided it. When <a href="http://twitter.github.io/bootstrap/">Twitter Bootstrap</a> was released I was pumped because there was a way for developers to just focus on code and ignore the style. Recently, I decide that I&#39;m going to write a cross-platform app using <a href="http://phonegap.com/">Adobe Phonegap</a>. So, I&#39;ll need to get really familiar with CSS3 hardware transitions and styles.</p>
+<p>[secp256k1]:</p>
+]]></description><link>http://procbits.com/2013/08/20/generating-a-bitcoin-address-with-javascript</link><guid isPermaLink="true">http://procbits.com/2013/08/20/generating-a-bitcoin-address-with-javascript</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Tue, 20 Aug 2013 05:00:00 GMT</pubDate></item><item><title><![CDATA[CSS Resets]]></title><description><![CDATA[<p>This is the first of <a href="http://procbits.com/tags/css">many articles</a> related to my adventures with CSS. I haven&#39;t actually really had the need to use CSS for about 6 years. I always had avoided it. When <a href="http://twitter.github.io/bootstrap/">Twitter Bootstrap</a> was released I was pumped because there was a way for developers to just focus on code and ignore the style. Recently, I decide that I&#39;m going to write a cross-platform app using <a href="http://phonegap.com/">Adobe Phonegap</a>. So, I&#39;ll need to get really familiar with CSS3 hardware transitions and styles.</p>
 <p>Let&#39;s start with the basics. CSS resets.</p>
 <p>Huh? What&#39;s the point?</p>
 <p>Each browser renders elements in its own default way. Consider the following HTML:</p>
@@ -213,7 +223,7 @@ of form elements. But it&#39;s definitely a good start to understanding on you c
 </ol>
 <p>There are still a lot of things to do. But for now, I&#39;m satisfied.</p>
 <p>-JP</p>
-]]></description><link>http://procbits.com/2013/03/02/wordpress-export-to-markdown-hosted-on-amazon-s3</link><guid isPermaLink="true">http://procbits.com/2013/03/02/wordpress-export-to-markdown-hosted-on-amazon-s3</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Sat, 23 Mar 2013 00:00:00 GMT</pubDate></item><item><title><![CDATA[BatchFlow: Easily batch process collections sequentially or in parallel in JavaScript/Node.js]]></title><description><![CDATA[<h2>Why?</h2>
+]]></description><link>http://procbits.com/2013/03/02/wordpress-export-to-markdown-hosted-on-amazon-s3</link><guid isPermaLink="true">http://procbits.com/2013/03/02/wordpress-export-to-markdown-hosted-on-amazon-s3</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Sat, 23 Mar 2013 00:00:00 GMT</pubDate></item><item><title><![CDATA[BatchFlow]]></title><description><![CDATA[<h2>Why?</h2>
 <p>I really got tired of writing the following patterns over and over
 again:</p>
 <p><strong>Sequential:</strong></p>
@@ -390,7 +400,7 @@ Burger King... have it your way.</p>
 using a different GUI. We would love your feedback.</p>
 <p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
 <p>-JP</p>
-]]></description><link>http://procbits.com/2012/08/14/batchflow-easily-batch-process-collections-sequentially-or-in-parallel-in-javascriptnode-js</link><guid isPermaLink="true">http://procbits.com/2012/08/14/batchflow-easily-batch-process-collections-sequentially-or-in-parallel-in-javascriptnode-js</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Wed, 15 Aug 2012 00:26:33 GMT</pubDate></item><item><title><![CDATA[Like Unix Expect: Automate Command Line Programs in Node.js with Suppose]]></title><description><![CDATA[<p>Have you ever heard of the command line program
+]]></description><link>http://procbits.com/2012/08/14/batchflow-easily-batch-process-collections-sequentially-or-in-parallel-in-javascriptnode-js</link><guid isPermaLink="true">http://procbits.com/2012/08/14/batchflow-easily-batch-process-collections-sequentially-or-in-parallel-in-javascriptnode-js</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Tue, 14 Aug 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[Like Unix Expect]]></title><description><![CDATA[<p>Have you ever heard of the command line program
 <a href="http://en.wikipedia.org/wiki/Expect">expect</a>? Basically, expect allows
 you to automate command line programs.
 <a href="https://github.com/jprichardson/node-suppose">suppose</a> is a
@@ -438,7 +448,7 @@ command line scripts.</p>
 using a different GUI. We would love your feedback.</p>
 <p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
 <p>-JP</p>
-]]></description><link>http://procbits.com/2012/08/03/like-unix-expect-automate-command-line-programs-in-node-js-with-suppose</link><guid isPermaLink="true">http://procbits.com/2012/08/03/like-unix-expect-automate-command-line-programs-in-node-js-with-suppose</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Fri, 03 Aug 2012 21:09:40 GMT</pubDate></item><item><title><![CDATA[NextFlow: Sane CoffeeScript Flow Control]]></title><description><![CDATA[<p>Take a look at the most prominent JavaScript control flow libraries:
+]]></description><link>http://procbits.com/2012/08/03/like-unix-expect-automate-command-line-programs-in-node-js-with-suppose</link><guid isPermaLink="true">http://procbits.com/2012/08/03/like-unix-expect-automate-command-line-programs-in-node-js-with-suppose</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Fri, 03 Aug 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[NextFlow]]></title><description><![CDATA[<p>Take a look at the most prominent JavaScript control flow libraries:
 <a href="https://github.com/caolan/async">Async.js</a>,
 <a href="https://github.com/creationix/step">Step</a>,
 <a href="https://github.com/substack/node-seq">Seq</a>. If you were to use these
@@ -575,7 +585,7 @@ NextFlow looks much nicer with CoffeeScript programs.</p>
 Git.</p>
 <p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
 <p>-JP</p>
-]]></description><link>http://procbits.com/2012/06/28/nextflow-sane-coffeescript-flow-control</link><guid isPermaLink="true">http://procbits.com/2012/06/28/nextflow-sane-coffeescript-flow-control</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 28 Jun 2012 18:23:54 GMT</pubDate></item><item><title><![CDATA[Thinking Asynchronously in CoffeeScript/JavaScript: Loops and Callbacks]]></title><description><![CDATA[<p>Awhile back, I wrote about my new experience in learning Node.js: <a href="http://procbits.com/2011/10/29/a-node-js-experiment-thinking-asynchronously-recursion-calculate-file-size-directory/">A
+]]></description><link>http://procbits.com/2012/06/28/nextflow-sane-coffeescript-flow-control</link><guid isPermaLink="true">http://procbits.com/2012/06/28/nextflow-sane-coffeescript-flow-control</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 28 Jun 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[Thinking Asynchronously in CoffeeScript/JavaScript]]></title><description><![CDATA[<p>Awhile back, I wrote about my new experience in learning Node.js: <a href="http://procbits.com/2011/10/29/a-node-js-experiment-thinking-asynchronously-recursion-calculate-file-size-directory/">A
 Node.js Experiment: Thinking Asynchronously, Using Recursion to
 Calculate the Total File Size in a
 Directory</a>.</p>
@@ -682,7 +692,7 @@ for the reminder.</p>
 <p>Checkout <a href="http://gitpilot.com">Gitpilot</a>, a different kind of Git GUI.</p>
 <p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
 <p>-JP</p>
-]]></description><link>http://procbits.com/2012/05/24/thinking-asynchronously-in-coffeescriptjavascript-loops-and-callbacks</link><guid isPermaLink="true">http://procbits.com/2012/05/24/thinking-asynchronously-in-coffeescriptjavascript-loops-and-callbacks</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 24 May 2012 23:19:20 GMT</pubDate></item><item><title><![CDATA[Why Do All the Great Node.js Developers Hate CoffeeScript?]]></title><description><![CDATA[<p>Why do all the great Node.js developers hate CoffeeScript?</p>
+]]></description><link>http://procbits.com/2012/05/24/thinking-asynchronously-in-coffeescriptjavascript-loops-and-callbacks</link><guid isPermaLink="true">http://procbits.com/2012/05/24/thinking-asynchronously-in-coffeescriptjavascript-loops-and-callbacks</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 24 May 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[Why Do All the Great Node.js Developers Hate CoffeeScript?]]></title><description><![CDATA[<p>Why do all the great Node.js developers hate CoffeeScript?</p>
 <p>Take a look at the following Github repositories of the well-known
 Node.js developers:</p>
 <ul>
@@ -757,7 +767,7 @@ We would love your advice.</p>
 <p>If you made it this far, follow me on Twitter:
 <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
 <p>-JP</p>
-]]></description><link>http://procbits.com/2012/05/18/why-do-all-the-great-node-js-developers-hate-coffeescript</link><guid isPermaLink="true">http://procbits.com/2012/05/18/why-do-all-the-great-node-js-developers-hate-coffeescript</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Sat, 19 May 2012 01:40:11 GMT</pubDate></item><item><title><![CDATA[Quick and Dirty Screen Scraping with Node.js using Request and Cheerio]]></title><description><![CDATA[<p>I wrote my own screen scraping module built on
+]]></description><link>http://procbits.com/2012/05/18/why-do-all-the-great-node-js-developers-hate-coffeescript</link><guid isPermaLink="true">http://procbits.com/2012/05/18/why-do-all-the-great-node-js-developers-hate-coffeescript</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Fri, 18 May 2012 05:00:00 GMT</pubDate></item><item><title><![CDATA[Quick and Dirty Screen Scraping with Node.js using Request and Cheerio]]></title><description><![CDATA[<p>I wrote my own screen scraping module built on
 <a href="http://www.phantomjs.org/">PhantomJS</a>, but unfortunately it&#39;s too slow
 for most screen scraping tasks that don&#39;t require browser-side
 JavaScript. One easy way to scrape pages with Node.js is to use
@@ -789,4 +799,4 @@ collaborating on software development easy.</p>
 <p>You should follow me on Twitter:
 <a href="http://twitter.com/jprichardson">@jprichardson</a>.</p>
 <p>-JP</p>
-]]></description><link>http://procbits.com/2012/04/11/quick-and-dirty-screen-scraping-with-node-js-using-request-and-cheerio</link><guid isPermaLink="true">http://procbits.com/2012/04/11/quick-and-dirty-screen-scraping-with-node-js-using-request-and-cheerio</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 12 Apr 2012 03:24:09 GMT</pubDate></item></channel></rss>
+]]></description><link>http://procbits.com/2012/04/11/quick-and-dirty-screen-scraping-with-node-js-using-request-and-cheerio</link><guid isPermaLink="true">http://procbits.com/2012/04/11/quick-and-dirty-screen-scraping-with-node-js-using-request-and-cheerio</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Wed, 11 Apr 2012 05:00:00 GMT</pubDate></item></channel></rss>

@@ -1,6 +1,6 @@
 <!--
 title: Generating a Bitcoin Address with JavaScript
-publish: 
+publish: 2013-08-020
 slug: 2013/08/20/generating-a-bitcoin-address-with-javascript
 tags: JavaScript, Bitcoin
 -->
@@ -8,6 +8,11 @@ tags: JavaScript, Bitcoin
 
 Random Number Generation
 ------------------------
+
+<mjax>
+When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are
+$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
+</mjax>
 
 I'd be remiss if I didn't mention anything about random number generation. Random number generation is the basis of most cryptography and Bitcoin. Your Bitcoin addresses are only as secure as your random number generator. A random number generator that is said to be cryptographically secure is good enough to use for cryptography. `Math.random()` is not cryptographically secure. This is because `Math.random()` is predictable. If it's predictable, an attacked could figure out your private key from your public key.
 

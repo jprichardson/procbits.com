@@ -1,0 +1,10 @@
+
+<h3>Tags:</h3>
+
+<ul>
+<% tags.forEach(function(tag) { %>
+  <li>
+    <a href="<%= tag.path %>"><%= tag.name %></a>
+  </li>
+<% }) %>
+</ul>

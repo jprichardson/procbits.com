@@ -3,16 +3,19 @@
     "name": "procbits",
     "tagline": "source code snippets and other random musings about software",
     "url": "http://procbits.com",
-    "template": "basic",
+    "theme": "blog",
     "author": "JP Richardson"
   },
   "articles": {
     "urlformat": "{{slug}}",
     "index": "index.html"
   },
+  "pages": {
+    "urlformat": "pages/{{basedir}}/{{slug}}"
+  },
   "build": {
     "outputDir": "public/",
-    "lastBuild": "2013-08-19T03:35:11.252Z"
+    "lastBuild": ""
   },
   "partials": {
     "disqus": {
