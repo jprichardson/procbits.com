@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<title>Buzz</title>
+<title>Buzz: A Node.js Command Line Program to Keep Your App Running Indefinitely; Like the Program Forever</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="JP Richardson">
@@ -31,7 +31,7 @@
       </div>
     </div>
   </div>
-  <div class="container"> <h1>Buzz</h1>
+  <div class="container"> <h1>Buzz: A Node.js Command Line Program to Keep Your App Running Indefinitely; Like the Program Forever</h1>
 
 <p>Buzz is a command line program that can kill your app routinely and
 restart it. It&#39;ll will also restart your app if it dies. It&#39;s a lot like

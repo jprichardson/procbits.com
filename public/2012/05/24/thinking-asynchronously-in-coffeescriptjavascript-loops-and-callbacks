@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<title>Thinking Asynchronously in CoffeeScript/JavaScript</title>
+<title>Thinking Asynchronously in CoffeeScript/JavaScript: Loops and Callbacks</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="JP Richardson">
@@ -31,7 +31,7 @@
       </div>
     </div>
   </div>
-  <div class="container"> <h1>Thinking Asynchronously in CoffeeScript/JavaScript</h1>
+  <div class="container"> <h1>Thinking Asynchronously in CoffeeScript/JavaScript: Loops and Callbacks</h1>
 
 <p>Awhile back, I wrote about my new experience in learning Node.js: <a href="http://procbits.com/2011/10/29/a-node-js-experiment-thinking-asynchronously-recursion-calculate-file-size-directory/">A
 Node.js Experiment: Thinking Asynchronously, Using Recursion to

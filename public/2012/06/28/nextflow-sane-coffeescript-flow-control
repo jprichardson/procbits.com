@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<title>NextFlow</title>
+<title>NextFlow: Sane CoffeeScript Flow Control</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="JP Richardson">
@@ -31,7 +31,7 @@
       </div>
     </div>
   </div>
-  <div class="container"> <h1>NextFlow</h1>
+  <div class="container"> <h1>NextFlow: Sane CoffeeScript Flow Control</h1>
 
 <p>Take a look at the most prominent JavaScript control flow libraries:
 <a href="https://github.com/caolan/async">Async.js</a>,

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<title>A Node.js Experiment</title>
+<title>A Node.js Experiment: Thinking Asynchronously, Using Recursion to Calculate the Total File Size in a Directory</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="JP Richardson">
@@ -31,7 +31,7 @@
       </div>
     </div>
   </div>
-  <div class="container"> <h1>A Node.js Experiment</h1>
+  <div class="container"> <h1>A Node.js Experiment: Thinking Asynchronously, Using Recursion to Calculate the Total File Size in a Directory</h1>
 
 <p>I recently picked up Node.js/CoffeeScript; I figured that since
 JavaScript can run on about every modern computing device, it&#39;s about

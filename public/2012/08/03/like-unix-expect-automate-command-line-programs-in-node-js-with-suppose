@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<title>Like Unix Expect</title>
+<title>Like Unix Expect: Automate Command Line Programs in Node.js with Suppose</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="JP Richardson">
@@ -31,7 +31,7 @@
       </div>
     </div>
   </div>
-  <div class="container"> <h1>Like Unix Expect</h1>
+  <div class="container"> <h1>Like Unix Expect: Automate Command Line Programs in Node.js with Suppose</h1>
 
 <p>Have you ever heard of the command line program
 <a href="http://en.wikipedia.org/wiki/Expect">expect</a>? Basically, expect allows
