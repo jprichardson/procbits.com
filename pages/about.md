@@ -19,13 +19,26 @@ Well, codebits.com was taken, funcbits.com sounded like it would be difficult to
 
 
 
-### Presence on the Web
+### Social Presence on the Web
 
 - email me at jprichardson@gmail.com
+- about.me: http://about.me/jprichardson
 - twitter: http://twitter.com/jprichardson
 - google+: https://plus.google.com/u/0/117996975742030675047
 - stack overflow: http://stackoverflow.com/users/10333/jp
 - github: http://github.com/jprichardson
+
+
+### Other Presence / New & Old Projects
+
+- [Reflect7](http://reflect7.com) is a company I cofounded with two other guys. Our mobile sports apps were downloaded over 100K+ times in a span of 1.5 years. We were acquired in 2011. I am no longer affiliated with the company.
+- [Gitpilot](http://gitpilot.com) is a compny I cofounded with one other guy. Our Git user interface aimed to make collaboration with others stupidly simple. We closed down at the end of 2012 due to lack of traction.
+- [Loudjet](http://loudjet.com) is another blog that I maintain. It focuses on entrepreneurship and self-improvement. Most of the posts were migrated over from [Techneur](http://techneur.com).
+- [Log Me Up](http://logmeup.com) solves the problem of you having to log into your server to view logs. Just open your web browser and view your logs from any of your servers in real-time.
+- [string.js](http://stringjs.com) is a JavaScript string library that includes a lot of methods that JavaScript left out.
+- [Sky](https://github.com/skywrite) is a static website generator. This site is built with it.
+- [datafun](http://datafun.org) is a collection of math and statistic tools to help perform calculations on text files.
+- [fs-extra](https://github.com/jprichardson/node-fs-extra) adds additional methods to the Node.js `fs` library. It's my most popular Node.js module.
 
 
 [github]: http://github.com/jprichardson

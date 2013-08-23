@@ -39,13 +39,25 @@
 <p>I&#39;m a strong advocate of the open source software (OSS) philosophy. I write a lot of open source <a href="http://github.com/jprichardson">code on Github</a> and lately have found Node.js, AngularJS, and Go to be fun.</p>
 <h3>What&#39;s procbits?</h3>
 <p>Well, codebits.com was taken, funcbits.com sounded like it would be difficult to relay via speech, and I just had to have &quot;bits&quot; at the end of the domain name. I don&#39;t really remember where &quot;proc&quot; came from... maybe procedural? </p>
-<h3>Presence on the Web</h3>
+<h3>Social Presence on the Web</h3>
 <ul>
 <li>email me at jprichardson@gmail.com</li>
+<li>about.me: <a href="http://about.me/jprichardson">http://about.me/jprichardson</a></li>
 <li>twitter: <a href="http://twitter.com/jprichardson">http://twitter.com/jprichardson</a></li>
 <li>google+: <a href="https://plus.google.com/u/0/117996975742030675047">https://plus.google.com/u/0/117996975742030675047</a></li>
 <li>stack overflow: <a href="http://stackoverflow.com/users/10333/jp">http://stackoverflow.com/users/10333/jp</a></li>
 <li>github: <a href="http://github.com/jprichardson">http://github.com/jprichardson</a></li>
+</ul>
+<h3>Other Presence / New &amp; Old Projects</h3>
+<ul>
+<li><a href="http://reflect7.com">Reflect7</a> is a company I cofounded with two other guys. Our mobile sports apps were downloaded over 100K+ times in a span of 1.5 years. We were acquired in 2011. I am no longer affiliated with the company.</li>
+<li><a href="http://gitpilot.com">Gitpilot</a> is a compny I cofounded with one other guy. Our Git user interface aimed to make collaboration with others stupidly simple. We closed down at the end of 2012 due to lack of traction.</li>
+<li><a href="http://loudjet.com">Loudjet</a> is another blog that I maintain. It focuses on entrepreneurship and self-improvement. Most of the posts were migrated over from <a href="http://techneur.com">Techneur</a>.</li>
+<li><a href="http://logmeup.com">Log Me Up</a> solves the problem of you having to log into your server to view logs. Just open your web browser and view your logs from any of your servers in real-time.</li>
+<li><a href="http://stringjs.com">string.js</a> is a JavaScript string library that includes a lot of methods that JavaScript left out.</li>
+<li><a href="https://github.com/skywrite">Sky</a> is a static website generator. This site is built with it.</li>
+<li><a href="http://datafun.org">datafun</a> is a collection of math and statistic tools to help perform calculations on text files.</li>
+<li><a href="https://github.com/jprichardson/node-fs-extra">fs-extra</a> adds additional methods to the Node.js <code>fs</code> library. It&#39;s my most popular Node.js module.</li>
 </ul>
 
 
