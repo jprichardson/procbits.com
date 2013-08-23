@@ -33,6 +33,8 @@
   </div>
   <div class="container"> <h1>Generating a Bitcoin Address with JavaScript</h1>
 
+<p>If you&#39;re not familiar with Bitcoin, Bitcoin is essentially a P2P currency that has <a href="http://blockchain.info/charts/market-price">increased an order of magnitude in value within the last year</a>. This <a href="http://www.youtube.com/watch?v=Um63OQz3bjo">video</a> explains what it is if you&#39;re familiar with it. There are a number of libraries to work with Bitcoin any some of the most popular languages: <a href="https://github.com/MatthewLM/cbitcoin">C</a>, <a href="https://code.google.com/p/bitcoinj/">Java</a>, <a href="https://code.google.com/p/bitcoinsharp/">C#</a>, <a href="https://github.com/lian/bitcoin-ruby">Ruby</a>, <a href="https://github.com/laanwj/bitcoin-python">Python</a>, <a href="https://github.com/piotrnar/gocoin">Go</a>, and <a href="https://github.com/bitcoinjs/bitcoinjs-lib">JavaScript</a>. This article will focus exclusively on the JavaScript library.</p>
+<p><strong>Disclaimer:</strong> I am not a cryptographer and any such cryptography advice or implementations should be accepted as academic experimentation and not secure best practices.</p>
 <h2>Random Number Generation</h2>
 <mjax>
 When $a \ne 0$, there are two solutions to (ax^2 + bx + c = 0) and they are
@@ -54,29 +56,47 @@ $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
 <li><a href="http://armoredbarista.blogspot.ch/2013/03/randomly-failed-weaknesses-in-java.html">Randomly failed! Weaknesses in Java Pseudo Random Number Generators</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/window.crypto.getRandomValues">window.crypto.getRandomValues()</a></li>
 </ul>
+<h2>Getting Started</h2>
+<p>You&#39;re going to want to download the <a href="https://raw.github.com/bitcoinjs/bitcoinjs-lib/master/build/bitcoinjs-min.js">latest BitcoinJS client lib</a>. It&#39;s pretty outdated though. There are some more recent forks: <a href="https://github.com/bitfloor/bitcoinjs-lib">1</a>, <a href="https://github.com/twistandshout/bitcoinjs-lib">2</a>, and the one that <a href="https://github.com/DimeJet/bitcoinjs-lib">I will eventually maintain</a>. For now, use the outdated one, from BitcoinJS.</p>
 <h2>Bitcoin Keys, Addresses, &amp; Formats</h2>
 <p>Bitcoin derives its security from the public-key crypto scheme <a href="http://en.wikipedia.org/wiki/Elliptic_curve_cryptography">Elliptic Curve Cryptography (ECC)</a>. So why did the designer of Bitcoin, <a href="https://en.bitcoin.it/wiki/Satoshi_Nakamoto">Satoshi Nakamoto</a>, decide to use ECC over the prevalent RSA crypto scheme? The primary benefit is the key size. According to the <a href="http://en.wikipedia.org/wiki/Elliptic_curve_cryptography">Wikipedia article on ECC</a>, &quot;a 256-bit ECC public key should provide comparable security to a 3072-bit RSA public key&quot;.</p>
 <p>The Elliptical Curve Cryptography <a href="http://www.secg.org/collateral/sec1_final.pdf">spec 2.2.1</a> states that the equations are governed by the equation:</p>
-<pre><code>y^2 = (x^3 + a*x + b) mod p </code></pre>
+<mjax>
+  $$ y^2 = (x^3 + ax + b) \bmod p $$
+</mjax>
+
+
 <p>The entire Elliptic curve domain is a sextuple, <a href="http://www.secg.org/collateral/sec1_final.pdf">spec 3.1.1</a>:</p>
-<pre><code>T = (p, a, b, G, n, h)</code></pre>
+<mjax>
+  $$  T = (p, a, b, G, n, h) $$
+</mjax>
+
+
 <p>The precise details are out of scope for this article, read the spec for more info. Bitcoin uses the <a href="http://www.secg.org/collateral/sec2_final.pdf">secp256k1 (info on 2.7.1)</a> implementation, which is uses <a href="http://en.wikipedia.org/wiki/Neal_Koblitz">Koblitz curves</a>.</p>
 <p>The sextuple parameters for secpk256k1 are:</p>
 <ul>
-<li><code>p</code>: FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFE FFFFFC2F</li>
-<li><code>a</code>: 0</li>
-<li><code>b</code>: 7</li>
-<li><code>G</code> (compressed):** 02 79BE667E F9DCBBAC 55A06295 CE870B07 029BFCDB 2DCE28D9 59F2815B 16F81798</li>
-<li><code>G</code> (uncompressed):** 04 79BE667E F9DCBBAC 55A06295 CE870B07 029BFCDB 2DCE28D9 59F2815B 16F81798 483ADA77 26A3C465 5DA4FBFC 0E1108A8 FD17B448 A6855419 9C47D08F FB10D4B8</li>
-<li><code>n</code>: FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFE BAAEDCE6 AF48A03B BFD25E8C D0364141</li>
-<li><code>h</code>: 1</li>
+<li><strong>p</strong>: FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFE FFFFFC2F</li>
+<li><strong>a</strong>: 0</li>
+<li><strong>b</strong>: 7</li>
+<li><strong>G</strong> (compressed): 02 79BE667E F9DCBBAC 55A06295 CE870B07 029BFCDB 2DCE28D9 59F2815B 16F81798</li>
+<li><strong>G</strong> (uncompressed): 04 79BE667E F9DCBBAC 55A06295 CE870B07 029BFCDB 2DCE28D9 59F2815B 16F81798 483ADA77 26A3C465 5DA4FBFC 0E1108A8 FD17B448 A6855419 9C47D08F FB10D4B8</li>
+<li><strong>n</strong>: FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFE BAAEDCE6 AF48A03B BFD25E8C D0364141</li>
+<li><strong>h</strong>: 1</li>
 </ul>
 <p>thus reducing the elliptic curve equation to:</p>
-<pre><code>y^2 = (x^3 + 7) mod p</code></pre>
+<mjax>
+    $$ y^2 = (x^3 + 7) \bmod p $$
+</mjax>
+
+
 <p>you really don&#39;t need to understand much of this. I mainly presented this material for academic purposes.</p>
 <h3>Private Keys</h3>
 <p>Private keys are what allows you to spend your coins. A private key, <code>d</code> is any random number between <code>1</code> and <code>n - 1</code>. According to the <a href="http://www.secg.org/collateral/sec1_final.pdf">spec (3.2.1)</a>: &quot;an elliptic
-curve key pair <code>(d, Q)</code> associated with <code>T</code> consists of an elliptic curve secret key <code>d</code> which is an integer in the interval <code>[1, n - 1]</code>, and an elliptic curve public key <code>Q = (xQ, yQ)</code> which is the point <code>Q = d*G</code>.</p>
+curve key pair <code>(d, Q)</code> associated with <code>T</code> consists of an elliptic curve secret key <code>d</code> which is an integer in the interval <code>[1, n - 1]</code>, and an elliptic curve public key <mjax>$ Q = (x_Q, y_Q) $</mjax> which is the point <mjax>$ Q = dG $</mjax>.</p>
+<p>Let&#39;s generate a private key, but first we must generate our random number</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">tarr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Uint8Array</span><span class="p">[</span><span class="mi">32</span><span class="p">];</span> <span class="c1">//create a typed array of 32 bytes (256 bits)</span>
+</pre></div>
+
 <h3>Address</h3>
 <p>Bitcoin uses <a href="https://en.bitcoin.it/wiki/Address">addresses</a> as a means to receive coins from someone else. An address is a <a href="https://en.bitcoin.it/wiki/Base58Check_encoding">base58</a> encoded string of a 25 byte binary address. All Bitcoin addresses start with <code>1</code>.  A person can have as many addresses as they&#39;d like. Using more than one address is said to increase anonymity. </p>
 <h3>Public Key</h3>

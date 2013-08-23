@@ -1,9 +1,14 @@
 <!--
 title: Generating a Bitcoin Address with JavaScript
-publish: 2013-08-020
+publish: 
 slug: 2013/08/20/generating-a-bitcoin-address-with-javascript
 tags: JavaScript, Bitcoin
 -->
+
+If you're not familiar with Bitcoin, Bitcoin is essentially a P2P currency that has [increased an order of magnitude in value within the last year](http://blockchain.info/charts/market-price). This [video](http://www.youtube.com/watch?v=Um63OQz3bjo) explains what it is if you're familiar with it. There are a number of libraries to work with Bitcoin any some of the most popular languages: [C](https://github.com/MatthewLM/cbitcoin), [Java](https://code.google.com/p/bitcoinj/), [C#](https://code.google.com/p/bitcoinsharp/), [Ruby](https://github.com/lian/bitcoin-ruby), [Python](https://github.com/laanwj/bitcoin-python), [Go](https://github.com/piotrnar/gocoin), and [JavaScript](https://github.com/bitcoinjs/bitcoinjs-lib). This article will focus exclusively on the JavaScript library.
+
+**Disclaimer:** I am not a cryptographer and any such cryptography advice or implementations should be accepted as academic experimentation and not secure best practices.
+
 
 
 Random Number Generation
@@ -32,6 +37,11 @@ further reading:
 - [window.crypto.getRandomValues()][window.crypto]
 
 
+Getting Started
+---------------
+
+You're going to want to download the [latest BitcoinJS client lib](https://raw.github.com/bitcoinjs/bitcoinjs-lib/master/build/bitcoinjs-min.js). It's pretty outdated though. There are some more recent forks: [1](https://github.com/bitfloor/bitcoinjs-lib), [2](https://github.com/twistandshout/bitcoinjs-lib), and the one that [I will eventually maintain](https://github.com/DimeJet/bitcoinjs-lib). For now, use the outdated one, from BitcoinJS.
+
 
 Bitcoin Keys, Addresses, & Formats
 ----------------------------------
@@ -40,27 +50,39 @@ Bitcoin derives its security from the public-key crypto scheme [Elliptic Curve C
 
 The Elliptical Curve Cryptography [spec 2.2.1][spec] states that the equations are governed by the equation:
 
-    y^2 = (x^3 + a*x + b) mod p 
+
+<mjax>
+  $$ y^2 = (x^3 + ax + b) \bmod p $$
+</mjax>
+
 
 The entire Elliptic curve domain is a sextuple, [spec 3.1.1][spec]:
 
-    T = (p, a, b, G, n, h)
+
+<mjax>
+  $$  T = (p, a, b, G, n, h) $$
+</mjax>
+
 
 The precise details are out of scope for this article, read the spec for more info. Bitcoin uses the [secp256k1 (info on 2.7.1)](http://www.secg.org/collateral/sec2_final.pdf) implementation, which is uses [Koblitz curves](http://en.wikipedia.org/wiki/Neal_Koblitz).
 
 The sextuple parameters for secpk256k1 are:
 
-- `p`: FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFE FFFFFC2F
-- `a`: 0
-- `b`: 7
-- `G` (compressed):** 02 79BE667E F9DCBBAC 55A06295 CE870B07 029BFCDB 2DCE28D9 59F2815B 16F81798
-- `G` (uncompressed):** 04 79BE667E F9DCBBAC 55A06295 CE870B07 029BFCDB 2DCE28D9 59F2815B 16F81798 483ADA77 26A3C465 5DA4FBFC 0E1108A8 FD17B448 A6855419 9C47D08F FB10D4B8
-- `n`: FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFE BAAEDCE6 AF48A03B BFD25E8C D0364141
-- `h`: 1
+- **p**: FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFE FFFFFC2F
+- **a**: 0
+- **b**: 7
+- **G** (compressed): 02 79BE667E F9DCBBAC 55A06295 CE870B07 029BFCDB 2DCE28D9 59F2815B 16F81798
+- **G** (uncompressed): 04 79BE667E F9DCBBAC 55A06295 CE870B07 029BFCDB 2DCE28D9 59F2815B 16F81798 483ADA77 26A3C465 5DA4FBFC 0E1108A8 FD17B448 A6855419 9C47D08F FB10D4B8
+- **n**: FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFE BAAEDCE6 AF48A03B BFD25E8C D0364141
+- **h**: 1
 
 thus reducing the elliptic curve equation to:
 
-    y^2 = (x^3 + 7) mod p
+
+<mjax>
+    $$ y^2 = (x^3 + 7) \bmod p $$
+</mjax>
+
 
 you really don't need to understand much of this. I mainly presented this material for academic purposes.
 
@@ -69,9 +91,16 @@ you really don't need to understand much of this. I mainly presented this materi
 ### Private Keys
 
 Private keys are what allows you to spend your coins. A private key, `d` is any random number between `1` and `n - 1`. According to the [spec (3.2.1)][spec]: "an elliptic
-curve key pair `(d, Q)` associated with `T` consists of an elliptic curve secret key `d` which is an integer in the interval `[1, n - 1]`, and an elliptic curve public key `Q = (xQ, yQ)` which is the point `Q = d*G`.
+curve key pair `(d, Q)` associated with `T` consists of an elliptic curve secret key `d` which is an integer in the interval `[1, n - 1]`, and an elliptic curve public key <mjax>$ Q = (x_Q, y_Q) $</mjax> which is the point <mjax>$ Q = dG $</mjax>.
+
+Let's generate a private key, but first we must generate our random number
+
+```js
+var tarr = new Uint8Array[32]; //create a typed array of 32 bytes (256 bits)
 
 
+
+```
 
 
 

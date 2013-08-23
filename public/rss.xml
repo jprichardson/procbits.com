@@ -1,101 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[procbits]]></title><description><![CDATA[source code snippets and other random musings about software]]></description><link>http://procbits.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Thu, 22 Aug 2013 03:01:26 GMT</lastBuildDate><atom:link href="http://procbits.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Generating a Bitcoin Address with JavaScript]]></title><description><![CDATA[<h2>Random Number Generation</h2>
-<mjax>
-When $a \ne 0$, there are two solutions to (ax^2 + bx + c = 0) and they are
-$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
-</mjax>
-
-<p>I&#39;d be remiss if I didn&#39;t mention anything about random number generation. Random number generation is the basis of most cryptography and Bitcoin. Your Bitcoin addresses are only as secure as your random number generator. A random number generator that is said to be cryptographically secure is good enough to use for cryptography. <code>Math.random()</code> is not cryptographically secure. This is because <code>Math.random()</code> is predictable. If it&#39;s predictable, an attacked could figure out your private key from your public key.</p>
-<p>At the time of this writing, the predominant <a href="">JavaScript Bitcoin library</a> uses <a href="https://code.google.com/p/crypto-js/">CryptoJS</a> which surprisingly uses <code>Math.random()</code>. You may want to find a way to substitute with the up and coming <a href="https://developer.mozilla.org/en-US/docs/Web/API/window.crypto.getRandomValues"><code>window.crytpo</code> standard</a> or the <a href="http://bitwiseshiftleft.github.io/sjcl/">Stanford JavaScript Crypto Library</a></p>
-<p>further reading:</p>
-<ul>
-<li><a href="http://nakedsecurity.sophos.com/2013/07/09/anatomy-of-a-pseudorandom-number-generator-visualising-cryptocats-buggy-prng/">Anatomy of a pseudorandom number generator - Visualizing Cryptocat&#39;s buggy PRNG</a></li>
-<li><a href="http://crypto.stackexchange.com/questions/394/what-tests-can-i-do-to-ensure-my-prng-is-working-correctly">What tests can I do to ensure my PRNG is working correctly?</a></li>
-<li><a href="http://cacr.uwaterloo.ca/hac/about/chap5.pdf">Handbook of Applied Cryptography - Chapter 5: Pseudorandom Bits and Sequences</a></li>
-<li><a href="https://bitcointalk.org/index.php?topic=271831.0">Bitcoin Talk: Android Key Rotation</a></li>
-<li><a href="https://bitcointalk.org/index.php?topic=271486.0/">Bitcoin Talk: Bad Signatures leading to 55.82 BTC theft</a></li>
-<li><a href="http://android-developers.blogspot.com/2013/08/some-securerandom-thoughts.html">Android Developers: Some SecureRandom Thoughts</a></li>
-<li><a href="http://arstechnica.com/security/2013/08/all-android-created-bitcoin-wallets-vulnerable-to-theft/">All Android-created Bitcoin wallets vulnerable to theft</a></li>
-<li><a href="http://arstechnica.com/security/2013/08/google-confirms-critical-android-crypto-flaw-used-in-5700-bitcoin-heist/">Google confirms critical Android crypto flaw used in $5,700 Bitcoin heist</a></li>
-<li><a href="http://armoredbarista.blogspot.ch/2013/03/randomly-failed-weaknesses-in-java.html">Randomly failed! Weaknesses in Java Pseudo Random Number Generators</a></li>
-<li><a href="https://developer.mozilla.org/en-US/docs/Web/API/window.crypto.getRandomValues">window.crypto.getRandomValues()</a></li>
-</ul>
-<h2>Getting Started</h2>
-<p>You&#39;re going to want to download the <a href="https://raw.github.com/bitcoinjs/bitcoinjs-lib/master/build/bitcoinjs-min.js">latest BitcoinJS client lib</a>. It&#39;s pretty outdated though. There are some more recent forks: <a href="https://github.com/bitfloor/bitcoinjs-lib">1</a>, <a href="https://github.com/twistandshout/bitcoinjs-lib">2</a>, and the one that <a href="https://github.com/DimeJet/bitcoinjs-lib">I will eventually maintain</a>. For now, use the outdated one, from BitcoinJS.</p>
-<h2>Bitcoin Keys, Addresses, &amp; Formats</h2>
-<p>Bitcoin derives its security from the public-key crypto scheme <a href="http://en.wikipedia.org/wiki/Elliptic_curve_cryptography">Elliptic Curve Cryptography (ECC)</a>. So why did the designer of Bitcoin, <a href="https://en.bitcoin.it/wiki/Satoshi_Nakamoto">Satoshi Nakamoto</a>, decide to use ECC over the prevalent RSA crypto scheme? The primary benefit is the key size. According to the <a href="http://en.wikipedia.org/wiki/Elliptic_curve_cryptography">Wikipedia article on ECC</a>, &quot;a 256-bit ECC public key should provide comparable security to a 3072-bit RSA public key&quot;.</p>
-<p>The Elliptical Curve Cryptography <a href="http://www.secg.org/collateral/sec1_final.pdf">spec 2.2.1</a> states that the equations are governed by the equation:</p>
-<mjax>
-  $$ y^2 = (x^3 + ax + b) \bmod p $$
-</mjax>
-
-
-<p>The entire Elliptic curve domain is a sextuple, <a href="http://www.secg.org/collateral/sec1_final.pdf">spec 3.1.1</a>:</p>
-<mjax>
-  $$  T = (p, a, b, G, n, h) $$
-</mjax>
-
-
-<p>The precise details are out of scope for this article, read the spec for more info. Bitcoin uses the <a href="http://www.secg.org/collateral/sec2_final.pdf">secp256k1 (info on 2.7.1)</a> implementation, which is uses <a href="http://en.wikipedia.org/wiki/Neal_Koblitz">Koblitz curves</a>.</p>
-<p>The sextuple parameters for secpk256k1 are:</p>
-<ul>
-<li><strong>p</strong>: FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFE FFFFFC2F</li>
-<li><strong>a</strong>: 0</li>
-<li><strong>b</strong>: 7</li>
-<li><strong>G</strong> (compressed): 02 79BE667E F9DCBBAC 55A06295 CE870B07 029BFCDB 2DCE28D9 59F2815B 16F81798</li>
-<li><strong>G</strong> (uncompressed): 04 79BE667E F9DCBBAC 55A06295 CE870B07 029BFCDB 2DCE28D9 59F2815B 16F81798 483ADA77 26A3C465 5DA4FBFC 0E1108A8 FD17B448 A6855419 9C47D08F FB10D4B8</li>
-<li><strong>n</strong>: FFFFFFFF FFFFFFFF FFFFFFFF FFFFFFFE BAAEDCE6 AF48A03B BFD25E8C D0364141</li>
-<li><strong>h</strong>: 1</li>
-</ul>
-<p>thus reducing the elliptic curve equation to:</p>
-<mjax>
-    $$ y^2 = (x^3 + 7) \bmod p $$
-</mjax>
-
-
-<p>you really don&#39;t need to understand much of this. I mainly presented this material for academic purposes.</p>
-<h3>Private Keys</h3>
-<p>Private keys are what allows you to spend your coins. A private key, <code>d</code> is any random number between <code>1</code> and <code>n - 1</code>. According to the <a href="http://www.secg.org/collateral/sec1_final.pdf">spec (3.2.1)</a>: &quot;an elliptic
-curve key pair <code>(d, Q)</code> associated with <code>T</code> consists of an elliptic curve secret key <code>d</code> which is an integer in the interval <code>[1, n - 1]</code>, and an elliptic curve public key <mjax>$ Q = (x_Q, y_Q) $</mjax> which is the point <mjax>$ Q = dG $</mjax>.</p>
-<h3>Address</h3>
-<p>Bitcoin uses <a href="https://en.bitcoin.it/wiki/Address">addresses</a> as a means to receive coins from someone else. An address is a <a href="https://en.bitcoin.it/wiki/Base58Check_encoding">base58</a> encoded string of a 25 byte binary address. All Bitcoin addresses start with <code>1</code>.  A person can have as many addresses as they&#39;d like. Using more than one address is said to increase anonymity. </p>
-<h3>Public Key</h3>
-<p>The an uncompressed public key is a 65 byte long value consisting of the leading <code>0x04</code> and X,Y coordinate consisting of 32 bytes each. A compressed key  </p>
-<p>As seen above, addresses are generated from the public ECDSA key. The public ECDSA key is generated from the private ECDSA key. Having access to the private key allows you to spend the coins associated with the address. The private key is essentially just a 256 bit random number governed by the <a href="https://en.bitcoin.it/wiki/Secp256k1">Secp256k1</a> ECDSA rules.</p>
-<p>Bitcoin addresses are generated using . Specifically, the public address is generated like the following:</p>
-<blockquote>
-<p>Version = 1 byte of 0 (zero); on the test network, this is 1 byte of 111</p>
-<p>Key hash = Version concatenated with RIPEMD-160(SHA-256(public key))</p>
-<p>Checksum = 1st 4 bytes of SHA-256(SHA-256(Key hash))</p>
-<p>Bitcoin Address = Base58Encode(Key hash concatenated with Checksum)</p>
-<p>-- <cite><a href="https://en.bitcoin.it/wiki/Protocol_specification#Addresses">Bitcoin Wiki: Addresses</a></cite> </p>
-</blockquote>
-<h3>Compressed Keys</h3>
-<p>An excellent <a href="http://bitcoin.stackexchange.com/questions/3059/what-is-a-compressed-bitcoin-key">answer on the Bitcoin Stack Exchange</a> explains the differences:</p>
-<blockquote>
-<p>A compressed key is just a way of storing a public key in fewer bytes (33 instead of 65). There are no compatibility or security issues because they are precisely the same keys, just stored in a different way. The original Bitcoin software didn&#39;t use compressed keys only because their use was poorly documented in OpenSSL. They have no disadvantages other than that a little bit of additional computation is needed before they can be used to validate a signature.</p>
-<p>If you think of a public key as a point somewhere along a giant U, an uncompressed key is the X and Y coordinates of the point. A compressed key is how high up on the U the point is along with a single bit indicating whether it&#39;s on the left or right side. As you can visualize, they both encode precisely the same thing, but the compressed form requires half as much space plus one bit. (Of course, they&#39;re really points on elliptic curve secp256k1, but the concept is the same.)</p>
-<p>-- <cite>David Schwartz</cite></p>
-</blockquote>
-<p>Both the address and <a href="https://en.bitcoin.it/wiki/Private_key">private key</a> are encoded using the <a href="https://en.bitcoin.it/wiki/Base58Check_encoding">Base 58</a> encoding scheme.</p>
-<p>further reading:</p>
-<ul>
-<li><a href="http://www.nsa.gov/business/programs/elliptic_curve.shtml">NSA: The Case for Elliptic Curve Cryptography</a></li>
-<li><a href="http://crypto.stackexchange.com/questions/653/basic-explanation-of-elliptic-curve-cryptography">Basic Explanation of Elliptic Curve Cryptography</a></li>
-<li><a href="http://en.wikipedia.org/wiki/Elliptic_Curve_DSA">Wikipedia: Elliptic Curve DSA</a></li>
-<li><a href="https://engineering.purdue.edu/kak/compsec/NewLectures/Lecture14.pdf">Elliptic Curve Cryptography and Digital Rights Management</a></li>
-<li><a href="https://en.bitcoin.it/wiki/Technical_background_of_version_1_Bitcoin_addresses#How_to_create_Bitcoin_Address">How to create a Bitcoin Address</a></li>
-<li><a href="http://bitcoin.stackexchange.com/questions/9202/why-does-bitcoin-use-two-hash-functions-sha-256-and-ripemd-160-to-create-an-ad">Why does Bitcoin use two hash functions (SHA-256 and RIPEMD-160) to create an address?</a></li>
-<li><a href="http://bitcoin.stackexchange.com/questions/3609/can-an-sha256-hash-be-used-as-an-ecdsa-private-key">Can a SHA256 hash be used as an ECDSA private key?</a></li>
-<li><a href="http://bitcoin.stackexchange.com/questions/3059/what-is-a-compressed-bitcoin-key">What is a compressed Bitcoin key?</a></li>
-<li><a href="http://bitcoin.stackexchange.com/questions/1730/what-are-green-addresses">What are Green Addresses?</a></li>
-<li><a href="http://crypto.stackexchange.com/questions/1638/compressing-ec-private-keys">Compressing EC Private Keys</a></li>
-<li><a href="https://bitcointalk.org/?topic=2699.0">Bitcoin Talk: secp256k1</a></li>
-<li><a href="http://bitcoin.stackexchange.com/questions/7683/why-is-it-impossible-to-derive-public-key-from-address">Why is it impossible to derive the public key from the address?</a></li>
-<li><a href="https://en.bitcoin.it/wiki/List_of_address_prefixes">List of address prefixes</a></li>
-</ul>
-<p>[secp256k1]:</p>
-]]></description><link>http://procbits.com/2013/08/20/generating-a-bitcoin-address-with-javascript</link><guid isPermaLink="true">http://procbits.com/2013/08/20/generating-a-bitcoin-address-with-javascript</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Tue, 20 Aug 2013 05:00:00 GMT</pubDate></item><item><title><![CDATA[CSS Resets]]></title><description><![CDATA[<p>This is the first of <a href="http://procbits.com/tags/css">many articles</a> related to my adventures with CSS. I haven&#39;t actually really had the need to use CSS for about 6 years. I always had avoided it. When <a href="http://twitter.github.io/bootstrap/">Twitter Bootstrap</a> was released I was pumped because there was a way for developers to just focus on code and ignore the style. Recently, I decide that I&#39;m going to write a cross-platform app using <a href="http://phonegap.com/">Adobe Phonegap</a>. So, I&#39;ll need to get really familiar with CSS3 hardware transitions and styles.</p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[procbits]]></title><description><![CDATA[source code snippets and other random musings about software]]></description><link>http://procbits.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Fri, 23 Aug 2013 00:17:10 GMT</lastBuildDate><atom:link href="http://procbits.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[CSS Resets]]></title><description><![CDATA[<p>This is the first of <a href="http://procbits.com/tags/css">many articles</a> related to my adventures with CSS. I haven&#39;t actually really had the need to use CSS for about 6 years. I always had avoided it. When <a href="http://twitter.github.io/bootstrap/">Twitter Bootstrap</a> was released I was pumped because there was a way for developers to just focus on code and ignore the style. Recently, I decide that I&#39;m going to write a cross-platform app using <a href="http://phonegap.com/">Adobe Phonegap</a>. So, I&#39;ll need to get really familiar with CSS3 hardware transitions and styles.</p>
 <p>Let&#39;s start with the basics. CSS resets.</p>
 <p>Huh? What&#39;s the point?</p>
 <p>Each browser renders elements in its own default way. Consider the following HTML:</p>
@@ -813,4 +717,171 @@ collaborating on software development easy.</p>
 <p>You should follow me on Twitter:
 <a href="http://twitter.com/jprichardson">@jprichardson</a>.</p>
 <p>-JP</p>
-]]></description><link>http://procbits.com/2012/04/11/quick-and-dirty-screen-scraping-with-node-js-using-request-and-cheerio</link><guid isPermaLink="true">http://procbits.com/2012/04/11/quick-and-dirty-screen-scraping-with-node-js-using-request-and-cheerio</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 12 Apr 2012 03:24:09 GMT</pubDate></item></channel></rss>
+]]></description><link>http://procbits.com/2012/04/11/quick-and-dirty-screen-scraping-with-node-js-using-request-and-cheerio</link><guid isPermaLink="true">http://procbits.com/2012/04/11/quick-and-dirty-screen-scraping-with-node-js-using-request-and-cheerio</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 12 Apr 2012 03:24:09 GMT</pubDate></item><item><title><![CDATA[Submitting/Posting Files and Fields to an HTTP Form using C#/.NET]]></title><description><![CDATA[<p>Awhile back, I had to integrate a C# program with a web system that
+allowed the user to upload a few files and include some misc. data. I
+Googled around and didn&#39;t find a comprehensive solution.</p>
+<p>I did use some code I found on the internet, unfortunately I don&#39;t
+remember where, so I can&#39;t give proper attribution. If you know, please
+let me know; it&#39;s the code relevant to the <code>MimePart</code> class. I added the
+form values code and packaged it up into the <code>HttpForm</code> sugar.</p>
+<p>Here is the code:</p>
+<div class="highlight"><pre><span class="k">public</span> <span class="k">class</span> <span class="nc">HttpForm</span> <span class="p">{</span>
+
+    <span class="k">private</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span> <span class="n">_files</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;();</span>
+    <span class="k">private</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span> <span class="n">_values</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;();</span>
+
+    <span class="k">public</span> <span class="nf">HttpForm</span><span class="p">(</span><span class="kt">string</span> <span class="n">url</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">Url</span> <span class="p">=</span> <span class="n">url</span><span class="p">;</span>
+        <span class="k">this</span><span class="p">.</span><span class="n">Method</span> <span class="p">=</span> <span class="s">&quot;POST&quot;</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Method</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="k">public</span> <span class="kt">string</span> <span class="n">Url</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+    <span class="c1">//return self so that we can chain</span>
+    <span class="k">public</span> <span class="n">HttpForm</span> <span class="nf">AttachFile</span><span class="p">(</span><span class="kt">string</span> <span class="n">field</span><span class="p">,</span> <span class="kt">string</span> <span class="n">fileName</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">_files</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="p">=</span> <span class="n">fileName</span><span class="p">;</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="n">HttpForm</span> <span class="nf">ResetForm</span><span class="p">(){</span>
+        <span class="n">_files</span><span class="p">.</span><span class="n">Clear</span><span class="p">();</span>
+        <span class="n">_values</span><span class="p">.</span><span class="n">Clear</span><span class="p">();</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="c1">//return self so that we can chain</span>
+    <span class="k">public</span> <span class="n">HttpForm</span> <span class="nf">SetValue</span><span class="p">(</span><span class="kt">string</span> <span class="n">field</span><span class="p">,</span> <span class="kt">string</span> <span class="k">value</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">_values</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">;</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="n">HttpWebResponse</span> <span class="nf">Submit</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="k">this</span><span class="p">.</span><span class="n">UploadFiles</span><span class="p">(</span><span class="n">_files</span><span class="p">,</span> <span class="n">_values</span><span class="p">);</span>
+    <span class="p">}</span>
+
+
+    <span class="k">private</span> <span class="n">HttpWebResponse</span> <span class="nf">UploadFiles</span><span class="p">(</span><span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span> <span class="n">files</span><span class="p">,</span> <span class="n">Dictionary</span><span class="p">&lt;</span><span class="kt">string</span><span class="p">,</span> <span class="kt">string</span><span class="p">&gt;</span> <span class="n">otherValues</span><span class="p">)</span> <span class="p">{</span>
+        <span class="kt">var</span> <span class="n">req</span> <span class="p">=</span> <span class="p">(</span><span class="n">HttpWebRequest</span><span class="p">)</span><span class="n">WebRequest</span><span class="p">.</span><span class="n">Create</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">Url</span><span class="p">);</span>
+
+        <span class="n">req</span><span class="p">.</span><span class="n">Timeout</span> <span class="p">=</span> <span class="m">10000</span> <span class="p">*</span> <span class="m">1000</span><span class="p">;</span>
+        <span class="n">req</span><span class="p">.</span><span class="n">Accept</span> <span class="p">=</span> <span class="s">&quot;text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8&quot;</span><span class="p">;</span>
+        <span class="n">req</span><span class="p">.</span><span class="n">AllowAutoRedirect</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+
+        <span class="kt">var</span> <span class="n">mimeParts</span> <span class="p">=</span> <span class="k">new</span> <span class="n">List</span><span class="p">&lt;</span><span class="n">MimePart</span><span class="p">&gt;();</span>
+        <span class="k">try</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">otherValues</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">fieldName</span> <span class="k">in</span> <span class="n">otherValues</span><span class="p">.</span><span class="n">Keys</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="kt">var</span> <span class="n">part</span> <span class="p">=</span> <span class="k">new</span> <span class="n">MimePart</span><span class="p">();</span>
+
+                    <span class="n">part</span><span class="p">.</span><span class="n">Headers</span><span class="p">[</span><span class="s">&quot;Content-Disposition&quot;</span><span class="p">]</span> <span class="p">=</span> <span class="s">&quot;form-data; name=\&quot;&quot;</span> <span class="p">+</span> <span class="n">fieldName</span> <span class="p">+</span> <span class="s">&quot;\&quot;&quot;</span><span class="p">;</span>
+                    <span class="n">part</span><span class="p">.</span><span class="n">Data</span> <span class="p">=</span> <span class="k">new</span> <span class="n">MemoryStream</span><span class="p">(</span><span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="n">otherValues</span><span class="p">[</span><span class="n">fieldName</span><span class="p">]));</span>
+
+                    <span class="n">mimeParts</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">part</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">files</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+                <span class="k">foreach</span> <span class="p">(</span><span class="kt">var</span> <span class="n">fieldName</span> <span class="k">in</span> <span class="n">files</span><span class="p">.</span><span class="n">Keys</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="kt">var</span> <span class="n">part</span> <span class="p">=</span> <span class="k">new</span> <span class="n">MimePart</span><span class="p">();</span>
+
+                    <span class="n">part</span><span class="p">.</span><span class="n">Headers</span><span class="p">[</span><span class="s">&quot;Content-Disposition&quot;</span><span class="p">]</span> <span class="p">=</span> <span class="s">&quot;form-data; name=\&quot;&quot;</span> <span class="p">+</span> <span class="n">fieldName</span> <span class="p">+</span> <span class="s">&quot;\&quot;; filename=\&quot;&quot;</span> <span class="p">+</span> <span class="n">files</span><span class="p">[</span><span class="n">fieldName</span><span class="p">]</span> <span class="p">+</span> <span class="s">&quot;\&quot;&quot;</span><span class="p">;</span>
+                    <span class="n">part</span><span class="p">.</span><span class="n">Headers</span><span class="p">[</span><span class="s">&quot;Content-Type&quot;</span><span class="p">]</span> <span class="p">=</span> <span class="s">&quot;application/octet-stream&quot;</span><span class="p">;</span>
+                    <span class="n">part</span><span class="p">.</span><span class="n">Data</span> <span class="p">=</span> <span class="n">File</span><span class="p">.</span><span class="n">OpenRead</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="n">fieldName</span><span class="p">]);</span>
+
+                    <span class="n">mimeParts</span><span class="p">.</span><span class="n">Add</span><span class="p">(</span><span class="n">part</span><span class="p">);</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+
+            <span class="kt">string</span> <span class="n">boundary</span> <span class="p">=</span> <span class="s">&quot;----------&quot;</span> <span class="p">+</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">.</span><span class="n">Ticks</span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s">&quot;x&quot;</span><span class="p">);</span>
+
+            <span class="n">req</span><span class="p">.</span><span class="n">ContentType</span> <span class="p">=</span> <span class="s">&quot;multipart/form-data; boundary=&quot;</span> <span class="p">+</span> <span class="n">boundary</span><span class="p">;</span>
+            <span class="n">req</span><span class="p">.</span><span class="n">Method</span> <span class="p">=</span> <span class="k">this</span><span class="p">.</span><span class="n">Method</span><span class="p">;</span>
+
+            <span class="kt">long</span> <span class="n">contentLength</span> <span class="p">=</span> <span class="m">0</span><span class="p">;</span>
+
+            <span class="kt">byte</span><span class="p">[]</span> <span class="n">_footer</span> <span class="p">=</span> <span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="s">&quot;--&quot;</span> <span class="p">+</span> <span class="n">boundary</span> <span class="p">+</span> <span class="s">&quot;--\r\n&quot;</span><span class="p">);</span>
+
+            <span class="k">foreach</span> <span class="p">(</span><span class="n">MimePart</span> <span class="n">part</span> <span class="k">in</span> <span class="n">mimeParts</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">contentLength</span> <span class="p">+=</span> <span class="n">part</span><span class="p">.</span><span class="n">GenerateHeaderFooterData</span><span class="p">(</span><span class="n">boundary</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="n">req</span><span class="p">.</span><span class="n">ContentLength</span> <span class="p">=</span> <span class="n">contentLength</span> <span class="p">+</span> <span class="n">_footer</span><span class="p">.</span><span class="n">Length</span><span class="p">;</span>
+
+            <span class="kt">byte</span><span class="p">[]</span> <span class="n">buffer</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="p">[</span><span class="m">8192</span><span class="p">];</span>
+            <span class="kt">byte</span><span class="p">[]</span> <span class="n">afterFile</span> <span class="p">=</span> <span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="s">&quot;\r\n&quot;</span><span class="p">);</span>
+            <span class="kt">int</span> <span class="n">read</span><span class="p">;</span>
+
+            <span class="k">using</span> <span class="p">(</span><span class="n">Stream</span> <span class="n">s</span> <span class="p">=</span> <span class="n">req</span><span class="p">.</span><span class="n">GetRequestStream</span><span class="p">())</span> <span class="p">{</span>
+                <span class="k">foreach</span> <span class="p">(</span><span class="n">MimePart</span> <span class="n">part</span> <span class="k">in</span> <span class="n">mimeParts</span><span class="p">)</span> <span class="p">{</span>
+                    <span class="n">s</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">part</span><span class="p">.</span><span class="n">Header</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">part</span><span class="p">.</span><span class="n">Header</span><span class="p">.</span><span class="n">Length</span><span class="p">);</span>
+
+                    <span class="k">while</span> <span class="p">((</span><span class="n">read</span> <span class="p">=</span> <span class="n">part</span><span class="p">.</span><span class="n">Data</span><span class="p">.</span><span class="n">Read</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">buffer</span><span class="p">.</span><span class="n">Length</span><span class="p">))</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span>
+                        <span class="n">s</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">read</span><span class="p">);</span>
+
+                    <span class="n">part</span><span class="p">.</span><span class="n">Data</span><span class="p">.</span><span class="n">Dispose</span><span class="p">();</span>
+
+                    <span class="n">s</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">afterFile</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">afterFile</span><span class="p">.</span><span class="n">Length</span><span class="p">);</span>
+                <span class="p">}</span>
+
+                <span class="n">s</span><span class="p">.</span><span class="n">Write</span><span class="p">(</span><span class="n">_footer</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">_footer</span><span class="p">.</span><span class="n">Length</span><span class="p">);</span>
+            <span class="p">}</span>
+
+            <span class="kt">var</span> <span class="n">res</span> <span class="p">=</span> <span class="p">(</span><span class="n">HttpWebResponse</span><span class="p">)</span><span class="n">req</span><span class="p">.</span><span class="n">GetResponse</span><span class="p">();</span>
+
+            <span class="k">return</span> <span class="n">res</span><span class="p">;</span>
+        <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="n">Exception</span> <span class="n">ex</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">Console</span><span class="p">.</span><span class="n">WriteLine</span><span class="p">(</span><span class="n">ex</span><span class="p">.</span><span class="n">Message</span><span class="p">);</span>
+            <span class="k">foreach</span> <span class="p">(</span><span class="n">MimePart</span> <span class="n">part</span> <span class="k">in</span> <span class="n">mimeParts</span><span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">part</span><span class="p">.</span><span class="n">Data</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+                    <span class="n">part</span><span class="p">.</span><span class="n">Data</span><span class="p">.</span><span class="n">Dispose</span><span class="p">();</span>
+
+            <span class="k">return</span> <span class="p">(</span><span class="n">HttpWebResponse</span><span class="p">)</span><span class="n">req</span><span class="p">.</span><span class="n">GetResponse</span><span class="p">();</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">private</span> <span class="k">class</span> <span class="nc">MimePart</span> <span class="p">{</span>
+        <span class="k">private</span> <span class="n">NameValueCollection</span> <span class="n">_headers</span> <span class="p">=</span> <span class="k">new</span> <span class="n">NameValueCollection</span><span class="p">();</span>
+        <span class="k">public</span> <span class="n">NameValueCollection</span> <span class="n">Headers</span> <span class="p">{</span> <span class="k">get</span> <span class="p">{</span> <span class="k">return</span> <span class="n">_headers</span><span class="p">;</span> <span class="p">}</span> <span class="p">}</span>
+
+        <span class="k">public</span> <span class="kt">byte</span><span class="p">[]</span> <span class="n">Header</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">protected</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+
+        <span class="k">public</span> <span class="kt">long</span> <span class="nf">GenerateHeaderFooterData</span><span class="p">(</span><span class="kt">string</span> <span class="n">boundary</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">StringBuilder</span> <span class="n">sb</span> <span class="p">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="p">();</span>
+
+            <span class="n">sb</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span><span class="s">&quot;--&quot;</span><span class="p">);</span>
+            <span class="n">sb</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span><span class="n">boundary</span><span class="p">);</span>
+            <span class="n">sb</span><span class="p">.</span><span class="n">AppendLine</span><span class="p">();</span>
+            <span class="k">foreach</span> <span class="p">(</span><span class="kt">string</span> <span class="n">key</span> <span class="k">in</span> <span class="n">_headers</span><span class="p">.</span><span class="n">AllKeys</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">sb</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span><span class="n">key</span><span class="p">);</span>
+                <span class="n">sb</span><span class="p">.</span><span class="n">Append</span><span class="p">(</span><span class="s">&quot;: &quot;</span><span class="p">);</span>
+                <span class="n">sb</span><span class="p">.</span><span class="n">AppendLine</span><span class="p">(</span><span class="n">_headers</span><span class="p">[</span><span class="n">key</span><span class="p">]);</span>
+            <span class="p">}</span>
+            <span class="n">sb</span><span class="p">.</span><span class="n">AppendLine</span><span class="p">();</span>
+
+            <span class="n">Header</span> <span class="p">=</span> <span class="n">Encoding</span><span class="p">.</span><span class="n">UTF8</span><span class="p">.</span><span class="n">GetBytes</span><span class="p">(</span><span class="n">sb</span><span class="p">.</span><span class="n">ToString</span><span class="p">());</span>
+
+            <span class="k">return</span> <span class="n">Header</span><span class="p">.</span><span class="n">Length</span> <span class="p">+</span> <span class="n">Data</span><span class="p">.</span><span class="n">Length</span> <span class="p">+</span> <span class="m">2</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="k">public</span> <span class="n">Stream</span> <span class="n">Data</span> <span class="p">{</span> <span class="k">get</span><span class="p">;</span> <span class="k">set</span><span class="p">;</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>You can easily use it like so:</p>
+<div class="highlight"><pre><span class="kt">var</span> <span class="n">file1</span> <span class="p">=</span> <span class="s">@&quot;C:\file&quot;</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">file2</span> <span class="p">=</span> <span class="s">@&quot;C:\file2&quot;</span><span class="p">;</span>
+
+<span class="kt">var</span> <span class="n">yourUrl</span> <span class="p">=</span> <span class="s">&quot;http://yourdomain.com/process.php&quot;</span><span class="p">;</span>
+<span class="kt">var</span> <span class="n">httpForm</span> <span class="p">=</span> <span class="k">new</span> <span class="n">HttpForm</span><span class="p">(</span><span class="n">yourUrl</span><span class="p">);</span>
+<span class="n">httpForm</span><span class="p">.</span><span class="n">AttachFile</span><span class="p">(</span><span class="s">&quot;file1&quot;</span><span class="p">,</span> <span class="n">file1</span><span class="p">).</span><span class="n">AttachFile</span><span class="p">(</span><span class="s">&quot;file2&quot;</span><span class="p">,</span> <span class="n">file2</span><span class="p">);</span>
+<span class="n">httpForm</span><span class="p">.</span><span class="n">setValue</span><span class="p">(</span><span class="s">&quot;foo&quot;</span><span class="p">,</span> <span class="s">&quot;some foo&quot;</span><span class="p">).</span><span class="n">setValue</span><span class="p">(</span><span class="s">&quot;blah&quot;</span><span class="p">,</span> <span class="s">&quot;rarrr!&quot;</span><span class="p">);</span>
+<span class="n">httpForm</span><span class="p">.</span><span class="n">Submit</span><span class="p">();</span>
+</pre></div>
+
+<p>Do you use Git? If so, checkout <a href="http://gitpilot.com">Gitpilot</a> to make
+using Git thoughtless.</p>
+<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>.</p>
+<p>-JP Richardson</p>
+]]></description><link>http://procbits.com/2012/02/29/submittingposting-files-and-fields-to-an-http-form-using-c-net</link><guid isPermaLink="true">http://procbits.com/2012/02/29/submittingposting-files-and-fields-to-an-http-form-using-c-net</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 01 Mar 2012 09:42:27 GMT</pubDate></item></channel></rss>
