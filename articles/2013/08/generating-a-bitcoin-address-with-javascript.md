@@ -5,18 +5,18 @@ slug: 2013/08/26/generating-a-bitcoin-address-with-javascript
 tags: JavaScript, Bitcoin
 -->
 
-If you're not familiar with Bitcoin, Bitcoin is essentially a P2P currency that has [increased an order of magnitude in value within the last year](http://blockchain.info/charts/market-price). This [video](http://www.youtube.com/watch?v=Um63OQz3bjo) explains what it is if you're familiar with it. There are a number of libraries to work with Bitcoin any some of the most popular languages: [C](https://github.com/MatthewLM/cbitcoin), [Java](https://code.google.com/p/bitcoinj/), [C#](https://code.google.com/p/bitcoinsharp/), [Ruby](https://github.com/lian/bitcoin-ruby), [Python](https://github.com/laanwj/bitcoin-python), [Go](https://github.com/piotrnar/gocoin), and [JavaScript](https://github.com/bitcoinjs/bitcoinjs-lib). This article will focus exclusively on the JavaScript library.
+If you're not familiar with Bitcoin, Bitcoin is essentially a P2P currency that has [increased an order of magnitude in value within the last year](http://blockchain.info/charts/market-price). This [video](http://www.youtube.com/watch?v=Um63OQz3bjo) does a good job of explaining it. There are a number of libraries to work with Bitcoin in some of the most popular languages: [C](https://github.com/MatthewLM/cbitcoin), [Java](https://code.google.com/p/bitcoinj/), [C#](https://code.google.com/p/bitcoinsharp/), [Ruby](https://github.com/lian/bitcoin-ruby), [Python](https://github.com/laanwj/bitcoin-python), [Go](https://github.com/piotrnar/gocoin), and [JavaScript](https://github.com/bitcoinjs/bitcoinjs-lib). This article will focus exclusively on the JavaScript library.
 
-**Disclaimer:** I am not a cryptographer and any such cryptography advice or implementations should be accepted as academic experimentation and not secure best practices.
+**Disclaimer:** I am not a cryptographer and any such cryptography advice or implementations should be accepted as academic experimentation and not crypto best practices.
 
 
 
 Random Number Generation
 ------------------------
 
-I'd be remiss if I didn't mention anything about random number generation. Random number generation is the basis of most cryptography and Bitcoin. Your Bitcoin addresses are only as secure as your random number generator. A random number generator that is said to be cryptographically secure is good enough to use for cryptography. `Math.random()` is not cryptographically secure. This is because `Math.random()` is predictable. If it's predictable, an attacked could figure out your private key from your public key.
+I'd be remiss if I didn't mention anything about random number generation. Random number generation is the basis of most cryptography and Bitcoin. Your Bitcoin addresses are only as secure as your random number generator. A random number generator that is said to be cryptographically secure is good enough to use for cryptography. `Math.random()` is not cryptographically secure. This is because `Math.random()` is predictable. If it's predictable, an attacker could figure out your private key from your public key. The implications of someone else knowing your private key means that they can also spend your Bitcoins.
 
-At the time of this writing, the predominant [JavaScript Bitcoin library]() uses [CryptoJS][cryptojs] which surprisingly uses `Math.random()`. You may want to find a way to substitute with the up and coming [`window.crytpo` standard][window.crypto] or the [Stanford JavaScript Crypto Library](http://bitwiseshiftleft.github.io/sjcl/)
+At the time of this writing, the predominant [JavaScript Bitcoin library]() uses [CryptoJS][cryptojs] which surprisingly uses `Math.random()`. This article shows how you can use the up and coming [`window.crytpo` standard][window.crypto] or the [Stanford JavaScript Crypto Library](http://bitwiseshiftleft.github.io/sjcl/)
 
 further reading:
 
@@ -43,7 +43,7 @@ Bitcoin Keys, Addresses, & Formats
 
 Bitcoin derives its security from the public-key crypto scheme [Elliptic Curve Cryptography (ECC)][ecc]. So why did the designer of Bitcoin, [Satoshi Nakamoto][satoshi], decide to use ECC over the prevalent RSA crypto scheme? The primary benefit is the key size. According to the [Wikipedia article on ECC](http://en.wikipedia.org/wiki/Elliptic_curve_cryptography), "a 256-bit ECC public key should provide comparable security to a 3072-bit RSA public key".
 
-The Elliptical Curve Cryptography [spec 2.2.1][spec] states that the equations are governed by the equation:
+The Elliptical Curve Cryptography [spec 2.2.1][spec] states that the cryptography is governed by the equation:
 
 
 <mjax>
@@ -59,7 +59,7 @@ The entire Elliptic curve domain is a sextuple, [spec 3.1.1][spec]:
 </mjax>
 
 
-The precise details are out of scope for this article, read the spec for more info. Bitcoin uses the [secp256k1 (info on 2.7.1)](http://www.secg.org/collateral/sec2_final.pdf) implementation, which is uses [Koblitz curves](http://en.wikipedia.org/wiki/Neal_Koblitz).
+The precise details are out of scope for this article, read the spec for more info. Bitcoin uses the [secp256k1 (info on 2.7.1)](http://www.secg.org/collateral/sec2_final.pdf) implementation, which uses [Koblitz curves](http://en.wikipedia.org/wiki/Neal_Koblitz).
 
 The sextuple parameters for secpk256k1 are:
 
@@ -87,6 +87,8 @@ you really don't need to understand much of this. I mainly presented this materi
 
 Private keys are what allows you to spend your coins. A private key, `d` is any random number between `1` and `n - 1`. According to the [spec (3.2.1)][spec]: "an elliptic
 curve key pair `(d, Q)` associated with `T` consists of an elliptic curve secret key `d` which is an integer in the interval `[1, n - 1]`, and an elliptic curve public key <mjax>$ Q = (x_Q, y_Q) $</mjax> which is the point <mjax>$ Q = dG $</mjax>.
+
+You'll notice that we generate 32 random values. And `n` does not have a maximum of <mjax>$ 2^256 - 1 $</mjax>, so it's theoretically possible to generate a key larger than the standard. However, in practice, you really don't have to worry about it.
 
 let's generate a private key:
 
