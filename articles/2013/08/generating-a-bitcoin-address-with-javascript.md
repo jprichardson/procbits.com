@@ -112,9 +112,10 @@ console.log(privateKeyHex) //1184CD2CDD640CA42CFC3A091C51D549B2F016D454B2774019C
 
 simple enough, huh? But wait, this doesn't look like the private keys that you see in your Bitcoin clients. So, what's going on? Private keys typically use a format called the [Wallet Import Format (WIF)](https://en.bitcoin.it/wiki/Wallet_import_format).
 
+
 #### Wallet Import Format
 
-The Wallet Import Format (WIF) is simply a [base 58][base58] encoding of a hash.
+The Wallet Import Format (WIF) is shorter way to encode the private key. It is a [base 58][base58] encoding of `0x80` + private key + checksum.
 
 generate a WIF in JS:
 
