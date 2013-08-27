@@ -93,14 +93,60 @@ you really don't need to understand much of this. I mainly presented this materi
 Private keys are what allows you to spend your coins. A private key, `d` is any random number between `1` and `n - 1`. According to the [spec (3.2.1)][spec]: "an elliptic
 curve key pair `(d, Q)` associated with `T` consists of an elliptic curve secret key `d` which is an integer in the interval `[1, n - 1]`, and an elliptic curve public key <mjax>$ Q = (x_Q, y_Q) $</mjax> which is the point <mjax>$ Q = dG $</mjax>.
 
-Let's generate a private key, but first we must generate our random number
+let's generate a private key:
 
 ```js
-var tarr = new Uint8Array[32]; //create a typed array of 32 bytes (256 bits)
+var randArr = new Uint8Array[32] //create a typed array of 32 bytes (256 bits)
+window.crypto.getRandomValues(randArr) //populate array with cryptographically secure random numbers
 
+//some Bitcoin and Crypto methods don't like Uint8Array for input. They expect regular JS arrays.
+var arr = []
+for (var i = 0; i < randArr.length; ++i)
+  arr[i] = randArr[i]
 
-
+//hex string of our private key
+var privateKeyHex = Crypto.util.bytesToHex(arr).toUpperCase()
+console.log(privateKeyHex) //1184CD2CDD640CA42CFC3A091C51D549B2F016D454B2774019C2B2D2E08529FD
 ```
+
+simple enough, huh? But wait, this doesn't look like the private keys that you see in your Bitcoin clients. So, what's going on? Private keys typically use a format called the [Wallet Import Format (WIF)](https://en.bitcoin.it/wiki/Wallet_import_format).
+
+#### Wallet Import Format
+
+The Wallet Import Format (WIF) is simply a [base 58][base58] encoding of a hash.
+
+generate a WIF in JS:
+
+```js
+//add 0x80 to the front, https://en.bitcoin.it/wiki/List_of_address_prefixes
+var privateKeyAndVersion = "80" + privateKeyHex
+var firstSHA = Crypto.SHA256(Crypto.util.hexToBytes(privateKeyAndVersion))
+var secondSHA = Crypto.SHA256(Crypto.util.hexToBytes(firstSHA))
+var checksum = secondSHA.substr(0, 8).toUpperCase()
+console.log(checksum) //"206EC97E"
+
+//append checksum to end of the private key and version
+var keyWithChecksum = privateKeyAndVersion + checksum
+console.log(keyWithChecksum) //"801184CD2CDD640CA42CFC3A091C51D549B2F016D454B2774019C2B2D2E08529FD206EC97E"
+
+var privateKeyWIF = Bitcoin.Base58.encode(Crypto.util.hexToBytes(keyWithChecksum))
+console.log(privateKeyWIF) //"5Hx15HFGyep2CfPxsJKe2fXJsCVn5DEiyoeGGF6JZjGbTRnqfiD"
+```
+
+You can verify that this checks out by looking at either at http://brainwallet.org or http://gobittest.appspot.com/PrivateKey.
+
+There is a much easier method to use:
+
+```js
+var privateKeyWIF = new Bitcoin.Address(arr) //recall, "arr" is an array of random numbers
+privateKeyWIF.version = 0x80 //0x80 = 128, https://en.bitcoin.it/wiki/List_of_address_prefixes
+privateKeyWIF = privateKeyWIF.toString()
+console.log(privateKeyWIF) //"5Hx15HFGyep2CfPxsJKe2fXJsCVn5DEiyoeGGF6JZjGbTRnqfiD"
+```
+
+
+### Public Key
+
 
 
 
