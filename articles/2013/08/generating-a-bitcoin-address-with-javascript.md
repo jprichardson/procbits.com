@@ -1,7 +1,7 @@
 <!--
 title: Generating a Bitcoin Address with JavaScript
-publish: 2013-08-26
-slug: 2013/08/26/generating-a-bitcoin-address-with-javascript
+publish: 2013-08-27
+slug: 2013/08/27/generating-a-bitcoin-address-with-javascript
 tags: JavaScript, Bitcoin
 -->
 

@@ -351,7 +351,7 @@ Thus, in order to support both, we must remember for each public/private keypair
 
   //optional url
   
-    var disqus_url = 'http://procbits.com/2013/08/26/generating-a-bitcoin-address-with-javascript/';
+    var disqus_url = 'http://procbits.com/2013/08/27/generating-a-bitcoin-address-with-javascript/';
   
 
   //optional id
