@@ -5,6 +5,8 @@ slug: 2013/08/27/generating-a-bitcoin-address-with-javascript
 tags: JavaScript, Bitcoin
 -->
 
+<script src="/media/2013/08/bitcoinjs-min.js"></script>
+
 If you're not familiar with Bitcoin, Bitcoin is essentially a P2P currency that has [increased an order of magnitude in value within the last year](http://blockchain.info/charts/market-price). This [video](http://www.youtube.com/watch?v=Um63OQz3bjo) does a good job of explaining it. There are a number of libraries to work with Bitcoin in some of the most popular languages: [C](https://github.com/MatthewLM/cbitcoin), [Java](https://code.google.com/p/bitcoinj/), [C#](https://code.google.com/p/bitcoinsharp/), [Ruby](https://github.com/lian/bitcoin-ruby), [Python](https://github.com/laanwj/bitcoin-python), [Go](https://github.com/piotrnar/gocoin), and [JavaScript](https://github.com/bitcoinjs/bitcoinjs-lib). This article will focus exclusively on the JavaScript library.
 
 **Disclaimer:** I am not a cryptographer and any such cryptography advice or implementations should be accepted as academic experimentation and not crypto best practices.
@@ -35,7 +37,9 @@ further reading:
 Getting Started
 ---------------
 
-You're going to want to download the [latest BitcoinJS client lib](https://raw.github.com/bitcoinjs/bitcoinjs-lib/master/build/bitcoinjs-min.js). It's pretty outdated though. There are some more recent forks: [1](https://github.com/bitfloor/bitcoinjs-lib), [2](https://github.com/twistandshout/bitcoinjs-lib), and the one that [I will eventually maintain](https://github.com/DimeJet/bitcoinjs-lib). For now, use the outdated one, from BitcoinJS.
+You're going to want to use the [latest BitcoinJS client lib](https://raw.github.com/bitcoinjs/bitcoinjs-lib/master/build/bitcoinjs-min.js). It's pretty outdated though. There are some more recent forks: [1](https://github.com/bitfloor/bitcoinjs-lib), [2](https://github.com/twistandshout/bitcoinjs-lib), and the one that [I will eventually maintain](https://github.com/DimeJet/bitcoinjs-lib). For now, use the outdated one, from BitcoinJS.
+
+I have included the library on this page. Just open up your Chrome Console or Firefox Console and start typing along.
 
 
 Bitcoin Keys, Addresses, & Formats
