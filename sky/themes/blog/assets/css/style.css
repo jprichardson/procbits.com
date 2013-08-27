@@ -44,3 +44,16 @@ body {
 code {
   font-size: 80%;
 }
+
+h3 {
+  margin-top: 20px;
+}
+
+h4 {
+  margin-top: 16px;
+}
+
+.highlight {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}

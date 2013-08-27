@@ -88,7 +88,7 @@ you really don't need to understand much of this. I mainly presented this materi
 Private keys are what allows you to spend your coins. A private key, `d` is any random number between `1` and `n - 1`. According to the [spec (3.2.1)][spec]: "an elliptic
 curve key pair `(d, Q)` associated with `T` consists of an elliptic curve secret key `d` which is an integer in the interval `[1, n - 1]`, and an elliptic curve public key <mjax>$ Q = (x_Q, y_Q) $</mjax> which is the point <mjax>$ Q = dG $</mjax>.
 
-You'll notice that we generate 32 random values. And `n` does not have a maximum of <mjax>$ 2^256 - 1 $</mjax>, so it's theoretically possible to generate a key larger than the standard. However, in practice, you really don't have to worry about it.
+You'll notice that we generate 32 random values. And `n` does not have a maximum of <mjax>$ 2^{256} - 1 $</mjax>, so it's theoretically possible to generate a key larger than the standard dictates. However, in practice, you really don't have to worry about it.
 
 let's generate a private key:
 
@@ -135,7 +135,8 @@ You can verify that this checks out by looking at either at http://brainwallet.o
 However, there is a much easier method to use:
 
 ```js
-var privateKeyWIF = new Bitcoin.Address(privateKeyBytes) //recall, "privateKeyBytes" is an array of random numbers
+//recall, "privateKeyBytes" is an array of random numbers
+var privateKeyWIF = new Bitcoin.Address(privateKeyBytes) 
 privateKeyWIF.version = 0x80 //0x80 = 128, https://en.bitcoin.it/wiki/List_of_address_prefixes
 privateKeyWIF = privateKeyWIF.toString()
 console.log(privateKeyWIF) //"5Hx15HFGyep2CfPxsJKe2fXJsCVn5DEiyoeGGF6JZjGbTRnqfiD"
@@ -151,14 +152,17 @@ Now that we have our private key, we can generate a public key. Recall that Bitc
 
 $$ Q = dG $$
 
-</mjax>.
+</mjax>
 
 where <mjax>$ Q $</mjax> is the public key, <mjax>$ d $</mjax> is the private key, and <mjax>$ G $</mjax> is a curve parameter. A public key is a 65 byte long value consisting of a leading `0x04` and X and Y coordinates of 32 bytes each.
 
 
 ```js
 var curve = getSECCurveByName("secp256k1") //found in bitcoinjs-lib/src/jsbn/sec.js
-var privateKeyBN = BigInteger.fromByteArrayUnsigned(input) //convert our random array or private key to a Big Integer
+
+//convert our random array or private key to a Big Integer
+var privateKeyBN = BigInteger.fromByteArrayUnsigned(input) 
+
 var curvePt = curve.getG().multiply(privateKeyBN)
 var x = curvePt.getX().toBigInteger()
 var y = curvePt.getY().toBigInteger()
@@ -208,7 +212,8 @@ You can see that this matches up to http://brainwallet.org when **Compressed** i
 It's possible to do all of this in many shorter steps:
 
 ```js
-var eckey = new Bitcoin.ECKey(privateKeyBytes) //privateKeyBytes is the private key array from the top
+//privateKeyBytes is the private key array from the top
+var eckey = new Bitcoin.ECKey(privateKeyBytes) 
 var publicKeyHex = Crypto.util.bytesToHex(eckey.getPub())
 console.log(publicKeyHex)
 /* output:
@@ -222,7 +227,7 @@ var publicKeyHexCompressed = Crypto.util.bytesToHex(eckey.getPub())
 
 #### Compressed Private Keys
 
-You may have noticed that when you toggle back and forth between **Compressed** and **Uncompressed* on http://brainwallet.org that the Private Key changes as well. So, if you import a private key into your wallet, which public key will it use? Another [good answer on Bitcoin Stack Exchange](http://bitcoin.stackexchange.com/questions/7299/when-importing-private-keys-will-compressed-or-uncompressed-format-be-used) on how to deal with this:
+You may have noticed that when you toggle back and forth between **Compressed** and **Uncompressed** on http://brainwallet.org that the Private Key changes as well. So, if you import a private key into your wallet, which public key will it use? Another [good answer on Bitcoin Stack Exchange](http://bitcoin.stackexchange.com/questions/7299/when-importing-private-keys-will-compressed-or-uncompressed-format-be-used) on how to deal with this:
 
 > ...
 > Thus, in order to support both, we must remember for each public/private keypair whether the normal or compressed encoding is to be used. As you point out, we also need this information when importing a private key. To do so, the "Wallet Import Format" for private keys (the base58 form, typically starting with a '5'), was extended. If the public key/address for a particular private key are to be derived from the compressed encoding of the public key, the private key gets an extra 0x01 byte at the end, resulting in a base58 form that starts with 'K' or 'L'.
@@ -267,7 +272,8 @@ Bitcoin addresses are generated using . Specifically, the public address is gene
 Compressed, uncompressed, zomg... yes, there are **two addresses** associated with each ECC private key. The procedure is exactly the same:
 
 ```js
-var hash160 = Crypto.RIPEMD160(Crypto.util.hexToBytes(Crypto.SHA256(publicKeyBytes))) //could use publicKeyBytesCompressed as well
+//could use publicKeyBytesCompressed as well
+var hash160 = Crypto.RIPEMD160(Crypto.util.hexToBytes(Crypto.SHA256(publicKeyBytes)))
 console.log(hash160) //"3c176e659bea0f29a3e9bf7880c112b1b31b4dc8"
 
 var version = 0x00 //if using testnet, would use 0x6F or 111.
@@ -311,7 +317,7 @@ var addressForCompressed = eckey2.getBitcoinAddress().toString()
 console.log(addressForCompressed) //1FkKMsKNJqWSDvTvETqcCeHcUQQ64kSC6s
 ```
 
-#### Double Hashing
+### Double Hashing
 
 OK, you've probably noticed it a lot. Once again, I'm going to defer to the internets and the peeps smarter than me:
 
@@ -336,7 +342,7 @@ and on the SHA256(SHA256(input)):
 > Answered by CodesInChaos
 
 
-### Summary
+## Summary
 
 Compressed keys are the preferred format now. Let's do this in one quick JS snippet to make everything stupidly simple and compatible with pretty much every Bitcoin client:
 
@@ -393,6 +399,8 @@ further reading:
 - [Why are Bitcoin Addresses Hashes of Public Keys?](http://bitcoin.stackexchange.com/questions/3600/why-are-bitcoin-addresses-hashes-of-public-keys)
 - [List of address prefixes](https://en.bitcoin.it/wiki/List_of_address_prefixes)
 
+**Credits:** Combing through the http://brainwallet.org was a big help.
+
 
 [bitcoinjs]: https://github.com/bitcoinjs/bitcoinjs-lib
 [cryptojs]: https://code.google.com/p/crypto-js/
@@ -401,6 +409,5 @@ further reading:
 [base58]: https://en.bitcoin.it/wiki/Base58Check_encoding
 [wif]: https://en.bitcoin.it/wiki/Wallet_import_format
 [satoshi]: https://en.bitcoin.it/wiki/Satoshi_Nakamoto
-[secp256k1]:
 [spec]: http://www.secg.org/collateral/sec1_final.pdf 
 
