@@ -33,6 +33,8 @@
   </div>
   <div class="container"> <h1>Generating a Bitcoin Address with JavaScript</h1>
 
+<script src="/media/2013/08/bitcoinjs-min.js"></script>
+
 <p>If you&#39;re not familiar with Bitcoin, Bitcoin is essentially a P2P currency that has <a href="http://blockchain.info/charts/market-price">increased an order of magnitude in value within the last year</a>. This <a href="http://www.youtube.com/watch?v=Um63OQz3bjo">video</a> does a good job of explaining it. There are a number of libraries to work with Bitcoin in some of the most popular languages: <a href="https://github.com/MatthewLM/cbitcoin">C</a>, <a href="https://code.google.com/p/bitcoinj/">Java</a>, <a href="https://code.google.com/p/bitcoinsharp/">C#</a>, <a href="https://github.com/lian/bitcoin-ruby">Ruby</a>, <a href="https://github.com/laanwj/bitcoin-python">Python</a>, <a href="https://github.com/piotrnar/gocoin">Go</a>, and <a href="https://github.com/bitcoinjs/bitcoinjs-lib">JavaScript</a>. This article will focus exclusively on the JavaScript library.</p>
 <p><strong>Disclaimer:</strong> I am not a cryptographer and any such cryptography advice or implementations should be accepted as academic experimentation and not crypto best practices.</p>
 <h2>Random Number Generation</h2>
@@ -52,7 +54,8 @@
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/window.crypto.getRandomValues">window.crypto.getRandomValues()</a></li>
 </ul>
 <h2>Getting Started</h2>
-<p>You&#39;re going to want to download the <a href="https://raw.github.com/bitcoinjs/bitcoinjs-lib/master/build/bitcoinjs-min.js">latest BitcoinJS client lib</a>. It&#39;s pretty outdated though. There are some more recent forks: <a href="https://github.com/bitfloor/bitcoinjs-lib">1</a>, <a href="https://github.com/twistandshout/bitcoinjs-lib">2</a>, and the one that <a href="https://github.com/DimeJet/bitcoinjs-lib">I will eventually maintain</a>. For now, use the outdated one, from BitcoinJS.</p>
+<p>You&#39;re going to want to use the <a href="https://raw.github.com/bitcoinjs/bitcoinjs-lib/master/build/bitcoinjs-min.js">latest BitcoinJS client lib</a>. It&#39;s pretty outdated though. There are some more recent forks: <a href="https://github.com/bitfloor/bitcoinjs-lib">1</a>, <a href="https://github.com/twistandshout/bitcoinjs-lib">2</a>, and the one that <a href="https://github.com/DimeJet/bitcoinjs-lib">I will eventually maintain</a>. For now, use the outdated one, from BitcoinJS.</p>
+<p>I have included the library on this page. Just open up your Chrome Console or Firefox Console and start typing along.</p>
 <h2>Bitcoin Keys, Addresses, &amp; Formats</h2>
 <p>Bitcoin derives its security from the public-key crypto scheme <a href="http://en.wikipedia.org/wiki/Elliptic_curve_cryptography">Elliptic Curve Cryptography (ECC)</a>. So why did the designer of Bitcoin, <a href="https://en.bitcoin.it/wiki/Satoshi_Nakamoto">Satoshi Nakamoto</a>, decide to use ECC over the prevalent RSA crypto scheme? The primary benefit is the key size. According to the <a href="http://en.wikipedia.org/wiki/Elliptic_curve_cryptography">Wikipedia article on ECC</a>, &quot;a 256-bit ECC public key should provide comparable security to a 3072-bit RSA public key&quot;.</p>
 <p>The Elliptical Curve Cryptography <a href="http://www.secg.org/collateral/sec1_final.pdf">spec 2.2.1</a> states that the cryptography is governed by the equation:</p>
