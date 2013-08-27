@@ -14,11 +14,6 @@ If you're not familiar with Bitcoin, Bitcoin is essentially a P2P currency that 
 Random Number Generation
 ------------------------
 
-<mjax>
-When $a \ne 0$, there are two solutions to \(ax^2 + bx + c = 0\) and they are
-$$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
-</mjax>
-
 I'd be remiss if I didn't mention anything about random number generation. Random number generation is the basis of most cryptography and Bitcoin. Your Bitcoin addresses are only as secure as your random number generator. A random number generator that is said to be cryptographically secure is good enough to use for cryptography. `Math.random()` is not cryptographically secure. This is because `Math.random()` is predictable. If it's predictable, an attacked could figure out your private key from your public key.
 
 At the time of this writing, the predominant [JavaScript Bitcoin library]() uses [CryptoJS][cryptojs] which surprisingly uses `Math.random()`. You may want to find a way to substitute with the up and coming [`window.crytpo` standard][window.crypto] or the [Stanford JavaScript Crypto Library](http://bitwiseshiftleft.github.io/sjcl/)
@@ -100,12 +95,12 @@ var randArr = new Uint8Array[32] //create a typed array of 32 bytes (256 bits)
 window.crypto.getRandomValues(randArr) //populate array with cryptographically secure random numbers
 
 //some Bitcoin and Crypto methods don't like Uint8Array for input. They expect regular JS arrays.
-var arr = []
+var privateKeyBytes = []
 for (var i = 0; i < randArr.length; ++i)
-  arr[i] = randArr[i]
+  privateKeyBytes[i] = randArr[i]
 
 //hex string of our private key
-var privateKeyHex = Crypto.util.bytesToHex(arr).toUpperCase()
+var privateKeyHex = Crypto.util.bytesToHex(privateKeyBytes).toUpperCase()
 console.log(privateKeyHex) //1184CD2CDD640CA42CFC3A091C51D549B2F016D454B2774019C2B2D2E08529FD
 ```
 
@@ -133,12 +128,12 @@ var privateKeyWIF = Bitcoin.Base58.encode(Crypto.util.hexToBytes(keyWithChecksum
 console.log(privateKeyWIF) //"5Hx15HFGyep2CfPxsJKe2fXJsCVn5DEiyoeGGF6JZjGbTRnqfiD"
 ```
 
-You can verify that this checks out by looking at either at http://brainwallet.org and entering the value of `privateKeyHex` for the input to `Secret Exponent`.  You can also verify http://gobittest.appspot.com/PrivateKey.
+You can verify that this checks out by looking at either at http://brainwallet.org and entering the value of `privateKeyHex` for the input to **Secret Exponent**.  You can also verify http://gobittest.appspot.com/PrivateKey.
 
 However, there is a much easier method to use:
 
 ```js
-var privateKeyWIF = new Bitcoin.Address(arr) //recall, "arr" is an array of random numbers
+var privateKeyWIF = new Bitcoin.Address(privateKeyBytes) //recall, "privateKeyBytes" is an array of random numbers
 privateKeyWIF.version = 0x80 //0x80 = 128, https://en.bitcoin.it/wiki/List_of_address_prefixes
 privateKeyWIF = privateKeyWIF.toString()
 console.log(privateKeyWIF) //"5Hx15HFGyep2CfPxsJKe2fXJsCVn5DEiyoeGGF6JZjGbTRnqfiD"
@@ -179,6 +174,7 @@ fbdd594388756a7beaf73b4822bc22d36e9bda7db82df2b8b623673eefc0b7495
 
 this output can be verified with http://brainwallet.org.
 
+
 #### Compressed Keys
 
 You may have heard of Compressed keys. An excellent [answer on the Bitcoin Stack Exchange](http://bitcoin.stackexchange.com/questions/3059/what-is-a-compressed-bitcoin-key) explains the differences:
@@ -189,7 +185,7 @@ You may have heard of Compressed keys. An excellent [answer on the Bitcoin Stack
 >
 > -- <cite>David Schwartz</cite>
 
-let's generate a compressed public key:
+There is little reason to use uncompressed keys. Let's generate a compressed public key:
 
 ```js
 var publicKeyBytesCompressed = integerToBytes(x,32) //x from above
@@ -205,28 +201,53 @@ console.log(publicKeyHexCompressed)
 */
 ```
 
-You can see that this matches up to http://brainwallet.org when `Compressed` is clicked.
+You can see that this matches up to http://brainwallet.org when **Compressed** is clicked.
 
-It's possible to do this in many shorter steps:
+It's possible to do all of this in many shorter steps:
 
 ```js
-var eckey = new Bitcoin.ECKey(arr) //arr is the private key array from the top
+var eckey = new Bitcoin.ECKey(privateKeyBytes) //privateKeyBytes is the private key array from the top
+var publicKeyHex = Crypto.util.bytesToHex(eckey.getPub())
+console.log(publicKeyHex)
+/* output:
+04d0988bfa799f7d7ef9ab3de97ef481cd0f75d2367ad456607647edde665d6f6
+fbdd594388756a7beaf73b4822bc22d36e9bda7db82df2b8b623673eefc0b7495
+*/
+
+eckey.compressed = true
+var publicKeyHexCompressed = Crypto.util.bytesToHex(eckey.getPub())
 ```
 
+#### Compressed Private Keys
+
+You may have noticed that when you toggle back and forth between **Compressed** and **Uncompressed* on http://brainwallet.org that the Private Key changes as well. So, if you import a private key into your wallet, which public key will it use? Another [good answer on Bitcoin Stack Exchange](http://bitcoin.stackexchange.com/questions/7299/when-importing-private-keys-will-compressed-or-uncompressed-format-be-used) on how to deal with this:
+
+> ...
+> Thus, in order to support both, we must remember for each public/private keypair whether the normal or compressed encoding is to be used. As you point out, we also need this information when importing a private key. To do so, the "Wallet Import Format" for private keys (the base58 form, typically starting with a '5'), was extended. If the public key/address for a particular private key are to be derived from the compressed encoding of the public key, the private key gets an extra 0x01 byte at the end, resulting in a base58 form that starts with 'K' or 'L'.
+>
+> So to answer your question: when importing a private key into the reference client, it will use the normal encoding for public keys if the '5' format was used for the private key, and the compressed encoding if the 'K'/'L' format was used. It doesn't make sense to try to convert one to the other: the client must use the same encoding as was used when generating the address, or the address won't match. Unfortunately, quite a lot of software doesn't support compressed public keys yet (which is a pity, as they save block chain space).
+>
+> -- <cite>Pieter Wuille</cite>
+
+let's generate our private compressed key:
+
+```js
+var privateKeyBytesCompressed = privateKeyBytes.slice(0) //clone array
+privateKeyBytesCompressed.push(0x01)
+var privateKeyWIFCompressed = new Bitcoin.Address(privateKeyBytesCompressed)
+privateKeyWIFCompressed.version = 0x80
+privateKeyWIFCompressed = privateKeyWIFCompressed.toString()
+
+console.log(privateKeyWIFCompressed) //KwomKti1X3tYJUUMb1TGSM2mrZk1wb1aHisUNHCQXTZq5auC2qc3
+```
+
+Once again, verify it matches http://brainwallet.org.
 
 
-### Address
 
-Bitcoin uses [addresses](https://en.bitcoin.it/wiki/Address) as a means to receive coins from someone else. An address is a [base58][base58] encoded string of a 25 byte binary address. All Bitcoin addresses start with `1`.  A person can have as many addresses as they'd like. Using more than one address is said to increase anonymity. 
+### Addresses
 
-
-### Public Key
-
-The an uncompressed public key is a 65 byte long value consisting of the leading `0x04` and X,Y coordinate consisting of 32 bytes each. A compressed key  
-
-
-As seen above, addresses are generated from the public ECDSA key. The public ECDSA key is generated from the private ECDSA key. Having access to the private key allows you to spend the coins associated with the address. The private key is essentially just a 256 bit random number governed by the [Secp256k1](https://en.bitcoin.it/wiki/Secp256k1) ECDSA rules.
-
+Bitcoin uses [addresses](https://en.bitcoin.it/wiki/Address) as a means to receive coins from someone else. An address is a [base58][base58] encoded string of a 25 byte binary address. All Bitcoin addresses start with `1`.  A person can have as many addresses as they'd like. Using more than one address is said to increase anonymity. Private keys give you access to spend money associated with an address.
 
 Bitcoin addresses are generated using . Specifically, the public address is generated like the following:
 
@@ -241,13 +262,118 @@ Bitcoin addresses are generated using . Specifically, the public address is gene
 >
 > -- <cite><a href="https://en.bitcoin.it/wiki/Protocol_specification#Addresses">Bitcoin Wiki: Addresses</a></cite> 
 
+Compressed, uncompressed, zomg... yes, there are **two addresses** associated with each ECC private key. The procedure is exactly the same:
+
+```js
+var hash160 = Crypto.RIPEMD160(Crypto.util.hexToBytes(Crypto.SHA256(publicKeyBytes))) //could use publicKeyBytesCompressed as well
+console.log(hash160) //"3c176e659bea0f29a3e9bf7880c112b1b31b4dc8"
+
+var version = 0x00 //if using testnet, would use 0x6F or 111.
+var hashAndBytes = Crypto.util.hexToBytes(hash160)
+hashAndBytes.unshift(version)
+
+var doubleSHA = Crypto.SHA256(Crypto.util.hexToBytes(Crypto.SHA256(hashAndBytes)))
+var addressChecksum = doubleSHA.substr(0,8)
+console.log(addressChecksum) //26268187
+
+var unencodedAddress = "00" + hash160 + addressChecksum
+
+console.log(unencodedAddress)
+/* output
+  003c176e659bea0f29a3e9bf7880c112b1b31b4dc826268187
+*/
+
+var address = Bitcoin.Base58.encode(Crypto.util.hexToBytes(unencodedAddress))
+console.log(address) //16UjcYNBG9GTK4uq2f7yYEbuifqCzoLMGS
+```
+
+even easier...
+
+```js
+var address = new Bitcoin.Address(Crypto.util.hexToBytes(hash160))
+address.version = 0x00 //testnet would be 0x6F
+address = address.toString()
+```
+
+ok, the easiest of all...
+
+```js
+var address = eckey.getBicoinAddress().toString() //"eckey" from above
+console.log(address) ////16UjcYNBG9GTK4uq2f7yYEbuifqCzoLMGS
+
+//you must generate a new one if you already called getBitcoinAddress() for the
+//address representing the uncompressed version
+var eckey2 = new Bitcoin.ECKey(privateKeyBytes)
+eckey2.compressed = true
+var addressForCompressed = eckey2.getBitcoinAddress().toString()
+console.log(addressForCompressed) //1FkKMsKNJqWSDvTvETqcCeHcUQQ64kSC6s
+```
+
+#### Double Hashing
+
+OK, you've probably noticed it a lot. Once again, I'm going to defer to the internets and the peeps smarter than me:
+
+From: [Why does Bitcoin use two hash functions (SHA-256 and RIPEMD-160) to create an address?](http://bitcoin.stackexchange.com/questions/9202/why-does-bitcoin-use-two-hash-functions-sha-256-and-ripemd-160-to-create-an-ad)
+
+> RIPEMD was used because it produces the shortest hashes whose uniqueness is still sufficiently assured. This allows Bitcoin addresses to be shorter.
+>
+> SHA256 is used as well because Bitcoin's use of a hash of a public key might create unique weaknesses due to unexpected interactions between RIPEMD and ECDSA (the public key signature algorithm). Interposing an additional and very different hash operation between RIPEMD and ECDSA makes it almost inconceivable that there might be a way to find address collisions that is significantly easier than brute force trying a large number of secret keys.
+>
+> Essentially, it was a belt and suspenders approach. Bitcoin had to do something unique and rather than have to hope they got it exactly right, they overdesigned it.
+>
+> -- <cite>David Schwartz</cite>
+
+and on the SHA256(SHA256(input)):
+
+> So why does he hash twice? I suspect it's in order to prevent length-extension attacks.
+>
+> SHA-2, like all Merkle-Damgard hashes suffers from a property called "length-extension". This allows an attacker who knows H(x) to calculate H(x||y) without knowing x. This is usually not a problem, but there are some uses where it totally breaks the security. The most relevant example is using H(k||m) as MAC, where an attacker can easily calculate a MAC for m||m'. I don't think Bitcoin ever uses hashes in a way that would suffer from length extensions, but I guess Satoshi went with the safe choice of preventing it everywhere.
+> 
+> To avoid this property, Ferguson and Schneier suggested using SHA256d = SHA256(SHA256(x)) which avoids length-extension attacks. This construction has some minor weaknesses (not relevant to bitcoin), so I wouldn't recommend it for new protocols, and would use HMAC with constant key, or truncated SHA512 instead.
+> 
+> Answered by CodesInChaos
 
 
+### Summary
+
+Compressed keys are the preferred format now. Let's do this in one quick JS snippet to make everything stupidly simple and compatible with pretty much every Bitcoin client:
+
+```js
+var randArr = new Uint8Array[32] //create a typed array of 32 bytes (256 bits)
+window.crypto.getRandomValues(randArr) //populate array with cryptographically secure random numbers
+
+//some Bitcoin and Crypto methods don't like Uint8Array for input. They expect regular JS arrays.
+var privateKeyBytes = []
+for (var i = 0; i < randArr.length; ++i)
+  privateKeyBytes[i] = randArr[i]
+
+var eckey = new Bitcoin.ECKey(privateKeyBytes)
+eckey.compressed = true
+var address = eckey.getBitcoinAddress().toString()
+console.log(address)// 1FkKMsKNJqWSDvTvETqcCeHcUQQ64kSC6s
 
 
+var privateKeyBytesCompressed = privateKeyBytes.slice(0) //clone array
+privateKeyBytesCompressed.push(0x01)
+var privateKeyWIFCompressed = new Bitcoin.Address(privateKeyBytesCompressed)
+privateKeyWIFCompressed.version = 0x80
+privateKeyWIFCompressed = privateKeyWIFCompressed.toString()
+
+console.log(privateKeyWIFCompressed) //KwomKti1X3tYJUUMb1TGSM2mrZk1wb1aHisUNHCQXTZq5auC2qc3
+```
+
+There you have it! **KwomKti1X3tYJUUMb1TGSM2mrZk1wb1aHisUNHCQXTZq5auC2qc3** is your private key in WIF form that allows you to send money for address **1FkKMsKNJqWSDvTvETqcCeHcUQQ64kSC6s**.
 
 
-Both the address and [private key](https://en.bitcoin.it/wiki/Private_key) are encoded using the [Base 58][base58] encoding scheme.
+#### Addresses and Keys from a Password or Passphrase
+
+You can generate passwords and passwords from a passphrase. One method would be to just calculate the double SHA256 hash on the user passphrase and use that as the private key.
+
+```js
+var password = "there can be only one"
+var privateKeyHex = Crytpo.util.SHA256(Crypto.util.hexToBytes(Crypto.util.SHA256(password)))
+var privateKeyBytes = Crypto.util.hexToBytes(privateKeyHex)
+```
 
 
 further reading:
@@ -257,13 +383,12 @@ further reading:
 - [Wikipedia: Elliptic Curve DSA](http://en.wikipedia.org/wiki/Elliptic_Curve_DSA)
 - [Elliptic Curve Cryptography and Digital Rights Management](https://engineering.purdue.edu/kak/compsec/NewLectures/Lecture14.pdf)
 - [How to create a Bitcoin Address](https://en.bitcoin.it/wiki/Technical_background_of_version_1_Bitcoin_addresses#How_to_create_Bitcoin_Address)
-- [Why does Bitcoin use two hash functions (SHA-256 and RIPEMD-160) to create an address?](http://bitcoin.stackexchange.com/questions/9202/why-does-bitcoin-use-two-hash-functions-sha-256-and-ripemd-160-to-create-an-ad)
 - [Can a SHA256 hash be used as an ECDSA private key?](http://bitcoin.stackexchange.com/questions/3609/can-an-sha256-hash-be-used-as-an-ecdsa-private-key)
-- [What is a compressed Bitcoin key?](http://bitcoin.stackexchange.com/questions/3059/what-is-a-compressed-bitcoin-key)
 - [What are Green Addresses?](http://bitcoin.stackexchange.com/questions/1730/what-are-green-addresses)
 - [Compressing EC Private Keys](http://crypto.stackexchange.com/questions/1638/compressing-ec-private-keys)
 - [Bitcoin Talk: secp256k1](https://bitcointalk.org/?topic=2699.0)
 - [Why is it impossible to derive the public key from the address?](http://bitcoin.stackexchange.com/questions/7683/why-is-it-impossible-to-derive-public-key-from-address)
+- [Why are Bitcoin Addresses Hashes of Public Keys?](http://bitcoin.stackexchange.com/questions/3600/why-are-bitcoin-addresses-hashes-of-public-keys)
 - [List of address prefixes](https://en.bitcoin.it/wiki/List_of_address_prefixes)
 
 
