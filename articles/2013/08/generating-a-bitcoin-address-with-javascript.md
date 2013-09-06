@@ -105,6 +105,10 @@ var privateKeyBytes = []
 for (var i = 0; i < randArr.length; ++i)
   privateKeyBytes[i] = randArr[i]
 
+//if you want to follow the step-by-step results in this article, comment the 
+//previous code and uncomment the following
+//var privateKeyBytes = Crypto.util.hexToBytes("//1184CD2CDD640CA42CFC3A091C51D549B2F016D454B2774019C2B2D2E08529FD")
+
 //hex string of our private key
 var privateKeyHex = Crypto.util.bytesToHex(privateKeyBytes).toUpperCase()
 console.log(privateKeyHex) //1184CD2CDD640CA42CFC3A091C51D549B2F016D454B2774019C2B2D2E08529FD
@@ -261,7 +265,7 @@ Once again, verify it matches http://brainwallet.org.
 
 Bitcoin uses [addresses](https://en.bitcoin.it/wiki/Address) as a means to receive coins from someone else. An address is a [base58][base58] encoded string of a 25 byte binary address. All Bitcoin addresses start with `1`.  A person can have as many addresses as they'd like. Using more than one address is said to increase anonymity. Private keys give you access to spend money associated with an address.
 
-Bitcoin addresses are generated using . Specifically, the public address is generated like the following:
+The address is generated like the following:
 
 > Version = 1 byte of 0 (zero); on the test network, this is 1 byte of 111
 >
@@ -380,7 +384,7 @@ There you have it! **KwomKti1X3tYJUUMb1TGSM2mrZk1wb1aHisUNHCQXTZq5auC2qc3** is y
 
 #### Addresses and Keys from a Password or Passphrase
 
-You can generate passwords and passwords from a passphrase. One method would be to just calculate the double SHA256 hash on the user passphrase and use that as the private key.
+You can generate private keys from a passphrase. One method would be to just calculate the double SHA256 hash on the user passphrase and use that as the private key.
 
 ```js
 var password = "there can be only one"
