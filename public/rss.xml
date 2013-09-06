@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[procbits]]></title><description><![CDATA[source code snippets and other random musings about software]]></description><link>http://procbits.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Thu, 29 Aug 2013 03:57:33 GMT</lastBuildDate><atom:link href="http://procbits.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Generating a Bitcoin Address with JavaScript]]></title><description><![CDATA[<script src="/media/2013/08/bitcoinjs-min.js"></script>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[procbits]]></title><description><![CDATA[source code snippets and other random musings about software]]></description><link>http://procbits.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Fri, 06 Sep 2013 01:41:22 GMT</lastBuildDate><atom:link href="http://procbits.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Generating a Bitcoin Address with JavaScript]]></title><description><![CDATA[<script src="/media/2013/08/bitcoinjs-min.js"></script>
 
 <p>If you&#39;re not familiar with Bitcoin, Bitcoin is essentially a P2P currency that has <a href="http://blockchain.info/charts/market-price">increased an order of magnitude in value within the last year</a>. This <a href="http://www.youtube.com/watch?v=Um63OQz3bjo">video</a> does a good job of explaining it. There are a number of libraries to work with Bitcoin in some of the most popular languages: <a href="https://github.com/MatthewLM/cbitcoin">C</a>, <a href="https://code.google.com/p/bitcoinj/">Java</a>, <a href="https://code.google.com/p/bitcoinsharp/">C#</a>, <a href="https://github.com/lian/bitcoin-ruby">Ruby</a>, <a href="https://github.com/laanwj/bitcoin-python">Python</a>, <a href="https://github.com/piotrnar/gocoin">Go</a>, and <a href="https://github.com/bitcoinjs/bitcoinjs-lib">JavaScript</a>. This article will focus exclusively on the JavaScript library.</p>
 <p><strong>Disclaimer:</strong> I am not a cryptographer and any such cryptography advice or implementations should be accepted as academic experimentation and not crypto best practices.</p>
@@ -66,6 +66,10 @@ curve key pair <code>(d, Q)</code> associated with <code>T</code> consists of an
 <span class="kd">var</span> <span class="nx">privateKeyBytes</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">randArr</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span>
   <span class="nx">privateKeyBytes</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">randArr</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
+
+<span class="c1">//if you want to follow the step-by-step results in this article, comment the </span>
+<span class="c1">//previous code and uncomment the following</span>
+<span class="c1">//var privateKeyBytes = Crypto.util.hexToBytes(&quot;//1184CD2CDD640CA42CFC3A091C51D549B2F016D454B2774019C2B2D2E08529FD&quot;)</span>
 
 <span class="c1">//hex string of our private key</span>
 <span class="kd">var</span> <span class="nx">privateKeyHex</span> <span class="o">=</span> <span class="nx">Crypto</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">bytesToHex</span><span class="p">(</span><span class="nx">privateKeyBytes</span><span class="p">).</span><span class="nx">toUpperCase</span><span class="p">()</span>
@@ -187,7 +191,7 @@ Thus, in order to support both, we must remember for each public/private keypair
 <p>Once again, verify it matches <a href="http://brainwallet.org">http://brainwallet.org</a>.</p>
 <h3>Addresses</h3>
 <p>Bitcoin uses <a href="https://en.bitcoin.it/wiki/Address">addresses</a> as a means to receive coins from someone else. An address is a <a href="https://en.bitcoin.it/wiki/Base58Check_encoding">base58</a> encoded string of a 25 byte binary address. All Bitcoin addresses start with <code>1</code>.  A person can have as many addresses as they&#39;d like. Using more than one address is said to increase anonymity. Private keys give you access to spend money associated with an address.</p>
-<p>Bitcoin addresses are generated using . Specifically, the public address is generated like the following:</p>
+<p>The address is generated like the following:</p>
 <blockquote>
 <p>Version = 1 byte of 0 (zero); on the test network, this is 1 byte of 111</p>
 <p>Key hash = Version concatenated with RIPEMD-160(SHA-256(public key))</p>
@@ -280,7 +284,7 @@ Thus, in order to support both, we must remember for each public/private keypair
 
 <p>There you have it! <strong>KwomKti1X3tYJUUMb1TGSM2mrZk1wb1aHisUNHCQXTZq5auC2qc3</strong> is your private key in WIF form that allows you to send money for address <strong>1FkKMsKNJqWSDvTvETqcCeHcUQQ64kSC6s</strong>.</p>
 <h4>Addresses and Keys from a Password or Passphrase</h4>
-<p>You can generate passwords and passwords from a passphrase. One method would be to just calculate the double SHA256 hash on the user passphrase and use that as the private key.</p>
+<p>You can generate private keys from a passphrase. One method would be to just calculate the double SHA256 hash on the user passphrase and use that as the private key.</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">password</span> <span class="o">=</span> <span class="s2">&quot;there can be only one&quot;</span>
 <span class="kd">var</span> <span class="nx">privateKeyHex</span> <span class="o">=</span> <span class="nx">Crytpo</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">SHA256</span><span class="p">(</span><span class="nx">Crypto</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">hexToBytes</span><span class="p">(</span><span class="nx">Crypto</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">SHA256</span><span class="p">(</span><span class="nx">password</span><span class="p">)))</span>
 <span class="kd">var</span> <span class="nx">privateKeyBytes</span> <span class="o">=</span> <span class="nx">Crypto</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">hexToBytes</span><span class="p">(</span><span class="nx">privateKeyHex</span><span class="p">)</span>
