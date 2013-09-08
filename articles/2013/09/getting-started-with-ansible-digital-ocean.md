@@ -1,14 +1,15 @@
 <!--
 title: Getting Started with Ansible on Digital Ocean
-publish: 2013-09-07
+publish: 2013-09-08
+slug: 2013/09/08/getting-started-with-ansible-digital-ocean
 tags: Linux, Server Management, Ansible
 -->
 
-If you have to manage more than one server with common software packages and configuration, you're going to want a server configuration management tool. Originally, I wrote shell scripts to handle this. However, shell scripts can have problems with error handling. Another benefit of most configuration management tools is that their operations are [idempotent](http://en.wikipedia.org/wiki/Idempotence) i.e. you can run an operation more than once and any additional operation won't have any effect. 
+If you have to manage more than one server with common software packages and configuration, you're going to want a server configuration management tool. Originally, I wrote shell scripts to handle this. However, shell scripts can have problems with error handling. Another benefit of most configuration management tools is that their operations are [idempotent](http://en.wikipedia.org/wiki/Idempotence) i.e. you can run any operation more than once and it won't have any effect. 
 
-For the last few months I've read tutorials on [Puppet](http://en.wikipedia.org/wiki/Puppet_(software)), [Chef](http://en.wikipedia.org/wiki/Chef_(software)), and [Salt](http://en.wikipedia.org/wiki/Salt_(software)). I took a liking to Chef, especially the Chef tool [Knife Solo](https://github.com/matschaffer/knife-solo). I finally discovered [Ansible](http://en.wikipedia.org/wiki/Ansible_(software)) in the comments of a [Hacker News](http://news.ycombinator.com) post about Salt.
+For the last few months, I've read tutorials on [Puppet][puppet], [Chef][chef], and [Salt][salt]. I took a liking to Chef, especially the Chef tool [Knife Solo](https://github.com/matschaffer/knife-solo). I finally discovered [Ansible][ansible] in the comments of a [Hacker News](http://news.ycombinator.com) post about Salt.
 
-Ansible's primary benefit is that of simplicity and not requiring any software to be installed on the target machine. All you need is SSH enabled. I have two [Digital Ocean][do] VPS that I need to installed software on and configure.
+Ansible's primary benefit is that of simplicity and not requiring any software to be installed on the target machine. All you need is SSH enabled. I have two [Digital Ocean][do] VPS that I need to install software and configure.
 
 
 
@@ -29,7 +30,7 @@ checkout latest development branch of Ansible:
     cd ./ansible
   
 
-if you want a specifi version, you can check that out too:
+if you want a specific version, you can check that out too:
 
     git tag
 
@@ -54,7 +55,7 @@ or, as stated, if you want the latest, don't call `git checkout`
 
     sudo make install
 
-according to this, you need to install some python ansible dependencies:
+according to [this](https://raymii.org/s/tutorials/Ansible_Deployment_Framework.html), you need to install some python Ansible dependencies:
 
     sudo easy_install jinja2 
     sudo easy_install pyyaml
@@ -65,7 +66,7 @@ according to this, you need to install some python ansible dependencies:
 Configuring Ansible to Communicate with Servers
 -----------------------------------------------
 
-Let's assume that you have two servers named with IPs `1.2.3.4` and `4.3.2.1`. With Digital Ocean, you're inscurely emailed the root password to each server. Let's add our SSH key to each server.
+Let's assume that you have two servers named with IPs `1.2.3.4` and `4.3.2.1`. With Digital Ocean, unfortunately, you're insecurely emailed the root password to each server. Let's add our SSH key to each server.
 
 
 ### SSH Keys
@@ -76,8 +77,8 @@ if you don't have an SSH key, you can generate one really easily:
 
 if you're running Linux, you can use `ssh-copy-id` to copy the key the remote servers:
 
-    ssh-copy-id -i ~/.ssh/id_rsa.pub 1.2.3.4
-    ssh-copy-id -i ~/.ssh/id_rsa.pub 4.3.2.1
+    ssh-copy-id -i ~/.ssh/id_rsa.pub root@1.2.3.4
+    ssh-copy-id -i ~/.ssh/id_rsa.pub root@4.3.2.1
 
 if you're running on OS X, you won't have `ssh-copy-id`, here is an alternative:
 
@@ -102,7 +103,7 @@ edit `~/ansible_hosts`:
     1.2.3.4
     4.3.2.1
 
-you can optionally add the port if you connect to your servers with using another port:
+you can optionally add the port if you connect to your servers using another port:
 
     [databases]
     1.2.3.4:5555
@@ -161,3 +162,9 @@ which indicates it was a success.
 Further reading: http://www.ansibleworks.com/docs/ In a future article, I'll discuss [playbooks](http://www.ansibleworks.com/docs/playbooks.html).
 
 [do]: https://www.digitalocean.com/?refcode=a65fd89c7fd0
+[puppet]: http://en.wikipedia.org/wiki/Puppet_(software)
+[salt]: http://en.wikipedia.org/wiki/Salt_(software)
+[chef]: http://en.wikipedia.org/wiki/Chef_(software)
+[ansible]: http://en.wikipedia.org/wiki/Ansible_(software)
+
+

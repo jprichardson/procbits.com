@@ -1,5 +1,92 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[procbits]]></title><description><![CDATA[source code snippets and other random musings about software]]></description><link>http://procbits.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Fri, 06 Sep 2013 01:44:02 GMT</lastBuildDate><atom:link href="http://procbits.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Generating a Bitcoin Address with JavaScript]]></title><description><![CDATA[<script src="/media/2013/08/bitcoinjs-min.js"></script>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[procbits]]></title><description><![CDATA[source code snippets and other random musings about software]]></description><link>http://procbits.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Sun, 08 Sep 2013 18:23:25 GMT</lastBuildDate><atom:link href="http://procbits.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Getting Started with Ansible on Digital Ocean]]></title><description><![CDATA[<p>If you have to manage more than one server with common software packages and configuration, you&#39;re going to want a server configuration management tool. Originally, I wrote shell scripts to handle this. However, shell scripts can have problems with error handling. Another benefit of most configuration management tools is that their operations are <a href="http://en.wikipedia.org/wiki/Idempotence">idempotent</a> i.e. you can run any operation more than once and it won&#39;t have any effect. </p>
+<p>For the last few months, I&#39;ve read tutorials on <a href="http://en.wikipedia.org/wiki/Puppet_(software)">Puppet</a>, <a href="http://en.wikipedia.org/wiki/Chef_(software)">Chef</a>, and <a href="http://en.wikipedia.org/wiki/Salt_(software)">Salt</a>. I took a liking to Chef, especially the Chef tool <a href="https://github.com/matschaffer/knife-solo">Knife Solo</a>. I finally discovered <a href="http://en.wikipedia.org/wiki/Ansible_(software)">Ansible</a> in the comments of a <a href="http://news.ycombinator.com">Hacker News</a> post about Salt.</p>
+<p>Ansible&#39;s primary benefit is that of simplicity and not requiring any software to be installed on the target machine. All you need is SSH enabled. I have two <a href="https://www.digitalocean.com/?refcode=a65fd89c7fd0">Digital Ocean</a> VPS that I need to installed software on and configure.</p>
+<h2>Assumptions</h2>
+<p>You&#39;re running Mac OS X (should work with Linux) and you have Git and Python installed. These instructions are specific to <a href="https://www.digitalocean.com/?refcode=a65fd89c7fd0">Digital Ocean</a> but should work with any remote servers offered by any vendor.</p>
+<h2>Installing Ansible</h2>
+<p>checkout latest development branch of Ansible:</p>
+<pre><code>cd /tmp
+git clone git://github.com/ansible/ansible.git
+cd ./ansible</code></pre>
+<p>if you want a specifi version, you can check that out too:</p>
+<pre><code>git tag</code></pre>
+<p>outputs:</p>
+<pre><code>...
+
+0.8
+v0.9
+v1.0
+v1.1
+v1.2
+v1.2.1
+v1.2.2
+v1.2.3</code></pre>
+<p>to checkout a specific version:</p>
+<pre><code>git checkout v1.2.3</code></pre>
+<p>or, as stated, if you want the latest, don&#39;t call <code>git checkout</code></p>
+<pre><code>sudo make install</code></pre>
+<p>according to this, you need to install some python ansible dependencies:</p>
+<pre><code>sudo easy_install jinja2 
+sudo easy_install pyyaml
+sudo easy_install paramiko</code></pre>
+<h2>Configuring Ansible to Communicate with Servers</h2>
+<p>Let&#39;s assume that you have two servers named with IPs <code>1.2.3.4</code> and <code>4.3.2.1</code>. With Digital Ocean, you&#39;re inscurely emailed the root password to each server. Let&#39;s add our SSH key to each server.</p>
+<h3>SSH Keys</h3>
+<p>if you don&#39;t have an SSH key, you can generate one really easily:</p>
+<pre><code>ssh-keygen -t rsa -C &quot;your_email@somedomain.com&quot;</code></pre>
+<p>if you&#39;re running Linux, you can use <code>ssh-copy-id</code> to copy the key the remote servers:</p>
+<pre><code>ssh-copy-id -i ~/.ssh/id_rsa.pub 1.2.3.4
+ssh-copy-id -i ~/.ssh/id_rsa.pub 4.3.2.1</code></pre>
+<p>if you&#39;re running on OS X, you won&#39;t have <code>ssh-copy-id</code>, here is an alternative:</p>
+<pre><code>cat ~/.ssh/id_rsa.pub | ssh root@1.2.3.4 &quot;mkdir ~/.ssh; cat &gt;&gt; ~/.ssh/authorized_keys&quot;
+cat ~/.ssh/id_rsa.pub | ssh root@4.3.2.1 &quot;mkdir ~/.ssh; cat &gt;&gt; ~/.ssh/authorized_keys&quot;</code></pre>
+<p>if you get an error about the <code>.ssh</code> directory existing, modify the previous to this:</p>
+<pre><code>cat ~/.ssh/id_rsa.pub | ssh root@1.2.3.4 &quot;cat &gt;&gt; ~/.ssh/authorized_keys&quot;
+cat ~/.ssh/id_rsa.pub | ssh root@4.3.2.1 &quot;cat &gt;&gt; ~/.ssh/authorized_keys&quot; </code></pre>
+<h3>Ansible Hosts File</h3>
+<p>You must create a file that tells Ansible which servers to connect to:</p>
+<pre><code>touch ~/ansible_hosts</code></pre>
+<p>edit <code>~/ansible_hosts</code>:</p>
+<pre><code>[databases]
+1.2.3.4
+4.3.2.1</code></pre>
+<p>you can optionally add the port if you connect to your servers with using another port:</p>
+<pre><code>[databases]
+1.2.3.4:5555
+4.3.2.1:22</code></pre>
+<p>add the following to the end of your shell resource file <code>~/.bashrc</code>, <code>~/.bash_profile</code>, or <code>~/.zshrc</code> (if you use zsh):</p>
+<pre><code>export ANSIBLE_HOSTS=~/ansible_hosts</code></pre>
+<p>load the changes in your current shell:</p>
+<pre><code>source ~/.bashrc</code></pre>
+<h2>Test Ansible</h2>
+<pre><code>ansible all -m ping</code></pre>
+<p>if you get the following errors:</p>
+<pre><code>1.2.3.4 | FAILED =&gt; could not create temporary directory: SSH exited with return code 255
+4.3.2.1 | FAILED =&gt; could not create temporary directory: SSH exited with return code 255</code></pre>
+<p>or:</p>
+<pre><code>1.2.3.4 | FAILED =&gt; Authentication or permission failure.  In some cases, you may have been able to authenticate and did not have permissions on the remote directory. Consider changing the remote temp path in ansible.cfg to a path rooted in &quot;/tmp&quot;. Failed command was: mkdir -p $HOME/.ansible/tmp/ansible-1378609938.37-242553567200892 &amp;&amp; chmod a+rx $HOME/.ansible/tmp/ansible-1378609938.37-242553567200892 &amp;&amp; echo $HOME/.ansible/tmp/ansible-1378609938.37-242553567200892, exited with result 255
+4.3.2.1 | FAILED =&gt; Authentication or permission failure.  In some cases, you may have been able to authenticate and did not have permissions on the remote directory. Consider changing the remote temp path in ansible.cfg to a path rooted in &quot;/tmp&quot;. Failed command was: mkdir -p $HOME/.ansible/tmp/ansible-1378609938.37-89444589247915 &amp;&amp; chmod a+rx $HOME/.ansible/tmp/ansible-1378609938.37-89444589247915 &amp;&amp; echo $HOME/.ansible/tmp/ansible-1378609938.37-89444589247915, exited with result 255</code></pre>
+<p>it&#39;s because we didn&#39;t specify that we want to connect with the <code>root</code> user. Generally, it&#39;s considered a bad idea to connect to SSH with the <code>root</code> user, but that&#39;s how <a href="https://www.digitalocean.com/?refcode=a65fd89c7fd0">Digital Ocean</a> servers are configured out of the box.</p>
+<p>you can modify your <code>ANSIBLE_HOSTS</code> file:</p>
+<pre><code>[databases]
+1.2.3.4 ansible_connection=ssh  ansible_ssh_user=root
+4.3.2.1 ansible_connection=ssh  ansible_ssh_user=root</code></pre>
+<p>or you can also do:</p>
+<pre><code>ansible all -m ping -u root</code></pre>
+<p>expected output:</p>
+<pre><code>1.2.3.4 | success &gt;&gt; {
+    &quot;changed&quot;: false, 
+    &quot;ping&quot;: &quot;pong&quot;
+}
+
+4.3.2.1 | success &gt;&gt; {
+    &quot;changed&quot;: false, 
+    &quot;ping&quot;: &quot;pong&quot;
+}</code></pre>
+<p>which indicates it was a success.</p>
+<p>Further reading: <a href="http://www.ansibleworks.com/docs/">http://www.ansibleworks.com/docs/</a> In a future article, I&#39;ll discuss <a href="http://www.ansibleworks.com/docs/playbooks.html">playbooks</a>.</p>
+]]></description><link>http://procbits.com/2013/09/08/getting-started-with-ansible-digital-ocean</link><guid isPermaLink="true">http://procbits.com/2013/09/08/getting-started-with-ansible-digital-ocean</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Sun, 08 Sep 2013 00:00:00 GMT</pubDate></item><item><title><![CDATA[Generating a Bitcoin Address with JavaScript]]></title><description><![CDATA[<script src="/media/2013/08/bitcoinjs-min.js"></script>
 
 <p>If you&#39;re not familiar with Bitcoin, Bitcoin is essentially a P2P currency that has <a href="http://blockchain.info/charts/market-price">increased an order of magnitude in value within the last year</a>. This <a href="http://www.youtube.com/watch?v=Um63OQz3bjo">video</a> does a good job of explaining it. There are a number of libraries to work with Bitcoin in some of the most popular languages: <a href="https://github.com/MatthewLM/cbitcoin">C</a>, <a href="https://code.google.com/p/bitcoinj/">Java</a>, <a href="https://code.google.com/p/bitcoinsharp/">C#</a>, <a href="https://github.com/lian/bitcoin-ruby">Ruby</a>, <a href="https://github.com/laanwj/bitcoin-python">Python</a>, <a href="https://github.com/piotrnar/gocoin">Go</a>, and <a href="https://github.com/bitcoinjs/bitcoinjs-lib">JavaScript</a>. This article will focus exclusively on the JavaScript library.</p>
 <p><strong>Disclaimer:</strong> I am not a cryptographer and any such cryptography advice or implementations should be accepted as academic experimentation and not crypto best practices.</p>
@@ -992,36 +1079,4 @@ We would love your advice.</p>
 <p>If you made it this far, follow me on Twitter:
 <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
 <p>-JP</p>
-]]></description><link>http://procbits.com/2012/05/18/why-do-all-the-great-node-js-developers-hate-coffeescript</link><guid isPermaLink="true">http://procbits.com/2012/05/18/why-do-all-the-great-node-js-developers-hate-coffeescript</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Sat, 19 May 2012 01:40:11 GMT</pubDate></item><item><title><![CDATA[Quick and Dirty Screen Scraping with Node.js using Request and Cheerio]]></title><description><![CDATA[<p>I wrote my own screen scraping module built on
-<a href="http://www.phantomjs.org/">PhantomJS</a>, but unfortunately it&#39;s too slow
-for most screen scraping tasks that don&#39;t require browser-side
-JavaScript. One easy way to scrape pages with Node.js is to use
-<a href="https://github.com/mikeal/request">Request</a> and
-<a href="https://github.com/MatthewMueller/cheerio">Cheerio</a>.</p>
-<p>Here is an example of scraping Bing to get all of the search results:</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">request</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;request&#39;</span><span class="p">);</span>
-<span class="kd">var</span> <span class="nx">cheerio</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;cheerio&#39;</span><span class="p">);</span>
-
-<span class="kd">var</span> <span class="nx">searchTerm</span> <span class="o">=</span> <span class="s1">&#39;screen+scraping&#39;</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">url</span> <span class="o">=</span> <span class="s1">&#39;http://www.bing.com/search?q=&#39;</span> <span class="o">+</span> <span class="nx">searchTerm</span><span class="p">;</span>
-
-<span class="nx">request</span><span class="p">(</span><span class="nx">url</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">resp</span><span class="p">,</span> <span class="nx">body</span><span class="p">){</span>
-  <span class="nx">$</span> <span class="o">=</span> <span class="nx">cheerio</span><span class="p">.</span><span class="nx">load</span><span class="p">(</span><span class="nx">body</span><span class="p">);</span>
-  <span class="nx">links</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="s1">&#39;.sb_tlst h3 a&#39;</span><span class="p">);</span> <span class="c1">//use your CSS selector here</span>
-  <span class="nx">$</span><span class="p">(</span><span class="nx">links</span><span class="p">).</span><span class="nx">each</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="nx">link</span><span class="p">){</span>
-    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">$</span><span class="p">(</span><span class="nx">link</span><span class="p">).</span><span class="nx">text</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;:\n  &#39;</span> <span class="o">+</span> <span class="nx">$</span><span class="p">(</span><span class="nx">link</span><span class="p">).</span><span class="nx">attr</span><span class="p">(</span><span class="s1">&#39;href&#39;</span><span class="p">));</span>
-  <span class="p">});</span>
-<span class="p">});</span>
-</pre></div>
-
-<p>Cheerio acts a jQuery replacement for a lot of jQuery tasks. It doesn&#39;t
-replicate jQuery in every way, and most importantly it&#39;s not meant for
-the browser but for the server. But it beats the pants off of the
-<a href="https://github.com/tmpvar/jsdom">jsdom</a>/jQuery combo for screen
-scraping.</p>
-<p>Do you use Git? If so, checkout <a href="http://gitpilot.com">Gitpilot</a> to make
-collaborating on software development easy.</p>
-<p>You should follow me on Twitter:
-<a href="http://twitter.com/jprichardson">@jprichardson</a>.</p>
-<p>-JP</p>
-]]></description><link>http://procbits.com/2012/04/11/quick-and-dirty-screen-scraping-with-node-js-using-request-and-cheerio</link><guid isPermaLink="true">http://procbits.com/2012/04/11/quick-and-dirty-screen-scraping-with-node-js-using-request-and-cheerio</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 12 Apr 2012 03:24:09 GMT</pubDate></item></channel></rss>
+]]></description><link>http://procbits.com/2012/05/18/why-do-all-the-great-node-js-developers-hate-coffeescript</link><guid isPermaLink="true">http://procbits.com/2012/05/18/why-do-all-the-great-node-js-developers-hate-coffeescript</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Sat, 19 May 2012 01:40:11 GMT</pubDate></item></channel></rss>
