@@ -5,9 +5,11 @@ slug: 2013/09/08/getting-started-with-ansible-digital-ocean
 tags: Linux, Server Management, Ansible
 -->
 
+Full disclosure: any link to Digital Ocean has a referral code. If you signup to Digital Ocean and purchase anything, I get a little credit for you doing so.
+
 If you have to manage more than one server with common software packages and configuration, you're going to want a server configuration management tool. Originally, I wrote shell scripts to handle this. However, shell scripts can have problems with error handling. Another benefit of most configuration management tools is that their operations are [idempotent](http://en.wikipedia.org/wiki/Idempotence) i.e. you can run any operation more than once and it won't have any effect. 
 
-For the last few months, I've read tutorials on [Puppet][puppet], [Chef][chef], and [Salt][salt]. I took a liking to Chef, especially the Chef tool [Knife Solo](https://github.com/matschaffer/knife-solo). I finally discovered [Ansible][ansible] in the comments of a [Hacker News](http://news.ycombinator.com) post about Salt.
+For the last few months, I've read tutorials on [Puppet][puppet], [Chef][chef], and [Salt][salt]. I took a liking to Chef, especially the Chef tool [Knife Solo](https://github.com/matschaffer/knife-solo). I finally discovered [Ansible][ansible] in the comments of a [Hacker News](http://news.ycombinator.com) post about Salt. If you're having trouble deciding whether you should choose Puppet, Chef, Salt, or Ansible then the eBook [Taste Test: Configuration Management Tools Get Tasted!][ebook] by [Matt Jaynes](http://mattjaynes.com/) will help you decide.
 
 Ansible's primary benefit is that of simplicity and not requiring any software to be installed on the target machine. All you need is SSH enabled. I have two [Digital Ocean][do] VPS that I need to install software and configure.
 
@@ -166,5 +168,6 @@ Further reading: http://www.ansibleworks.com/docs/ In a future article, I'll dis
 [salt]: http://en.wikipedia.org/wiki/Salt_(software)
 [chef]: http://en.wikipedia.org/wiki/Chef_(software)
 [ansible]: http://en.wikipedia.org/wiki/Ansible_(software)
+[ebook]: http://devopsu.com/books/taste-test-puppet-chef-salt-stack-ansible.html
 
 

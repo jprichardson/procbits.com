@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[procbits]]></title><description><![CDATA[source code snippets and other random musings about software]]></description><link>http://procbits.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Sun, 08 Sep 2013 18:23:25 GMT</lastBuildDate><atom:link href="http://procbits.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Getting Started with Ansible on Digital Ocean]]></title><description><![CDATA[<p>If you have to manage more than one server with common software packages and configuration, you&#39;re going to want a server configuration management tool. Originally, I wrote shell scripts to handle this. However, shell scripts can have problems with error handling. Another benefit of most configuration management tools is that their operations are <a href="http://en.wikipedia.org/wiki/Idempotence">idempotent</a> i.e. you can run any operation more than once and it won&#39;t have any effect. </p>
-<p>For the last few months, I&#39;ve read tutorials on <a href="http://en.wikipedia.org/wiki/Puppet_(software)">Puppet</a>, <a href="http://en.wikipedia.org/wiki/Chef_(software)">Chef</a>, and <a href="http://en.wikipedia.org/wiki/Salt_(software)">Salt</a>. I took a liking to Chef, especially the Chef tool <a href="https://github.com/matschaffer/knife-solo">Knife Solo</a>. I finally discovered <a href="http://en.wikipedia.org/wiki/Ansible_(software)">Ansible</a> in the comments of a <a href="http://news.ycombinator.com">Hacker News</a> post about Salt.</p>
-<p>Ansible&#39;s primary benefit is that of simplicity and not requiring any software to be installed on the target machine. All you need is SSH enabled. I have two <a href="https://www.digitalocean.com/?refcode=a65fd89c7fd0">Digital Ocean</a> VPS that I need to installed software on and configure.</p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[procbits]]></title><description><![CDATA[source code snippets and other random musings about software]]></description><link>http://procbits.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Tue, 10 Sep 2013 13:38:44 GMT</lastBuildDate><atom:link href="http://procbits.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Getting Started with Ansible on Digital Ocean]]></title><description><![CDATA[<p>Full disclosure: any link to Digital Ocean has a referral code. If you signup to Digital Ocean and purchase anything, I get a little credit for you doing so.</p>
+<p>If you have to manage more than one server with common software packages and configuration, you&#39;re going to want a server configuration management tool. Originally, I wrote shell scripts to handle this. However, shell scripts can have problems with error handling. Another benefit of most configuration management tools is that their operations are <a href="http://en.wikipedia.org/wiki/Idempotence">idempotent</a> i.e. you can run any operation more than once and it won&#39;t have any effect. </p>
+<p>For the last few months, I&#39;ve read tutorials on <a href="http://en.wikipedia.org/wiki/Puppet_(software)">Puppet</a>, <a href="http://en.wikipedia.org/wiki/Chef_(software)">Chef</a>, and <a href="http://en.wikipedia.org/wiki/Salt_(software)">Salt</a>. I took a liking to Chef, especially the Chef tool <a href="https://github.com/matschaffer/knife-solo">Knife Solo</a>. I finally discovered <a href="http://en.wikipedia.org/wiki/Ansible_(software)">Ansible</a> in the comments of a <a href="http://news.ycombinator.com">Hacker News</a> post about Salt. If you&#39;re having trouble deciding whether you should choose Puppet, Chef, Salt, or Ansible then the eBook <a href="http://devopsu.com/books/taste-test-puppet-chef-salt-stack-ansible.html">Taste Test: Configuration Management Tools Get Tasted!</a> by <a href="http://mattjaynes.com/">Matt Jaynes</a> will help you decide.</p>
+<p>Ansible&#39;s primary benefit is that of simplicity and not requiring any software to be installed on the target machine. All you need is SSH enabled. I have two <a href="https://www.digitalocean.com/?refcode=a65fd89c7fd0">Digital Ocean</a> VPS that I need to install software and configure.</p>
 <h2>Assumptions</h2>
 <p>You&#39;re running Mac OS X (should work with Linux) and you have Git and Python installed. These instructions are specific to <a href="https://www.digitalocean.com/?refcode=a65fd89c7fd0">Digital Ocean</a> but should work with any remote servers offered by any vendor.</p>
 <h2>Installing Ansible</h2>
@@ -9,7 +10,7 @@
 <pre><code>cd /tmp
 git clone git://github.com/ansible/ansible.git
 cd ./ansible</code></pre>
-<p>if you want a specifi version, you can check that out too:</p>
+<p>if you want a specific version, you can check that out too:</p>
 <pre><code>git tag</code></pre>
 <p>outputs:</p>
 <pre><code>...
@@ -26,18 +27,18 @@ v1.2.3</code></pre>
 <pre><code>git checkout v1.2.3</code></pre>
 <p>or, as stated, if you want the latest, don&#39;t call <code>git checkout</code></p>
 <pre><code>sudo make install</code></pre>
-<p>according to this, you need to install some python ansible dependencies:</p>
+<p>according to <a href="https://raymii.org/s/tutorials/Ansible_Deployment_Framework.html">this</a>, you need to install some python Ansible dependencies:</p>
 <pre><code>sudo easy_install jinja2 
 sudo easy_install pyyaml
 sudo easy_install paramiko</code></pre>
 <h2>Configuring Ansible to Communicate with Servers</h2>
-<p>Let&#39;s assume that you have two servers named with IPs <code>1.2.3.4</code> and <code>4.3.2.1</code>. With Digital Ocean, you&#39;re inscurely emailed the root password to each server. Let&#39;s add our SSH key to each server.</p>
+<p>Let&#39;s assume that you have two servers named with IPs <code>1.2.3.4</code> and <code>4.3.2.1</code>. With Digital Ocean, unfortunately, you&#39;re insecurely emailed the root password to each server. Let&#39;s add our SSH key to each server.</p>
 <h3>SSH Keys</h3>
 <p>if you don&#39;t have an SSH key, you can generate one really easily:</p>
 <pre><code>ssh-keygen -t rsa -C &quot;your_email@somedomain.com&quot;</code></pre>
 <p>if you&#39;re running Linux, you can use <code>ssh-copy-id</code> to copy the key the remote servers:</p>
-<pre><code>ssh-copy-id -i ~/.ssh/id_rsa.pub 1.2.3.4
-ssh-copy-id -i ~/.ssh/id_rsa.pub 4.3.2.1</code></pre>
+<pre><code>ssh-copy-id -i ~/.ssh/id_rsa.pub root@1.2.3.4
+ssh-copy-id -i ~/.ssh/id_rsa.pub root@4.3.2.1</code></pre>
 <p>if you&#39;re running on OS X, you won&#39;t have <code>ssh-copy-id</code>, here is an alternative:</p>
 <pre><code>cat ~/.ssh/id_rsa.pub | ssh root@1.2.3.4 &quot;mkdir ~/.ssh; cat &gt;&gt; ~/.ssh/authorized_keys&quot;
 cat ~/.ssh/id_rsa.pub | ssh root@4.3.2.1 &quot;mkdir ~/.ssh; cat &gt;&gt; ~/.ssh/authorized_keys&quot;</code></pre>
@@ -51,7 +52,7 @@ cat ~/.ssh/id_rsa.pub | ssh root@4.3.2.1 &quot;cat &gt;&gt; ~/.ssh/authorized_ke
 <pre><code>[databases]
 1.2.3.4
 4.3.2.1</code></pre>
-<p>you can optionally add the port if you connect to your servers with using another port:</p>
+<p>you can optionally add the port if you connect to your servers using another port:</p>
 <pre><code>[databases]
 1.2.3.4:5555
 4.3.2.1:22</code></pre>
