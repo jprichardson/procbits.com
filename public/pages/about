@@ -4,8 +4,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="author" content="JP Richardson">
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc2/css/bootstrap.min.css" rel="stylesheet" media="screen">
-<link href="/assets/css/style.css" rel="stylesheet">
 <link href="/assets/css/highlight.css" rel="stylesheet">
+<link href="/assets/css/style.css" rel="stylesheet">
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
 <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc2/js/bootstrap.min.js"></script>
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc2/css/bootstrap-glyphicons.css" rel="stylesheet">
@@ -35,8 +35,22 @@
 
 <p><a href="http://procbits.files.wordpress.com/2009/03/twitter.jpg"><img src="http://procbits.files.wordpress.com/2009/03/twitter.jpg" alt="JP Richardson, Software Developer & Entrepreneur" title="JP Richardson" width="174" height="234" style="float:right; padding: 3px; border: 3px solid gray; margin-left: 20px; margin-top: 20px; " /></a></p>
 <p>Hi!</p>
-<p>I&#39;m a programming language junkie with a passion for software, technology, entrepreneurship, bitcoin, people and relationships. I love learning about others and what makes them tick. If you&#39;re ever in Lincoln, Nebraska, look me up and let&#39;s grab a drink. I strongly aspire to change the world through software.</p>
+<p>I&#39;m a programming language junkie with a passion for software, technology, entrepreneurship, <a href="http://bitcoin.org/en/">bitcoin</a>, people and relationships. I love learning about others and what makes them tick. If you&#39;re ever in Lincoln, Nebraska, look me up and let&#39;s grab a drink.</p>
 <p>I&#39;m a strong advocate of the open source software (OSS) philosophy. I write a lot of open source <a href="http://github.com/jprichardson">code on Github</a> and lately have found Node.js, AngularJS, and Go to be fun.</p>
+<h3>Single Motivating Purpose</h3>
+<p>I&#39;m extremely purpose driven and constantly think about how I can help others and how I can serve the world. I feel that my purpose is not to serve myself, but to serve humanity by writing software and building businesses so that I can reduce suffering in others. This could be via the software or businesses themselves, or more nobly: through money, time, or fellowship.</p>
+<p>I generally believe:</p>
+<ul>
+<li>everyone has good inside of them, therefore we should give most the benefit of the doubt</li>
+<li>everyone has some form of suffering, lending a helping hand or an open ear can bring someone joy</li>
+<li>every experience should be maximized to its full potential</li>
+<li>compassion and tolerance for our fellow human being must be a priority to us in order for us to be fully happy</li>
+<li>material possessions cloud our happiness, therefore we should reduce our material wants</li>
+<li>help others succeed and get what they want, and you&#39;ll find that you&#39;ll move faster on the path to your success</li>
+<li>we should seek to build up and create instead of tear down and destroy</li>
+<li>honesty above all us, the truth really will set you free</li>
+</ul>
+<p>If you share any of these thoughts, feel free to reach out to me: jprichardson@gmail.com</p>
 <h3>What&#39;s procbits?</h3>
 <p>Well, codebits.com was taken, funcbits.com sounded like it would be difficult to relay via speech, and I just had to have &quot;bits&quot; at the end of the domain name. I don&#39;t really remember where &quot;proc&quot; came from... maybe procedural? </p>
 <h3>Social Presence on the Web</h3>
@@ -50,9 +64,9 @@
 </ul>
 <h3>Other Presence / New &amp; Old Projects</h3>
 <ul>
-<li><a href="http://reflect7.com">Reflect7</a> is a company I cofounded with two other guys. Our mobile sports apps were downloaded over 100K+ times in a span of 1.5 years. We were acquired in 2011. I am no longer affiliated with the company.</li>
-<li><a href="http://gitpilot.com">Gitpilot</a> is a compny I cofounded with one other guy. Our Git user interface aimed to make collaboration with others stupidly simple. We closed down at the end of 2012 due to lack of traction.</li>
-<li><a href="http://loudjet.com">Loudjet</a> is another blog that I maintain. It focuses on entrepreneurship and self-improvement. Most of the posts were migrated over from <a href="http://techneur.com">Techneur</a>.</li>
+<li><a href="http://reflect7.com">Reflect7</a> is a company I cofounded with two other people. Our mobile sports apps were downloaded over 100K+ times in a span of 1.5 years. We were acquired in 2011. I am no longer affiliated with the company.</li>
+<li><a href="http://gitpilot.com">Gitpilot</a> is a company I cofounded with one other person. Our Git user interface aimed to make collaboration with others stupidly simple. We closed down at the end of 2012 due to lack of traction.</li>
+<li><a href="http://loudjet.com">Loudjet</a> is another blog that I write. It focuses on entrepreneurship and self-improvement. Most of the posts I originally wrote on <a href="http://techneur.com">Techneur</a> and migrated them over.</li>
 <li><a href="http://logmeup.com">Log Me Up</a> solves the problem of you having to log into your server to view logs. Just open your web browser and view your logs from any of your servers in real-time.</li>
 <li><a href="http://stringjs.com">string.js</a> is a JavaScript string library that includes a lot of methods that JavaScript left out.</li>
 <li><a href="https://github.com/skywrite">Sky</a> is a static website generator. This site is built with it.</li>

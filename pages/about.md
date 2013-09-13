@@ -8,7 +8,7 @@ title: About
 
 Hi!
 
-I'm a programming language junkie with a passion for software, technology, entrepreneurship, bitcoin, people and relationships. I love learning about others and what makes them tick. If you're ever in Lincoln, Nebraska, look me up and let's grab a drink.
+I'm a programming language junkie with a passion for software, technology, entrepreneurship, [bitcoin](http://bitcoin.org/en/), people and relationships. I love learning about others and what makes them tick. If you're ever in Lincoln, Nebraska, look me up and let's grab a drink.
 
 I'm a strong advocate of the open source software (OSS) philosophy. I write a lot of open source [code on Github][github] and lately have found Node.js, AngularJS, and Go to be fun.
 
