@@ -10,7 +10,7 @@ Overview of the Problem
 I wasted over four hours today on a problem with an extremely trivial solution. I was trying to connect native HTML5 instances of the 
 `WebSocket` class to my Node.js [SockJS](https://github.com/sockjs/sockjs-node) server. Why, was I trying to do this? I was trying to mimize dependences for my library [JSock](https://github.com/jprichardson/jsock)
 
-I kept getting the following error:
+I kept getting the following error in the browser Chrome console:
 
     failed: Unexpected response code: 200 
 
@@ -18,7 +18,7 @@ I Googled this error, and usually Google returns the cause of the problem within
 
 So, this solution applies to you if:
 
-1. You are using SockJS on the server, in particular Node.js.
+1. You are using SockJS on the server, in particular Node.js. (It may apply to other SockJS server implementations too)
 2. In the browser, you are using the native `WebSocket` class and not SockJS.
 
 Your code may look something like this:
@@ -41,7 +41,6 @@ wss.on('connection', function(ws) {
 })
 
 wss.installHandlers(server, {prefix: '/data'})
-
 server.listen(PORT)
 ```
 
@@ -69,7 +68,7 @@ ws.onerror = function(error) {
 Solution
 --------
 
-I tried removing Express, different ports, different prefixes, spent an hour combing SockJS source code, and finally stumbled upon the solution and felt like a complete idiot.
+I tried removing Express, different ports, different prefixes, spent an hour combing the SockJS source code, and finally stumbled upon the solution and felt like a complete idiot.
 
 To get your WebSockets working and remove this error:
 
@@ -87,6 +86,6 @@ to:
 var ws = new WebSocket(wsUrl + '/data/websocket')
 ```
 
-... as stated in the documentation that I thought I read thourougly enough. I wanted to bang my head against the wall. Oh well, if this saves someone else time out there, then I'll be glad that I documented it here. Happy coding!
+... as stated in the documentation that I thought I read thourougly enough. I wanted to bang my head against the wall. Oh well, if this saves someone else time, then I'll be glad that I least documented it here. Happy coding!
 
-    
+

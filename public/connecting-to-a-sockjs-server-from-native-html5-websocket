@@ -36,12 +36,12 @@
 <h2>Overview of the Problem</h2>
 <p>I wasted over four hours today on a problem with an extremely trivial solution. I was trying to connect native HTML5 instances of the 
 <code>WebSocket</code> class to my Node.js <a href="https://github.com/sockjs/sockjs-node">SockJS</a> server. Why, was I trying to do this? I was trying to mimize dependences for my library <a href="https://github.com/jprichardson/jsock">JSock</a></p>
-<p>I kept getting the following error:</p>
+<p>I kept getting the following error in the browser Chrome console:</p>
 <pre><code>failed: Unexpected response code: 200 </code></pre>
 <p>I Googled this error, and usually Google returns the cause of the problem within the first page. What followed, was me spending hours trying various different things.</p>
 <p>So, this solution applies to you if:</p>
 <ol>
-<li>You are using SockJS on the server, in particular Node.js.</li>
+<li>You are using SockJS on the server, in particular Node.js. (It may apply to other SockJS server implementations too)</li>
 <li>In the browser, you are using the native <code>WebSocket</code> class and not SockJS.</li>
 </ol>
 <p>Your code may look something like this:</p>
@@ -62,7 +62,6 @@
 <span class="p">})</span>
 
 <span class="nx">wss</span><span class="p">.</span><span class="nx">installHandlers</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span> <span class="p">{</span><span class="nx">prefix</span><span class="o">:</span> <span class="s1">&#39;/data&#39;</span><span class="p">})</span>
-
 <span class="nx">server</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">PORT</span><span class="p">)</span>
 </pre></div>
 
@@ -86,7 +85,7 @@
 </pre></div>
 
 <h2>Solution</h2>
-<p>I tried removing Express, different ports, different prefixes, spent an hour combing SockJS source code, and finally stumbled upon the solution and felt like a complete idiot.</p>
+<p>I tried removing Express, different ports, different prefixes, spent an hour combing the SockJS source code, and finally stumbled upon the solution and felt like a complete idiot.</p>
 <p>To get your WebSockets working and remove this error:</p>
 <pre><code>failed: Unexpected response code: 200 </code></pre>
 <p>Change the following line:</p>
@@ -97,7 +96,7 @@
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="nx">wsUrl</span> <span class="o">+</span> <span class="s1">&#39;/data/websocket&#39;</span><span class="p">)</span>
 </pre></div>
 
-<p>... as stated in the documentation that I thought I read thourougly enough. I wanted to bang my head against the wall. Oh well, if this saves someone else time out there, then I&#39;ll be glad that I documented it here. Happy coding!</p>
+<p>... as stated in the documentation that I thought I read thourougly enough. I wanted to bang my head against the wall. Oh well, if this saves someone else time, then I&#39;ll be glad that I least documented it here. Happy coding!</p>
 
 
 <!--<p>

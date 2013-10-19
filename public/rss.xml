@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[procbits]]></title><description><![CDATA[source code snippets and other random musings about software]]></description><link>http://procbits.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Sat, 19 Oct 2013 07:08:35 GMT</lastBuildDate><atom:link href="http://procbits.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Connecting to a SockJS server from native HTML5 WebSocket]]></title><description><![CDATA[<h2>Overview of the Problem</h2>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[procbits]]></title><description><![CDATA[source code snippets and other random musings about software]]></description><link>http://procbits.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Sat, 19 Oct 2013 07:12:20 GMT</lastBuildDate><atom:link href="http://procbits.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Connecting to a SockJS server from native HTML5 WebSocket]]></title><description><![CDATA[<h2>Overview of the Problem</h2>
 <p>I wasted over four hours today on a problem with an extremely trivial solution. I was trying to connect native HTML5 instances of the 
 <code>WebSocket</code> class to my Node.js <a href="https://github.com/sockjs/sockjs-node">SockJS</a> server. Why, was I trying to do this? I was trying to mimize dependences for my library <a href="https://github.com/jprichardson/jsock">JSock</a></p>
-<p>I kept getting the following error:</p>
+<p>I kept getting the following error in the browser Chrome console:</p>
 <pre><code>failed: Unexpected response code: 200 </code></pre>
 <p>I Googled this error, and usually Google returns the cause of the problem within the first page. What followed, was me spending hours trying various different things.</p>
 <p>So, this solution applies to you if:</p>
 <ol>
-<li>You are using SockJS on the server, in particular Node.js.</li>
+<li>You are using SockJS on the server, in particular Node.js. (It may apply to other SockJS server implementations too)</li>
 <li>In the browser, you are using the native <code>WebSocket</code> class and not SockJS.</li>
 </ol>
 <p>Your code may look something like this:</p>
@@ -28,7 +28,6 @@
 <span class="p">})</span>
 
 <span class="nx">wss</span><span class="p">.</span><span class="nx">installHandlers</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span> <span class="p">{</span><span class="nx">prefix</span><span class="o">:</span> <span class="s1">&#39;/data&#39;</span><span class="p">})</span>
-
 <span class="nx">server</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">PORT</span><span class="p">)</span>
 </pre></div>
 
@@ -52,7 +51,7 @@
 </pre></div>
 
 <h2>Solution</h2>
-<p>I tried removing Express, different ports, different prefixes, spent an hour combing SockJS source code, and finally stumbled upon the solution and felt like a complete idiot.</p>
+<p>I tried removing Express, different ports, different prefixes, spent an hour combing the SockJS source code, and finally stumbled upon the solution and felt like a complete idiot.</p>
 <p>To get your WebSockets working and remove this error:</p>
 <pre><code>failed: Unexpected response code: 200 </code></pre>
 <p>Change the following line:</p>
@@ -63,7 +62,7 @@
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="nx">wsUrl</span> <span class="o">+</span> <span class="s1">&#39;/data/websocket&#39;</span><span class="p">)</span>
 </pre></div>
 
-<p>... as stated in the documentation that I thought I read thourougly enough. I wanted to bang my head against the wall. Oh well, if this saves someone else time out there, then I&#39;ll be glad that I documented it here. Happy coding!</p>
+<p>... as stated in the documentation that I thought I read thourougly enough. I wanted to bang my head against the wall. Oh well, if this saves someone else time, then I&#39;ll be glad that I least documented it here. Happy coding!</p>
 ]]></description><link>http://procbits.com/connecting-to-a-sockjs-server-from-native-html5-websocket</link><guid isPermaLink="true">http://procbits.com/connecting-to-a-sockjs-server-from-native-html5-websocket</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Sat, 19 Oct 2013 00:00:00 GMT</pubDate></item><item><title><![CDATA[Getting Started with Ansible on Digital Ocean]]></title><description><![CDATA[<p>Full disclosure: any link to Digital Ocean has a referral code. If you signup to Digital Ocean and purchase anything, I get a little credit for you doing so.</p>
 <p>If you have to manage more than one server with common software packages and configuration, you&#39;re going to want a server configuration management tool. Originally, I wrote shell scripts to handle this. However, shell scripts can have problems with error handling. Another benefit of most configuration management tools is that their operations are <a href="http://en.wikipedia.org/wiki/Idempotence">idempotent</a> i.e. you can run any operation more than once and it won&#39;t have any effect. </p>
 <p>For the last few months, I&#39;ve read tutorials on <a href="http://en.wikipedia.org/wiki/Puppet_(software)">Puppet</a>, <a href="http://en.wikipedia.org/wiki/Chef_(software)">Chef</a>, and <a href="http://en.wikipedia.org/wiki/Salt_(software)">Salt</a>. I took a liking to Chef, especially the Chef tool <a href="https://github.com/matschaffer/knife-solo">Knife Solo</a>. I finally discovered <a href="http://en.wikipedia.org/wiki/Ansible_(software)">Ansible</a> in the comments of a <a href="http://news.ycombinator.com">Hacker News</a> post about Salt. If you&#39;re having trouble deciding whether you should choose Puppet, Chef, Salt, or Ansible then the eBook <a href="http://devopsu.com/books/taste-test-puppet-chef-salt-stack-ansible.html">Taste Test: Configuration Management Tools Get Tasted!</a> by <a href="http://mattjaynes.com/">Matt Jaynes</a> will help you decide.</p>
