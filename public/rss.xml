@@ -1,5 +1,70 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[procbits]]></title><description><![CDATA[source code snippets and other random musings about software]]></description><link>http://procbits.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Fri, 13 Sep 2013 03:41:17 GMT</lastBuildDate><atom:link href="http://procbits.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Getting Started with Ansible on Digital Ocean]]></title><description><![CDATA[<p>Full disclosure: any link to Digital Ocean has a referral code. If you signup to Digital Ocean and purchase anything, I get a little credit for you doing so.</p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[procbits]]></title><description><![CDATA[source code snippets and other random musings about software]]></description><link>http://procbits.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Sat, 19 Oct 2013 07:08:35 GMT</lastBuildDate><atom:link href="http://procbits.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Connecting to a SockJS server from native HTML5 WebSocket]]></title><description><![CDATA[<h2>Overview of the Problem</h2>
+<p>I wasted over four hours today on a problem with an extremely trivial solution. I was trying to connect native HTML5 instances of the 
+<code>WebSocket</code> class to my Node.js <a href="https://github.com/sockjs/sockjs-node">SockJS</a> server. Why, was I trying to do this? I was trying to mimize dependences for my library <a href="https://github.com/jprichardson/jsock">JSock</a></p>
+<p>I kept getting the following error:</p>
+<pre><code>failed: Unexpected response code: 200 </code></pre>
+<p>I Googled this error, and usually Google returns the cause of the problem within the first page. What followed, was me spending hours trying various different things.</p>
+<p>So, this solution applies to you if:</p>
+<ol>
+<li>You are using SockJS on the server, in particular Node.js.</li>
+<li>In the browser, you are using the native <code>WebSocket</code> class and not SockJS.</li>
+</ol>
+<p>Your code may look something like this:</p>
+<p><strong>server.js</strong>:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">PORT</span> <span class="o">=</span> <span class="mi">8080</span>
+
+<span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">()</span>
+
+<span class="kd">var</span> <span class="nx">sockjs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;sockjs&#39;</span><span class="p">)</span>
+<span class="kd">var</span> <span class="nx">wss</span> <span class="o">=</span> <span class="nx">sockjs</span><span class="p">.</span><span class="nx">createServer</span><span class="p">()</span>
+<span class="nx">wss</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;connection&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">ws</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">ws</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">ws</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="s1">&#39;from server: &#39;</span> <span class="o">+</span> <span class="nx">data</span><span class="p">)</span>
+  <span class="p">})</span>
+  <span class="nx">ws</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;close&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;close&#39;</span><span class="p">)</span>
+  <span class="p">})</span>
+<span class="p">})</span>
+
+<span class="nx">wss</span><span class="p">.</span><span class="nx">installHandlers</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span> <span class="p">{</span><span class="nx">prefix</span><span class="o">:</span> <span class="s1">&#39;/data&#39;</span><span class="p">})</span>
+
+<span class="nx">server</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="nx">PORT</span><span class="p">)</span>
+</pre></div>
+
+<p><strong>browser.js</strong>:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">wsUrl</span> <span class="o">=</span> <span class="s1">&#39;ws://&#39;</span> <span class="o">+</span> <span class="nb">window</span><span class="p">.</span><span class="nx">location</span><span class="p">.</span><span class="nx">host</span> 
+<span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="nx">wsUrl</span> <span class="o">+</span> <span class="s1">&#39;/data&#39;</span><span class="p">)</span>
+
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">data</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onopen</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;opening...&#39;</span><span class="p">)</span>
+  <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="s1">&#39;hello server&#39;</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onerror</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;WEbSocket error &#39;</span> <span class="o">+</span> <span class="nx">error</span><span class="p">)</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">dir</span><span class="p">(</span><span class="nx">error</span><span class="p">)</span>
+<span class="p">}</span>
+</pre></div>
+
+<h2>Solution</h2>
+<p>I tried removing Express, different ports, different prefixes, spent an hour combing SockJS source code, and finally stumbled upon the solution and felt like a complete idiot.</p>
+<p>To get your WebSockets working and remove this error:</p>
+<pre><code>failed: Unexpected response code: 200 </code></pre>
+<p>Change the following line:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="nx">wsUrl</span> <span class="o">+</span> <span class="s1">&#39;/data&#39;</span><span class="p">)</span>
+</pre></div>
+
+<p>to:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="nx">wsUrl</span> <span class="o">+</span> <span class="s1">&#39;/data/websocket&#39;</span><span class="p">)</span>
+</pre></div>
+
+<p>... as stated in the documentation that I thought I read thourougly enough. I wanted to bang my head against the wall. Oh well, if this saves someone else time out there, then I&#39;ll be glad that I documented it here. Happy coding!</p>
+]]></description><link>http://procbits.com/connecting-to-a-sockjs-server-from-native-html5-websocket</link><guid isPermaLink="true">http://procbits.com/connecting-to-a-sockjs-server-from-native-html5-websocket</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Sat, 19 Oct 2013 00:00:00 GMT</pubDate></item><item><title><![CDATA[Getting Started with Ansible on Digital Ocean]]></title><description><![CDATA[<p>Full disclosure: any link to Digital Ocean has a referral code. If you signup to Digital Ocean and purchase anything, I get a little credit for you doing so.</p>
 <p>If you have to manage more than one server with common software packages and configuration, you&#39;re going to want a server configuration management tool. Originally, I wrote shell scripts to handle this. However, shell scripts can have problems with error handling. Another benefit of most configuration management tools is that their operations are <a href="http://en.wikipedia.org/wiki/Idempotence">idempotent</a> i.e. you can run any operation more than once and it won&#39;t have any effect. </p>
 <p>For the last few months, I&#39;ve read tutorials on <a href="http://en.wikipedia.org/wiki/Puppet_(software)">Puppet</a>, <a href="http://en.wikipedia.org/wiki/Chef_(software)">Chef</a>, and <a href="http://en.wikipedia.org/wiki/Salt_(software)">Salt</a>. I took a liking to Chef, especially the Chef tool <a href="https://github.com/matschaffer/knife-solo">Knife Solo</a>. I finally discovered <a href="http://en.wikipedia.org/wiki/Ansible_(software)">Ansible</a> in the comments of a <a href="http://news.ycombinator.com">Hacker News</a> post about Salt. If you&#39;re having trouble deciding whether you should choose Puppet, Chef, Salt, or Ansible then the eBook <a href="http://devopsu.com/books/taste-test-puppet-chef-salt-stack-ansible.html">Taste Test: Configuration Management Tools Get Tasted!</a> by <a href="http://mattjaynes.com/">Matt Jaynes</a> will help you decide.</p>
 <p>Ansible&#39;s primary benefit is that of simplicity and not requiring any software to be installed on the target machine. All you need is SSH enabled. I have two <a href="https://www.digitalocean.com/?refcode=a65fd89c7fd0">Digital Ocean</a> VPS that I need to install software and configure.</p>
@@ -1005,79 +1070,4 @@ for the reminder.</p>
 <p>Checkout <a href="http://gitpilot.com">Gitpilot</a>, a different kind of Git GUI.</p>
 <p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
 <p>-JP</p>
-]]></description><link>http://procbits.com/2012/05/24/thinking-asynchronously-in-coffeescriptjavascript-loops-and-callbacks</link><guid isPermaLink="true">http://procbits.com/2012/05/24/thinking-asynchronously-in-coffeescriptjavascript-loops-and-callbacks</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 24 May 2012 23:19:20 GMT</pubDate></item><item><title><![CDATA[Why Do All the Great Node.js Developers Hate CoffeeScript?]]></title><description><![CDATA[<p>Why do all the great Node.js developers hate CoffeeScript?</p>
-<p>Take a look at the following Github repositories of the well-known
-Node.js developers:</p>
-<ul>
-<li><a href="https://github.com/isaacs">Isaac Schleuter</a> (maintainer of Node.js
-/ NPM)</li>
-<li><a href="https://github.com/visionmedia">TJ Holowaychuk</a> (express, Jade,
-Mocha)</li>
-<li><a href="https://github.com/mikeal">Mikeal Rogers</a> (Request)</li>
-<li><a href="https://github.com/substack">James Haliday &quot;substack&quot;</a> (Browserify,
-dnode, Optimist)</li>
-<li><a href="https://github.com/guille">Guillermo Rauch</a> (Socket.IO)</li>
-<li><a href="https://github.com/aheckmann">Aaron Heckmann</a> (Mongoose)</li>
-<li><a href="https://github.com/TooTallNate">Nathan Rajich &quot;Too Tall Nate&quot;</a>
-(node-gyp)</li>
-<li><a href="https://github.com/marak">Marak Squires</a> (Hook.io, pdf.js,
-color.js)</li>
-<li><a href="https://github.com/felixge">Felix Geisendörfer </a></li>
-<li><a href="https://github.com/creationix">Tim Caswell</a> (NVM)</li>
-</ul>
-<p>Did you look at them? Not one of them has a project (that isn&#39;t forked)
-that is written in CoffeeScript. So does the absence of CoffeeScript on
-Github imply these developers hate it? Absolutely not. Listen to episode
-<a href="http://nodeup.com/eighteen">18</a> or <a href="http://nodeup.com/nineteen">19</a> of
-Nodeup (don&#39;t remember which one) but there are a couple of instances
-where they (expert Node.js devs) joke and laugh about writing in
-CoffeeScript. If this offensive? Of course not. But the attitude is
-curious to me.</p>
-<p>One of the aforementioned developers said the following about a
-technology:</p>
-<blockquote>
-<p>What if we could omit braces? How about semi-colons?</p>
-</blockquote>
-<p>Sounds like the developer is talking about CoffeeScript, doesn&#39;t it? No,
-it was TJ Holowaychuk
-describing <a href="http://learnboost.github.com/stylus/">Stylus</a>, his CSS
-replacement language. Look at Stylus, look how CoffeeScript-esque it is.
-This is the the same <a href="https://github.com/visionmedia/jade/issues/430">TJ that doesn&#39;t like
-CoffeeScript</a>. This is
-meant to be partially tongue &amp; cheek, but it does lend credance to my
-point.</p>
-<p>Can you guess what the second most <a href="http://search.npmjs.org/">depended-upon package is on
-NPM</a>? If you guessed CoffeeScript, you&#39;d be
-right!</p>
-<p><a href="http://procbits.files.wordpress.com/2012/05/coffeescript-dep2.png"><img src="http://procbits.files.wordpress.com/2012/05/coffeescript-dep2.png?w=300" alt="" title="NPM / CoffeeScript"></a></p>
-<p>So if it&#39;s the second most depended-upon package, it must be in use by
-us mere-mortal developers. Having defected from Rails, I love
-CoffeeScript. But, I ask again, why do the greats have a haughty
-attitude towards CoffeeScript? This isn&#39;t meant to be a crusade trying
-to get people to convert to the holier-than-though CoffeeScript, but a
-genuine lack of understanding of why the disdain exists. Especially
-given the acceptance towards Haml, SASS, SCSS, Jade, etc. I mean, when
-it comes down to it, write in whatever makes you happy, but I feel like
-I&#39;m missing something. If you&#39;re part of the Node.js community, you&#39;ll
-know what I&#39;m talking about.</p>
-<p>Looking over the <a href="http://coffeescript.org/">CoffeeScrip</a>t page, I think
-that you can safely conclude that in general, you&#39;ll write less lines of
-code using CoffeeScript. <a href="http://www.codinghorror.com/blog/2007/12/size-is-the-enemy.html">Code is our
-enemy</a>
-so that&#39;s a good thing.</p>
-<p>What do you think about CoffeeScript? Why do you think these developers
-don&#39;t like CoffeeScript?</p>
-<p>More fun CoffeeScript hatred:</p>
-<ul>
-<li><a href="http://ryanflorence.com/2011/case-against-coffeescript/">A Case Against Using
-CoffeeScript</a></li>
-<li><a href="http://net.tutsplus.com/articles/interviews/should-you-learn-coffeescript/">Should You Learn
-CoffeeScript?</a></li>
-</ul>
-<p>If you use Git with others, you should checkout
-<a href="http://gitpilot.com">Gitpilot</a> to make collaboration with Git simple.
-We would love your advice.</p>
-<p>If you made it this far, follow me on Twitter:
-<a href="http://twitter.com/jprichardson">@jprichardson</a></p>
-<p>-JP</p>
-]]></description><link>http://procbits.com/2012/05/18/why-do-all-the-great-node-js-developers-hate-coffeescript</link><guid isPermaLink="true">http://procbits.com/2012/05/18/why-do-all-the-great-node-js-developers-hate-coffeescript</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Sat, 19 May 2012 01:40:11 GMT</pubDate></item></channel></rss>
+]]></description><link>http://procbits.com/2012/05/24/thinking-asynchronously-in-coffeescriptjavascript-loops-and-callbacks</link><guid isPermaLink="true">http://procbits.com/2012/05/24/thinking-asynchronously-in-coffeescriptjavascript-loops-and-callbacks</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 24 May 2012 23:19:20 GMT</pubDate></item></channel></rss>
