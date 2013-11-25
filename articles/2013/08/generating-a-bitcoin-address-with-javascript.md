@@ -97,7 +97,7 @@ You'll notice that we generate 32 random values. And `n` does not have a maximum
 let's generate a private key:
 
 ```js
-var randArr = new Uint8Array[32] //create a typed array of 32 bytes (256 bits)
+var randArr = new Uint8Array(32) //create a typed array of 32 bytes (256 bits)
 window.crypto.getRandomValues(randArr) //populate array with cryptographically secure random numbers
 
 //some Bitcoin and Crypto methods don't like Uint8Array for input. They expect regular JS arrays.
@@ -409,6 +409,8 @@ further reading:
 - [List of address prefixes](https://en.bitcoin.it/wiki/List_of_address_prefixes)
 
 **Credits:** Combing through the http://brainwallet.org was a big help.
+
+I started a new project called [CryptoCoinJS](https://github.com/cryptocoinjs) to address the shortcomings in the BitcoinJS library. Check it out here: https://github.com/cryptocoinjs
 
 
 [bitcoinjs]: https://github.com/bitcoinjs/bitcoinjs-lib

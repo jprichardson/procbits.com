@@ -37,7 +37,7 @@
 
 <p>If you&#39;re not familiar with Bitcoin, Bitcoin is essentially a P2P currency that has <a href="http://blockchain.info/charts/market-price">increased an order of magnitude in value within the last year</a>. This <a href="http://www.youtube.com/watch?v=Um63OQz3bjo">video</a> does a good job of explaining it. There are a number of libraries to work with Bitcoin in some of the most popular languages: <a href="https://github.com/MatthewLM/cbitcoin">C</a>, <a href="https://code.google.com/p/bitcoinj/">Java</a>, <a href="https://code.google.com/p/bitcoinsharp/">C#</a>, <a href="https://github.com/lian/bitcoin-ruby">Ruby</a>, <a href="https://github.com/laanwj/bitcoin-python">Python</a>, <a href="https://github.com/piotrnar/gocoin">Go</a>, and <a href="https://github.com/bitcoinjs/bitcoinjs-lib">JavaScript</a>. This article will focus exclusively on the JavaScript library.</p>
 <p><strong>Disclaimer:</strong> I am not a cryptographer and any such cryptography advice or implementations should be accepted as academic experimentation and not crypto best practices.</p>
-<h2>Random Number Generation</h2>
+<h2 id="random-number-generation">Random Number Generation</h2>
 <p>I&#39;d be remiss if I didn&#39;t mention anything about random number generation. Random number generation is the basis of most cryptography and Bitcoin. Your Bitcoin addresses are only as secure as your random number generator. A random number generator that is said to be cryptographically secure if it is good enough to use for cryptography in that there is enough <a href="http://en.wikipedia.org/wiki/Entropy">entropy</a> for a person to predict the number generator. <code>Math.random()</code> is not cryptographically secure. This is because <code>Math.random()</code> is predictable. If it&#39;s predictable, an attacker could figure out your private key from your public key. The implications of someone else knowing your private key means that they can also spend your Bitcoins.</p>
 <p>At the time of this writing, the predominant <a href="">JavaScript Bitcoin library</a> uses <a href="https://code.google.com/p/crypto-js/">CryptoJS</a> which surprisingly uses <code>Math.random()</code>. This article shows how you can use the up and coming <a href="https://developer.mozilla.org/en-US/docs/Web/API/window.crypto.getRandomValues"><code>window.crytpo</code> standard</a> or the <a href="http://bitwiseshiftleft.github.io/sjcl/">Stanford JavaScript Crypto Library</a></p>
 <p>further reading:</p>
@@ -53,10 +53,10 @@
 <li><a href="http://armoredbarista.blogspot.ch/2013/03/randomly-failed-weaknesses-in-java.html">Randomly failed! Weaknesses in Java Pseudo Random Number Generators</a></li>
 <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/window.crypto.getRandomValues">window.crypto.getRandomValues()</a></li>
 </ul>
-<h2>Getting Started</h2>
+<h2 id="getting-started">Getting Started</h2>
 <p>You&#39;re going to want to use the <a href="https://raw.github.com/bitcoinjs/bitcoinjs-lib/master/build/bitcoinjs-min.js">latest BitcoinJS client lib</a>. It&#39;s pretty outdated though. There are some more recent forks: <a href="https://github.com/bitfloor/bitcoinjs-lib">1</a>, <a href="https://github.com/twistandshout/bitcoinjs-lib">2</a>, and the one that <a href="https://github.com/DimeJet/bitcoinjs-lib">I will eventually maintain</a>. For now, use the outdated one, from BitcoinJS.</p>
 <p>I have included the library on this page. Just open up your Chrome Console or Firefox Console and start typing along.</p>
-<h2>Bitcoin Keys, Addresses, &amp; Formats</h2>
+<h2 id="bitcoin-keys-addresses-formats">Bitcoin Keys, Addresses, &amp; Formats</h2>
 <p>Bitcoin derives its security from the public-key crypto scheme <a href="http://en.wikipedia.org/wiki/Elliptic_curve_cryptography">Elliptic Curve Cryptography (ECC)</a>. So why did the designer of Bitcoin, <a href="https://en.bitcoin.it/wiki/Satoshi_Nakamoto">Satoshi Nakamoto</a>, decide to use ECC over the prevalent RSA crypto scheme? The primary benefit is the key size. According to the <a href="http://en.wikipedia.org/wiki/Elliptic_curve_cryptography">Wikipedia article on ECC</a>, &quot;a 256-bit ECC public key should provide comparable security to a 3072-bit RSA public key&quot;.</p>
 <p>The Elliptical Curve Cryptography <a href="http://www.secg.org/collateral/sec1_final.pdf">spec 2.2.1</a> states that the cryptography is governed by the equation:</p>
 <mjax>
@@ -88,12 +88,12 @@
 
 
 <p>you really don&#39;t need to understand much of this. I mainly presented this material for academic purposes.</p>
-<h3>Private Keys</h3>
+<h3 id="private-keys">Private Keys</h3>
 <p>Private keys are what allows you to spend your coins. A private key, <code>d</code> is any random number between <code>1</code> and <code>n - 1</code>. According to the <a href="http://www.secg.org/collateral/sec1_final.pdf">spec (3.2.1)</a>: &quot;an elliptic
 curve key pair <code>(d, Q)</code> associated with <code>T</code> consists of an elliptic curve secret key <code>d</code> which is an integer in the interval <code>[1, n - 1]</code>, and an elliptic curve public key <mjax>$ Q = (x_Q, y_Q) $</mjax> which is the point <mjax>$ Q = dG $</mjax>.</p>
 <p>You&#39;ll notice that we generate 32 random values. And <code>n</code> does not have a maximum of <mjax>$ 2^{256} - 1 $</mjax>, so it&#39;s theoretically possible to generate a key larger than the standard dictates. However, in practice, you really don&#39;t have to worry about it.</p>
 <p>let&#39;s generate a private key:</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">randArr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Uint8Array</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="c1">//create a typed array of 32 bytes (256 bits)</span>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">randArr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Uint8Array</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span> <span class="c1">//create a typed array of 32 bytes (256 bits)</span>
 <span class="nb">window</span><span class="p">.</span><span class="nx">crypto</span><span class="p">.</span><span class="nx">getRandomValues</span><span class="p">(</span><span class="nx">randArr</span><span class="p">)</span> <span class="c1">//populate array with cryptographically secure random numbers</span>
 
 <span class="c1">//some Bitcoin and Crypto methods don&#39;t like Uint8Array for input. They expect regular JS arrays.</span>
@@ -111,7 +111,7 @@ curve key pair <code>(d, Q)</code> associated with <code>T</code> consists of an
 </pre></div>
 
 <p>simple enough, huh? But wait, this doesn&#39;t look like the private keys that you see in your Bitcoin clients. So, what&#39;s going on? Private keys typically use a format called the <a href="https://en.bitcoin.it/wiki/Wallet_import_format">Wallet Import Format (WIF)</a>.</p>
-<h4>Wallet Import Format</h4>
+<h4 id="wallet-import-format">Wallet Import Format</h4>
 <p>The Wallet Import Format (WIF) is shorter way to encode the private key. It is a <a href="https://en.bitcoin.it/wiki/Base58Check_encoding">base 58</a> encoding of <code>0x80</code> + private key + checksum.</p>
 <p>generate a WIF in JS:</p>
 <div class="highlight"><pre><span class="c1">//add 0x80 to the front, https://en.bitcoin.it/wiki/List_of_address_prefixes</span>
@@ -138,7 +138,7 @@ curve key pair <code>(d, Q)</code> associated with <code>T</code> consists of an
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">privateKeyWIF</span><span class="p">)</span> <span class="c1">//&quot;5Hx15HFGyep2CfPxsJKe2fXJsCVn5DEiyoeGGF6JZjGbTRnqfiD&quot;</span>
 </pre></div>
 
-<h3>Public Keys</h3>
+<h3 id="public-keys">Public Keys</h3>
 <p>Now that we have our private key, we can generate a public key. Recall that Bitcoin keys use the <a href="http://www.secg.org/collateral/sec2_final.pdf">secp256k1 (info on 2.7.1)</a> parameters. Public keys are generated by:</p>
 <mjax>
 
@@ -168,7 +168,7 @@ $$ Q = dG $$
 </pre></div>
 
 <p>this output can be verified with <a href="http://brainwallet.org">http://brainwallet.org</a>.</p>
-<h4>Compressed Keys</h4>
+<h4 id="compressed-keys">Compressed Keys</h4>
 <p>You may have heard of Compressed keys. An excellent <a href="http://bitcoin.stackexchange.com/questions/3059/what-is-a-compressed-bitcoin-key">answer on the Bitcoin Stack Exchange</a> explains the differences:</p>
 <blockquote>
 <p>A compressed key is just a way of storing a public key in fewer bytes (33 instead of 65). There are no compatibility or security issues because they are precisely the same keys, just stored in a different way. The original Bitcoin software didn&#39;t use compressed keys only because their use was poorly documented in OpenSSL. They have no disadvantages other than that a little bit of additional computation is needed before they can be used to validate a signature.</p>
@@ -204,7 +204,7 @@ $$ Q = dG $$
 <span class="kd">var</span> <span class="nx">publicKeyHexCompressed</span> <span class="o">=</span> <span class="nx">Crypto</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">bytesToHex</span><span class="p">(</span><span class="nx">eckey</span><span class="p">.</span><span class="nx">getPub</span><span class="p">())</span>
 </pre></div>
 
-<h4>Compressed Private Keys</h4>
+<h4 id="compressed-private-keys">Compressed Private Keys</h4>
 <p>You may have noticed that when you toggle back and forth between <strong>Compressed</strong> and <strong>Uncompressed</strong> on <a href="http://brainwallet.org">http://brainwallet.org</a> that the Private Key changes as well. So, if you import a private key into your wallet, which public key will it use? Another <a href="http://bitcoin.stackexchange.com/questions/7299/when-importing-private-keys-will-compressed-or-uncompressed-format-be-used">good answer on Bitcoin Stack Exchange</a> on how to deal with this:</p>
 <blockquote>
 <p>...
@@ -223,7 +223,7 @@ Thus, in order to support both, we must remember for each public/private keypair
 </pre></div>
 
 <p>Once again, verify it matches <a href="http://brainwallet.org">http://brainwallet.org</a>.</p>
-<h3>Addresses</h3>
+<h3 id="addresses">Addresses</h3>
 <p>Bitcoin uses <a href="https://en.bitcoin.it/wiki/Address">addresses</a> as a means to receive coins from someone else. An address is a <a href="https://en.bitcoin.it/wiki/Base58Check_encoding">base58</a> encoded string of a 25 byte binary address. All Bitcoin addresses start with <code>1</code>.  A person can have as many addresses as they&#39;d like. Using more than one address is said to increase anonymity. Private keys give you access to spend money associated with an address.</p>
 <p>The address is generated like the following:</p>
 <blockquote>
@@ -275,7 +275,7 @@ Thus, in order to support both, we must remember for each public/private keypair
 <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">addressForCompressed</span><span class="p">)</span> <span class="c1">//1FkKMsKNJqWSDvTvETqcCeHcUQQ64kSC6s</span>
 </pre></div>
 
-<h3>Double Hashing</h3>
+<h3 id="double-hashing">Double Hashing</h3>
 <p>OK, you&#39;ve probably noticed it a lot. Once again, I&#39;m going to defer to the internets and the peeps smarter than me:</p>
 <p>From: <a href="http://bitcoin.stackexchange.com/questions/9202/why-does-bitcoin-use-two-hash-functions-sha-256-and-ripemd-160-to-create-an-ad">Why does Bitcoin use two hash functions (SHA-256 and RIPEMD-160) to create an address?</a></p>
 <blockquote>
@@ -291,7 +291,7 @@ Thus, in order to support both, we must remember for each public/private keypair
 <p>To avoid this property, Ferguson and Schneier suggested using SHA256d = SHA256(SHA256(x)) which avoids length-extension attacks. This construction has some minor weaknesses (not relevant to bitcoin), so I wouldn&#39;t recommend it for new protocols, and would use HMAC with constant key, or truncated SHA512 instead.</p>
 <p>Answered by CodesInChaos</p>
 </blockquote>
-<h2>Summary</h2>
+<h2 id="summary">Summary</h2>
 <p>Compressed keys are the preferred format now. Let&#39;s do this in one quick JS snippet to make everything stupidly simple and compatible with pretty much every Bitcoin client:</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">randArr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Uint8Array</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="c1">//create a typed array of 32 bytes (256 bits)</span>
 <span class="nb">window</span><span class="p">.</span><span class="nx">crypto</span><span class="p">.</span><span class="nx">getRandomValues</span><span class="p">(</span><span class="nx">randArr</span><span class="p">)</span> <span class="c1">//populate array with cryptographically secure random numbers</span>
@@ -317,7 +317,7 @@ Thus, in order to support both, we must remember for each public/private keypair
 </pre></div>
 
 <p>There you have it! <strong>KwomKti1X3tYJUUMb1TGSM2mrZk1wb1aHisUNHCQXTZq5auC2qc3</strong> is your private key in WIF form that allows you to send money for address <strong>1FkKMsKNJqWSDvTvETqcCeHcUQQ64kSC6s</strong>.</p>
-<h4>Addresses and Keys from a Password or Passphrase</h4>
+<h4 id="addresses-and-keys-from-a-password-or-passphrase">Addresses and Keys from a Password or Passphrase</h4>
 <p>You can generate private keys from a passphrase. One method would be to just calculate the double SHA256 hash on the user passphrase and use that as the private key.</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">password</span> <span class="o">=</span> <span class="s2">&quot;there can be only one&quot;</span>
 <span class="kd">var</span> <span class="nx">privateKeyHex</span> <span class="o">=</span> <span class="nx">Crytpo</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">SHA256</span><span class="p">(</span><span class="nx">Crypto</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">hexToBytes</span><span class="p">(</span><span class="nx">Crypto</span><span class="p">.</span><span class="nx">util</span><span class="p">.</span><span class="nx">SHA256</span><span class="p">(</span><span class="nx">password</span><span class="p">)))</span>
@@ -340,6 +340,7 @@ Thus, in order to support both, we must remember for each public/private keypair
 <li><a href="https://en.bitcoin.it/wiki/List_of_address_prefixes">List of address prefixes</a></li>
 </ul>
 <p><strong>Credits:</strong> Combing through the <a href="http://brainwallet.org">http://brainwallet.org</a> was a big help.</p>
+<p>I started a new project called <a href="https://github.com/cryptocoinjs">CryptoCoinJS</a> to address the shortcomings in the BitcoinJS library. Check it out here: <a href="https://github.com/cryptocoinjs">https://github.com/cryptocoinjs</a></p>
 
 
 <!--<p>
