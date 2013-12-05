@@ -1,6 +1,7 @@
 <!--
 title: Connecting to a SockJS server from native HTML5 WebSocket
 publish: 2013-10-19
+slug: 2013/10/09/connecting-to-a-sockjs-server-from-native-html5-websocket
 tags: JavaScript, Node.js
 -->
 

@@ -33,7 +33,7 @@
   </div>
   <div class="container"> <h1>Connecting to a SockJS server from native HTML5 WebSocket</h1>
 
-<h2>Overview of the Problem</h2>
+<h2 id="overview-of-the-problem">Overview of the Problem</h2>
 <p>I wasted over four hours today on a problem with an extremely trivial solution. I was trying to connect native HTML5 instances of the 
 <code>WebSocket</code> class to my Node.js <a href="https://github.com/sockjs/sockjs-node">SockJS</a> server. Why, was I trying to do this? I was trying to mimize dependences for my library <a href="https://github.com/jprichardson/jsock">JSock</a></p>
 <p>I kept getting the following error in the browser Chrome console:</p>
@@ -84,7 +84,7 @@
 <span class="p">}</span>
 </pre></div>
 
-<h2>Solution</h2>
+<h2 id="solution">Solution</h2>
 <p>I tried removing Express, different ports, different prefixes, spent an hour combing the SockJS source code, and finally stumbled upon the solution and felt like a complete idiot.</p>
 <p>To get your WebSockets working and remove this error:</p>
 <pre><code>failed: Unexpected response code: 200 </code></pre>
@@ -119,7 +119,7 @@ If you made it this far, you should <a href="http://twitter.com/jprichardson">fo
 
   //optional url
   
-    var disqus_url = 'http://procbits.com/connecting-to-a-sockjs-server-from-native-html5-websocket/';
+    var disqus_url = 'http://procbits.com/2013/10/09/connecting-to-a-sockjs-server-from-native-html5-websocket/';
   
 
   //optional id
