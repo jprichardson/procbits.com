@@ -1,13 +1,15 @@
 <!--
 title: Warming Up To Grunt: Compiling Less and Browserify
 publish: 2013-12-03
+slug: 2013/12/05/warming-up-to-grunt-compiling-less-and-browserify
 tags: HTML, JavaScript, Node.js, CSS, Productivity, CoffeeScript
 -->
 
-I use to hate [Grunt][grunt]. No, I actually use to loath Grunt. I couldn't understand why anyone would want to use it over something so simple as a Makefile. I'd rather gouge my eyes out with a spoon than look at a Gruntfile. I hate CoffeeScript too, (forgive all the hate, please don't think of me like the Darth Vadar of programming) but CoffeeScript at least makes Grunt a little easier on the eyes.
+I use to hate [Grunt][grunt]. No, I actually use to loath Grunt. I couldn't understand why anyone would want to use it over something so simple as a Makefile. I'd rather gouge my eyes out with a spoon than look at a Gruntfile. I hate CoffeeScript too, (forgive all the hate, please don't think of me like a Sith Lord of programming) but CoffeeScript at least makes Grunt a little easier on the eyes.
 
-When I started using [Browserify][browserify] and [Less][less] I needed a way to recompile the changes. So I like a good little *nix developer, I made make tasks:
+When I started using [Browserify][browserify] and [Less][less] I needed a way to recompile the changes. So I like a good little *nix developer, I made Make tasks:
 
+**Makefile**:
 ```make
 client-js:
     browserify js/app.js -o build/bundle.js
@@ -53,7 +55,7 @@ module.exports = function(grunt) {
 Text vomit to me, ick.
 
 
-```coffee
+```coffeescript
 module.exports = (grunt) ->
   
   # Project configuration.
@@ -61,7 +63,7 @@ module.exports = (grunt) ->
     pkg: grunt.file.readJSON("package.json")
     uglify:
       options:
-        banner: "/*! <%= pkg.name %> <%= grunt.template.today(\"yyyy-mm-dd\") %> */\n"
+        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
 
       build:
         src: "src/<%= pkg.name %>.js"
@@ -75,7 +77,7 @@ module.exports = (grunt) ->
   grunt.registerTask "default", ["uglify"]
 ```
 
-As stated, I pretty much hate CoffeeScript despite the fact that I wrote [this](http://procbits.com/2012/05/18/why-do-all-the-great-node-js-developers-hate-coffeescript). (I might just invent a time-machine so that I can go back in time and give a round house kick to the face to JP of the past.) But at least it looks a little better.
+As stated, I pretty much hate CoffeeScript despite the fact that I wrote [this](http://procbits.com/2012/05/18/why-do-all-the-great-node-js-developers-hate-coffeescript). (I might just go invent a time-machine so that I can go back in time and give a round house kick to the face of JP past.) But at least it looks a little better.
 
 
 

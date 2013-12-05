@@ -1,5 +1,170 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[procbits]]></title><description><![CDATA[source code snippets and other random musings about software]]></description><link>http://procbits.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Mon, 25 Nov 2013 03:25:01 GMT</lastBuildDate><atom:link href="http://procbits.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Connecting to a SockJS server from native HTML5 WebSocket]]></title><description><![CDATA[<h2 id="overview-of-the-problem">Overview of the Problem</h2>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[procbits]]></title><description><![CDATA[source code snippets and other random musings about software]]></description><link>http://procbits.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Thu, 05 Dec 2013 13:38:55 GMT</lastBuildDate><atom:link href="http://procbits.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Warming Up To Grunt: Compiling Less and Browserify]]></title><description><![CDATA[<p>I use to hate <a href="http://gruntjs.com/">Grunt</a>. No, I actually use to loath Grunt. I couldn&#39;t understand why anyone would want to use it over something so simple as a Makefile. I&#39;d rather gouge my eyes out with a spoon than look at a Gruntfile. I hate CoffeeScript too, (forgive all the hate, please don&#39;t think of me like a Sith Lord of programming) but CoffeeScript at least makes Grunt a little easier on the eyes.</p>
+<p>When I started using <a href="https://github.com/substack/node-browserify">Browserify</a> and <a href="http://lesscss.org/">Less</a> I needed a way to recompile the changes. So I like a good little *nix developer, I made Make tasks:</p>
+<p><strong>Makefile</strong>:</p>
+<div class="highlight"><pre><span class="nf">client-js</span><span class="o">:</span>
+    browserify js/app.js -o build/bundle.js
+
+<span class="nf">client-css</span><span class="o">:</span>
+    lessc css/app.less css/app.css 
+
+<span class="nf">.PHONY</span><span class="o">:</span> <span class="m">client-js client-css</span>
+</pre></div>
+
+<p>It got really annoying typing <code>make client-js</code> or <code>make client-css</code> after everytime I changed my JavaScript of less source. I needed something to watch my files and recompile the changes.</p>
+<p>Enter Grunt.</p>
+<p>Here is a <a href="http://gruntjs.com/getting-started">sample Gruntfile</a>:</p>
+<div class="highlight"><pre><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">grunt</span><span class="p">)</span> <span class="p">{</span>
+
+  <span class="c1">// Project configuration.</span>
+  <span class="nx">grunt</span><span class="p">.</span><span class="nx">initConfig</span><span class="p">({</span>
+    <span class="nx">pkg</span><span class="o">:</span> <span class="nx">grunt</span><span class="p">.</span><span class="nx">file</span><span class="p">.</span><span class="nx">readJSON</span><span class="p">(</span><span class="s1">&#39;package.json&#39;</span><span class="p">),</span>
+    <span class="nx">uglify</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">options</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">banner</span><span class="o">:</span> <span class="s1">&#39;/*! &lt;%= pkg.name %&gt; &lt;%= grunt.template.today(&quot;yyyy-mm-dd&quot;) %&gt; */\n&#39;</span>
+      <span class="p">},</span>
+      <span class="nx">build</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">src</span><span class="o">:</span> <span class="s1">&#39;src/&lt;%= pkg.name %&gt;.js&#39;</span><span class="p">,</span>
+        <span class="nx">dest</span><span class="o">:</span> <span class="s1">&#39;build/&lt;%= pkg.name %&gt;.min.js&#39;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+
+  <span class="c1">// Load the plugin that provides the &quot;uglify&quot; task.</span>
+  <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s1">&#39;grunt-contrib-uglify&#39;</span><span class="p">);</span>
+
+  <span class="c1">// Default task(s).</span>
+  <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;uglify&#39;</span><span class="p">]);</span>
+
+<span class="p">};</span>
+</pre></div>
+
+<p>Text vomit to me, ick.</p>
+<div class="highlight"><pre><span class="nv">module.exports = </span><span class="nf">(grunt) -&gt;</span>
+
+  <span class="c1"># Project configuration.</span>
+  <span class="nx">grunt</span><span class="p">.</span><span class="nx">initConfig</span>
+    <span class="nv">pkg: </span><span class="nx">grunt</span><span class="p">.</span><span class="nx">file</span><span class="p">.</span><span class="nx">readJSON</span><span class="p">(</span><span class="s">&quot;package.json&quot;</span><span class="p">)</span>
+    <span class="nv">uglify:</span>
+      <span class="nv">options:</span>
+        <span class="nv">banner: </span><span class="s">&#39;/*! &lt;%= pkg.name %&gt; &lt;%= grunt.template.today(&quot;yyyy-mm-dd&quot;) %&gt; */\n&#39;</span>
+
+      <span class="nv">build:</span>
+        <span class="nv">src: </span><span class="s">&quot;src/&lt;%= pkg.name %&gt;.js&quot;</span>
+        <span class="nv">dest: </span><span class="s">&quot;build/&lt;%= pkg.name %&gt;.min.js&quot;</span>
+
+
+  <span class="c1"># Load the plugin that provides the &quot;uglify&quot; task.</span>
+  <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span> <span class="s">&quot;grunt-contrib-uglify&quot;</span>
+
+  <span class="c1"># Default task(s).</span>
+  <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span> <span class="s">&quot;default&quot;</span><span class="p">,</span> <span class="p">[</span><span class="s">&quot;uglify&quot;</span><span class="p">]</span>
+</pre></div>
+
+<p>As stated, I pretty much hate CoffeeScript despite the fact that I wrote <a href="http://procbits.com/2012/05/18/why-do-all-the-great-node-js-developers-hate-coffeescript">this</a>. (I might just go invent a time-machine so that I can go back in time and give a round house kick to the face of JP past.) But at least it looks a little better.</p>
+<h2 id="grunt-with-browserify">Grunt with Browserify</h2>
+<p>First, you should install the Grunt task runner:</p>
+<pre><code>[sudo] npm install -g grunt-cli</code></pre>
+<p>install the grunt browserify package:</p>
+<pre><code>npm install --save-dev grunt-browserify</code></pre>
+<p>that&#39;s it.</p>
+<p>Let&#39;s create a simple JS file that will act as our browser side JavaScript:</p>
+<pre><code>mkdir www
+touch www/app.js</code></pre>
+<p>Now let&#39;s create our gruntfile <code>Gruntfile.js</code>:</p>
+<div class="highlight"><pre><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">grunt</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">grunt</span><span class="p">.</span><span class="nx">initConfig</span><span class="p">({</span>
+    <span class="nx">pkg</span><span class="o">:</span> <span class="nx">grunt</span><span class="p">.</span><span class="nx">file</span><span class="p">.</span><span class="nx">readJSON</span><span class="p">(</span><span class="s1">&#39;package.json&#39;</span><span class="p">),</span>
+    <span class="nx">browserify</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">js</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">src</span><span class="o">:</span> <span class="s1">&#39;./www/app.js&#39;</span><span class="p">,</span>
+        <span class="nx">dest</span><span class="o">:</span> <span class="s1">&#39;./www/bundle.js&#39;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">})</span>
+
+  <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s1">&#39;grunt-browserify&#39;</span><span class="p">)</span>
+  <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;browserify&#39;</span><span class="p">])</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>now run the task:</p>
+<pre><code>grunt browserify</code></pre>
+<p>and you&#39;ll notice that <code>./www/bundle.js</code> has been created. But that&#39;s not much better than creating a Makefile. Arguably worse.</p>
+<h2 id="grunt-with-watch">Grunt with Watch</h2>
+<p>What would really be useful is to save a file and then have Grunt call browserify to recompile it. </p>
+<p>Install the following npm package:</p>
+<pre><code>npm install --save-dev grunt-contrib-watch</code></pre>
+<p>modify your grunt file to look like:</p>
+<div class="highlight"><pre><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">grunt</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">grunt</span><span class="p">.</span><span class="nx">initConfig</span><span class="p">({</span>
+    <span class="nx">pkg</span><span class="o">:</span> <span class="nx">grunt</span><span class="p">.</span><span class="nx">file</span><span class="p">.</span><span class="nx">readJSON</span><span class="p">(</span><span class="s1">&#39;package.json&#39;</span><span class="p">),</span>
+    <span class="nx">watch</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">js</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">files</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;www/**/*.js&#39;</span><span class="p">],</span>
+        <span class="nx">tasks</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;browserify&#39;</span><span class="p">]</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">browserify</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">js</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">src</span><span class="o">:</span> <span class="s1">&#39;./www/app.js&#39;</span><span class="p">,</span>
+        <span class="nx">dest</span><span class="o">:</span> <span class="s1">&#39;./www/bundle.js&#39;</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">})</span>
+
+  <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s1">&#39;grunt-contrib-watch&#39;</span><span class="p">)</span>
+  <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s1">&#39;grunt-browserify&#39;</span><span class="p">)</span>
+  <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;watch&#39;</span><span class="p">,</span> <span class="s1">&#39;browserify&#39;</span><span class="p">])</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>now run the task:</p>
+<pre><code>grunt watch</code></pre>
+<p>and if you modify <code>./www/app.js</code> and save it, you&#39;ll notice browserify will automatically run!</p>
+<h2 id="grunt-with-less">Grunt with Less</h2>
+<p>Now let&#39;s say that you want the same behavior with Less. Install:</p>
+<pre><code>npm install --save-dev grunt-contrib-less</code></pre>
+<p>create your less file:</p>
+<pre><code>touch www/app.less</code></pre>
+<p>modify your gruntfile:</p>
+<div class="highlight"><pre><span class="nx">module</span><span class="p">.</span><span class="nx">exports</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">grunt</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">grunt</span><span class="p">.</span><span class="nx">initConfig</span><span class="p">({</span>
+    <span class="nx">pkg</span><span class="o">:</span> <span class="nx">grunt</span><span class="p">.</span><span class="nx">file</span><span class="p">.</span><span class="nx">readJSON</span><span class="p">(</span><span class="s1">&#39;package.json&#39;</span><span class="p">),</span>
+    <span class="nx">watch</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">js</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">files</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;www/**/*.js&#39;</span><span class="p">],</span>
+        <span class="nx">tasks</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;browserify&#39;</span><span class="p">]</span>
+      <span class="p">},</span>
+      <span class="nx">css</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">files</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;www/**/*.less&#39;</span><span class="p">],</span>
+        <span class="nx">tasks</span><span class="o">:</span> <span class="p">[</span><span class="s1">&#39;less&#39;</span><span class="p">]</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">browserify</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">js</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">src</span><span class="o">:</span> <span class="s1">&#39;./www/app.js&#39;</span><span class="p">,</span>
+        <span class="nx">dest</span><span class="o">:</span> <span class="s1">&#39;./www/bundle.js&#39;</span>
+      <span class="p">}</span>
+    <span class="p">},</span>
+    <span class="nx">less</span><span class="o">:</span> <span class="p">{</span>
+      <span class="nx">development</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">files</span><span class="o">:</span> <span class="p">{</span><span class="s1">&#39;./www/app.css&#39;</span><span class="o">:</span> <span class="s1">&#39;./www/app.less&#39;</span><span class="p">}</span>
+      <span class="p">}</span>
+    <span class="p">}</span>
+  <span class="p">})</span>
+
+  <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s1">&#39;grunt-contrib-watch&#39;</span><span class="p">)</span>
+  <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s1">&#39;grunt-browserify&#39;</span><span class="p">)</span>
+  <span class="nx">grunt</span><span class="p">.</span><span class="nx">loadNpmTasks</span><span class="p">(</span><span class="s1">&#39;grunt-contrib-less&#39;</span><span class="p">)</span>
+  <span class="nx">grunt</span><span class="p">.</span><span class="nx">registerTask</span><span class="p">(</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;watch&#39;</span><span class="p">,</span> <span class="s1">&#39;browserify&#39;</span><span class="p">,</span> <span class="s1">&#39;less&#39;</span><span class="p">])</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>Now modify <code>www/app.less</code> and save it. You&#39;ll see <code>www/app.css</code> update accordingly.</p>
+<h2 id="conclusion">Conclusion</h2>
+<p>I don&#39;t love Grunt yet, but I&#39;m definitely warming up to the idea of having it as another tool in my developer arsenal.</p>
+]]></description><link>http://procbits.com/2013/12/05/warming-up-to-grunt-compiling-less-and-browserify</link><guid isPermaLink="true">http://procbits.com/2013/12/05/warming-up-to-grunt-compiling-less-and-browserify</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Tue, 03 Dec 2013 00:00:00 GMT</pubDate></item><item><title><![CDATA[Connecting to a SockJS server from native HTML5 WebSocket]]></title><description><![CDATA[<h2 id="overview-of-the-problem">Overview of the Problem</h2>
 <p>I wasted over four hours today on a problem with an extremely trivial solution. I was trying to connect native HTML5 instances of the 
 <code>WebSocket</code> class to my Node.js <a href="https://github.com/sockjs/sockjs-node">SockJS</a> server. Why, was I trying to do this? I was trying to mimize dependences for my library <a href="https://github.com/jprichardson/jsock">JSock</a></p>
 <p>I kept getting the following error in the browser Chrome console:</p>
@@ -963,111 +1128,4 @@ NextFlow looks much nicer with CoffeeScript programs.</p>
 Git.</p>
 <p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
 <p>-JP</p>
-]]></description><link>http://procbits.com/2012/06/28/nextflow-sane-coffeescript-flow-control</link><guid isPermaLink="true">http://procbits.com/2012/06/28/nextflow-sane-coffeescript-flow-control</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 28 Jun 2012 18:23:54 GMT</pubDate></item><item><title><![CDATA[Thinking Asynchronously in CoffeeScript/JavaScript: Loops and Callbacks]]></title><description><![CDATA[<p>Awhile back, I wrote about my new experience in learning Node.js: <a href="http://procbits.com/2011/10/29/a-node-js-experiment-thinking-asynchronously-recursion-calculate-file-size-directory/">A
-Node.js Experiment: Thinking Asynchronously, Using Recursion to
-Calculate the Total File Size in a
-Directory</a>.</p>
-<p>Consider this snippet of code:</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;JP&#39;</span><span class="p">,</span> <span class="s1">&#39;Chris&#39;</span><span class="p">,</span> <span class="s1">&#39;Leslie&#39;</span><span class="p">];</span>
-<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">names</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">){</span>
-  <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">names</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
-  <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-    <span class="nx">alert</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>              
-  <span class="p">},</span><span class="mi">10</span><span class="p">);</span>
-<span class="p">}</span><span class="err">​</span>
-</pre></div>
-
-<p>Equivalent CoffeeScript:</p>
-<div class="highlight"><pre><span class="n">names</span> <span class="o">=</span> <span class="o">[</span><span class="s1">&#39;JP&#39;</span><span class="p">,</span> <span class="s1">&#39;Chris&#39;</span><span class="p">,</span> <span class="s1">&#39;Leslie&#39;</span><span class="o">]</span>
-<span class="k">for</span> <span class="nb">name</span> <span class="k">in</span> <span class="n">names</span>
-  <span class="n">setTimeout</span><span class="p">(</span><span class="o">-&gt;</span>
-    <span class="n">alert</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
-  <span class="p">,</span><span class="mi">10</span><span class="p">)</span>
-</pre></div>
-
-<p>Click
-<a href="http://coffeescript.org/#try:names%20%3D%20%5B&#39;JP&#39;%2C%20&#39;Chris&#39;%2C%20&#39;Leslie&#39;%5D%0Afor%20name%20in%20names%0A%20%20setTimeout(-%3E%0A%20%20%20%20alert(name">here</a>%0A%20%20%2C10))
-to run it. If you guessed that the loop would alert &quot;Leslie&quot; three
-times, then you&#39;d be correct.</p>
-<p>The problem is, that before the callback executes, the loop has
-completed. Thus callback always has the last value.</p>
-<p>How do you solve this problem? You wrap the callback in a closure that
-executes immediately.</p>
-<p>JavaScript:</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;JP&#39;</span><span class="p">,</span> <span class="s1">&#39;Chris&#39;</span><span class="p">,</span> <span class="s1">&#39;Leslie&#39;</span><span class="p">];</span>
-<span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">names</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">){</span>
-  <span class="kd">var</span> <span class="nx">name</span> <span class="o">=</span> <span class="nx">names</span><span class="p">[</span><span class="nx">i</span><span class="p">];</span>
-  <span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">){</span>
-    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-      <span class="nx">alert</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>              
-    <span class="p">},</span><span class="mi">10</span><span class="p">);</span>
-  <span class="p">})(</span><span class="nx">name</span><span class="p">);</span>
-<span class="p">}</span><span class="err">​</span>
-</pre></div>
-
-<p>CoffeeScript:</p>
-<div class="highlight"><pre><span class="n">names</span> <span class="o">=</span> <span class="o">[</span><span class="s1">&#39;JP&#39;</span><span class="p">,</span> <span class="s1">&#39;Chris&#39;</span><span class="p">,</span> <span class="s1">&#39;Leslie&#39;</span><span class="o">]</span>
-<span class="k">for</span> <span class="nb">name</span> <span class="k">in</span> <span class="n">names</span>
-  <span class="k">do</span> <span class="p">(</span><span class="nb">name</span><span class="p">)</span> <span class="o">-&gt;</span>
-    <span class="n">setTimeout</span><span class="p">(</span><span class="o">-&gt;</span>
-      <span class="n">alert</span><span class="p">(</span><span class="nb">name</span><span class="p">)</span>
-    <span class="p">,</span><span class="mi">10</span><span class="p">)</span>
-</pre></div>
-
-<p>Click
-<a href="http://coffeescript.org/#try:names%20%3D%20%5B&#39;JP&#39;%2C%20&#39;Chris&#39;%2C%20&#39;Leslie&#39;%5D%0Afor%20name%20in%20names%0A%20%20do%20(name">here</a>%20-%3E%0A%20%20%20%20setTimeout(-%3E%0A%20%20%20%20%20%20alert(name)%0A%20%20%20%20%2C10))
-to run it.</p>
-<p>These solutions execute the block of code in a parallel manner. Using
-the alert&#39;s are not a good indication in showing this behavior. However,
-if you were opening files, all of them would be opened approximately
-(not exactly) at the same time.</p>
-<p>What if you wanted to perform the action in the callback in a serial
-manner?</p>
-<p>Using the previous simple example, it&#39;d look like this:</p>
-<p>JavaScript:</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;JP&#39;</span><span class="p">,</span> <span class="s1">&#39;Chris&#39;</span><span class="p">,</span> <span class="s1">&#39;Leslie&#39;</span><span class="p">];</span>
-<span class="nx">loop</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">i</span><span class="p">){</span>
-    <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-      <span class="nx">alert</span><span class="p">(</span><span class="nx">names</span><span class="p">[</span><span class="nx">i</span><span class="p">]);</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">names</span><span class="p">.</span><span class="nx">length</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="nx">loop</span><span class="p">(</span><span class="nx">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">);</span>       
-    <span class="p">},</span><span class="mi">10</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="nx">loop</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-</pre></div>
-
-<p>CoffeeScript:</p>
-<div class="highlight"><pre><span class="n">names</span> <span class="o">=</span> <span class="o">[</span><span class="s1">&#39;JP&#39;</span><span class="p">,</span> <span class="s1">&#39;Chris&#39;</span><span class="p">,</span> <span class="s1">&#39;Leslie&#39;</span><span class="o">]</span><span class="p">;</span>
-<span class="n">doloop</span> <span class="o">=</span> <span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">-&gt;</span>
-  <span class="n">setTimeout</span><span class="p">(</span><span class="o">-&gt;</span>
-    <span class="n">alert</span><span class="p">(</span><span class="n">names</span><span class="o">[</span><span class="n">i</span><span class="o">]</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">names</span><span class="o">.</span><span class="n">length</span> <span class="o">-</span> <span class="mi">1</span>
-      <span class="n">doloop</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>       
-  <span class="p">,</span><span class="mi">10</span><span class="p">);</span>
-<span class="n">doloop</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-</pre></div>
-
-<p><a href="http://coffeescript.org/#try:names%20%3D%20%5B&#39;JP&#39;%2C%20&#39;Chris&#39;%2C%20&#39;Leslie&#39;%5D%3B%0Adoloop%20%3D%20(i">Run
-it.</a>%20-%3E%0A%20%20setTimeout(-%3E%0A%20%20%20%20alert(names%5Bi%5D)%0A%20%20%20%20if%20i%20%3C%20names.length%20-%201%0A%20%20%20%20%20%20doloop(i%20%2B%201)%20%20%20%20%20%20%20%0A%20%20%2C10)%3B%0Adoloop(0))</p>
-<p>If you were doing file processing in the loop, it would be executed
-sequentially.</p>
-<p>Hopefully this helps you to better understand asynchronous design of
-algorithms in JavaScript.</p>
-<p><strong>Update:</strong> I forgot about the forEach function that exists in Node.js
-and most modern browsers. This function pretty much solves the problem.</p>
-<p>Here&#39;s the JavaScript code:</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">names</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;JP&#39;</span><span class="p">,</span> <span class="s1">&#39;Chris&#39;</span><span class="p">,</span> <span class="s1">&#39;Leslie&#39;</span><span class="p">];</span>
-<span class="nx">names</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">name</span><span class="p">){</span>
-  <span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
-    <span class="nx">alert</span><span class="p">(</span><span class="nx">name</span><span class="p">);</span>              
-  <span class="p">},</span><span class="mi">10</span><span class="p">);</span>
-<span class="p">}</span><span class="err">​</span><span class="p">);</span>
-</pre></div>
-
-<p>Much cleaner. Thanks to <a href="http://www.reddit.com/r/programming/comments/u34ed/thinking_asynchronously_in_coffeescriptjavascript/c4ryifw">smog_alado
-[Reddit]</a>
-for the reminder.</p>
-<p>Checkout <a href="http://gitpilot.com">Gitpilot</a>, a different kind of Git GUI.</p>
-<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
-<p>-JP</p>
-]]></description><link>http://procbits.com/2012/05/24/thinking-asynchronously-in-coffeescriptjavascript-loops-and-callbacks</link><guid isPermaLink="true">http://procbits.com/2012/05/24/thinking-asynchronously-in-coffeescriptjavascript-loops-and-callbacks</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 24 May 2012 23:19:20 GMT</pubDate></item></channel></rss>
+]]></description><link>http://procbits.com/2012/06/28/nextflow-sane-coffeescript-flow-control</link><guid isPermaLink="true">http://procbits.com/2012/06/28/nextflow-sane-coffeescript-flow-control</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 28 Jun 2012 18:23:54 GMT</pubDate></item></channel></rss>
