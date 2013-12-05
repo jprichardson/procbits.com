@@ -106,12 +106,6 @@ intellisense by using the &quot;dynamic&quot; data type.</p>
 <p>Outputs... [sourcecode language=&quot;javascript&quot;] { &quot;some_number&quot;: 108.541,
 &quot;date_time&quot;: &quot;2011-04-13T15:34:09Z&quot;, &quot;serial_number&quot;: &quot;SN1234&quot;
 ```</p>
-<p>Do you use Git? If so, checkout <a href="http://gitpilot.com">Gitpilot</a> to make
-project management and collaborating on projects seamless.</p>
-<p>If you made it this far, read my blog on <a href="http://techneur.com">software
-entrepreneurship</a> and follow me on Twitter:
-<a href="http://twitter.com/jprichardson">@jprichardson</a>.</p>
-<p>-JP</p>
 
 
 <!--<p>

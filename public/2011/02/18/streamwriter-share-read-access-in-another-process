@@ -97,11 +97,6 @@ without getting an IOException. In short this works because the
 <a href="http://msdn.microsoft.com/en-us/library/system.io.fileshare.aspx">FileShare</a>
 permissions are set properly. You can also read more about the <a href="http://msdn.microsoft.com/en-us/library/system.io.filemode.aspx">enum
 FileMode</a>.</p>
-<p>Are you a <a href="http://gitpilot.com">Git</a> user? Let me help you make project
-management with Git simple. Checkout <a href="http://gitpilot.com">Gitpilot</a>.</p>
-<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>
-and read my <a href="http://techneur.com">blog on entrepreneurship</a>.</p>
-<p>-JP</p>
 
 
 <!--<p>

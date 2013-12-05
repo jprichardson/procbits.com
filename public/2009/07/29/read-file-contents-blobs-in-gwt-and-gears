@@ -155,9 +155,6 @@ public class BlobReader {
 this writing, I&#39;m using Gears 0.5 with the GWT-Gears 1.2.1. In the
 current GWT-Gears svn trunk you can see upcoming support for the GWT
 methods &quot;getNativeBytes&quot; and &quot;getBytes&quot;</p>
-<p>Are you a <a href="http://gitpilot.com">Git</a> user? Let me help you make project
-management with Git simple. Checkout <a href="http://gitpilot.com">Gitpilot</a>.</p>
-<p>Enjoy!</p>
 
 
 <!--<p>

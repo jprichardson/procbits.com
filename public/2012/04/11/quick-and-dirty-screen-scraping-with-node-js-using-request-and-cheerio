@@ -60,11 +60,6 @@ replicate jQuery in every way, and most importantly it&#39;s not meant for
 the browser but for the server. But it beats the pants off of the
 <a href="https://github.com/tmpvar/jsdom">jsdom</a>/jQuery combo for screen
 scraping.</p>
-<p>Do you use Git? If so, checkout <a href="http://gitpilot.com">Gitpilot</a> to make
-collaborating on software development easy.</p>
-<p>You should follow me on Twitter:
-<a href="http://twitter.com/jprichardson">@jprichardson</a>.</p>
-<p>-JP</p>
 
 
 <!--<p>

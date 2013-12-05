@@ -34,19 +34,19 @@
   <div class="container"> <h1>Wordpress Export to Markdown Hosted on Amazon S3</h1>
 
 <p>You may have been able to tell, but this blog looks different. Yes, I finally left Wordpress. I converted my Wordpress blog to a static generated Markdown blog. It&#39;s fairly straight forward.</p>
-<h2>Why?</h2>
+<h2 id="why-">Why?</h2>
 <ul>
 <li>I hated writing my blog posts in Wordpress. I wanted to write in pure Markdown since I&#39;m such a big <a href="https://github.com/jprichardson">open source advocate</a> and have been using Markdown a lot with Github.</li>
 <li>I wanted complete control on the look and the feel.</li>
 <li>I hate the idea of maintaining a server for a blog.</li>
 </ul>
-<h2>Must Haves:</h2>
+<h2 id="must-haves-">Must Haves:</h2>
 <ul>
 <li>Must not break any links. For obvious SEO purposes. That&#39;s why I&#39;m using Amazon S3 over Github.</li>
 <li>Must be able to use existing comments. (Disqus handled this beautifully)</li>
 <li>Must be able to control the entire look and feel.</li>
 </ul>
-<h2>How?</h2>
+<h2 id="how-">How?</h2>
 <p>It&#39;s pretty straightforward:</p>
 <ol>
 <li>Installed Pandoc: <a href="http://code.google.com/p/pandoc/downloads/list">http://code.google.com/p/pandoc/downloads/list</a> </li>
@@ -57,7 +57,6 @@
 <li>Deployed to S3 using another tool that I wrote (Basin): <a href="https://github.com/skywrite/basin">https://github.com/skywrite/basin</a>.</li>
 </ol>
 <p>There are still a lot of things to do. But for now, I&#39;m satisfied.</p>
-<p>-JP</p>
 
 
 <!--<p>

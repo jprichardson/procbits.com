@@ -120,12 +120,6 @@ each column and you&#39;re set. At this time, the major disadvantage is that
 you can&#39;t lazily evaluate your CSV. You must read it entirely into
 memory. This class could be modified for lazy evaluation and then you
 would be able to use LINQ on large CSV files.</p>
-<p>Are you a <a href="http://gitpilot.com">Git</a> user? Let me help you make project
-management with Git simple. Checkout <a href="http://gitpilot.com">Gitpilot</a>.</p>
-<p>I hope you&#39;ve enjoyed this. You should read my blog on entrepreneurship:
-<a href="http://techneur.com">Techneur</a> or follow me on Twitter:
-<a href="http://twitter.com/jprichardson">@jprichardson</a>.</p>
-<p>-JP</p>
 
 
 <!--<p>

@@ -196,10 +196,6 @@ form values code and packaged it up into the <code>HttpForm</code> sugar.</p>
 <span class="n">httpForm</span><span class="p">.</span><span class="n">Submit</span><span class="p">();</span>
 </pre></div>
 
-<p>Do you use Git? If so, checkout <a href="http://gitpilot.com">Gitpilot</a> to make
-using Git thoughtless.</p>
-<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>.</p>
-<p>-JP Richardson</p>
 
 
 <!--<p>

@@ -130,11 +130,6 @@ use CoffeeScript. Here&#39;s the modification:</p>
 convert to JSON to remove the prototype. I suppose you could make this
 more efficient my just manually setting the prototype to Object before
 doing the comparison, but oh well this works for the time being.</p>
-<p>Do you use Git? If so, checkout <a href="http://gitpilot.com">Gitpilot</a> to make
-project management and collaborating on projects seamless.</p>
-<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>
-and read my blog on entrepreneurship: <a href="http://techneur.com">Techneur</a>.</p>
-<p>-JP Richardson</p>
 
 
 <!--<p>

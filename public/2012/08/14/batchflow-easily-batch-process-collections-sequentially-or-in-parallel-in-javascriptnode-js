@@ -33,7 +33,7 @@
   </div>
   <div class="container"> <h1>BatchFlow: Easily batch process collections sequentially or in parallel in JavaScript/Node.js</h1>
 
-<h2>Why?</h2>
+<h2 id="why-">Why?</h2>
 <p>I really got tired of writing the following patterns over and over
 again:</p>
 <p><strong>Sequential:</strong></p>
@@ -76,10 +76,10 @@ thinking.</p>
 way too much. I also suffer from a server case of NIH syndrome. Kidding,
 or else I&#39;d rewrite Express.js. Or, am I? Muahahhaa. `async` syntax is
 also very ugly and not CoffeeScript friendly.</p>
-<h2>Installation</h2>
+<h2 id="installation">Installation</h2>
 <p><code>npm install batchflow</code></p>
-<h2>Examples</h2>
-<h3>Arrays</h3>
+<h2 id="examples">Examples</h2>
+<h3 id="arrays">Arrays</h3>
 <p>Let&#39;s rewrite the previous sequential example:</p>
 <p><strong>Sequential:</strong></p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">batch</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;batchflow&#39;</span><span class="p">);</span>
@@ -149,7 +149,7 @@ batch(files).sequential()
 <span class="p">});</span>
 </pre></div>
 
-<h2>Misc</h2>
+<h2 id="misc">Misc</h2>
 <p>​1. Is `sequential()` or `parallel()` too long? Fine. `series()`
 and `seq()` are aliases for `sequential()` and `par()` is an alias
 for `parallel()`. 2. You don&#39;t like the fluent API? That&#39;s OK too:</p>
@@ -167,7 +167,7 @@ for `parallel()`. 2. You don&#39;t like the fluent API? That&#39;s OK too:</p>
 <span class="p">});</span>
 </pre></div>
 
-<h2>CoffeeScript</h2>
+<h2 id="coffeescript">CoffeeScript</h2>
 <div class="highlight"><pre><span class="n">batch</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;batchflow&#39;</span><span class="p">)</span>
 <span class="n">files</span> <span class="o">=</span> <span class="o">[.</span><span class="n">.</span><span class="o">.</span> <span class="n">list</span> <span class="n">of</span> <span class="n">files</span> <span class="o">.</span><span class="n">.</span><span class="o">.]</span>
 <span class="n">bf</span> <span class="o">=</span> <span class="n">batch</span><span class="p">(</span><span class="n">files</span><span class="p">)</span><span class="o">.</span><span class="n">seq</span><span class="p">()</span><span class="o">.</span><span class="n">each</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">file</span><span class="p">,</span> <span class="n">done</span><span class="p">)</span> <span class="o">-&gt;</span>
@@ -178,7 +178,7 @@ for `parallel()`. 2. You don&#39;t like the fluent API? That&#39;s OK too:</p>
   <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">fr</span><span class="o">.</span><span class="n">toString</span><span class="p">()</span> <span class="k">for</span> <span class="n">fr</span> <span class="k">in</span> <span class="n">results</span>
 </pre></div>
 
-<h2>Error Handling</h2>
+<h2 id="error-handling">Error Handling</h2>
 <p>What&#39;s that, you want error handling? Well, you might as well call me
 Burger King... have it your way.</p>
 <div class="highlight"><pre><span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;f&#39;</span><span class="o">:</span> <span class="s1">&#39;/tmp/file_DOES_NOT_exist_hopefully&#39;</span> <span class="o">+</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">()};</span>
@@ -205,11 +205,6 @@ Burger King... have it your way.</p>
 
 <p>You can grab the source on
 <a href="https://github.com/jprichardson/node-batchflow">Github</a>.</p>
-<p>If you use Git with others, you should checkout
-<a href="http://gitpilot.com">Gitpilot</a> to make collaboration with Git simple
-using a different GUI. We would love your feedback.</p>
-<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
-<p>-JP</p>
 
 
 <!--<p>

@@ -47,12 +47,6 @@ grep?</a></p>
 <p>But how can I put them together? It&#39;s probably of no surpise that I can
 use the &#39;|&#39; operator like so:</p>
 <p>```bash</p>
-<p>Are you a <a href="http://gitpilot.com">Git</a> user? Let me help you make project
-management with Git simple. Checkout <a href="http://gitpilot.com">Gitpilot</a>.</p>
-<p>That&#39;s it! Follow me on Twitter
-<a href="http://twitter.com/jprichardson">@jprichardson</a> and read my <a href="http://techneur.com">blog on
-entrepreneurship</a>.</p>
-<p>-JP</p>
 
 
 <!--<p>

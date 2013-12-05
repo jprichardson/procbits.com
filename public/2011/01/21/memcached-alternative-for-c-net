@@ -45,20 +45,20 @@ I don&#39;t want to waste your time. 1) I wouldn&#39;t use this in a production
 environment. It just hasn&#39;t had enough rigorous testing. YMMV. 2) It
 only works on the same machine that the app resides on. Yes, I realize
 that this is a huge caveat.</p>
-<h3>Why?</h3>
+<h3 id="why-">Why?</h3>
 <p>So, what was my use case? I follow a loose Agile process of delivering
 every week. Well, as the production went on, more data would accumulate
 on the server. I needed a quick way to cache this data locally without
 rewriting my algorithms in the short term. Thus,
 <a href="https://github.com/jprichardson/MemMapCache">MemMapCache</a> was born.</p>
-<h3>How Does It Work?</h3>
+<h3 id="how-does-it-work-">How Does It Work?</h3>
 <p>It uses memory mapped files that are new in .NET 4.0 (they just wrap the
 Win32 API). The client creates a key and persists the object value to a
 memory mapped file using the said key. It then passes the key onto the
 server so that the server can keep the reference. This prevents the .NET
 garbage collector from cleaning up the memory mapped file so that upon a
 new instance of the client, it can still retrieve the data.</p>
-<h3>How do you use it?</h3>
+<h3 id="how-do-you-use-it-">How do you use it?</h3>
 <p>Go clone this project:
 <a href="https://github.com/jprichardson/MemMapCache"><a href="https://github.com/jprichardson/MemMapCache">https://github.com/jprichardson/MemMapCache</a></a>
 and then add MemMapCacheLib to your project. You&#39;ll need to make sure
@@ -89,11 +89,6 @@ that MemMapCache.exe is running on your system.</p>
 
 <p>That&#39;s it. It&#39;s come in handy for me during development. If you find
 this useful please leave a comment.</p>
-<p>Are you a <a href="http://gitpilot.com">Git</a> user? Let me help you make project
-management with Git simple. Checkout <a href="http://gitpilot.com">Gitpilot</a>.</p>
-<p>Follow me on Twitter <a href="http://twitter.com/jprichardson">@jprichardson</a> or
-read my blog on entrepreneurship: <a href="http://techneur.com">Techneur</a></p>
-<p>-JP</p>
 
 
 <!--<p>

@@ -69,10 +69,6 @@ in a StoryBoard. They can run simultaneously or sequentially. If you
 have multiple animations in a StoryBoard and you want them to run
 sequentially, you need to add a &quot;BeginTime&quot; attribute. This ensures that
 the animation is executed after the previous animation(s).</p>
-<p>Are you a <a href="http://gitpilot.com">Git</a> user? Let me help you make project
-management with Git simple. Checkout <a href="http://gitpilot.com">Gitpilot</a>.</p>
-<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a></p>
-<p>-JP</p>
 
 
 <!--<p>

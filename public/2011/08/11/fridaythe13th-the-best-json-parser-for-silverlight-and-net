@@ -37,8 +37,8 @@
 Recently, a project came up where Silverlight made more sense to use.
 I&#39;d thought that wouldn&#39;t be a problem since I&#39;d just use
 <a href="http://msdn.microsoft.com/en-us/library/system.web.script.serialization.javascriptserializer.aspx">JavaScriptSerializer</a>
-<a href="http://procbits.com/2011/04/21/quick-json-serializationdeserialization-in-c/" title="here">wrote about it
-[here</a>]
+[wrote about it
+<a href="http://procbits.com/2011/04/21/quick-json-serializationdeserialization-in-c/" title="here">here</a>]
 like I did for my WPF project.</p>
 <p>Uh oh. It turns out that Silverlight doesn&#39;t have JavaScriptSerializer.
 Never fear!
@@ -90,12 +90,6 @@ property &quot;CamelizeProperties&quot; to turn &quot;some_number&quot; into
 <a href="https://github.com/jprichardson/FridayThe13th">Github</a>. Oh yeah... it&#39;s
 also faster than that <a href="http://json.codeplex.com/">other .NET JSON
 library</a> that everyone uses.</p>
-<p>Are you a <a href="http://gitpilot.com">Git</a> user? Let me help you make project
-management with Git simple. Checkout <a href="http://gitpilot.com">Gitpilot</a>.</p>
-<p>If you made it this far, read my blog on <a href="http://techneur.com">software
-entrepreneurship</a> and follow me on Twitter:
-<a href="http://twitter.com/jprichardson">@jprichardson</a>.</p>
-<p>-JP</p>
 
 
 <!--<p>

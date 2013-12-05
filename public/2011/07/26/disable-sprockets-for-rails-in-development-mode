@@ -52,12 +52,6 @@ your Rails application. This will aid in debugging.</p>
 <span class="sx">&lt;%=</span> <span class="n">javascript_include_tag</span> <span class="s2">&quot;application&quot;</span><span class="p">,</span> <span class="n">debug</span><span class="p">:</span> <span class="no">Rails</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">development?</span> <span class="o">%&gt;</span>
 </pre></div>
 
-<p>Are you a Git user? Let me help you make project management with Git
-simple. Checkout <a href="http://gitpilot.com">Gitpilot</a>.</p>
-<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>
-and read my blog on software entrepreneurship:
-<a href="http://techneur.com">Techneur</a></p>
-<p>-JP</p>
 
 
 <!--<p>

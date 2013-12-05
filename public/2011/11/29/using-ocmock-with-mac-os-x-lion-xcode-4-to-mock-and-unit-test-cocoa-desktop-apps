@@ -49,7 +49,7 @@ apply part of these instructions to your own project.</p>
 <p>I should preface these instructions by stating that I am not an Xcode or
 Objective C expert. Also, I&#39;m using Xcode version 4.1 despite version
 4.2 being available. I just haven&#39;t upgraded yet.</p>
-<h3>Building 64-bit OCMock Library</h3>
+<h3 id="building-64-bit-ocmock-library">Building 64-bit OCMock Library</h3>
 <p>This is the first necessary task. As stated earlier, the libOCMock.a
 file found in the downloadable package is 32 bit only.</p>
 <ol>
@@ -100,7 +100,7 @@ the directory OCMock founder in the Headers directory that is
 located in the same directory as libOCMock.a. Copy these two items
 to a location that you can find them later.</li>
 </ol>
-<h3>Adding OCMock to the Demo Project</h3>
+<h3 id="adding-ocmock-to-the-demo-project">Adding OCMock to the Demo Project</h3>
 <p>Now we&#39;ll add the library and header to a demo project.</p>
 <ol>
 <li>Open Xcode. Click File...New Project. Select Cocoa Application.</li>
@@ -165,11 +165,6 @@ OCMock</a></li>
 <li><a href="http://jtigger-learning.wikidot.com/getting-ocmock-to-work-with-an-iphone-project">Getting OCMock to Work with an iPhone
 Project</a></li>
 </ul>
-<p>Do you use Git? If so, checkout <a href="http://gitpilot.com">Gitpilot</a> to make
-using Git easy.</p>
-<p>Follow me on Twitter: <a href="http://twitter.com/jprichardson">@jprichardson</a>
-and read my blog on entrepreneurship: <a href="http://techneur.com">Techneur</a>.</p>
-<p>-JP Richardson</p>
 
 
 <!--<p>

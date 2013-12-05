@@ -48,9 +48,6 @@ osascript -e <span class="s1">&#39;tell application &quot;Terminal&quot;&#39;</s
 
 <p>Then set its executable bit. &quot;chmod +x /usr/local/bin/nt&quot;</p>
 <p>That&#39;s it!</p>
-<p>Advertisement: Make Git simple. Let <a href="http://gitpilot.com">Gitpilot</a> show
-you the right way to Git things done. <a href="http://gitpilot.com">Gitpilot</a>
-will help you write software faster.</p>
 
 
 <!--<p>

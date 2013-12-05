@@ -42,9 +42,6 @@ need transactions or foreign key support you should not do this.</p>
 <code>SELECT CONCAT(&#39;ALTER TABLE &#39;,table_schema,&#39;.&#39;,table_name,&#39; engine=MyISAM;&#39;) FROM information_schema.tables WHERE engine = &#39;InnoDB&#39;;</code></p>
 <p>It seems to have worked. Maybe I&#39;ll provide an article or tutorial in
 the future on benchmarking your slice.</p>
-<p>Are you a <a href="http://gitpilot.com">Git</a> user? Let me help you make project
-management with Git simple. Checkout <a href="http://gitpilot.com">Gitpilot</a>.</p>
-<p>-JP</p>
 
 
 <!--<p>
