@@ -34,11 +34,3 @@ use the '|' operator like so:
 
 ```bash
 
-Are you a [Git](http://gitpilot.com) user? Let me help you make project
-management with Git simple. Checkout [Gitpilot](http://gitpilot.com).
-
-That's it! Follow me on Twitter
-[@jprichardson](http://twitter.com/jprichardson) and read my [blog on
-entrepreneurship](http://techneur.com).
-
--JP

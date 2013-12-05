@@ -507,10 +507,4 @@ namespace TestYourProject
 
 Enjoy. Drop me a line if you have any problems.
 
-Are you a [Git](http://gitpilot.com) user? Let me help you make project
-management with Git simple. Checkout [Gitpilot](http://gitpilot.com).
 
-Read my blog on entrepreneurship: [Techneur](http://techneur.com) Follow
-me on Twitter: [@jprichardson](http://twitter.com/jprichardson)
-
--JP

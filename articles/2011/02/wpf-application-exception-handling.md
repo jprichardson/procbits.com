@@ -40,10 +40,4 @@ That's it. So now if the app crashes on your users, you don't have to
 ask your users what steps they did to cause the crash. You can just look
 at the logs!
 
-Are you a [Git](http://gitpilot.com) user? Let me help you make project
-management with Git simple. Checkout [Gitpilot](http://gitpilot.com).
 
-Follow me on Twitter [@jprichardson](http://twitter.com/jprichardson) or
-read my [blog on software entrepreneurship](http://techneur.com).
-
--JP

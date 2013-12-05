@@ -58,10 +58,4 @@ code](https://github.com/jprichardson/keychain_manager).
 I'll post soon on how I automated the web portion of communicating with
 the iOS Provisioning Portal.
 
-Do you use Git? If so, checkout [Gitpilot](http://gitpilot.com) to make
-using Git thoughtless.
 
-Follow me on Twitter: [@jprichardson](http://twitter.com/jprichardson)
-and read my blog on entrepreneurship: [Techneur](http://techneur.com).
-
--JP Richardson

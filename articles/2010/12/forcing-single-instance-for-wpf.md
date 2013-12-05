@@ -52,10 +52,4 @@ ShowWindow](http://msdn.microsoft.com/en-us/library/ms633548(VS.85).aspx)
 and pass any of the associated constants to alter the behavior of the
 window if it is already running.
 
-Are you a [Git](http://gitpilot.com) user? Let me help you make project
-management with Git simple. Checkout [Gitpilot](http://gitpilot.com).
 
-Read my [blog on entrepreneurship](http://techneur.com) and follow me on
-[Twitter](http://twitter.com/jprichardson).
-
--JP

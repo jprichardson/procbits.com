@@ -76,10 +76,3 @@ the command line to experiment with the Node.js REPL. You can also run
 `npm` to install Node.js packages. Read more about [NPM
 here](http://npmjs.org/).
 
-Do you use Git? If so, checkout [Gitpilot](http://gitpilot.com) to make
-using Git mindless.
-
-Follow me on Twitter: [@jprichardson](http://twitter.com/jprichardson)
-and read my blog on entrepreneurship: [Techneur](http://techneur.com).
-
--JP Richardson

@@ -135,10 +135,4 @@ Module:
 13. [Converting V8 Arguments to C++
     Types](http://stackoverflow.com/questions/7476145/converting-from-v8arguments-to-c-types)
 
-Do you use Git? If so, checkout [Gitpilot](http://gitpilot.com) to make
-using Git easy.
 
-Follow me on Twitter: [@jprichardson](http://twitter.com/jprichardson)
-and read my blog on entrepreneurship: [Techneur](http://techneur.com).
-
--JP Richardson

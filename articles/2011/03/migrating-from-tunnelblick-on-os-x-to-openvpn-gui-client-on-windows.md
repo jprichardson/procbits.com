@@ -37,11 +37,4 @@ If you see this, you didn't install the version from
 [openvpn.net](http://openvpn.net/index.php/open-source/downloads.html)
 or you didn't run the GUI as Administrator.
 
-Are you a [Git](http://gitpilot.com) user? Let me help you make project
-management with Git simple. Checkout [Gitpilot](http://gitpilot.com).
 
-You should follow me on Twitter:
-[@jprichardson](http://twitter.com/jprichardson) and read my [blog on
-entrepreneurship](http://techneur.com).
-
--JP

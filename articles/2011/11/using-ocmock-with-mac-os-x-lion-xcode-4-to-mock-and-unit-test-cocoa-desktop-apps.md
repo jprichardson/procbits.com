@@ -149,10 +149,4 @@ Hope this helps. References:
 -   [Getting OCMock to Work with an iPhone
     Project](http://jtigger-learning.wikidot.com/getting-ocmock-to-work-with-an-iphone-project)
 
-Do you use Git? If so, checkout [Gitpilot](http://gitpilot.com) to make
-using Git easy.
 
-Follow me on Twitter: [@jprichardson](http://twitter.com/jprichardson)
-and read my blog on entrepreneurship: [Techneur](http://techneur.com).
-
--JP Richardson

@@ -88,11 +88,4 @@ More fun CoffeeScript hatred:
 -   [Should You Learn
     CoffeeScript?](http://net.tutsplus.com/articles/interviews/should-you-learn-coffeescript/)
 
-If you use Git with others, you should checkout
-[Gitpilot](http://gitpilot.com) to make collaboration with Git simple.
-We would love your advice.
 
-If you made it this far, follow me on Twitter:
-[@jprichardson](http://twitter.com/jprichardson)
-
--JP

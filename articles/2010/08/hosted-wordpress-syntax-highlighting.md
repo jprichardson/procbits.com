@@ -29,5 +29,4 @@ JP
 No, but seriously... I didn't know about this! I'm stoked, I got tired
 of looking at the crappy background of my code!
 
-Are you a [Git](http://gitpilot.com) user? Let me help you make project
-management with Git simple. Checkout [Gitpilot](http://gitpilot.com).
+

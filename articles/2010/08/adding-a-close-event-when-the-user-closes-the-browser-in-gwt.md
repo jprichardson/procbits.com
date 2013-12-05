@@ -26,9 +26,3 @@ Window.addWindowClosingHandler(new ClosingHandler(){
 Simple as pie. If event.setMessage is called, a prompt will be displayed
 for you.
 
-Are you a [Git](http://gitpilot.com) user? Let me help you make project
-management with Git simple. Checkout [Gitpilot](http://gitpilot.com).
-
-Follow me on Twitter: [@jprichardson](http://twitter.com/jprichardson)
-
--JP

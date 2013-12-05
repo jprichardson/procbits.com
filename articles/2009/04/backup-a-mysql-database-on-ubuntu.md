@@ -16,7 +16,4 @@ directory as to where you want to store your backups. I typically just
 dump them in /var/dbbak. You can then run the following command:
 ``  /usr/bin/mysqldump -u root -p YOUR_DB_NAME | gzip > /root/dbbak/YOUR_DB_NAME_`date +%y_%m_%d`.gz ``
 
-Are you a [Git](http://gitpilot.com) user? Let me help you make project
-management with Git simple. Checkout [Gitpilot](http://gitpilot.com).
 
--JP

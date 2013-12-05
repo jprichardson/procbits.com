@@ -22,10 +22,3 @@ in crime updatedb? Google to the rescue,
 [djangrrl.com](http://www.djangrrl.com/view/update-locate-database-for-mac-os-x/)
 has the answer: ` sudo /usr/libexec/locate.updatedb`
 
-Are you a [Git](http://gitpilot.com) user? Let me help you make project
-management with Git simple. Checkout [Gitpilot](http://gitpilot.com).
-
-Follow me on Twitter: [@jprichardson](http://twitter.com/jprichardson)
-and read my blog on entrepreneurship: [Techneur](http://techneur.com).
-
--JP

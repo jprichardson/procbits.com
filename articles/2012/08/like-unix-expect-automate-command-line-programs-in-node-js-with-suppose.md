@@ -60,10 +60,4 @@ suppose('npm', ['init'])
 Pretty easy, huh? You can grab the source on
 [Github](https://github.com/jprichardson/node-suppose).
 
-If you use Git with others, you should checkout
-[Gitpilot](http://gitpilot.com) to make collaboration with Git simple
-using a different GUI. We would love your feedback.
 
-Follow me on Twitter: [@jprichardson](http://twitter.com/jprichardson)
-
--JP

@@ -121,10 +121,3 @@ convert to JSON to remove the prototype. I suppose you could make this
 more efficient my just manually setting the prototype to Object before
 doing the comparison, but oh well this works for the time being.
 
-Do you use Git? If so, checkout [Gitpilot](http://gitpilot.com) to make
-project management and collaborating on projects seamless.
-
-Follow me on Twitter: [@jprichardson](http://twitter.com/jprichardson)
-and read my blog on entrepreneurship: [Techneur](http://techneur.com).
-
--JP Richardson

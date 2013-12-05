@@ -141,7 +141,4 @@ this writing, I'm using Gears 0.5 with the GWT-Gears 1.2.1. In the
 current GWT-Gears svn trunk you can see upcoming support for the GWT
 methods "getNativeBytes" and "getBytes"
 
-Are you a [Git](http://gitpilot.com) user? Let me help you make project
-management with Git simple. Checkout [Gitpilot](http://gitpilot.com).
 
-Enjoy!

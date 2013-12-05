@@ -31,6 +31,4 @@ Then set its executable bit. "chmod +x /usr/local/bin/nt"
 
 That's it!
 
-Advertisement: Make Git simple. Let [Gitpilot](http://gitpilot.com) show
-you the right way to Git things done. [Gitpilot](http://gitpilot.com)
-will help you write software faster.
+

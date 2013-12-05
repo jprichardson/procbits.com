@@ -79,9 +79,3 @@ Then add this to your spec\_helper.rb file:
 
 That's it!
 
-Are you a [Git](http://gitpilot.com) user? Let me help you make project
-management with Git simple. Checkout [Gitpilot](http://gitpilot.com).
-
-If you made it this far, read my blog on [software
-entrepreneurship](http://techneur.com) and follow me on Twitter:
-[@jprichardson](http://twitter.com/jprichardson).

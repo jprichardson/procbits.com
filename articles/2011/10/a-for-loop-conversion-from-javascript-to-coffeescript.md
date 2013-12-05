@@ -77,10 +77,3 @@ convert JavaScript to CoffeeScript](http://js2coffee.org/). Try our
 examples here and see what the tool generates. Hint: it isn't always
 optimized.
 
-Do you use Git? If so, checkout [Gitpilot](http://gitpilot.com) to make
-using Git thoughtless.
-
-Follow me on Twitter: [@jprichardson](http://twitter.com/jprichardson)
-and read my blog on entrepreneurship: [Techneur](http://techneur.com).
-
--JP Richardson

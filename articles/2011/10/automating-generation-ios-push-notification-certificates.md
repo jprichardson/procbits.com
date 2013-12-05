@@ -94,10 +94,4 @@ automating the interaction with web pages. It's pretty slow as it's
 meant for testing, so I wouldn't use it for screen scraping, but it's
 served me well for this task.
 
-Do you use Git? If so, checkout [Gitpilot](http://gitpilot.com) to make
-using Git thoughtless.
 
-Follow me on Twitter: [@jprichardson](http://twitter.com/jprichardson)
-and read my blog on entrepreneurship: [Techneur](http://techneur.com).
-
--JP Richardson

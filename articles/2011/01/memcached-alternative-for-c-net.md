@@ -77,10 +77,4 @@ cache.CacheHitAlwaysMiss = true
 That's it. It's come in handy for me during development. If you find
 this useful please leave a comment.
 
-Are you a [Git](http://gitpilot.com) user? Let me help you make project
-management with Git simple. Checkout [Gitpilot](http://gitpilot.com).
 
-Follow me on Twitter [@jprichardson](http://twitter.com/jprichardson) or
-read my blog on entrepreneurship: [Techneur](http://techneur.com)
-
--JP

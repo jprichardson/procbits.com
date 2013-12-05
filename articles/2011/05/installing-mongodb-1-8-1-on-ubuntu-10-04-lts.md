@@ -39,11 +39,4 @@ Edit the file: /etc/mongodb.conf
 Add the following lines: bind\_ip 127.0.0.1 noauth = true \#\#\#\#\# YOU
 MUST add this line if you use bind\_ip
 
-Are you a Git user? Let me help you make project management with Git
-simple. Checkout [Gitpilot](http://gitpilot.com).
 
-That's it. Follow me on Twitter:
-[@jprichardson](http://twitter.com/jprichardson) and read my blog on
-[software entrepreneurship](http://techneur.com).
-
--JP

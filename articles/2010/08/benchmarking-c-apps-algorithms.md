@@ -76,11 +76,4 @@ public static class BenchmarkTimer
         }
     }
 ```
-
-Are you a [Git](http://gitpilot.com) user? Let me help you make project
-management with Git simple. Checkout [Gitpilot](http://gitpilot.com).
-
-Follow me on Twitter: [@jprichardson](http://twitter.com/jprichardson)
-Read my blog entrepreneurship: [Techneur](http://techneur.com)
-
--JP
+Enjoy.

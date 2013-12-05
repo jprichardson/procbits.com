@@ -226,10 +226,3 @@ almost **twice as fast** as the synchronous version!
 Try it out and let me know your results. Also, can you think of any
 other ways to solve this problem?
 
-Do you use Git? If so, checkout [Gitpilot](http://gitpilot.com) to make
-using Git thoughtless.
-
-Follow me on Twitter: [@jprichardson](http://twitter.com/jprichardson)
-and read my blog on entrepreneurship: [Techneur](http://techneur.com).
-
--JP Richardson

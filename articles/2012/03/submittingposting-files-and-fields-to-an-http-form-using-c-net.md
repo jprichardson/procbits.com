@@ -180,9 +180,4 @@ httpForm.setValue("foo", "some foo").setValue("blah", "rarrr!");
 httpForm.Submit();
 ```
 
-Do you use Git? If so, checkout [Gitpilot](http://gitpilot.com) to make
-using Git thoughtless.
 
-Follow me on Twitter: [@jprichardson](http://twitter.com/jprichardson).
-
--JP Richardson

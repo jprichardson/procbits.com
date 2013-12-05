@@ -53,12 +53,3 @@ So your code might look like:
 
 Enjoy.
 
-Advertisement: Make Git simple. Let [Gitpilot](http://gitpilot.com) show
-you the right way to Git things done. [Gitpilot](http://gitpilot.com)
-will help you write software faster.
-
-Follow me on Twitter: [@jprichardson](http://twitter.com/jprichardson)
-and read my blog on software entrepreneurship:
-[Techneur](http://techneur.com)
-
--JP

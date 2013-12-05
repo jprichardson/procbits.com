@@ -40,5 +40,5 @@ It's pretty straightforward:
 
 There are still a lot of things to do. But for now, I'm satisfied.
 
--JP
+
 

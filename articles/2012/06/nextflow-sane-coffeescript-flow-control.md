@@ -162,9 +162,4 @@ next(flow)
 
 [NextFlow on Github](https://github.com/jprichardson/node-nextflow)
 
-Checkout [Gitpilot](http://gitpilot.com), to become more productive with
-Git.
 
-Follow me on Twitter: [@jprichardson](http://twitter.com/jprichardson)
-
--JP

@@ -104,11 +104,3 @@ Outputs... [sourcecode language="javascript"] { "some\_number": 108.541,
 "date\_time": "2011-04-13T15:34:09Z", "serial\_number": "SN1234"
 ```
 
-Do you use Git? If so, checkout [Gitpilot](http://gitpilot.com) to make
-project management and collaborating on projects seamless.
-
-If you made it this far, read my blog on [software
-entrepreneurship](http://techneur.com) and follow me on Twitter:
-[@jprichardson](http://twitter.com/jprichardson).
-
--JP

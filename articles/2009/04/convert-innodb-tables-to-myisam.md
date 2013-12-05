@@ -23,7 +23,4 @@ I came across this
 It seems to have worked. Maybe I'll provide an article or tutorial in
 the future on benchmarking your slice.
 
-Are you a [Git](http://gitpilot.com) user? Let me help you make project
-management with Git simple. Checkout [Gitpilot](http://gitpilot.com).
 
--JP

@@ -116,12 +116,5 @@ this:
 </Records>
 ```
 
-Are you a [Git](http://gitpilot.com) user? Let me help you make project
-management with Git simple. Checkout [Gitpilot](http://gitpilot.com).
-
 Pretty nifty huh? In the next post, I'll explain how you can use this
-with LINQ. In the mean time follow me on Twitter
-([@jprichardson](http://twitter.com/jprichardson)) or read my blog on
-entrepreneurship: [Techneur](http://techneur.com).
-
--JP
+with LINQ. 

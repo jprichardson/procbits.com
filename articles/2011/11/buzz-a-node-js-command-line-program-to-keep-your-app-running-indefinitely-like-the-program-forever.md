@@ -58,10 +58,4 @@ But really, it's utility is that it's a much simpler Forever.
 The name comes from Buzz Lightyear in the movie Toy Story. His popular
 phrase was: To infinity and beyond!
 
-Do you use Git? If so, checkout [Gitpilot](http://gitpilot.com) to make
-using Git thoughtless.
 
-Follow me on Twitter: [@jprichardson](http://twitter.com/jprichardson)
-and read my blog on entrepreneurship: [Techneur](http://techneur.com).
-
--JP Richardson

@@ -52,11 +52,4 @@ void __fastcall TForm2::Button1Click(TObject *Sender)
 }
 ```
 
-Are you a Git user? Let me help you make project management with Git
-simple. Checkout [Gitpilot](http://gitpilot.com).
 
-Follow me on Twitter: [@jprichardson](http://twitter.com/jprichardson)
-and read my blog on software entrepreneurship:
-[Techneur](http://techneur.com)
-
--JP

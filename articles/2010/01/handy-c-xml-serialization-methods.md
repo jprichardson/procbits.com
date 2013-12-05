@@ -40,5 +40,4 @@ public static void WriteToFile(T obj, string file) {
 
 Enjoy.
 
-Are you a [Git](http://gitpilot.com) user? Let me help you make project
-management with Git simple. Checkout [Gitpilot](http://gitpilot.com).
+

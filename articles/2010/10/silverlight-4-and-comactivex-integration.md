@@ -56,10 +56,3 @@ All you need to do is add a reference to "Microsoft.CSharp.dll." You can
 do this by right-clicking "References" in the "Solution Explorer" and
 then navigating to the ".NET" tab and selecting it.
 
-Are you a [Git](http://gitpilot.com) user? Let me help you make project
-management with Git simple. Checkout [Gitpilot](http://gitpilot.com).
-
-Follow me on Twitter: [@jprichardson](http://twitter.com/jprichardson)
-or read my blog on entrepreneurship: [Techneur](http://techneur.com).
-
--JP

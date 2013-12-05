@@ -42,10 +42,4 @@ the browser but for the server. But it beats the pants off of the
 [jsdom](https://github.com/tmpvar/jsdom)/jQuery combo for screen
 scraping.
 
-Do you use Git? If so, checkout [Gitpilot](http://gitpilot.com) to make
-collaborating on software development easy.
 
-You should follow me on Twitter:
-[@jprichardson](http://twitter.com/jprichardson).
-
--JP

@@ -142,8 +142,4 @@ Much cleaner. Thanks to [smog\_alado
 [Reddit]](http://www.reddit.com/r/programming/comments/u34ed/thinking_asynchronously_in_coffeescriptjavascript/c4ryifw)
 for the reminder.
 
-Checkout [Gitpilot](http://gitpilot.com), a different kind of Git GUI.
 
-Follow me on Twitter: [@jprichardson](http://twitter.com/jprichardson)
-
--JP

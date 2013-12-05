@@ -117,11 +117,4 @@ you can't lazily evaluate your CSV. You must read it entirely into
 memory. This class could be modified for lazy evaluation and then you
 would be able to use LINQ on large CSV files.
 
-Are you a [Git](http://gitpilot.com) user? Let me help you make project
-management with Git simple. Checkout [Gitpilot](http://gitpilot.com).
 
-I hope you've enjoyed this. You should read my blog on entrepreneurship:
-[Techneur](http://techneur.com) or follow me on Twitter:
-[@jprichardson](http://twitter.com/jprichardson).
-
--JP

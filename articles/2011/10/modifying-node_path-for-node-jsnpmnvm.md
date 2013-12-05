@@ -71,10 +71,4 @@ I also didn't know how to [modify strings in
 bash](http://www.faqs.org/docs/abs/HTML/string-manipulation.html). What
 kind of hacker am I? ::sobs:: Hehehe.
 
-Do you use Git? If so, checkout [Gitpilot](http://gitpilot.com) to make
-using Git thoughtless.
 
-Follow me on Twitter: [@jprichardson](http://twitter.com/jprichardson)
-and read my blog on entrepreneurship: [Techneur](http://techneur.com).
-
--JP Richardson
