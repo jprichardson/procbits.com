@@ -356,7 +356,7 @@ and on the SHA256(SHA256(input)):
 Compressed keys are the preferred format now. Let's do this in one quick JS snippet to make everything stupidly simple and compatible with pretty much every Bitcoin client:
 
 ```js
-var randArr = new Uint8Array[32] //create a typed array of 32 bytes (256 bits)
+var randArr = new Uint8Array(32) //create a typed array of 32 bytes (256 bits)
 window.crypto.getRandomValues(randArr) //populate array with cryptographically secure random numbers
 
 //some Bitcoin and Crypto methods don't like Uint8Array for input. They expect regular JS arrays.

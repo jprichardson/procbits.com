@@ -293,7 +293,7 @@ Thus, in order to support both, we must remember for each public/private keypair
 </blockquote>
 <h2 id="summary">Summary</h2>
 <p>Compressed keys are the preferred format now. Let&#39;s do this in one quick JS snippet to make everything stupidly simple and compatible with pretty much every Bitcoin client:</p>
-<div class="highlight"><pre><span class="kd">var</span> <span class="nx">randArr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Uint8Array</span><span class="p">[</span><span class="mi">32</span><span class="p">]</span> <span class="c1">//create a typed array of 32 bytes (256 bits)</span>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">randArr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Uint8Array</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span> <span class="c1">//create a typed array of 32 bytes (256 bits)</span>
 <span class="nb">window</span><span class="p">.</span><span class="nx">crypto</span><span class="p">.</span><span class="nx">getRandomValues</span><span class="p">(</span><span class="nx">randArr</span><span class="p">)</span> <span class="c1">//populate array with cryptographically secure random numbers</span>
 
 <span class="c1">//some Bitcoin and Crypto methods don&#39;t like Uint8Array for input. They expect regular JS arrays.</span>
