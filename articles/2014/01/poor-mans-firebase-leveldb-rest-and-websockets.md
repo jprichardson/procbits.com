@@ -267,7 +267,9 @@ Chat Example
 
 Let's put together what we learned to create a chat example. Similar to the one found on http://angularfire.com. 
 
- 
+Install deps:
+
+    npm install --save levelup leveldown multilevel express event-stream shoe level-live-stream 
 
 
 
