@@ -1,5 +1,151 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[procbits]]></title><description><![CDATA[source code snippets and other random musings about software]]></description><link>http://procbits.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Sat, 07 Dec 2013 20:23:59 GMT</lastBuildDate><atom:link href="http://procbits.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Warming Up To Grunt: Compiling Less and Browserify]]></title><description><![CDATA[<p>I use to hate <a href="http://gruntjs.com/">Grunt</a>. No, I actually use to loath Grunt. I couldn&#39;t understand why anyone would want to use it over something so simple as a Makefile. I&#39;d rather gouge my eyes out with a spoon than look at a Gruntfile. I hate CoffeeScript too, (forgive all the hate, please don&#39;t think of me like a Sith Lord of programming) but CoffeeScript at least makes Grunt a little easier on the eyes.</p>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[procbits]]></title><description><![CDATA[source code snippets and other random musings about software]]></description><link>http://procbits.com</link><generator>NodeJS RSS Module</generator><lastBuildDate>Sun, 05 Jan 2014 06:31:56 GMT</lastBuildDate><atom:link href="http://procbits.com/rss.xml" rel="self" type="application/rss+xml"/><item><title><![CDATA[Understanding Custom AngularJS Promises, Services, and Punching Clowns with a Phonegap Example]]></title><description><![CDATA[<p>If you look at the documentation for <a href="http://docs.angularjs.org/api/ng.$q">$q</a>, the AngularJS promise library inspired by <a href="https://github.com/kriskowal/q">Q</a>, you&#39;ll notice that it functions a bit different than the promise returned by <a href="http://docs.angularjs.org/api/ng.$http">$http</a>.</p>
+<p>For example:</p>
+<div class="highlight"><pre><span class="c1">// =&gt; myPromise standard $q promise returned or created above somewhere</span>
+<span class="nx">myPromise</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// =&gt; success code here</span>
+<span class="p">},</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// =&gt; failure code here</span>
+<span class="p">})</span>
+</pre></div>
+
+<p>vs <code>$http</code> promise:</p>
+<div class="highlight"><pre><span class="nx">$http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="cm">/* ... */</span><span class="p">)</span>
+<span class="p">.</span><span class="nx">success</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// =&gt; success</span>
+<span class="p">}).</span><span class="nx">failure</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// =&gt; failure</span>
+<span class="p">})</span>
+</pre></div>
+
+<p>The documentation does not make it clear why they&#39;re different. But this <a href="http://stackoverflow.com/questions/16385278/angular-httppromise-difference-between-success-error-methods-and-thens-a">StackOverflow post</a>  has some details. Arguably, it can be said that it may be a bit cleaner. Let&#39;s take a look on you can leverage this idea to make a clean modal confirmation service for a Phonegap/Cordova app.</p>
+<h2 id="phonegap-cordova">Phonegap/Cordova</h2>
+<p>As you may know, Adobe Phonegap provides <a href="http://docs.phonegap.com/en/3.3.0/cordova_notification_notification.md.html#Notification">notifications</a> so that your app can have native alert dialogs instead of the dialogs created by JavaScript.</p>
+<p>so, instead of:</p>
+<div class="highlight"><pre><span class="c1">// =&gt; returns `true` if &#39;OK&#39; was clicked and `false` if &#39;Cancel&#39; was clicked</span>
+<span class="nb">window</span><span class="p">.</span><span class="nx">confirm</span><span class="p">(</span><span class="s1">&#39;Are you sure that you want to punch the clown?&#39;</span><span class="p">)</span>
+</pre></div>
+
+<p>you can do this:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">onConfirm</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">idx</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">idx</span> <span class="o">===</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// =&gt; &#39;OK&#39; was pressed (clown punched)</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="c1">// =&gt; &#39;Cancel&#39; was pressed (you&#39;re a weeny)</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="nx">navigator</span><span class="p">.</span><span class="nx">notification</span><span class="p">.</span><span class="nx">confirm</span><span class="p">(</span><span class="s1">&#39;Are you sure that you want to punch the clown?&#39;</span><span class="p">,</span> <span class="nx">onConfirm</span><span class="p">)</span>
+</pre></div>
+
+<p>even better, you can add a title and change the text of the buttons:</p>
+<div class="highlight"><pre><span class="nx">navigator</span><span class="p">.</span><span class="nx">notification</span><span class="p">.</span><span class="nx">confirm</span><span class="p">(</span><span class="s1">&#39;Are you sure that you want to punch the clown?&#39;</span><span class="p">,</span> <span class="nx">onConfirm</span><span class="p">,</span> <span class="s1">&#39;Punch Clown?&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Punch Clown&#39;</span><span class="p">,</span> <span class="s1">&#39;Cancel&#39;</span><span class="p">])</span>
+</pre></div>
+
+<h2 id="angularjs-services">AngularJS Services</h2>
+<p>Let&#39;s wrap this bad boy up in a service so that we don&#39;t have to worry if we&#39;re testing our desktop browser or native mobile app.</p>
+<p><strong>alerts.js</strong>:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">alertsModule</span> <span class="o">=</span> <span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">&#39;alerts&#39;</span><span class="p">,</span> <span class="p">[])</span>
+
+<span class="nx">alertsModule</span><span class="p">.</span><span class="nx">service</span><span class="p">(</span><span class="s1">&#39;alerts&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$q</span><span class="p">,</span> <span class="nx">$window</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">confirm</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span> <span class="nx">title</span><span class="p">,</span> <span class="nx">buttonLabels</span><span class="p">,</span> <span class="nx">successCallback</span><span class="p">,</span> <span class="nx">cancelCallback</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">navigator</span><span class="p">.</span><span class="nx">notification</span> <span class="o">&amp;&amp;</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">notification</span><span class="p">.</span><span class="nx">confirm</span><span class="p">)</span> <span class="p">{</span> <span class="c1">//native app</span>
+      <span class="kd">var</span> <span class="nx">onConfirm</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">idx</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">idx</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">?</span> <span class="nx">successCallback</span><span class="p">()</span> <span class="o">:</span> <span class="nx">cancelCallback</span><span class="p">()</span>
+      <span class="p">}</span>
+
+      <span class="nx">navigator</span><span class="p">.</span><span class="nx">notification</span><span class="p">.</span><span class="nx">confirm</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span> <span class="nx">onConfirm</span><span class="p">,</span> <span class="nx">title</span><span class="p">,</span> <span class="nx">buttonLabels</span><span class="p">)</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">$window</span><span class="p">.</span><span class="nx">confirm</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="o">?</span> <span class="nx">successCallback</span><span class="p">()</span> <span class="o">:</span> <span class="nx">cancelCallback</span><span class="p">()</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+</pre></div>
+
+<p>now somewhere in your app, you can do:</p>
+<div class="highlight"><pre><span class="kd">function</span> <span class="nx">onSuccess</span><span class="p">(){</span>
+  <span class="c1">// =&gt; bozo punched</span>
+<span class="p">}</span>
+
+<span class="kd">function</span> <span class="nx">onCancel</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// =&gt; ya, Bozo scares me too, not punched.</span>
+<span class="p">}</span>
+
+<span class="nx">alerts</span><span class="p">.</span><span class="nx">confirm</span><span class="p">(</span><span class="s1">&#39;Do you want to punch bozo?&#39;</span><span class="p">,</span> <span class="s1">&#39;Punch him?&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Punch Bozo&#39;</span><span class="p">,</span> <span class="s2">&quot;No, I&#39;m a Weeny&quot;</span><span class="p">],</span> <span class="nx">onSuccess</span><span class="p">,</span> <span class="nx">onCancel</span><span class="p">)</span>
+</pre></div>
+
+<p>but that&#39;s ugly. </p>
+<h2 id="promises">Promises</h2>
+<p>I won&#39;t talk about the virtues of promises, as it&#39;s been done <a href="http://blog.parse.com/2013/01/29/whats-so-great-about-javascript-promises/">ad nausaem</a>. I rarely use them, but when I do... probably a Dos Equis meme here. </p>
+<p>Let&#39;s modify our service to have a promise:</p>
+<div class="highlight"><pre><span class="nx">mod</span><span class="p">.</span><span class="nx">service</span><span class="p">(</span><span class="s1">&#39;alerts&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$q</span><span class="p">,</span> <span class="nx">$window</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">confirm</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span> <span class="nx">title</span><span class="p">,</span> <span class="nx">buttonLabels</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">defer</span> <span class="o">=</span> <span class="nx">$q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="nx">navigator</span><span class="p">.</span><span class="nx">notification</span> <span class="o">&amp;&amp;</span> <span class="nx">navigator</span><span class="p">.</span><span class="nx">notification</span><span class="p">.</span><span class="nx">confirm</span><span class="p">)</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">onConfirm</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">idx</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">idx</span> <span class="o">===</span> <span class="mi">1</span> <span class="o">?</span> <span class="nx">defer</span><span class="p">.</span><span class="nx">resolve</span><span class="p">()</span> <span class="o">:</span> <span class="nx">defer</span><span class="p">.</span><span class="nx">reject</span><span class="p">()</span>
+      <span class="p">}</span>
+
+      <span class="nx">navigator</span><span class="p">.</span><span class="nx">notification</span><span class="p">.</span><span class="nx">confirm</span><span class="p">(</span><span class="nx">message</span><span class="p">,</span> <span class="nx">onConfirm</span><span class="p">,</span> <span class="nx">title</span><span class="p">,</span> <span class="nx">buttonLabels</span><span class="p">)</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+      <span class="nx">$window</span><span class="p">.</span><span class="nx">confirm</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span> <span class="o">?</span> <span class="nx">defer</span><span class="p">.</span><span class="nx">resolve</span><span class="p">()</span> <span class="o">:</span> <span class="nx">defer</span><span class="p">.</span><span class="nx">reject</span><span class="p">()</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="nx">defer</span><span class="p">.</span><span class="nx">promise</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+</pre></div>
+
+<p>now you can do this:</p>
+<div class="highlight"><pre><span class="nx">alerts</span><span class="p">.</span><span class="nx">confirm</span><span class="p">(</span><span class="s1">&#39;Do you want to punch bozo?&#39;</span><span class="p">,</span> <span class="s1">&#39;Punch him?&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Punch Bozo&#39;</span><span class="p">,</span> <span class="s2">&quot;No, I&#39;m a Weeny&quot;</span><span class="p">])</span>
+<span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+  <span class="c1">// =&gt; bozo punched</span>
+<span class="p">},</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// =&gt; ya, Bozo scares me too, not punched.</span>
+<span class="p">})</span>
+</pre></div>
+
+<h3 id="custom-promise">Custom Promise</h3>
+<p>You can make a custom promise to add clarity, let&#39;s modify our <code>alerts</code> service again:</p>
+<div class="highlight"><pre><span class="nx">mod</span><span class="p">.</span><span class="nx">service</span><span class="p">(</span><span class="s1">&#39;alerts&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$q</span><span class="p">,</span> <span class="nx">$window</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">this</span><span class="p">.</span><span class="nx">confirm</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="cm">/* ... */</span><span class="p">)</span> <span class="p">{</span>
+    <span class="cm">/* ... */</span>
+    <span class="k">return</span> <span class="nx">alertPromise</span><span class="p">(</span><span class="nx">defer</span><span class="p">.</span><span class="nx">promise</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+
+<span class="kd">function</span> <span class="nx">alertPromise</span><span class="p">(</span><span class="nx">promise</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">promise</span><span class="p">.</span><span class="nx">ok</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">promise</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">fn</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">)</span>
+    <span class="p">})</span>
+    <span class="k">return</span> <span class="nx">promise</span>
+  <span class="p">}</span>
+
+  <span class="nx">promise</span><span class="p">.</span><span class="nx">cancel</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">fn</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">promise</span><span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="nx">fn</span><span class="p">.</span><span class="nx">apply</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="nx">arguments</span><span class="p">)</span>
+    <span class="p">})</span>
+    <span class="k">return</span> <span class="nx">promise</span>
+  <span class="p">}</span>
+
+  <span class="k">return</span> <span class="nx">promise</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>now you can do this:</p>
+<div class="highlight"><pre><span class="nx">alerts</span><span class="p">.</span><span class="nx">confirm</span><span class="p">(</span><span class="s1">&#39;Do you want to punch bozo?&#39;</span><span class="p">,</span> <span class="s1">&#39;Punch him?&#39;</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;Punch Bozo&#39;</span><span class="p">,</span> <span class="s2">&quot;No, I&#39;m a Weeny&quot;</span><span class="p">])</span>
+<span class="p">.</span><span class="nx">ok</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+  <span class="c1">// =&gt; bozo punched</span>
+<span class="p">})</span>
+<span class="p">.</span><span class="nx">cancel</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="c1">// =&gt; ya, Bozo scares me too, not punched.</span>
+<span class="p">})</span>
+</pre></div>
+
+<p>is this better? Not really. But at least your clown punching code has a little more clarity.</p>
+]]></description><link>http://procbits.com/2014/01/05/understanding-custom-angularjs-promises-services-clown-punch-phonegap-example</link><guid isPermaLink="true">http://procbits.com/2014/01/05/understanding-custom-angularjs-promises-services-clown-punch-phonegap-example</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Sun, 05 Jan 2014 00:00:00 GMT</pubDate></item><item><title><![CDATA[Warming Up To Grunt: Compiling Less and Browserify]]></title><description><![CDATA[<p>I use to hate <a href="http://gruntjs.com/">Grunt</a>. No, I actually use to loath Grunt. I couldn&#39;t understand why anyone would want to use it over something so simple as a Makefile. I&#39;d rather gouge my eyes out with a spoon than look at a Gruntfile. I hate CoffeeScript too, (forgive all the hate, please don&#39;t think of me like a Sith Lord of programming) but CoffeeScript at least makes Grunt a little easier on the eyes.</p>
 <p>When I started using <a href="https://github.com/substack/node-browserify">Browserify</a> and <a href="http://lesscss.org/">Less</a> I needed a way to recompile the changes. So I like a good little *nix developer, I made Make tasks:</p>
 <p><strong>Makefile</strong>:</p>
 <div class="highlight"><pre><span class="nf">client-js</span><span class="o">:</span>
@@ -980,137 +1126,4 @@ command line scripts.</p>
 
 <p>Pretty easy, huh? You can grab the source on
 <a href="https://github.com/jprichardson/node-suppose">Github</a>.</p>
-]]></description><link>http://procbits.com/2012/08/03/like-unix-expect-automate-command-line-programs-in-node-js-with-suppose</link><guid isPermaLink="true">http://procbits.com/2012/08/03/like-unix-expect-automate-command-line-programs-in-node-js-with-suppose</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Fri, 03 Aug 2012 21:09:40 GMT</pubDate></item><item><title><![CDATA[NextFlow: Sane CoffeeScript Flow Control]]></title><description><![CDATA[<p>Take a look at the most prominent JavaScript control flow libraries:
-<a href="https://github.com/caolan/async">Async.js</a>,
-<a href="https://github.com/creationix/step">Step</a>,
-<a href="https://github.com/substack/node-seq">Seq</a>. If you were to use these
-libraries in CoffeeScript, your code would be an ugly mess.</p>
-<p><strong>Async.js / CoffeeScript</strong></p>
-<div class="highlight"><pre><span class="n">async</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;async&#39;</span><span class="p">)</span>
-
-<span class="n">async</span><span class="o">.</span><span class="n">series</span><span class="p">(</span>
-  <span class="p">(</span><span class="o">-&gt;</span>
-    <span class="c1">#first function</span>
-  <span class="p">),</span>
-  <span class="p">(</span><span class="o">-&gt;</span>
-    <span class="c1">#second function</span>
-  <span class="p">)</span>
-<span class="p">)</span>
-</pre></div>
-
-<p><strong>Step / CoffeeScript</strong></p>
-<div class="highlight"><pre><span class="no">Step</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;step&#39;</span><span class="p">)</span>
-
-<span class="no">Step</span><span class="p">(</span>
-  <span class="p">(</span><span class="o">-&gt;</span>
-    <span class="c1">#first function</span>
-  <span class="p">),</span>
-  <span class="p">(</span><span class="o">-&gt;</span>
-    <span class="c1">#second function</span>
-  <span class="p">)</span>
-<span class="p">)</span>
-</pre></div>
-
-<p><strong>Seq / CoffeeScript</strong></p>
-<div class="highlight"><pre><span class="no">Seq</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;seq&#39;</span><span class="p">)</span>
-
-<span class="no">Seq</span><span class="p">()</span><span class="o">.</span><span class="n">seq</span><span class="p">(</span><span class="o">-&gt;</span>
-  <span class="c1">#first function</span>
-<span class="p">)</span><span class="o">.</span><span class="n">seq</span><span class="p">(</span><span class="o">-&gt;</span>
-  <span class="c1">#second function</span>
-<span class="p">)</span>
-</pre></div>
-
-<p>Yuck. If you&#39;re programming in JavaScript, all of them are very usable
-solutions. Also, to be fair, they do a lot more than NextFlow. But
-NextFlow looks much nicer with CoffeeScript programs.</p>
-<p><strong>How to Install:</strong></p>
-<p><code>npm install --production nextflow</code></p>
-<p>Can be used in the browser too.</p>
-<p>Execute sequentially, calling the `next()` function:</p>
-<div class="highlight"><pre><span class="k">next</span> <span class="o">=</span> <span class="nb">require</span><span class="p">(</span><span class="s1">&#39;nextflow&#39;</span><span class="p">)</span>
-
-<span class="n">vals</span> <span class="o">=</span> <span class="o">[]</span>
-<span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
-
-<span class="n">flow</span> <span class="o">=</span>
-  <span class="mi">1</span><span class="p">:</span> <span class="o">-&gt;</span>
-    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-    <span class="vi">@next</span><span class="p">()</span>
-  <span class="mi">2</span><span class="p">:</span> <span class="o">-&gt;</span>
-    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="no">Math</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
-    <span class="vi">@next</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-  <span class="mi">3</span><span class="p">:</span> <span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">-&gt;</span>
-    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
-    <span class="vi">@next</span><span class="p">()</span>
-  <span class="mi">4</span><span class="p">:</span> <span class="o">-&gt;</span>
-    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-    <span class="vi">@next</span><span class="p">()</span>
-  <span class="mi">5</span><span class="p">:</span> <span class="o">-&gt;</span>
-    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="c1">#is 1</span>
-    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="c1">#is 2</span>
-    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="c1">#is x</span>
-    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">3</span><span class="o">]</span> <span class="c1">#is 4</span>
-
-<span class="k">next</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span>
-</pre></div>
-
-<p>Call functions by the label:</p>
-<div class="highlight"><pre><span class="n">vals</span> <span class="o">=</span> <span class="o">[]</span>
-<span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
-
-<span class="n">flow</span> <span class="o">=</span>
-  <span class="n">a1</span><span class="p">:</span> <span class="o">-&gt;</span>
-    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-    <span class="vi">@a2</span><span class="p">()</span>
-  <span class="n">a2</span><span class="p">:</span> <span class="o">-&gt;</span>
-    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="no">Math</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
-    <span class="vi">@a3</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-  <span class="n">a3</span><span class="p">:</span> <span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">-&gt;</span>
-    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
-    <span class="vi">@a4</span><span class="p">()</span>
-  <span class="n">a4</span><span class="p">:</span> <span class="o">-&gt;</span>
-    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
-    <span class="vi">@a5</span><span class="p">()</span>
-  <span class="n">a5</span><span class="p">:</span> <span class="o">-&gt;</span>
-    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="c1">#is 1</span>
-    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="c1">#is 2</span>
-    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="c1">#is x</span>
-    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">3</span><span class="o">]</span> <span class="c1">#is 4</span>
-
-<span class="k">next</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span>
-</pre></div>
-
-<p>Call either `next()` or call the label:</p>
-<div class="highlight"><pre><span class="n">vals</span> <span class="o">=</span> <span class="o">[]</span>
-<span class="n">x</span> <span class="o">=</span> <span class="mi">0</span>
-<span class="n">y</span> <span class="o">=</span> <span class="mi">0</span>
-
-<span class="n">flow</span> <span class="o">=</span>
-  <span class="n">a1</span><span class="p">:</span> <span class="o">-&gt;</span>
-    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-    <span class="vi">@a2</span><span class="p">()</span>
-  <span class="n">a2</span><span class="p">:</span> <span class="o">-&gt;</span>
-    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="no">Math</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
-    <span class="vi">@a3</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-  <span class="n">a3</span><span class="p">:</span> <span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">-&gt;</span>
-    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="no">Math</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
-    <span class="vi">@next</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
-  <span class="n">a4</span><span class="p">:</span> <span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">-&gt;</span>
-    <span class="n">vals</span><span class="o">.</span><span class="n">push</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>
-    <span class="vi">@a5</span><span class="p">()</span>
-  <span class="n">a5</span><span class="p">:</span> <span class="o">-&gt;</span>
-    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="c1">#is 1</span>
-    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="c1">#is 2</span>
-    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="c1">#is x</span>
-    <span class="n">console</span><span class="o">.</span><span class="n">log</span> <span class="n">vals</span><span class="o">[</span><span class="mi">3</span><span class="o">]</span> <span class="c1">#is y</span>
-
-<span class="k">next</span><span class="p">(</span><span class="n">flow</span><span class="p">)</span>
-</pre></div>
-
-<p><a href="https://github.com/jprichardson/node-nextflow">NextFlow on Github</a></p>
-]]></description><link>http://procbits.com/2012/06/28/nextflow-sane-coffeescript-flow-control</link><guid isPermaLink="true">http://procbits.com/2012/06/28/nextflow-sane-coffeescript-flow-control</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Thu, 28 Jun 2012 18:23:54 GMT</pubDate></item></channel></rss>
+]]></description><link>http://procbits.com/2012/08/03/like-unix-expect-automate-command-line-programs-in-node-js-with-suppose</link><guid isPermaLink="true">http://procbits.com/2012/08/03/like-unix-expect-automate-command-line-programs-in-node-js-with-suppose</guid><dc:creator><![CDATA[JP Richardson]]></dc:creator><pubDate>Fri, 03 Aug 2012 21:09:40 GMT</pubDate></item></channel></rss>

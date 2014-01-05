@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<title></title>
+<title>procbits: source code snippets and other random musings about software</title>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="author">
+<meta name="author" content="JP Richardson">
 <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc2/css/bootstrap.min.css" rel="stylesheet" media="screen">
 <link href="/assets/css/highlight.css" rel="stylesheet">
 <link href="/assets/css/style.css" rel="stylesheet">
@@ -31,37 +31,19 @@
       </div>
     </div>
   </div>
-  <div class="container"> <h2>Tags:</h2><br/>
+  <div class="container"> 
 
-<ul>
-  <li><a href="/tags/angularjs">AngularJS</a></li>
-  <li><a href="/tags/ansible">Ansible</a></li>
-  <li><a href="/tags/bitcoin">Bitcoin</a></li>
-  <li><a href="/tags/c">C#</a></li>
-  <li><a href="/tags/cocoa">Cocoa</a></li>
-  <li><a href="/tags/coffeescript">CoffeeScript</a></li>
-  <li><a href="/tags/cordova">Cordova</a></li>
-  <li><a href="/tags/css">CSS</a></li>
-  <li><a href="/tags/gwt">GWT</a></li>
-  <li><a href="/tags/html">HTML</a></li>
-  <li><a href="/tags/javascript">JavaScript</a></li>
-  <li><a href="/tags/linux">Linux</a></li>
-  <li><a href="/tags/meta">meta</a></li>
-  <li><a href="/tags/misc">Misc</a></li>
-  <li><a href="/tags/mongodb">MongoDB</a></li>
-  <li><a href="/tags/mysql">MySql</a></li>
-  <li><a href="/tags/nodejs">Node.js</a></li>
-  <li><a href="/tags/objective-c">Objective C</a></li>
-  <li><a href="/tags/osx">OSX</a></li>
-  <li><a href="/tags/phonegap">Phonegap</a></li>
-  <li><a href="/tags/productivity">Productivity</a></li>
-  <li><a href="/tags/rails">Rails</a></li>
-  <li><a href="/tags/ruby">Ruby</a></li>
-  <li><a href="/tags/server-management">Server Management</a></li>
-  <li><a href="/tags/silverlight">Silverlight</a></li>
-  <li><a href="/tags/sql">SQL</a></li>
-  <li><a href="/tags/uncategorized">Uncategorized</a></li>
-  <li><a href="/tags/wpf">WPF</a></li>
+
+  
+  <h3>2014</h3>
+  <ul>
+    
+      
+      <li>
+        <a href="/2014/01/05/understanding-custom-angularjs-promises-services-clown-punch-phonegap-example">Understanding Custom AngularJS Promises, Services, and Punching Clowns with a Phonegap Example</a>
+      </li>
+    
+  </ul>
 
 
   </div>

@@ -12,7 +12,7 @@ For example:
 ```js
 // => myPromise standard $q promise returned or created above somewhere
 myPromise.then(function() {
-	// => success code here
+  // => success code here
 }, function() {
   // => failure code here
 })
@@ -21,21 +21,22 @@ myPromise.then(function() {
 vs `$http` promise:
 
 ```js
-$http.get(/* ... */).success(function() {
+$http.get(/* ... */)
+.success(function() {
   // => success
 }).failure(function() {
   // => failure
 })
 ```
 
-The documentation does not make it clear why they're different. But this [StackOverflow post](http://stackoverflow.com/questions/16385278/angular-httppromise-difference-between-success-error-methods-and-thens-a)  has some details. Arguably, it can be said that it may be a bit cleaner. Let's take a look on you can leverage this idea to make a clean confirmation for a Phonegap/Cordova app.
+The documentation does not make it clear why they're different. But this [StackOverflow post](http://stackoverflow.com/questions/16385278/angular-httppromise-difference-between-success-error-methods-and-thens-a)  has some details. Arguably, it can be said that it may be a bit cleaner. Let's take a look on you can leverage this idea to make a clean modal confirmation service for a Phonegap/Cordova app.
 
 
 
 Phonegap/Cordova
 ----------------
 
-As you may know, Adobe Phonegap provides [notification](http://docs.phonegap.com/en/3.3.0/cordova_notification_notification.md.html#Notification) so that your app can have native alert dialogs instead of the dialogs created by JavaScript.
+As you may know, Adobe Phonegap provides [notifications](http://docs.phonegap.com/en/3.3.0/cordova_notification_notification.md.html#Notification) so that your app can have native alert dialogs instead of the dialogs created by JavaScript.
 
 so, instead of:
 
@@ -150,12 +151,10 @@ alerts.confirm('Do you want to punch bozo?', 'Punch him?', ['Punch Bozo', "No, I
 
 You can make a custom promise to add clarity, let's modify our `alerts` service again:
 
-```
 ```js
 mod.service('alerts', function($q, $window) {
   this.confirm = function(/* ... */) {
     /* ... */
-
     return alertPromise(defer.promise)
   }
 })
