@@ -1,6 +1,6 @@
 <!--
 title: Poor Man's Firebase: LevelDB, REST, and WebSockets
-publish: 2014-01-03
+publish:
 slug: 2014/01/03/poor-mans-firebase-leveldb-rest-and-websockets
 tags: WebSockets, JavaScript, Node.js, LevelDB, REST, Browserify
 -->
