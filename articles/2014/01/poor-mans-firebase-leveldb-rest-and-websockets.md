@@ -1,14 +1,14 @@
 <!--
 title: Poor Man's Firebase: LevelDB, REST, and WebSockets
-publish:
-slug: 2014/01/03/poor-mans-firebase-leveldb-rest-and-websockets
+publish: 2014-01-06
+slug: 2014/01/06/poor-mans-firebase-leveldb-rest-and-websockets
 tags: WebSockets, JavaScript, Node.js, LevelDB, REST, Browserify
 -->
 
 Firebase
 --------
 
-I wanted to build a web app that would allow data to easily be transmitted to other connected web clients. I had heard of [Firebase][http://www.firebase.com] before. So I started reading the Firebase documentation and playing around with the examples.There is a nice library that they created called [AngularFire](http://angularfire.com) which provides some slick integration between Firebase and [AngularJS][http://angularjs.com]. But for some reason, the provided chat example would sporadically not work. (As an aside, it seems that it would work most of the time in most of environments that I'd try, but for some reason, it rarely worked in one). So I needed to find a new solution.
+I wanted to build a web app that would allow data to easily be transmitted to other connected web clients. I had heard of [Firebase](http://www.firebase.com) before. So I started reading the Firebase documentation and playing around with the examples.There is a nice library that they created called [AngularFire](http://angularfire.com) which provides some slick integration between Firebase and [AngularJS](http://angularjs.com). But for some reason, the provided chat example would sporadically not work. (As an aside, it seems that it would work most of the time in most of environments that I'd try, but for some reason, it rarely worked in one). So I needed to find a new solution.
 
 
 
@@ -269,10 +269,165 @@ Let's put together what we learned to create a chat example. Similar to the one 
 
 Install deps:
 
-    npm install --save levelup leveldown multilevel express event-stream shoe level-live-stream 
+    npm init
+    npm install --save levelup leveldown multilevel event-stream shoe level-live-stream browserify
 
+create **server.js**:
 
+```js
+var levelup = require('levelup')
+  , multilevel = require('multilevel')
+  , levelLiveStream = require('level-live-stream')
+  , http = require('http')
+  , shoe = require('shoe')
+  , fs = require('fs')
+  , browserify = require('browserify')
+  , es = require('event-stream')
 
+var db = levelup('./chat.db', {valueEncoding: 'json'})
+var liveDbStream = levelLiveStream(db)
 
+var messages = {}
+
+//load initial messages
+db.get('messages', function(err, data) {
+  if (err) return
+  messages = data
+})
+
+liveDbStream.on('data', function(data) {
+  if (data.type === 'del' && data.key === 'messages') { 
+    //'clear' pressed, doesn't actually remove all of the keys, although you easily could
+    messages = {}
+  }
+
+  if (data.key.indexOf('message:') >= 0) {
+    var idx = data.key.split(':')[1]
+    messages[idx] = '' //not sophisticated enough to handle messages generated at exact same time
+    db.put('messages', messages)
+  }
+})
+
+var server = http.createServer(function(req, res) {
+  switch (req.url) {
+    case '/': 
+      fs.createReadStream('./index.html').pipe(res)
+      break;
+    case '/client.js':
+      res.writeHead(200, {'Content-Type': 'application/javascript'})
+      browserify('./client.js').bundle({debug:true}).pipe(res)
+      break;
+    default: 
+      res.writeHead(200, {'Content-Type': 'text/plain'})
+      res.end(res.url + ' not found')
+  }
+})
+
+var dbSocket = shoe(function(stream) {
+  stream.pipe(multilevel.server(db)).pipe(stream)
+})
+dbSocket.install(server, '/wsdb')
+
+var changesSocket = shoe(function(stream) {
+  es.pipeline(
+    liveDbStream,
+    es.map(function(data, next) { next(null, JSON.stringify(data)) }),
+    stream
+  )
+})
+changesSocket.install(server, '/wschanges')
+
+server.listen(8000, function() {
+  console.log('listening...')
+})
+```
+
+create **index.html**:
+
+```html
+<!DOCTYPE html>
+<meta charset=utf-8>
+<title>chat example</title>
+<script src="client.js"></script>
+<form>
+  <input type="text" id="name" value="guest" style="width: 75px;">
+  <input type="text" id="message" placeholder="type message here..." style="width: 300px;">
+  <input type="submit" onclick="send(); return false;" value="send">
+  <button onclick="clearMessages(); return false;">clear</button>
+</form>
+<hr>
+<div id="messages"></div>
+```
+
+create **client.js**:
+
+```js
+var multilevel = require('multilevel')
+  , shoe = require('shoe')
+
+var db = multilevel.client()
+var dbSocket = shoe('/wsdb')
+var changesSocket = shoe('/wschanges')
+
+dbSocket.pipe(db.createRpcStream()).pipe(dbSocket)
+
+changesSocket.on('data', function(updateData) {
+  var updateData = JSON.parse(updateData)
+
+  if (updateData.type === 'del' && updateData.key === 'messages') {
+    document.getElementById('messages').innerHTML = ''
+    return
+  }
+
+  if (updateData.key.indexOf('message:') >= 0) {
+    appendMessage(updateData.value)
+  }
+})
+
+function appendMessage(msg) {
+  var p = document.createElement('p')
+  var text = document.createTextNode(msg.name + ': ' + msg.message)
+  p.appendChild(text)
+  document.getElementById('messages').appendChild(p)
+}
+
+window.send = function() {
+  var nameEl = document.getElementById('name')
+  var msgEl = document.getElementById('message')
+  var obj = {name: nameEl.value, message: msgEl.value}
+  msgEl.value = ''
+  db.put('message:' + Date.now(), obj)
+}
+
+window.onload = function() {
+  var nameEl = document.getElementById('name')
+  var id = Math.random().toString().substr(2,3)
+  nameEl.value += id
+
+  //get initial chat state
+  db.get('messages', function(err, messages) {
+    if (messages == null) return
+    
+    var ids = Object.keys(messages).slice(-15) //take last 15
+    ids.forEach(function(id) {
+      db.get('message:' + id, function(err, data) {
+        appendMessage(data)
+      })
+    })
+  })
+}
+
+window.clearMessages = function() {
+  db.del('messages', function(err) {
+    if (err) alert(err.message)
+  })
+}
+```
+
+now run:
+
+    node server.js
+
+Boom! Now you have a hacky chat server ready to rock!
 
 

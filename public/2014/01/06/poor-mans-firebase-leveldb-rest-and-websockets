@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<title>Poor Man's Firebase: LevelDB, REST, and WebSockets</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="author" content="JP Richardson">
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc2/css/bootstrap.min.css" rel="stylesheet" media="screen">
+<link href="/assets/css/highlight.css" rel="stylesheet">
+<link href="/assets/css/style.css" rel="stylesheet">
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc2/js/bootstrap.min.js"></script>
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0-rc2/css/bootstrap-glyphicons.css" rel="stylesheet">
+<script src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$'], ['\\(','\\)']]}});
+  
+  
+  
+</script>
+<div id="wrap">
+  <div class="navbar navbar-default">
+    <div class="container">
+      <div class="navbar-header">
+        <button data-toggle="collapse" data-target=".navbar-collapse" class="navbar-toggle"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="http://procbits.com" class="navbar-brand">procbits</a>
+      </div>
+      <div class="collapse navbar-collapse">
+        <ul class="nav navbar-nav pull-right"> 
+          <li><a href="/pages/about">About            </a></li>
+          <li><a href="/tags">Tags</a></li>
+          <li><a href="/rss.xml">RSS</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="container"> <h1>Poor Man's Firebase: LevelDB, REST, and WebSockets</h1>
+
+<h2 id="firebase">Firebase</h2>
+<p>I wanted to build a web app that would allow data to easily be transmitted to other connected web clients. I had heard of <a href="http://www.firebase.com">Firebase</a> before. So I started reading the Firebase documentation and playing around with the examples.There is a nice library that they created called <a href="http://angularfire.com">AngularFire</a> which provides some slick integration between Firebase and <a href="http://angularjs.com">AngularJS</a>. But for some reason, the provided chat example would sporadically not work. (As an aside, it seems that it would work most of the time in most of environments that I&#39;d try, but for some reason, it rarely worked in one). So I needed to find a new solution.</p>
+<h2 id="leveldb">LevelDB</h2>
+<p>According to the project page: &quot;<a href="https://code.google.com/p/leveldb/">LevelDB</a> is a fast key-value storage library written at Google that provides an ordered mapping from string keys to string values.&quot; What&#39;s great about LevelDB is that it&#39;s fast and it doesn&#39;t have any external dependencies that users need to install before they install your app.</p>
+<p><a href="https://github.com/rvagg/node-levelup">LevelUP</a> is the Node.js bindings built on <a href="https://github.com/rvagg/node-leveldown">LevelDOWN</a> which is the low-level Node.js bindings for LevelDB. </p>
+<p>example:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">levelup</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;levelup&#39;</span><span class="p">)</span>
+
+<span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">levelup</span><span class="p">(</span><span class="s1">&#39;./mydb.db&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">valueEncoding</span><span class="o">:</span> <span class="s1">&#39;json&#39;</span><span class="p">})</span> <span class="c1">//default value encoding is &#39;utf8&#39;</span>
+<span class="nx">db</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;somekey&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;some data&#39;</span><span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">db</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;somekey&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">dir</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="c1">//{name: &#39;some data&#39;}</span>
+  <span class="p">})</span>
+<span class="p">})</span>
+</pre></div>
+
+<p>As you can see, it has pretty intuitive API.</p>
+<p>That&#39;s not the exciting part though. What&#39;s exciting is the ecosystem of <a href="https://github.com/rvagg/node-levelup/wiki/Modules">modules and plugins</a> built on LevelDB and LevelUP.</p>
+<h2 id="rest">REST</h2>
+<p>So let&#39;s assume that you want your database to be accessible by others. You can create a simple REST API over your LevelDB database by using <a href="https://github.com/juliangruber/multilevel-http">multilevel-http</a>. <code>multilevel-http</code> just wraps <a href="http://expressjs.com/">Express</a> and adds REST routes.</p>
+<pre><code>npm install --save multilevel-http</code></pre>
+<p>example <strong>(server.js)</strong>:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">levelup</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;levelup&#39;</span><span class="p">)</span>
+  <span class="p">,</span> <span class="nx">multilevelHttp</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;multilevel-http&#39;</span><span class="p">)</span>
+  <span class="p">,</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">)</span>
+
+<span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">levelup</span><span class="p">(</span><span class="s1">&#39;./mydb.db&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">valueEncoding</span><span class="o">:</span> <span class="s1">&#39;json&#39;</span><span class="p">})</span>
+<span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">multilevelHttp</span><span class="p">.</span><span class="nx">server</span><span class="p">(</span><span class="nx">db</span><span class="p">)</span>
+
+<span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">(</span><span class="nx">app</span><span class="p">)</span>
+
+<span class="nx">server</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">3000</span><span class="p">,</span> <span class="kd">function</span><span class="p">(){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;listening on port %d...&#39;</span><span class="p">,</span> <span class="mi">3000</span><span class="p">)</span>
+<span class="p">})</span>
+</pre></div>
+
+<p>you can now run:</p>
+<pre><code>node server.js</code></pre>
+<p>and access the REST interface via your browser or <code>curl</code>:</p>
+<pre><code>curl -X POST -d &#39;{&quot;name&quot;:&quot;data from curl&quot;}&#39; -H &quot;Content-Type:application/json&quot; http://localhost:3000/data/somekey</code></pre>
+<p>retrieve the key <code>somekey</code>:</p>
+<pre><code>curl -x GET http://localhost:3000/data/somekey</code></pre>
+<h3 id="serving-html">serving HTML</h3>
+<p>create the following file <strong>(index.html)</strong>:</p>
+<div class="highlight"><pre><span class="c">&lt;!-- </span>
+<span class="c">  watch this: http://www.youtube.com/watch?v=WxmcDoAxdoY </span>
+<span class="c">--&gt;</span>
+<span class="cp">&lt;!doctype html&gt;</span>
+<span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">&quot;utf-8&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;title&gt;</span>LevelDB Rules the World<span class="nt">&lt;/title&gt;</span>
+
+<span class="nt">&lt;h1&gt;</span>hi<span class="nt">&lt;/h1&gt;</span>
+</pre></div>
+
+<p>As a quick aside, you don&#39;t need the <code>html</code>, <code>body</code>, and <code>head</code> tags in HTML5. Watch this <a href="http://www.youtube.com/watch?v=WxmcDoAxdoY">talk by Paul Irish</a> explaining why.</p>
+<p>let&#39;s modify <strong>(server.js)</strong>:</p>
+<div class="highlight"><pre><span class="cm">/* ... */</span>
+
+<span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">multilevelHttp</span><span class="p">.</span><span class="nx">server</span><span class="p">(</span><span class="nx">db</span><span class="p">)</span>
+
+<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">sendfile</span><span class="p">(</span><span class="s1">&#39;./index.html&#39;</span><span class="p">)</span>
+<span class="p">})</span>
+
+<span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">(</span><span class="nx">app</span><span class="p">)</span>
+
+<span class="cm">/* ... */</span>
+</pre></div>
+
+<p>now, rerun:</p>
+<pre><code>node server.js</code></pre>
+<p>notice now that you&#39;re redirected to <code>/meta</code>? This is because <code>multilevel-http</code> has setup this redirect. Here&#39;s how you can fix it:</p>
+<div class="highlight"><pre><span class="cm">/* ... */</span>
+
+<span class="kd">function</span> <span class="nx">removeRoute</span><span class="p">(</span><span class="nx">app</span><span class="p">,</span> <span class="nx">method</span><span class="p">,</span> <span class="nx">routeMatcher</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">routes</span> <span class="o">=</span> <span class="nx">app</span><span class="p">.</span><span class="nx">routes</span><span class="p">[</span><span class="nx">method</span><span class="p">]</span>
+
+  <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">routes</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="o">++</span><span class="nx">i</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">route</span> <span class="o">=</span> <span class="nx">routes</span><span class="p">[</span><span class="nx">i</span><span class="p">]</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">route</span><span class="p">.</span><span class="nx">path</span> <span class="o">===</span> <span class="nx">routeMatcher</span><span class="p">)</span>
+      <span class="k">break</span><span class="p">;</span>
+  <span class="p">}</span>
+
+  <span class="nx">routes</span><span class="p">.</span><span class="nx">splice</span><span class="p">(</span><span class="nx">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">multilevelHttp</span><span class="p">.</span><span class="nx">server</span><span class="p">(</span><span class="nx">db</span><span class="p">)</span>
+
+<span class="nx">removeRoute</span><span class="p">(</span><span class="nx">app</span><span class="p">,</span> <span class="s1">&#39;get&#39;</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">)</span>
+<span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">res</span><span class="p">.</span><span class="nx">sendfile</span><span class="p">(</span><span class="s1">&#39;./index.html&#39;</span><span class="p">)</span>
+<span class="p">})</span>
+
+<span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">(</span><span class="nx">app</span><span class="p">)</span>
+
+<span class="cm">/* ... */</span>
+</pre></div>
+
+<p>now run:</p>
+<pre><code>node server.js</code></pre>
+<p>notice now your <code>index.html</code> page is being served up correctly.</p>
+<h2 id="websockets">WebSockets</h2>
+<p>A REST API is nice, but there is still more that you&#39;d need to do to get it working with your client-side JavaScript. Yes, you can easily interface with a REST API via AJAX calls, but let&#39;s make things even easier and use RPC over WebSockets.</p>
+<p>install <code>multilevel</code> and <code>shoe</code>:</p>
+<pre><code>npm install --save multilevel shoe</code></pre>
+<p><code>shoe</code> requires <code>browserify</code> for it to run client-side:</p>
+<pre><code>npm install -g browserify</code></pre>
+<p><a href="http://browserify.org/"><code>browserify</code></a> is an awesome solution for client-side package management. Probably <a href="http://procbits.com/2013/06/17/client-side-javascript-management-browserify-vs-component">the best</a> at the moment. </p>
+<p><code>multilevel</code> isn&#39;t the same as the package above <code>multilevel-http</code>. This is its sexier sister. <code>shoe</code> is a wrapper for <a href="http://github.com/sockjs">sockjs</a>. It makes dealing with WebSockets more like Node.js streams.</p>
+<p><strong>server.js</strong>:</p>
+<div class="highlight"><pre><span class="cm">/*** </span>
+<span class="cm">  other requires</span>
+<span class="cm">***/</span>
+<span class="kd">var</span> <span class="nx">multilevel</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;multilevel&#39;</span><span class="p">)</span>
+<span class="kd">var</span> <span class="nx">shoe</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;shoe&#39;</span><span class="p">)</span>
+
+<span class="cm">/*** other code ***/</span>
+
+<span class="kd">var</span> <span class="nx">wsdb</span> <span class="o">=</span> <span class="nx">shoe</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">stream</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">multilevel</span><span class="p">.</span><span class="nx">db</span><span class="p">(</span><span class="nx">db</span><span class="p">)).</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span>
+<span class="p">})</span>
+<span class="nx">wsdb</span><span class="p">.</span><span class="nx">install</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span> <span class="s1">&#39;/wsdb&#39;</span><span class="p">)</span>
+</pre></div>
+
+<p><strong>client.js</strong>:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">multilevel</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;multilevel&#39;</span><span class="p">)</span>
+<span class="kd">var</span> <span class="nx">shoe</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;shoe&#39;</span><span class="p">)</span>
+
+<span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">multilevel</span><span class="p">.</span><span class="nx">client</span><span class="p">()</span>
+<span class="kd">var</span> <span class="nx">stream</span> <span class="o">=</span> <span class="nx">shoe</span><span class="p">(</span><span class="s1">&#39;/wsdb&#39;</span><span class="p">)</span>
+
+<span class="nx">stream</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">db</span><span class="p">.</span><span class="nx">createRpcStream</span><span class="p">()).</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span>
+
+<span class="cm">/****</span>
+
+<span class="cm">later in the script, you use the leveldb api</span>
+
+<span class="cm">e.g.: db.get, db.put, etc</span>
+
+<span class="cm">*****/</span>
+</pre></div>
+
+<p>(reference app.js in index.html)</p>
+<p>browserify:</p>
+<pre><code>browserify client.js &gt; app.js</code></pre>
+<p>run it:</p>
+<pre><code>node server.js</code></pre>
+<p>That&#39;s it. Now client-side/browser scripts can use the <code>levelup</code> API.</p>
+<h3 id="live-changes">Live Changes</h3>
+<p>Part of the utility of Firebase is that changes propagate to other connected clients. Fortunately, you can do the same with LevelDB. We&#39;ll use another WebSocket to broadcast the changes.</p>
+<p>install deps:</p>
+<pre><code>install --save event-stream level-live-stream</code></pre>
+<p><strong>server.js</strong>:</p>
+<div class="highlight"><pre><span class="cm">/*****</span>
+<span class="cm">  other requires</span>
+<span class="cm">******/</span>
+<span class="kd">var</span> <span class="nx">leveLiveStream</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;level-live-stream&#39;</span><span class="p">)</span>
+<span class="kd">var</span> <span class="nx">es</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;event-stream&#39;</span><span class="p">)</span>
+
+<span class="cm">/* ... */</span>
+
+<span class="kd">var</span> <span class="nx">liveDBStream</span> <span class="o">=</span> <span class="nx">levelLiveStream</span><span class="p">(</span><span class="nx">db</span><span class="p">)</span>
+<span class="kd">var</span> <span class="nx">changesSocket</span> <span class="o">=</span> <span class="nx">shoe</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">es</span><span class="p">.</span><span class="nx">pipeline</span><span class="p">(</span>
+    <span class="nx">liveDbStream</span><span class="p">,</span>
+    <span class="nx">es</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span><span class="nx">next</span><span class="p">)</span> <span class="p">{</span> <span class="nx">next</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span> <span class="p">}),</span>
+    <span class="nx">stream</span>
+  <span class="p">)</span>
+<span class="p">})</span>
+<span class="nx">changesSocket</span><span class="p">.</span><span class="nx">install</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span> <span class="s1">&#39;/wschanges&#39;</span><span class="p">)</span>
+
+<span class="cm">/* ... */</span>
+</pre></div>
+
+<p><strong>client.js</strong>:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">changesSocket</span> <span class="o">=</span> <span class="nx">shoe</span><span class="p">(</span><span class="s1">&#39;/wschanges&#39;</span><span class="p">)</span>
+<span class="nx">changesSocket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">dir</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span>
+<span class="p">})</span>
+</pre></div>
+
+<h2 id="chat-example">Chat Example</h2>
+<p>Let&#39;s put together what we learned to create a chat example. Similar to the one found on <a href="http://angularfire.com">http://angularfire.com</a>. </p>
+<p>Install deps:</p>
+<pre><code>npm init
+npm install --save levelup leveldown multilevel event-stream shoe level-live-stream browserify</code></pre>
+<p>create <strong>server.js</strong>:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">levelup</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;levelup&#39;</span><span class="p">)</span>
+  <span class="p">,</span> <span class="nx">multilevel</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;multilevel&#39;</span><span class="p">)</span>
+  <span class="p">,</span> <span class="nx">levelLiveStream</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;level-live-stream&#39;</span><span class="p">)</span>
+  <span class="p">,</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;http&#39;</span><span class="p">)</span>
+  <span class="p">,</span> <span class="nx">shoe</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;shoe&#39;</span><span class="p">)</span>
+  <span class="p">,</span> <span class="nx">fs</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;fs&#39;</span><span class="p">)</span>
+  <span class="p">,</span> <span class="nx">browserify</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;browserify&#39;</span><span class="p">)</span>
+  <span class="p">,</span> <span class="nx">es</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;event-stream&#39;</span><span class="p">)</span>
+
+<span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">levelup</span><span class="p">(</span><span class="s1">&#39;./chat.db&#39;</span><span class="p">,</span> <span class="p">{</span><span class="nx">valueEncoding</span><span class="o">:</span> <span class="s1">&#39;json&#39;</span><span class="p">})</span>
+<span class="kd">var</span> <span class="nx">liveDbStream</span> <span class="o">=</span> <span class="nx">levelLiveStream</span><span class="p">(</span><span class="nx">db</span><span class="p">)</span>
+
+<span class="kd">var</span> <span class="nx">messages</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="c1">//load initial messages</span>
+<span class="nx">db</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;messages&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="k">return</span>
+  <span class="nx">messages</span> <span class="o">=</span> <span class="nx">data</span>
+<span class="p">})</span>
+
+<span class="nx">liveDbStream</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">type</span> <span class="o">===</span> <span class="s1">&#39;del&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">data</span><span class="p">.</span><span class="nx">key</span> <span class="o">===</span> <span class="s1">&#39;messages&#39;</span><span class="p">)</span> <span class="p">{</span> 
+    <span class="c1">//&#39;clear&#39; pressed, doesn&#39;t actually remove all of the keys, although you easily could</span>
+    <span class="nx">messages</span> <span class="o">=</span> <span class="p">{}</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="nx">data</span><span class="p">.</span><span class="nx">key</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;message:&#39;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">idx</span> <span class="o">=</span> <span class="nx">data</span><span class="p">.</span><span class="nx">key</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="nx">messages</span><span class="p">[</span><span class="nx">idx</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span> <span class="c1">//not sophisticated enough to handle messages generated at exact same time</span>
+    <span class="nx">db</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;messages&#39;</span><span class="p">,</span> <span class="nx">messages</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+
+<span class="kd">var</span> <span class="nx">server</span> <span class="o">=</span> <span class="nx">http</span><span class="p">.</span><span class="nx">createServer</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">switch</span> <span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">url</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="s1">&#39;/&#39;</span><span class="o">:</span> 
+      <span class="nx">fs</span><span class="p">.</span><span class="nx">createReadStream</span><span class="p">(</span><span class="s1">&#39;./index.html&#39;</span><span class="p">).</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">case</span> <span class="s1">&#39;/client.js&#39;</span><span class="o">:</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span> <span class="s1">&#39;application/javascript&#39;</span><span class="p">})</span>
+      <span class="nx">browserify</span><span class="p">(</span><span class="s1">&#39;./client.js&#39;</span><span class="p">).</span><span class="nx">bundle</span><span class="p">({</span><span class="nx">debug</span><span class="o">:</span><span class="kc">true</span><span class="p">}).</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">res</span><span class="p">)</span>
+      <span class="k">break</span><span class="p">;</span>
+    <span class="k">default</span><span class="o">:</span> 
+      <span class="nx">res</span><span class="p">.</span><span class="nx">writeHead</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;Content-Type&#39;</span><span class="o">:</span> <span class="s1">&#39;text/plain&#39;</span><span class="p">})</span>
+      <span class="nx">res</span><span class="p">.</span><span class="nx">end</span><span class="p">(</span><span class="nx">res</span><span class="p">.</span><span class="nx">url</span> <span class="o">+</span> <span class="s1">&#39; not found&#39;</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+
+<span class="kd">var</span> <span class="nx">dbSocket</span> <span class="o">=</span> <span class="nx">shoe</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">stream</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">multilevel</span><span class="p">.</span><span class="nx">server</span><span class="p">(</span><span class="nx">db</span><span class="p">)).</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span>
+<span class="p">})</span>
+<span class="nx">dbSocket</span><span class="p">.</span><span class="nx">install</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span> <span class="s1">&#39;/wsdb&#39;</span><span class="p">)</span>
+
+<span class="kd">var</span> <span class="nx">changesSocket</span> <span class="o">=</span> <span class="nx">shoe</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">stream</span><span class="p">)</span> <span class="p">{</span>
+  <span class="nx">es</span><span class="p">.</span><span class="nx">pipeline</span><span class="p">(</span>
+    <span class="nx">liveDbStream</span><span class="p">,</span>
+    <span class="nx">es</span><span class="p">.</span><span class="nx">map</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">,</span> <span class="nx">next</span><span class="p">)</span> <span class="p">{</span> <span class="nx">next</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">data</span><span class="p">))</span> <span class="p">}),</span>
+    <span class="nx">stream</span>
+  <span class="p">)</span>
+<span class="p">})</span>
+<span class="nx">changesSocket</span><span class="p">.</span><span class="nx">install</span><span class="p">(</span><span class="nx">server</span><span class="p">,</span> <span class="s1">&#39;/wschanges&#39;</span><span class="p">)</span>
+
+<span class="nx">server</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">8000</span><span class="p">,</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;listening...&#39;</span><span class="p">)</span>
+<span class="p">})</span>
+</pre></div>
+
+<p>create <strong>index.html</strong>:</p>
+<div class="highlight"><pre><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="nt">&lt;meta</span> <span class="na">charset=</span><span class="s">utf-8</span><span class="nt">&gt;</span>
+<span class="nt">&lt;title&gt;</span>chat example<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;script </span><span class="na">src=</span><span class="s">&quot;client.js&quot;</span><span class="nt">&gt;&lt;/script&gt;</span>
+<span class="nt">&lt;form&gt;</span>
+  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">id=</span><span class="s">&quot;name&quot;</span> <span class="na">value=</span><span class="s">&quot;guest&quot;</span> <span class="na">style=</span><span class="s">&quot;width: 75px;&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;text&quot;</span> <span class="na">id=</span><span class="s">&quot;message&quot;</span> <span class="na">placeholder=</span><span class="s">&quot;type message here...&quot;</span> <span class="na">style=</span><span class="s">&quot;width: 300px;&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">&quot;submit&quot;</span> <span class="na">onclick=</span><span class="s">&quot;send(); return false;&quot;</span> <span class="na">value=</span><span class="s">&quot;send&quot;</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;button</span> <span class="na">onclick=</span><span class="s">&quot;clearMessages(); return false;&quot;</span><span class="nt">&gt;</span>clear<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+<span class="nt">&lt;hr&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">id=</span><span class="s">&quot;messages&quot;</span><span class="nt">&gt;&lt;/div&gt;</span>
+</pre></div>
+
+<p>create <strong>client.js</strong>:</p>
+<div class="highlight"><pre><span class="kd">var</span> <span class="nx">multilevel</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;multilevel&#39;</span><span class="p">)</span>
+  <span class="p">,</span> <span class="nx">shoe</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">&#39;shoe&#39;</span><span class="p">)</span>
+
+<span class="kd">var</span> <span class="nx">db</span> <span class="o">=</span> <span class="nx">multilevel</span><span class="p">.</span><span class="nx">client</span><span class="p">()</span>
+<span class="kd">var</span> <span class="nx">dbSocket</span> <span class="o">=</span> <span class="nx">shoe</span><span class="p">(</span><span class="s1">&#39;/wsdb&#39;</span><span class="p">)</span>
+<span class="kd">var</span> <span class="nx">changesSocket</span> <span class="o">=</span> <span class="nx">shoe</span><span class="p">(</span><span class="s1">&#39;/wschanges&#39;</span><span class="p">)</span>
+
+<span class="nx">dbSocket</span><span class="p">.</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">db</span><span class="p">.</span><span class="nx">createRpcStream</span><span class="p">()).</span><span class="nx">pipe</span><span class="p">(</span><span class="nx">dbSocket</span><span class="p">)</span>
+
+<span class="nx">changesSocket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">updateData</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">updateData</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">updateData</span><span class="p">)</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="nx">updateData</span><span class="p">.</span><span class="nx">type</span> <span class="o">===</span> <span class="s1">&#39;del&#39;</span> <span class="o">&amp;&amp;</span> <span class="nx">updateData</span><span class="p">.</span><span class="nx">key</span> <span class="o">===</span> <span class="s1">&#39;messages&#39;</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;messages&#39;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+    <span class="k">return</span>
+  <span class="p">}</span>
+
+  <span class="k">if</span> <span class="p">(</span><span class="nx">updateData</span><span class="p">.</span><span class="nx">key</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s1">&#39;message:&#39;</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">appendMessage</span><span class="p">(</span><span class="nx">updateData</span><span class="p">.</span><span class="nx">value</span><span class="p">)</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+
+<span class="kd">function</span> <span class="nx">appendMessage</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s1">&#39;p&#39;</span><span class="p">)</span>
+  <span class="kd">var</span> <span class="nx">text</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createTextNode</span><span class="p">(</span><span class="nx">msg</span><span class="p">.</span><span class="nx">name</span> <span class="o">+</span> <span class="s1">&#39;: &#39;</span> <span class="o">+</span> <span class="nx">msg</span><span class="p">.</span><span class="nx">message</span><span class="p">)</span>
+  <span class="nx">p</span><span class="p">.</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">text</span><span class="p">)</span>
+  <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;messages&#39;</span><span class="p">).</span><span class="nx">appendChild</span><span class="p">(</span><span class="nx">p</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nb">window</span><span class="p">.</span><span class="nx">send</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">nameEl</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span>
+  <span class="kd">var</span> <span class="nx">msgEl</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;message&#39;</span><span class="p">)</span>
+  <span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span><span class="nx">name</span><span class="o">:</span> <span class="nx">nameEl</span><span class="p">.</span><span class="nx">value</span><span class="p">,</span> <span class="nx">message</span><span class="o">:</span> <span class="nx">msgEl</span><span class="p">.</span><span class="nx">value</span><span class="p">}</span>
+  <span class="nx">msgEl</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+  <span class="nx">db</span><span class="p">.</span><span class="nx">put</span><span class="p">(</span><span class="s1">&#39;message:&#39;</span> <span class="o">+</span> <span class="nb">Date</span><span class="p">.</span><span class="nx">now</span><span class="p">(),</span> <span class="nx">obj</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="nb">window</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="kd">var</span> <span class="nx">nameEl</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">&#39;name&#39;</span><span class="p">)</span>
+  <span class="kd">var</span> <span class="nx">id</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">().</span><span class="nx">toString</span><span class="p">().</span><span class="nx">substr</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
+  <span class="nx">nameEl</span><span class="p">.</span><span class="nx">value</span> <span class="o">+=</span> <span class="nx">id</span>
+
+  <span class="c1">//get initial chat state</span>
+  <span class="nx">db</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;messages&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">messages</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">messages</span> <span class="o">==</span> <span class="kc">null</span><span class="p">)</span> <span class="k">return</span>
+
+    <span class="kd">var</span> <span class="nx">ids</span> <span class="o">=</span> <span class="nb">Object</span><span class="p">.</span><span class="nx">keys</span><span class="p">(</span><span class="nx">messages</span><span class="p">).</span><span class="nx">slice</span><span class="p">(</span><span class="o">-</span><span class="mi">15</span><span class="p">)</span> <span class="c1">//take last 15</span>
+    <span class="nx">ids</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">db</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">&#39;message:&#39;</span> <span class="o">+</span> <span class="nx">id</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">appendMessage</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span>
+      <span class="p">})</span>
+    <span class="p">})</span>
+  <span class="p">})</span>
+<span class="p">}</span>
+
+<span class="nb">window</span><span class="p">.</span><span class="nx">clearMessages</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+  <span class="nx">db</span><span class="p">.</span><span class="nx">del</span><span class="p">(</span><span class="s1">&#39;messages&#39;</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">err</span><span class="p">)</span> <span class="nx">alert</span><span class="p">(</span><span class="nx">err</span><span class="p">.</span><span class="nx">message</span><span class="p">)</span>
+  <span class="p">})</span>
+<span class="p">}</span>
+</pre></div>
+
+<p>now run:</p>
+<pre><code>node server.js</code></pre>
+<p>Boom! Now you have a hacky chat server ready to rock!</p>
+
+
+<!--<p>
+  If you made it this far, you should follow me on Twitter. &nbsp; <a style="margin-top: -3px" href="https://twitter.com/jprichardson" class="twitter-follow-button" data-show-count="false">Follow @jprichardson</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+</p>-->
+
+<p>
+If you made it this far, you should <a href="http://twitter.com/jprichardson">follow me on Twitter</a>.
+</p>
+
+<p>
+  -JP
+</p>
+
+ <div id="disqus_thread"></div>
+<script type="text/javascript">
+  /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+  var disqus_shortname = 'procbits'; // required: replace example with your forum shortname
+
+  //optional url
+  
+    var disqus_url = 'http://procbits.com/2014/01/06/poor-mans-firebase-leveldb-rest-and-websockets/';
+  
+
+  //optional id
+  
+
+  /* * * DON'T EDIT BELOW THIS LINE * * */
+        (function() {
+            var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+            dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+<a href="http://disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+    
+  </div>
+</div>
+<div id="footer">
+  <div class="container">
+    <p class="text-muted credit">Proudly built with<a href="https://github.com/skywrite"> Sky</a></p>
+  </div>
+</div>
+<div class="scripts">  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35069840-2']);
+    _gaq.push(['_trackPageview']);
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+</div>
