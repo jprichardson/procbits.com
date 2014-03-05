@@ -1,6 +1,7 @@
 <!--
 title: Deploy a Node.js Web App with Nginx and Ansible
-publish: 2014-01-17
+publish:
+slug: 
 tags: Node.js, Nginx, Linux, Ansible
 -->
 
@@ -12,16 +13,41 @@ If you don't know what [Ansible][4] is, don't worry. You can complete this tutor
 
 Let's assume that you have this super simple following Node.js script:
 
-**server.js**:
+**./coolapp/index.html**:
+
+```html
+<!doctype html>
+<meta charset="utf-8">
+<title>Cool App</title>
+<link href="/css/style.css" rel="stylesheet"/>
+
+<h1>this is the cool app</h1>
+```
+
+**./coolapp/css/style.css**:
+```css
+h1 {
+  font-size: 54px;
+  color: red;
+  text-decoration: underline;
+}
+```
+
+**./coolapp/server.js**:
 
 ```js
 var http = require('http');
+var fs = require('fs');
 
 http.createServer(function(req, res) {
-  res.writeHead(200, {'Content-Type': 'text/plain'});
   if (req.url === '/') {
-    res.end('hello world');
+    res.writeHead(200, {'Content-Type': 'text/html'});
+    fs.createReadStream('./index.html').pipe(res);
+  } else if (req.url === '/css/style.css') {
+    res.writeHead(200, {'Content-Type': 'text/css'});
+    fs.createReadStream('./css/style.css').pipe(res);
   } else {
+    res.writeHead(200, {'Content-Type': 'text/plain'});
     res.end(req.url);
   }
 }).listen(process.env.PORT);
@@ -64,10 +90,53 @@ Other problems of these methods:
 Getting Started
 ---------------
 
-First things first, setup a brand new spanking VPS. I prefer [Digital Ocean][do], but any VPS will do.
+First things first, setup a brand new spanking VPS. I prefer [Digital Ocean][do], but any VPS will do. My instructions should work for Digital Ocean or Amazon EC2.
 
 
 
+Installing Node and a Node Version Manager
+------------------------------------------
+
+On my client workstation, I prefer [nvm][5]. On my servers I prefer [n][6]. Really, they are just a matter of taste and you could use either one. Now login to your workstation if you're not going to use Ansible. 
+
+Note that the syntax `[sudo]` means that you should run `sudo` if you're not logged in as `root`.
+
+manually:
+
+    [sudo] apt-get install make git-core
+    git clone https://github.com/visionmedia/n /tmp/n
+    make -C /tmp/n
+    [sudo] n stable
+
+(TODO: ansible)
+
+Now the latest stable Node version is installed.
+
+
+Setup Git Repo on Server
+------------------------
+
+    [sudo] mkdir -p /var/lib/git/coolapp.git
+    cd /var/lib/git/coolapp.git
+    [sudo] git init --bare
+    [sudo] touch hooks/pre-receive
+    [sudo] touch hooks/post-receive
+    [sudo] chmod +x hooks/pre-receive
+    [sudo] chmod +x hooks/post-receive
+
+
+(error on push)
+
+    (pre-receive hook declined)
+
+
+
+
+Creating User / Group / Upstart Service
+---------------------------------------
+
+    [sudo] addgroup --system nodejs
+    [sudo] adduser --system --shell /bin/false  --no-create-home --ingroup nodejs nodejs
 
 
 
@@ -75,5 +144,7 @@ First things first, setup a brand new spanking VPS. I prefer [Digital Ocean][do]
 [2]:https://www.nodejitsu.com/
 [3]:http://procbits.com/2013/09/08/getting-started-with-ansible-digital-ocean
 [4]:http://www.ansibleworks.com/
+[5]:https://github.com/creationix/nvm
+[6]:
 
 [do]:https://www.digitalocean.com/?refcode=a65fd89c7fd0
