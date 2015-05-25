@@ -47,7 +47,7 @@
 <span class="nt">&lt;/body&gt;</span>
 </pre></div>
 
-<h4>output:</h4>
+<h4 id="output-">output:</h4>
 <iframe src="http://embed.plnkr.co/RRptESb8sbIeWWk4JzXf/preview" ></iframe>
 
 <p>It looks liked you&#39;d expect. </p>
@@ -57,7 +57,7 @@
 <span class="p">}</span>
 </pre></div>
 
-<h4>output:</h4>
+<h4 id="output-">output:</h4>
 <iframe src="http://embed.plnkr.co/rxRPPHnK9ploDznjhAD5/preview"></iframe>
 
 <p>Notice the item list bullets are gone?</p>
@@ -68,18 +68,18 @@
 <span class="p">}</span>
 </pre></div>
 
-<h4>output:</h4>
+<h4 id="output-">output:</h4>
 <iframe src="http://embed.plnkr.co/VlVoTlypjSKWo4CGvSSu/preview"></iframe>
 
 <p>Now you&#39;ll notice that the margins are removed.</p>
 <p>There is a case to be made against using the universal selector <code>*</code>, and that is that it ruins the margins and padding
 of form elements. But it&#39;s definitely a good start to understanding on you can make cross browser HTML look consistent.</p>
-<h3>CSS Reset Frameworks</h3>
+<h3 id="css-reset-frameworks">CSS Reset Frameworks</h3>
 <ul>
 <li><a href="http://necolas.github.io/normalize.css/">Normalize.css</a></li>
 <li><a href="http://meyerweb.com/eric/thoughts/2011/01/03/reset-revisited/">Eric Meyer&#39;s Reset</a></li>
 </ul>
-<h3>Resources</h3>
+<h3 id="resources">Resources</h3>
 <ul>
 <li><a href="http://sixrevisions.com/css/css-tips/css-tip-1-resetting-your-styles-with-css-reset/">http://sixrevisions.com/css/css-tips/css-tip-1-resetting-your-styles-with-css-reset/</a></li>
 <li><a href="http://snook.ca/archives/html_and_css/no_css_reset/">http://snook.ca/archives/html_and_css/no_css_reset/</a></li>
@@ -99,6 +99,12 @@ If you made it this far, you should <a href="http://twitter.com/jprichardson">fo
 
 <p>
   -JP
+</p>
+
+<p style="border: 1px solid #ccc; background-color: #f8f8f8; padding: 3px;">
+Want to test-drive Bitcoin without any risk? Check out my 
+  <a href="https://play.google.com/store/apps/details?id=com.coinbolt.bitcoin">
+    bitcoin wallet Coinbolt</a>. It includes test coins for free.
 </p>
 
  <div id="disqus_thread"></div>

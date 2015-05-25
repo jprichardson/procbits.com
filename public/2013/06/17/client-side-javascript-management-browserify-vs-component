@@ -42,15 +42,15 @@
 </ol>
 <p>Because of m ybias towards CommonJS because of Node.js and the fact that I agree with TJ Holowaychuk that <a href="http://tjholowaychuk.com/post/27984551477/components">AMD is ugly</a>, automatically rules out any solution that prefers AMD, namely: <a href="http://requirejs.org/">RequireJS</a>, <a href="http://volojs.org/">Volo</a>, or <a href="http://jamjs.org/">Jam</a>. <a href="http://bowerjs.org">Bower</a> is intriguing because it does a great job of client-side dependency management and it was created by Twitter, so there is a big name backing it. However, Bower doesn&#39;t care if you use AMD or CommonJS. I cared more about using CommonJS in the browser than I did package management. So, it&#39;s preferable to find a solution that does dependency management and CommonJS.</p>
 <p>This left me with a choice of <a href="http://browserify.org/">Browserify</a> and <a href="https://github.com/component/component">Component</a>. They are both created by well known members of the Node.js community: <a href="https://github.com/substack">Substack</a> and <a href="https://github.com/visionmedia">TJ Holowaychuk</a> respectively.</p>
-<h2>Browserify</h2>
-<h3>Pros</h3>
+<h2 id="browserify">Browserify</h2>
+<h3 id="pros">Pros</h3>
 <ol>
 <li>Can reuse Node.js modules on the client with relative ease. Obviously, there are limits such as modules that use any of the networking or file system API.</li>
 <li>You use NPM for installation and dependency management. Isaac (the Node.js benevolent dictator) has <a href="http://esa-matti.suuronen.org/blog/2013/03/22/journey-from-requirejs-to-browserify/#comment-838581508">said that storing pure client-side modules in NPM is OK</a>. </li>
 <li>Source maps.</li>
 <li>Simple to use. If you&#39;re already using Node.js and NPM, there isn&#39;t much you need to do with Browserify, other than require your code client-side. There is no dependency listing or anything like that, Browserify will traverse your <code>require()</code> statements and include the necessary code.</li>
 </ol>
-<h3>Cons</h3>
+<h3 id="cons">Cons</h3>
 <ol>
 <li>There is no dependency management. This could be a pro as well if you&#39;re satisfied with NPM for dependency management.</li>
 <li>It may feel a bit magical. You can use <code>EventEmitter</code> and other Node.js core modules on the client.</li>
@@ -60,8 +60,8 @@
 <li>Documentation is really bad.</li>
 <li>Node.js naming conflicts. Getting harder to come up with good names. Fortunately you can just append a <code>.js</code> to give yourself more choices but will probably introduce ambiguity.</li>
 </ol>
-<h2>Component</h2>
-<h3>Pros</h3>
+<h2 id="component">Component</h2>
+<h3 id="pros">Pros</h3>
 <ol>
 <li>Encouragement of simplicity. This could become a bit unwieldy because some Component modules are just a few lines. Your app might need 100&#39;s of components. But again, this could be a big plus.</li>
 <li>Github is the de facto repository for storage and retrieval of your components. This makes publishing easy.</li>
@@ -69,7 +69,7 @@
 <li>Momentum seems to be increasing.</li>
 <li>Flat dependency tree. Only one version of a component allowed, this reduces the amount of client-side JavaScript.</li>
 </ol>
-<h3>Cons</h3>
+<h3 id="cons">Cons</h3>
 <ol>
 <li>Feels like there is a bit too much ceremony to get up and going if you&#39;re already using NPM. This makes sense given that it supports dependency management though.</li>
 <li>Build step.</li>
@@ -77,7 +77,7 @@
 <li>HTTP only remotes. You can have private Component repos, but it must support HTTP. I know that this <a href="https://github.com/godmodelabs/contre">https://github.com/godmodelabs/contre</a> can help with that. I really bothers me. I&#39;d like to <code>component install jp@myprivateserver.com/var/lib/git/mymodule.git</code>.</li>
 <li>Extra <code>component.json</code> file. I&#39;m being a bit nitpicky here, but managing the version number in two places (assuming you have a package.json) sucks. I understand TJ&#39;s <a href="https://github.com/component/component/wiki/F.A.Q">reason for doing this though</a>.</li>
 </ol>
-<h2>Conclusion</h2>
+<h2 id="conclusion">Conclusion</h2>
 <p>I ultimately chose Browserify. At this point it seems that my main problem to solve is getting some of my JavaScript modules (specific algorithms) on the client. I love NPM and so Browserify feels natural and makes sense. To be fair, it seems that Component&#39;s main goal is to encourage you to write reusable web (or JavaScript) components. This isn&#39;t a problem that I need to solve, especially given that I&#39;m pretty invested in the AngularJS ecosystem and Angular way of doing things. But Component is a pure client-side solution. It may feel like a bit much if you&#39;re already using NPM.</p>
 <p>I&#39;m also hoping that <a href="http://wiki.ecmascript.org/doku.php?id=harmony:modules">ES Harmony modules</a> and <a href="http://www.w3.org/TR/2013/WD-components-intro-20130606/">Web Components standard</a> help to solve some of these problems.</p>
 <p>Honorable mention: <a href="http://ender.jit.su/">Ender</a>. I have no idea why Ender hasn&#39;t seen a lot of adoption.</p>
@@ -110,6 +110,12 @@ If you made it this far, you should <a href="http://twitter.com/jprichardson">fo
 
 <p>
   -JP
+</p>
+
+<p style="border: 1px solid #ccc; background-color: #f8f8f8; padding: 3px;">
+Want to test-drive Bitcoin without any risk? Check out my 
+  <a href="https://play.google.com/store/apps/details?id=com.coinbolt.bitcoin">
+    bitcoin wallet Coinbolt</a>. It includes test coins for free.
 </p>
 
  <div id="disqus_thread"></div>

@@ -37,9 +37,9 @@
 <p>If you have to manage more than one server with common software packages and configuration, you&#39;re going to want a server configuration management tool. Originally, I wrote shell scripts to handle this. However, shell scripts can have problems with error handling. Another benefit of most configuration management tools is that their operations are <a href="http://en.wikipedia.org/wiki/Idempotence">idempotent</a> i.e. you can run any operation more than once and it won&#39;t have any effect. </p>
 <p>For the last few months, I&#39;ve read tutorials on <a href="http://en.wikipedia.org/wiki/Puppet_(software)">Puppet</a>, <a href="http://en.wikipedia.org/wiki/Chef_(software)">Chef</a>, and <a href="http://en.wikipedia.org/wiki/Salt_(software)">Salt</a>. I took a liking to Chef, especially the Chef tool <a href="https://github.com/matschaffer/knife-solo">Knife Solo</a>. I finally discovered <a href="http://en.wikipedia.org/wiki/Ansible_(software)">Ansible</a> in the comments of a <a href="http://news.ycombinator.com">Hacker News</a> post about Salt. If you&#39;re having trouble deciding whether you should choose Puppet, Chef, Salt, or Ansible then the eBook <a href="http://devopsu.com/books/taste-test-puppet-chef-salt-stack-ansible.html">Taste Test: Configuration Management Tools Get Tasted!</a> by <a href="http://mattjaynes.com/">Matt Jaynes</a> will help you decide.</p>
 <p>Ansible&#39;s primary benefit is that of simplicity and not requiring any software to be installed on the target machine. All you need is SSH enabled. I have two <a href="https://www.digitalocean.com/?refcode=a65fd89c7fd0">Digital Ocean</a> VPS that I need to install software and configure.</p>
-<h2>Assumptions</h2>
+<h2 id="assumptions">Assumptions</h2>
 <p>You&#39;re running Mac OS X (should work with Linux) and you have Git and Python installed. These instructions are specific to <a href="https://www.digitalocean.com/?refcode=a65fd89c7fd0">Digital Ocean</a> but should work with any remote servers offered by any vendor.</p>
-<h2>Installing Ansible</h2>
+<h2 id="installing-ansible">Installing Ansible</h2>
 <p>checkout latest development branch of Ansible:</p>
 <pre><code>cd /tmp
 git clone git://github.com/ansible/ansible.git
@@ -65,9 +65,9 @@ v1.2.3</code></pre>
 <pre><code>sudo easy_install jinja2 
 sudo easy_install pyyaml
 sudo easy_install paramiko</code></pre>
-<h2>Configuring Ansible to Communicate with Servers</h2>
+<h2 id="configuring-ansible-to-communicate-with-servers">Configuring Ansible to Communicate with Servers</h2>
 <p>Let&#39;s assume that you have two servers named with IPs <code>1.2.3.4</code> and <code>4.3.2.1</code>. With Digital Ocean, unfortunately, you&#39;re insecurely emailed the root password to each server. Let&#39;s add our SSH key to each server.</p>
-<h3>SSH Keys</h3>
+<h3 id="ssh-keys">SSH Keys</h3>
 <p>if you don&#39;t have an SSH key, you can generate one really easily:</p>
 <pre><code>ssh-keygen -t rsa -C &quot;your_email@somedomain.com&quot;</code></pre>
 <p>if you&#39;re running Linux, you can use <code>ssh-copy-id</code> to copy the key the remote servers:</p>
@@ -79,7 +79,7 @@ cat ~/.ssh/id_rsa.pub | ssh root@4.3.2.1 &quot;mkdir ~/.ssh; cat &gt;&gt; ~/.ssh
 <p>if you get an error about the <code>.ssh</code> directory existing, modify the previous to this:</p>
 <pre><code>cat ~/.ssh/id_rsa.pub | ssh root@1.2.3.4 &quot;cat &gt;&gt; ~/.ssh/authorized_keys&quot;
 cat ~/.ssh/id_rsa.pub | ssh root@4.3.2.1 &quot;cat &gt;&gt; ~/.ssh/authorized_keys&quot; </code></pre>
-<h3>Ansible Hosts File</h3>
+<h3 id="ansible-hosts-file">Ansible Hosts File</h3>
 <p>You must create a file that tells Ansible which servers to connect to:</p>
 <pre><code>touch ~/ansible_hosts</code></pre>
 <p>edit <code>~/ansible_hosts</code>:</p>
@@ -94,7 +94,7 @@ cat ~/.ssh/id_rsa.pub | ssh root@4.3.2.1 &quot;cat &gt;&gt; ~/.ssh/authorized_ke
 <pre><code>export ANSIBLE_HOSTS=~/ansible_hosts</code></pre>
 <p>load the changes in your current shell:</p>
 <pre><code>source ~/.bashrc</code></pre>
-<h2>Test Ansible</h2>
+<h2 id="test-ansible">Test Ansible</h2>
 <pre><code>ansible all -m ping</code></pre>
 <p>if you get the following errors:</p>
 <pre><code>1.2.3.4 | FAILED =&gt; could not create temporary directory: SSH exited with return code 255
@@ -134,6 +134,12 @@ If you made it this far, you should <a href="http://twitter.com/jprichardson">fo
 
 <p>
   -JP
+</p>
+
+<p style="border: 1px solid #ccc; background-color: #f8f8f8; padding: 3px;">
+Want to test-drive Bitcoin without any risk? Check out my 
+  <a href="https://play.google.com/store/apps/details?id=com.coinbolt.bitcoin">
+    bitcoin wallet Coinbolt</a>. It includes test coins for free.
 </p>
 
  <div id="disqus_thread"></div>
